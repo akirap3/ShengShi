@@ -68,6 +68,7 @@ const loginWithProvider = (provider) => {
 export const loginWithFB = () => {
   loginWithProvider(fbProvider);
 };
+
 export const loginWithGoogle = () => {
   loginWithProvider(googleProvider);
 };
