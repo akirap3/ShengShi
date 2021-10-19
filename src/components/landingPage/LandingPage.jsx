@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { layoutConfig } from '../../utils/commonVariables';
 import Banner from './Banner';
 import Advantages from './Advantages';
 import UserShares from './UserShares';
@@ -19,7 +19,7 @@ const LandingPage = () => {
 
 const Main = styled.div`
   position: relative;
-  top: 7vh;
+  top: ${layoutConfig.navHeight};
   width: 100%;
 `;
 
