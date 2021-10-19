@@ -1,28 +1,89 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+
+import * as validation from '../../utils/validation';
+import * as firebase from '../../utils/firebase';
 import { layoutConfig } from '../../utils/commonVariables';
 
 import { IoLogoFacebook } from 'react-icons/io';
 import { FcGoogle } from 'react-icons/fc';
 
 const SignupPage = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [secPassword, setSecPassword] = useState('');
+
+  const checkNames = () => {
+    const regex = /[a-zA-Z0-9]+/;
+    if (!regex.test(firstName) || !regex.test(lastName)) {
+      alert('您的名字資料格式不符');
+      return false;
+    }
+    return true;
+  };
+
+  const checkPassword = () => {
+    if (!password && !secPassword) {
+      alert('請輸入密碼');
+      return false;
+    } else if (password !== secPassword) {
+      alert('密碼不相符');
+      return false;
+    }
+    return true;
+  };
+
+  const checkSignup = () => {
+    if (checkNames() && validation.checkEmail(email) && checkPassword())
+      firebase.register(email, password);
+  };
+
   return (
     <Main>
       <SignupContainer>
         <Title>註冊</Title>
         <NameContainer>
-          <NameFiled placeholder="請輸入您的名" />
-          <LastNameField placeholder="請輸入您的姓" />
+          <NameFiled
+            placeholder="請輸入您的名"
+            onChange={(e) => {
+              setFirstName(e.target.value);
+            }}
+          />
+          <LastNameField
+            placeholder="請輸入您的姓"
+            onChange={(e) => {
+              setLastName(e.target.value);
+            }}
+          />
         </NameContainer>
-        <Field placeholder="請輸入電子郵件" />
-        <Field placeholder="請輸入密碼" />
-        <Field placeholder="請再次輸入密碼" />
+        <Field
+          placeholder="請輸入電子郵件"
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+        />
+        <Field
+          type="password"
+          placeholder="請輸入密碼"
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+        />
+        <Field
+          type="password"
+          placeholder="請再次輸入密碼"
+          onChange={(e) => {
+            setSecPassword(e.target.value);
+          }}
+        />
         <ButtonContainer>
-          <NativeButton>確認</NativeButton>
-          <FBButton>
+          <NativeButton onClick={() => checkSignup()}>確認</NativeButton>
+          <FBButton onClick={() => firebase.loginWithFB()}>
             <FbIcon /> <span>FB 登入</span>
           </FBButton>
-          <GoogleButton>
+          <GoogleButton onClick={() => firebase.loginWithGoogle()}>
             <GoogleIcon /> <span>Google 登入</span>
           </GoogleButton>
         </ButtonContainer>
@@ -92,6 +153,7 @@ const Button = styled.div`
   border: 1px solid darkcyan;
   border-radius: 5px;
   padding: 0.5rem;
+  cursor: pointer;
 `;
 
 const NativeButton = styled(Button)`
@@ -105,19 +167,35 @@ const NativeButton = styled(Button)`
 `;
 
 const FBButton = styled(Button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   width: 30%;
   @media screen and (max-width: 470px) {
     width: 48%;
     font-size: 14px;
   }
+  @media screen and (max-width: 370px) {
+    flex-direction: column;
+    width: 48%;
+    font-size: 12px;
+  }
 `;
 
 const GoogleButton = styled(Button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   @media screen and (max-width: 470px) {
     width: 48%;
     font-size: 14px;
+  }
+  @media screen and (max-width: 370px) {
+    flex-direction: column;
+    width: 48%;
+    font-size: 12px;
   }
 `;
 

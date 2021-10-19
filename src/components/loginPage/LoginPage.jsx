@@ -1,23 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+
+import * as validation from '../../utils/validation';
+import * as firebase from '../../utils/firebase';
 import { layoutConfig } from '../../utils/commonVariables';
 
 import { IoLogoFacebook } from 'react-icons/io';
 import { FcGoogle } from 'react-icons/fc';
 
 const LoginPage = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const checkAndLogin = () => {
+    if (validation.checkEmail(email)) firebase.login(email, password);
+  };
+
   return (
     <Main>
       <SignupContainer>
         <Title>登入</Title>
-        <Field placeholder="請輸入電子郵件" />
-        <Field placeholder="請輸入密碼" />
+        <Field
+          placeholder="請輸入電子郵件"
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+        />
+        <Field
+          type="password"
+          placeholder="請輸入密碼"
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+        />
         <ButtonContainer>
-          <NativeButton>確認</NativeButton>
-          <FBButton>
-            <FbIcon /> <span>FB 登入</span>
+          <NativeButton onClick={() => checkAndLogin()}>確認</NativeButton>
+          <FBButton onClick={() => firebase.loginWithFB()}>
+            <FbIcon />
+            <span>FB 登入</span>
           </FBButton>
-          <GoogleButton>
+          <GoogleButton onClick={() => firebase.loginWithGoogle()}>
             <GoogleIcon /> <span>Google 登入</span>
           </GoogleButton>
         </ButtonContainer>
@@ -73,6 +95,7 @@ const Button = styled.div`
   border: 1px solid darkcyan;
   border-radius: 5px;
   padding: 0.5rem;
+  cursor: pointer;
 `;
 
 const NativeButton = styled(Button)`
