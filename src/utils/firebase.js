@@ -9,6 +9,7 @@ import {
   fetchSignInMethodsForEmail,
   signOut,
 } from 'firebase/auth';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 require('dotenv').config();
 
@@ -24,6 +25,7 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 const auth = getAuth();
+const db = getFirestore();
 auth.languageCode = 'it';
 
 export const register = (email, password) => {
@@ -102,7 +104,7 @@ export const loginWithGoogle = () => {
 //   }
 // };
 
-const logOut = () => {
+export const logOut = () => {
   signOut(auth)
     .then(() => {
       console.log('Log out successfully!');
@@ -110,4 +112,11 @@ const logOut = () => {
     .catch((error) => {
       alert(`Error: ${error.message}`);
     });
+};
+
+export const fetchRestaurants = async () => {
+  const restaurantArr = [];
+  const querySnapshot = await getDocs(collection(db, 'restaurants'));
+  querySnapshot.forEach((doc) => restaurantArr.push(doc.data()));
+  return restaurantArr;
 };

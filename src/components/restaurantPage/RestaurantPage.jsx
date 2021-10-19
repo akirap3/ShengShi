@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { layoutConfig } from '../../utils/commonVariables';
+import Carousels from '../landingPage/Carousels';
 
 const RestaurantPage = () => {
   return (
@@ -28,6 +29,8 @@ const RestaurantPage = () => {
         <SearchBar placeholder="餐廳搜尋" />
         <SearchButton>搜尋</SearchButton>
       </SearchContent>
+      <Carousels />
+      <Map />
     </Main>
   );
 };
@@ -59,5 +62,7 @@ const SearchContent = styled.div``;
 const SearchBar = styled.input``;
 
 const SearchButton = styled.button``;
+
+const Map = styled.div``;
 
 export default RestaurantPage;

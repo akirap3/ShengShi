@@ -1,35 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { AiTwotoneStar, AiTwotoneHeart } from 'react-icons/ai';
 import { IoIosArrowDropleft, IoIosArrowDropright } from 'react-icons/io';
 
-import RestaurantImgOne from '../../images/homepage/restaurant-1.jpg';
-import RestaurantImgTwo from '../../images/homepage/restaurant-1.jpg';
-import RestaurantImgThree from '../../images/homepage/restaurant-3.jpg';
-import RestaurantImgFour from '../../images/homepage/restaurant-4.jpg';
-import RestaurantImgFive from '../../images/homepage/restaurant-5.jpg';
-
-const ImgArr = [
-  RestaurantImgOne,
-  RestaurantImgTwo,
-  RestaurantImgThree,
-  RestaurantImgFour,
-  RestaurantImgFive,
-];
-
-const category = [
-  { title: '合作餐廳', images: ImgArr },
-  { title: '剩食分享', images: ImgArr },
-];
+import * as firebase from '../../utils/firebase';
 
 const Carousels = () => {
+  const [restaurants, setRestaurants] = useState([]);
+
+  useEffect(() => {
+    firebase.fetchRestaurants().then((data) => {
+      setRestaurants(data);
+    });
+    return;
+  }, []);
+
   const settings = {
     className: 'slider variable-width',
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 2,
     nextArrow: <RightArrow />,
     prevArrow: <LeftArrow />,
@@ -61,19 +53,19 @@ const Carousels = () => {
     ],
   };
 
-  return category.map((cat) => (
+  return (
     <CarouselContainer>
-      <Title>{cat.title}</Title>
+      <Title>合作餐廳</Title>
       <CarouselContext>
         <SlideWrapper>
           <StyledSlider {...settings}>
-            {cat.images.map((img) => {
+            {restaurants.map((restaurant) => {
               return (
                 <Card>
-                  <CardImg src={img} />
+                  <CardImg src={restaurant.imageUrl} />
                   <CardTitle>Ad eos saepe lucilius</CardTitle>
                   <Row>
-                    {[1, 2, 3, 4, 5].map(() => (
+                    {Array.from(Array(restaurant.rating).keys()).map(() => (
                       <Star />
                     ))}
                     <Heart />
@@ -85,7 +77,7 @@ const Carousels = () => {
         </SlideWrapper>
       </CarouselContext>
     </CarouselContainer>
-  ));
+  );
 };
 
 const RightArrow = ({ currentSlide, slideCount, ...props }) => {
