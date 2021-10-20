@@ -55,6 +55,10 @@ const AvtContent = styled.div`
   background-color: #94d2bd;
   padding: 2rem;
   justify-content: space-around;
+  align-items: center;
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const AvtContentOne = styled(AvtContent)``;
@@ -65,20 +69,36 @@ const AvtContentTwo = styled(AvtContent)`
 const AvtContentThree = styled(AvtContent)``;
 
 const AvtImg = styled.img`
-  max-height: 35vh;
+  max-width: 40vw;
   border-radius: 5px;
-  max-height: 35vh;
+
+  @media screen and (max-width: 600px) {
+    max-width: 80vw;
+  }
 `;
 
-const AvtImgOne = styled(AvtImg)``;
-const AvtImgTwo = styled(AvtImg)``;
-const AvtImgThree = styled(AvtImg)``;
+const AvtImgOne = styled(AvtImg)`
+  @media screen and (max-width: 600px) {
+    margin-bottom: 1rem;
+  }
+`;
+const AvtImgTwo = styled(AvtImg)`
+  margin-top: 1rem;
+`;
+const AvtImgThree = styled(AvtImg)`
+  margin-bottom: 1rem;
+`;
 
 const AvtColumn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  max-width: 35vw;
+
+  @media screen and (max-width: 600px) {
+    max-width: 80vw;
+  }
 `;
 
 const Title = styled.h2`
@@ -86,7 +106,6 @@ const Title = styled.h2`
 `;
 
 export const Description = styled.p`
-  max-width: 300px;
   line-height: 1.4rem;
 `;
 
