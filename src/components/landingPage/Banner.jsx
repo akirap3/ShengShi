@@ -14,8 +14,8 @@ const Banner = () => {
           sequi nesciunt. Neque porro quisquam est, qui dolorem.
         </Description>
         <ButtonRow>
-          <StartButton>開始使用</StartButton>
-          <LearnMoreButton>了解更多</LearnMoreButton>
+          <StartButton to="/login">開始使用</StartButton>
+          <LearnMoreButton to="/about">了解更多</LearnMoreButton>
         </ButtonRow>
       </BannerContent>
       <BannerImg src={BannerImage} />

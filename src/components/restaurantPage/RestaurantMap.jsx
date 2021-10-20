@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { compose, withProps } from 'recompose';
 import {
   withScriptjs,
