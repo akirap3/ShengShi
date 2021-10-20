@@ -114,16 +114,21 @@ export const logOut = () => {
     });
 };
 
+const fetchAllDocs = async (collectionName) => {
+  const arr = [];
+  const querySnapshot = await getDocs(collection(db, collectionName));
+  querySnapshot.forEach((doc) => arr.push(doc.data()));
+  return arr;
+};
+
 export const fetchRestaurants = async () => {
-  const restaurantArr = [];
-  const querySnapshot = await getDocs(collection(db, 'restaurants'));
-  querySnapshot.forEach((doc) => restaurantArr.push(doc.data()));
-  return restaurantArr;
+  return fetchAllDocs('restaurants');
 };
 
 export const fetchShares = async () => {
-  const shareArr = [];
-  const querySnapshot = await getDocs(collection(db, 'shares'));
-  querySnapshot.forEach((doc) => shareArr.push(doc.data()));
-  return shareArr;
+  return fetchAllDocs('shares');
+};
+
+export const fetchArticles = async () => {
+  return fetchAllDocs('articles');
 };
