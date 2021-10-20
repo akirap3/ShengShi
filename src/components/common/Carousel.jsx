@@ -1,21 +1,9 @@
-import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { AiTwotoneStar, AiTwotoneHeart } from 'react-icons/ai';
 import { IoIosArrowDropleft, IoIosArrowDropright } from 'react-icons/io';
 
-import * as firebase from '../../utils/firebase';
-
-const Carousels = () => {
-  const [restaurants, setRestaurants] = useState([]);
-
-  useEffect(() => {
-    firebase.fetchRestaurants().then((data) => {
-      setRestaurants(data);
-    });
-    return;
-  }, []);
-
+const Carousel = ({ title, contentData }) => {
   const settings = {
     className: 'slider variable-width',
     dots: true,
@@ -54,29 +42,31 @@ const Carousels = () => {
   };
 
   return (
-    <CarouselContainer>
-      <Title>合作餐廳</Title>
-      <CarouselContext>
-        <SlideWrapper>
-          <StyledSlider {...settings}>
-            {restaurants.map((restaurant) => {
-              return (
-                <Card>
-                  <CardImg src={restaurant.imageUrl} />
-                  <CardTitle>Ad eos saepe lucilius</CardTitle>
-                  <Row>
-                    {Array.from(Array(restaurant.rating).keys()).map(() => (
-                      <Star />
-                    ))}
-                    <Heart />
-                  </Row>
-                </Card>
-              );
-            })}
-          </StyledSlider>
-        </SlideWrapper>
-      </CarouselContext>
-    </CarouselContainer>
+    contentData && (
+      <CarouselContainer>
+        <Title>{title}</Title>
+        <CarouselContext>
+          <SlideWrapper>
+            <StyledSlider {...settings}>
+              {contentData.map((content) => {
+                return (
+                  <Card>
+                    <CardImg src={content.imageUrl} />
+                    <CardTitle>{content.name}</CardTitle>
+                    <Row>
+                      {Array.from(Array(content.rating).keys()).map(() => (
+                        <Star />
+                      ))}
+                      <Heart />
+                    </Row>
+                  </Card>
+                );
+              })}
+            </StyledSlider>
+          </SlideWrapper>
+        </CarouselContext>
+      </CarouselContainer>
+    )
   );
 };
 
@@ -160,4 +150,4 @@ const Heart = styled(AiTwotoneHeart)`
   fill: red;
 `;
 
-export default Carousels;
+export default Carousel;

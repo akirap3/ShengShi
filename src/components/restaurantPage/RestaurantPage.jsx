@@ -1,12 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+
 import { layoutConfig, themeColor } from '../../utils/commonVariables';
-import Carousels from '../landingPage/Carousels';
+import Carousel from '../common/Carousel';
+import useRestaurants from '../../hooks/useRestaurants';
+
+import RestaurantMap from './RestaurantMap';
 
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
 
 const RestaurantPage = () => {
+  const restaurants = useRestaurants();
+  console.log(restaurants);
   return (
     <Main>
       <Banner>
@@ -31,8 +37,10 @@ const RestaurantPage = () => {
         <SearchBar placeholder="餐廳搜尋" />
         <SearchButton>搜尋</SearchButton>
       </SearchContent>
-      <Carousels />
-      <Map />
+      {restaurants && <Carousel title="合作餐廳" contentData={restaurants} />}
+      <MapWrapper>
+        {restaurants && <RestaurantMap contentData={restaurants} />}
+      </MapWrapper>
     </Main>
   );
 };
@@ -135,6 +143,8 @@ const SearchButton = styled.button`
   background-color: ${themeColor.blue};
 `;
 
-const Map = styled.div``;
+const MapWrapper = styled.div`
+  margin: 0 4rem 6rem;
+`;
 
 export default RestaurantPage;
