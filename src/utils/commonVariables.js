@@ -2,6 +2,8 @@ const layoutConfig = {
   navHeight: '7vh',
 };
 
-const themeColor = {};
+const themeColor = {
+  blue: '#cddae8',
+};
 
 export { layoutConfig, themeColor };

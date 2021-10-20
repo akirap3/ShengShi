@@ -26,10 +26,15 @@ const Banner = () => {
 const BannerContainer = styled.div`
   display: flex;
   justify-content: space-around;
+  align-items: center;
   flex-wrap: wrap;
   position: relative;
   background-color: #0a9396;
   padding: 2rem;
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const BannerContent = styled.div`
@@ -37,13 +42,17 @@ const BannerContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  max-width: 35vw;
+  @media screen and (max-width: 600px) {
+    max-width: 80vw;
+    margin-bottom: 1rem;
+  }
 `;
 const BannerTitle = styled.h2`
   margin-bottom: 1rem;
 `;
 const Description = styled.p`
   margin-bottom: 1rem;
-  max-width: 300px;
   line-height: 1.4rem;
 `;
 const ButtonRow = styled.div`
@@ -66,9 +75,13 @@ const LearnMoreButton = styled(StyledLink)`
   background-color: white;
 `;
 const BannerImg = styled.img`
-  max-height: 35vh;
+  max-width: 40vw;
   align-self: center;
   border-radius: 5px;
+
+  @media screen and (max-width: 600px) {
+    max-width: 80vw;
+  }
 `;
 
 export default Banner;

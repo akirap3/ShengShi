@@ -9,21 +9,23 @@ import {
   fetchSignInMethodsForEmail,
   signOut,
 } from 'firebase/auth';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 require('dotenv').config();
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP__FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP__FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP__FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP__FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP__FIREBASE_APP_ID,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
 initializeApp(firebaseConfig);
 
 const auth = getAuth();
+const db = getFirestore();
 auth.languageCode = 'it';
 
 export const register = (email, password) => {
@@ -102,7 +104,7 @@ export const loginWithGoogle = () => {
 //   }
 // };
 
-const logOut = () => {
+export const logOut = () => {
   signOut(auth)
     .then(() => {
       console.log('Log out successfully!');
@@ -110,4 +112,18 @@ const logOut = () => {
     .catch((error) => {
       alert(`Error: ${error.message}`);
     });
+};
+
+export const fetchRestaurants = async () => {
+  const restaurantArr = [];
+  const querySnapshot = await getDocs(collection(db, 'restaurants'));
+  querySnapshot.forEach((doc) => restaurantArr.push(doc.data()));
+  return restaurantArr;
+};
+
+export const fetchShares = async () => {
+  const shareArr = [];
+  const querySnapshot = await getDocs(collection(db, 'shares'));
+  querySnapshot.forEach((doc) => shareArr.push(doc.data()));
+  return shareArr;
 };

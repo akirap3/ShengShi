@@ -1,35 +1,15 @@
-import React from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { AiTwotoneStar, AiTwotoneHeart } from 'react-icons/ai';
 import { IoIosArrowDropleft, IoIosArrowDropright } from 'react-icons/io';
 
-import RestaurantImgOne from '../../images/homepage/restaurant-1.jpg';
-import RestaurantImgTwo from '../../images/homepage/restaurant-1.jpg';
-import RestaurantImgThree from '../../images/homepage/restaurant-3.jpg';
-import RestaurantImgFour from '../../images/homepage/restaurant-4.jpg';
-import RestaurantImgFive from '../../images/homepage/restaurant-5.jpg';
-
-const ImgArr = [
-  RestaurantImgOne,
-  RestaurantImgTwo,
-  RestaurantImgThree,
-  RestaurantImgFour,
-  RestaurantImgFive,
-];
-
-const category = [
-  { title: '合作餐廳', images: ImgArr },
-  { title: '剩食分享', images: ImgArr },
-];
-
-const Carousels = () => {
+const Carousel = ({ title, contentData }) => {
   const settings = {
     className: 'slider variable-width',
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 2,
     nextArrow: <RightArrow />,
     prevArrow: <LeftArrow />,
@@ -61,31 +41,33 @@ const Carousels = () => {
     ],
   };
 
-  return category.map((cat) => (
-    <CarouselContainer>
-      <Title>{cat.title}</Title>
-      <CarouselContext>
-        <SlideWrapper>
-          <StyledSlider {...settings}>
-            {cat.images.map((img) => {
-              return (
-                <Card>
-                  <CardImg src={img} />
-                  <CardTitle>Ad eos saepe lucilius</CardTitle>
-                  <Row>
-                    {[1, 2, 3, 4, 5].map(() => (
-                      <Star />
-                    ))}
-                    <Heart />
-                  </Row>
-                </Card>
-              );
-            })}
-          </StyledSlider>
-        </SlideWrapper>
-      </CarouselContext>
-    </CarouselContainer>
-  ));
+  return (
+    contentData && (
+      <CarouselContainer>
+        <Title>{title}</Title>
+        <CarouselContext>
+          <SlideWrapper>
+            <StyledSlider {...settings}>
+              {contentData.map((content) => {
+                return (
+                  <Card>
+                    <CardImg src={content.imageUrl} />
+                    <CardTitle>{content.name}</CardTitle>
+                    <Row>
+                      {Array.from(Array(content.rating).keys()).map(() => (
+                        <Star />
+                      ))}
+                      <Heart />
+                    </Row>
+                  </Card>
+                );
+              })}
+            </StyledSlider>
+          </SlideWrapper>
+        </CarouselContext>
+      </CarouselContainer>
+    )
+  );
 };
 
 const RightArrow = ({ currentSlide, slideCount, ...props }) => {
@@ -168,4 +150,4 @@ const Heart = styled(AiTwotoneHeart)`
   fill: red;
 `;
 
-export default Carousels;
+export default Carousel;
