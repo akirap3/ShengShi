@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Slider from 'react-slick';
+import { v4 as uuidv4 } from 'uuid';
 import { AiTwotoneStar, AiTwotoneHeart } from 'react-icons/ai';
 import { IoIosArrowDropleft, IoIosArrowDropright } from 'react-icons/io';
 
@@ -50,12 +51,12 @@ const Carousel = ({ title, contentData }) => {
             <StyledSlider {...settings}>
               {contentData.map((content) => {
                 return (
-                  <Card>
+                  <Card key={content.id}>
                     <CardImg src={content.imageUrl} />
                     <CardTitle>{content.name}</CardTitle>
                     <Row>
                       {Array.from(Array(content.rating).keys()).map(() => (
-                        <Star />
+                        <Star key={uuidv4()} />
                       ))}
                       <Heart />
                     </Row>

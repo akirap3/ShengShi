@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import * as validation from '../../utils/validation';
 import * as firebase from '../../utils/firebase';
-import { layoutConfig } from '../../utils/commonVariables';
+import Main from '../common/Main';
 
 import { IoLogoFacebook } from 'react-icons/io';
 import { FcGoogle } from 'react-icons/fc';
@@ -17,7 +17,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Main>
+    <StyledMain>
       <SignupContainer>
         <Title>登入</Title>
         <Field
@@ -44,17 +44,14 @@ const LoginPage = () => {
           </GoogleButton>
         </ButtonContainer>
       </SignupContainer>
-    </Main>
+    </StyledMain>
   );
 };
 
-const Main = styled.div`
+const StyledMain = styled(Main)`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  top: ${layoutConfig.navHeight};
-  /* background-color: #c4c4c4; */
 `;
 
 const SignupContainer = styled.div`

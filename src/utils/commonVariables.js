@@ -4,6 +4,7 @@ const layoutConfig = {
 
 const themeColor = {
   blue: '#cddae8',
+  outLineColor: '#90e0ef',
 };
 
 export { layoutConfig, themeColor };

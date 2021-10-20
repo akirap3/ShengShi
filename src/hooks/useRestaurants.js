@@ -14,7 +14,7 @@ const useRestaurants = () => {
       console.log(data);
       dispatch({ type: 'restaurants/fetched', payload: data });
     });
-  }, [dispatch]);
+  }, [dispatch, restaurants]);
 
   return restaurants;
 };

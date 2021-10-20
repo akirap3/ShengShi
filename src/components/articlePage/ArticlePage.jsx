@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { layoutConfig, themeColor } from '../../utils/commonVariables';
+import { v4 as uuidv4 } from 'uuid';
+
+import { themeColor } from '../../utils/commonVariables';
+import Main from '../common/Main';
 import { Link } from 'react-router-dom';
 import useArticles from '../../hooks/useArticles';
-
-import Img from '../../images/articlePage/article-1.jpg';
 
 const ArticlePage = () => {
   const articles = useArticles();
@@ -30,14 +31,14 @@ const ArticlePage = () => {
       <ArticleContainer>
         {articles &&
           articles.map((article) => (
-            <ArticleCard>
+            <ArticleCard key={article.id}>
               <a href={article.url} target="_blank" rel="noreferrer">
                 <CardImg src={article.imageUrl} />
               </a>
               <CardContent>
                 <TagContainer>
                   {article.tags.map((tag) => (
-                    <Tag>{tag}</Tag>
+                    <Tag key={uuidv4()}>{tag}</Tag>
                   ))}
                 </TagContainer>
                 <CardTitle>{article.title}</CardTitle>
@@ -58,12 +59,6 @@ const ArticlePage = () => {
     </Main>
   );
 };
-
-const Main = styled.div`
-  position: relative;
-  top: ${layoutConfig.navHeight};
-  width: 100%;
-`;
 
 const Banner = styled.div`
   display: flex;
@@ -118,7 +113,7 @@ const ArticleContainer = styled.div`
 `;
 
 const ArticleCard = styled.div`
-  border: 1px solid black;
+  border: 1px solid ${themeColor.outLineColor};
   border-radius: 8px;
 `;
 
