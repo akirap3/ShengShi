@@ -2,10 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import { layoutConfig, themeColor } from '../../utils/commonVariables';
 import { Link } from 'react-router-dom';
+import useArticles from '../../hooks/useArticles';
 
 import Img from '../../images/articlePage/article-1.jpg';
 
 const ArticlePage = () => {
+  const articles = useArticles();
+
   return (
     <Main>
       <Banner>
@@ -25,66 +28,23 @@ const ArticlePage = () => {
         </SearchContainer>
       </Banner>
       <ArticleContainer>
-        <ArticleCard>
-          <CardImg src={Img} />
-          <CardContent>
-            <TagContainer>
-              <Tag>{`# Label`}</Tag>
-            </TagContainer>
-            <CardTitle>Sed ut perspiciatis</CardTitle>
-            <CardSubtitle>Nemo enim ipsam voluptatem quia...</CardSubtitle>
-          </CardContent>
-        </ArticleCard>
-        <ArticleCard>
-          <CardImg src={Img} />
-          <CardContent>
-            <TagContainer>
-              <Tag>{`# Label`}</Tag>
-            </TagContainer>
-            <CardTitle>Sed ut perspiciatis</CardTitle>
-            <CardSubtitle>Nemo enim ipsam voluptatem quia...</CardSubtitle>
-          </CardContent>
-        </ArticleCard>
-        <ArticleCard>
-          <CardImg src={Img} />
-          <CardContent>
-            <TagContainer>
-              <Tag>{`# Label`}</Tag>
-            </TagContainer>
-            <CardTitle>Sed ut perspiciatis</CardTitle>
-            <CardSubtitle>Nemo enim ipsam voluptatem quia...</CardSubtitle>
-          </CardContent>
-        </ArticleCard>
-        <ArticleCard>
-          <CardImg src={Img} />
-          <CardContent>
-            <TagContainer>
-              <Tag>{`# Label`}</Tag>
-            </TagContainer>
-            <CardTitle>Sed ut perspiciatis</CardTitle>
-            <CardSubtitle>Nemo enim ipsam voluptatem quia...</CardSubtitle>
-          </CardContent>
-        </ArticleCard>
-        <ArticleCard>
-          <CardImg src={Img} />
-          <CardContent>
-            <TagContainer>
-              <Tag>{`# Label`}</Tag>
-            </TagContainer>
-            <CardTitle>Sed ut perspiciatis</CardTitle>
-            <CardSubtitle>Nemo enim ipsam voluptatem quia...</CardSubtitle>
-          </CardContent>
-        </ArticleCard>
-        <ArticleCard>
-          <CardImg src={Img} />
-          <CardContent>
-            <TagContainer>
-              <Tag>{`# Label`}</Tag>
-            </TagContainer>
-            <CardTitle>Sed ut perspiciatis</CardTitle>
-            <CardSubtitle>Nemo enim ipsam voluptatem quia...</CardSubtitle>
-          </CardContent>
-        </ArticleCard>
+        {articles &&
+          articles.map((article) => (
+            <ArticleCard>
+              <a href={article.url} target="_blank" rel="noreferrer">
+                <CardImg src={article.imageUrl} />
+              </a>
+              <CardContent>
+                <TagContainer>
+                  {article.tags.map((tag) => (
+                    <Tag>{tag}</Tag>
+                  ))}
+                </TagContainer>
+                <CardTitle>{article.title}</CardTitle>
+                <CardSubtitle>{article.subtitle}</CardSubtitle>
+              </CardContent>
+            </ArticleCard>
+          ))}
       </ArticleContainer>
       <PageContainer>
         <PageContent>
@@ -179,6 +139,7 @@ const Tag = styled.span`
   border: 1px solid black;
   padding: 0.2rem 0.3rem;
   border-radius: 5px;
+  margin-right: 0.5rem;
 `;
 
 const CardTitle = styled.div`
