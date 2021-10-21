@@ -28,8 +28,8 @@ const RestaurantPage = () => {
             molestiae te. Ex duo eripuit mentitum.
           </SubTitle>
           <ButtonRow>
-            <StartButton>開始使用</StartButton>
-            <LookButton>別人分享</LookButton>
+            <StartButton to="/login">開始使用</StartButton>
+            <LookButton to="/search">別人分享</LookButton>
           </ButtonRow>
         </BannerContent>
       </Banner>

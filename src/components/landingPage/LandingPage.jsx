@@ -1,6 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-import { layoutConfig } from '../../utils/commonVariables';
+import Main from '../common/Main';
 import Banner from './Banner';
 import Advantages from './Advantages';
 import UserShares from './UserShares';
@@ -22,11 +21,5 @@ const LandingPage = () => {
     </Main>
   );
 };
-
-const Main = styled.div`
-  position: relative;
-  top: ${layoutConfig.navHeight};
-  width: 100%;
-`;
 
 export default LandingPage;

@@ -12,7 +12,7 @@ const useShares = () => {
     firebase.fetchShares().then((data) => {
       dispatch({ type: 'shares/fetched', payload: data });
     });
-  }, [dispatch]);
+  }, [dispatch, shares]);
 
   return shares;
 };

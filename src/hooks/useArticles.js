@@ -12,7 +12,7 @@ const useArticles = () => {
     firebase.fetchArticles().then((data) => {
       dispatch({ type: 'articles/fetched', payload: data });
     });
-  });
+  }, [dispatch, articles]);
 
   return articles;
 };
