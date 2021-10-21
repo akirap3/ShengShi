@@ -127,7 +127,7 @@ const Card = styled.div`
 
 const CardImg = styled.img`
   width: 100%;
-  height: 60%;
+  height: 30vh;
   border-radius: 10px 10px 0 0;
 `;
 

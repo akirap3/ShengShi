@@ -106,7 +106,7 @@ const SearchButton = styled(Link)`
 
 const ArticleContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   grid-template-rows: auto;
   gap: 2rem;
   margin: 0 4rem;
@@ -118,6 +118,7 @@ const ArticleCard = styled.div`
 `;
 
 const CardImg = styled.img`
+  height: 30vh;
   width: 100%;
   border-radius: 8px 8px 0px 0px;
 `;
