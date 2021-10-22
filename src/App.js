@@ -9,6 +9,7 @@ import ContactPage from './components/contactPage/ContactPage';
 import SearchPage from './components/searchPage/SearchPage';
 import LoginPage from './components/loginPage/LoginPage';
 import SignupPage from './components/signupPage/SingupPage';
+import PersonalPage from './components/personalPage/PersonalPage';
 
 import './App.css';
 
@@ -37,6 +38,9 @@ const App = () => {
         </Route>
         <Route exact path="/signup">
           <SignupPage />
+        </Route>
+        <Route exact path="/personal">
+          <PersonalPage />
         </Route>
         <Route path="/">
           <LandingPage />
