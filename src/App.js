@@ -18,6 +18,7 @@ import ToReceive from './components/personalPage/toReceive';
 import CollectedShares from './components/personalPage/CollectedShares';
 import CollectedRestaurants from './components/personalPage/CollectedRestaurants';
 import './App.css';
+import Main from './components/common/Main';
 
 const App = () => {
   return (
@@ -25,28 +26,36 @@ const App = () => {
       <Header />
       <Switch>
         <Route path="/personal">
-          <Dashbaord></Dashbaord>
-          <Title></Title>
-          <Switch>
-            <Route exact path="/personal/list">
-              <ShareCards />
-            </Route>
-            <Route exact path="/personal/badges">
-              <Badges />
-            </Route>
-            <Route exact path="/personal/received">
-              <Received />
-            </Route>
-            <Route exact path="/personal/toReceive">
-              <ToReceive />
-            </Route>
-            <Route exact path="/personal/collectedShares">
-              <CollectedShares />
-            </Route>
-            <Route exact path="/personal/collectedRestaurants">
-              <CollectedRestaurants />
-            </Route>
-          </Switch>
+          <Main>
+            <Dashbaord></Dashbaord>
+
+            <Switch>
+              <Route exact path="/personal/list">
+                <Title title="我的分享清單"></Title>
+                <ShareCards />
+              </Route>
+              <Route exact path="/personal/badges">
+                <Title title="我的勳章"></Title>
+                <Badges />
+              </Route>
+              <Route exact path="/personal/received">
+                <Title title="我已領取的清單"></Title>
+                <Received />
+              </Route>
+              <Route exact path="/personal/toReceive">
+                <Title title="我的尚未領取清單"></Title>
+                <ToReceive />
+              </Route>
+              <Route exact path="/personal/collectedShares">
+                <Title title="我的收藏清單"></Title>
+                <CollectedShares />
+              </Route>
+              <Route exact path="/personal/collectedRestaurants">
+                <Title title="我的收藏店家"></Title>
+                <CollectedRestaurants />
+              </Route>
+            </Switch>
+          </Main>
         </Route>
         <Route exact path="/restaurants">
           <RestaurantPage />

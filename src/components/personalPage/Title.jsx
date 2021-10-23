@@ -3,11 +3,11 @@ import styled from 'styled-components';
 
 import Hotpot from '../../images/searchPage/hotpot.svg';
 
-const Title = () => {
+const Title = ({ title }) => {
   return (
     <SharesTitleContainer>
       <TitleIcon src={Hotpot} />
-      <SharesTitle>我的分享清單</SharesTitle>
+      <SharesTitle>{title}</SharesTitle>
     </SharesTitleContainer>
   );
 };
