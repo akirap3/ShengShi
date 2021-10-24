@@ -3,18 +3,33 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar';
 
+import { useHistory } from 'react-router';
+
+import useCurrentUser from '../../hooks/useCurrentUser';
+import * as firebase from '../../utils/firebase';
+
 import LogoImg from '../../images/common/logo-1.png';
 import { BsPersonCircle } from 'react-icons/bs';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { FcMenu } from 'react-icons/fc';
 
 const Header = () => {
+  const history = useHistory();
   const [showMenu, setShowMenu] = useState(false);
+  const currentUser = useCurrentUser();
+
+  const logout = () => {
+    firebase.logOut().then(() => {
+      history.push('/');
+    });
+  };
 
   return (
     <>
       <HeaderContainer>
-        <Logo src={LogoImg} />
+        <Link to="/">
+          <Logo src={LogoImg} />
+        </Link>
         <HomeNav to="/">首頁</HomeNav>
         <RestaurantNav to="/restaurants">合作餐廳</RestaurantNav>
         <ArticleNav to="/articles">文章</ArticleNav>
@@ -22,8 +37,17 @@ const Header = () => {
         <ContactNav to="/contact">聯絡我們</ContactNav>
         <SearchBar />
         <MemberIcon />
-        <LoginButton to="/login">登入</LoginButton>
-        <SignupButton to="/signup">註冊</SignupButton>
+        {currentUser ? (
+          <>
+            <MyDashboard to="/personal/list">我的看板</MyDashboard>
+            <LogoutButton onClick={() => logout()}>登出</LogoutButton>
+          </>
+        ) : (
+          <>
+            <LoginButton to="/login">登入</LoginButton>
+            <SignupButton to="/signup">註冊</SignupButton>
+          </>
+        )}
       </HeaderContainer>
       <MobileHeader>
         <MobileHeaderLogo src={LogoImg} />
@@ -41,8 +65,21 @@ const Header = () => {
           <MobileArticleNav to="/articles">文章</MobileArticleNav>
           <MobileAboutNav to="/about">關於我們</MobileAboutNav>
           <MobileContactNav to="/contact">聯絡我們</MobileContactNav>
-          <MobileLoginButton to="/login">登入</MobileLoginButton>
-          <MobileSignupButton to="/signup">註冊</MobileSignupButton>
+          {currentUser ? (
+            <>
+              <MyMobileDashboard to="/personal/list">
+                我的看板
+              </MyMobileDashboard>
+              <MobileLogoutButton onClick={() => logout()}>
+                登出
+              </MobileLogoutButton>
+            </>
+          ) : (
+            <>
+              <MobileLoginButton to="/login">登入</MobileLoginButton>
+              <MobileSignupButton to="/signup">註冊</MobileSignupButton>
+            </>
+          )}
         </MobileMenu>
       )}
     </>
@@ -81,12 +118,20 @@ const RestaurantNav = styled(StyledLink)`
 `;
 const ArticleNav = styled(StyledLink)`
   width: 35px;
+
+  @media screen and (max-width: 760px) {
+    margin-right: auto;
+  }
 `;
 const AboutNav = styled(StyledLink)`
   width: 70px;
 
   @media screen and (max-width: 760px) {
     display: none;
+  }
+
+  @media screen and (max-width: 870px) {
+    margin-right: auto;
   }
 `;
 const ContactNav = styled(StyledLink)`
@@ -108,6 +153,14 @@ const LoginButton = styled(StyledLink)`
   width: 35px;
 `;
 const SignupButton = styled(StyledLink)`
+  width: 35px;
+`;
+
+const MyDashboard = styled(StyledLink)`
+  width: 70px;
+`;
+
+const LogoutButton = styled.div`
   width: 35px;
 `;
 
@@ -139,6 +192,7 @@ const MobileMenuIcon = styled(FcMenu)`
   margin-left: 1vw;
   height: 3vh;
   width: 3vh;
+  cursor: pointer;
 `;
 
 const MobileMenu = styled.div`
@@ -163,6 +217,7 @@ const MenuClose = styled(AiFillCloseCircle)`
   border: 1px solid blue;
   border-radius: 50%;
   opacity: 0.7;
+  cursor: pointer;
 `;
 
 const ImgContainer = styled.div`
@@ -201,5 +256,14 @@ const MobileLoginButton = styled(Link)`
   margin-bottom: 2vw;
 `;
 const MobileSignupButton = styled(Link)``;
+
+const MyMobileDashboard = styled(Link)`
+  margin-bottom: 2vw;
+`;
+
+const MobileLogoutButton = styled.div`
+  margin-bottom: 2vw;
+  cursor: pointer;
+`;
 
 export default Header;

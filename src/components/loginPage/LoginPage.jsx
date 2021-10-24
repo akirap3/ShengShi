@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
+import ReactLoading from 'react-loading';
 
 import * as validation from '../../utils/validation';
 import * as firebase from '../../utils/firebase';
@@ -9,15 +11,62 @@ import { IoLogoFacebook } from 'react-icons/io';
 import { FcGoogle } from 'react-icons/fc';
 
 const LoginPage = () => {
+  const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const checkAndLogin = () => {
-    if (validation.checkEmail(email)) firebase.login(email, password);
+    if (validation.checkEmail(email)) {
+      setIsLoading(true);
+      firebase
+        .login(email, password)
+        .then(() => {
+          setIsLoading(false);
+          history.push('personal/list');
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    }
+  };
+
+  const loginFB = () => {
+    setIsLoading(true);
+    firebase
+      .loginWithFB()
+      .then((reslut) => {
+        setIsLoading(false);
+        history.push('personal/list');
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  const loginGoogle = () => {
+    setIsLoading(true);
+    firebase
+      .loginWithGoogle()
+      .then((result) => {
+        setIsLoading(false);
+        history.push('/personal/list');
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   return (
     <StyledMain>
+      {isLoading && (
+        <StyledLoading
+          type={'spin'}
+          color={'#2a9d8f'}
+          height={'10vw'}
+          width={'10vw'}
+        />
+      )}
       <SignupContainer>
         <Title>登入</Title>
         <Field
@@ -35,11 +84,11 @@ const LoginPage = () => {
         />
         <ButtonContainer>
           <NativeButton onClick={() => checkAndLogin()}>確認</NativeButton>
-          <FBButton onClick={() => firebase.loginWithFB()}>
+          <FBButton onClick={() => loginFB()}>
             <FbIcon />
             <span>FB 登入</span>
           </FBButton>
-          <GoogleButton onClick={() => firebase.loginWithGoogle()}>
+          <GoogleButton onClick={() => loginGoogle()}>
             <GoogleIcon /> <span>Google 登入</span>
           </GoogleButton>
         </ButtonContainer>
@@ -66,6 +115,14 @@ const SignupContainer = styled.div`
     margin-left: 2rem;
     padding: 2rem;
   } ;
+`;
+
+const StyledLoading = styled(ReactLoading)`
+  display: flex;
+  position: absolute;
+  z-index: 10;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Title = styled.h1`

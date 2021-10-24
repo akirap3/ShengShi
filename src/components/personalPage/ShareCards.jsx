@@ -228,6 +228,7 @@ const StyledColse = styled(AiFillCloseCircle)`
   background-color: blue;
   border-radius: 50%;
   opacity: 0.8;
+  cursor: pointer;
 `;
 
 const DeleteButton = styled(StyledColse)`
@@ -282,6 +283,7 @@ const GetButton = styled.div`
   border-radius: 8px;
   background-color: #2a9d8f;
   color: white;
+  cursor: pointer;
 
   @media screen and (max-width: 860px) {
     padding: 0.3rem 0.5rem;
@@ -298,6 +300,7 @@ const PopClose = styled(StyledColse)`
   right: 2vw;
   width: 3vw;
   height: 3vw;
+  cursor: pointer;
 `;
 
 const PopTitleContainer = styled.div`
@@ -359,6 +362,7 @@ const Calendar = styled(BsCalendarCheckFill)`
   width: 2vw;
   height: 2vw;
   fill: lightseagreen;
+  cursor: pointer;
 `;
 
 const PopPlaceLabel = styled.label`
@@ -383,6 +387,7 @@ const ImgUpload = styled.label`
   border-radius: 5px;
   background-color: lightskyblue;
   padding: 0.5vw;
+  cursor: pointer;
 `;
 
 const UploadBtn = styled.input`
