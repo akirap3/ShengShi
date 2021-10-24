@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Logo from '../../images/common/logo-2.png';
 import { IoLogoFacebook, IoLogoTwitter, IoLogoInstagram } from 'react-icons/io';
@@ -8,13 +9,15 @@ const Footer = () => {
     <FooterContainer>
       <FooterContent>
         <TextRow>
-          <Text>首 頁</Text>
-          <Text>餐 廳</Text>
+          <HomeText to="/">首 頁</HomeText>
+          <RestaurantText to="/restaurants">餐 廳</RestaurantText>
         </TextRow>
-        <LogoImg src={Logo} />
+        <Link to="/">
+          <LogoImg src={Logo} />
+        </Link>
         <TextRow>
-          <Text>關 於</Text>
-          <Text>聯 絡</Text>
+          <AboutText to="/about">關 於</AboutText>
+          <ContactText to="contact">聯 絡</ContactText>
         </TextRow>
       </FooterContent>
       <LogoRow>
@@ -50,13 +53,18 @@ const TextRow = styled.div`
   }
 `;
 
-const Text = styled.div`
+const Text = styled(Link)`
   margin: auto 2rem;
   letter-spacing: 0.5vw;
   @media screen and (max-width: 650px) {
     letter-spacing: 2vw;
   }
 `;
+
+const HomeText = styled(Text)``;
+const RestaurantText = styled(Text)``;
+const AboutText = styled(Text)``;
+const ContactText = styled(Text)``;
 
 const LogoImg = styled.img`
   width: 100px;

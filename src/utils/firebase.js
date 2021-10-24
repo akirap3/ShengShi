@@ -8,6 +8,7 @@ import {
   GoogleAuthProvider,
   fetchSignInMethodsForEmail,
   signOut,
+  onAuthStateChanged,
 } from 'firebase/auth';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
@@ -40,39 +41,18 @@ export const register = (email, password) => {
 };
 
 export const login = (email, password) => {
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      alert('You have logged in our website!!');
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
+  return signInWithEmailAndPassword(auth, email, password);
 };
 
 const fbProvider = new FacebookAuthProvider();
 const googleProvider = new GoogleAuthProvider();
 
-const loginWithProvider = (provider) => {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      const user = result.user;
-      alert(`Hi, ${user.displayName}`);
-      // const credential = FacebookAuthProvider.credentialFromResult(result);
-      // const accessToken = credential.accessToken;
-      // console.log(user, accessToken);
-    })
-    .catch((error) => {
-      alert(error.message);
-      //   handleDiffCredential(error);
-    });
-};
-
 export const loginWithFB = () => {
-  loginWithProvider(fbProvider);
+  return signInWithPopup(auth, fbProvider);
 };
 
 export const loginWithGoogle = () => {
-  loginWithProvider(googleProvider);
+  return signInWithPopup(auth, googleProvider);
 };
 
 // const handleDiffCredential = (error) => {
@@ -105,13 +85,7 @@ export const loginWithGoogle = () => {
 // };
 
 export const logOut = () => {
-  signOut(auth)
-    .then(() => {
-      console.log('Log out successfully!');
-    })
-    .catch((error) => {
-      alert(`Error: ${error.message}`);
-    });
+  return signOut(auth);
 };
 
 const fetchAllDocs = async (collectionName) => {
@@ -131,4 +105,8 @@ export const fetchShares = async () => {
 
 export const fetchArticles = async () => {
   return fetchAllDocs('articles');
+};
+
+export const observeUserChange = (callback) => {
+  onAuthStateChanged(auth, callback);
 };

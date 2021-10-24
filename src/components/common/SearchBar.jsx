@@ -19,7 +19,7 @@ const SearchWrapper = styled.div`
   width: 30%;
   margin-right: 1vw;
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 610px) {
     flex-grow: 1;
   }
 `;

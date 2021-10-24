@@ -167,6 +167,7 @@ const UserName = styled.span`
 const Setting = styled(BsGear)`
   width: 1.8vw;
   height: 1.8vw;
+  cursor: pointer;
   @media screen and (max-width: 700px) {
     margin-left: 2vw;
     width: 2.5vw;
@@ -263,6 +264,7 @@ const CheckButton = styled(BigButton)`
 
 const ShareButton = styled(BigButton)`
   grid-area: ShareButton;
+  cursor: pointer;
 `;
 
 export default Dashbaord;
