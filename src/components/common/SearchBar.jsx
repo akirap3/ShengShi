@@ -18,7 +18,10 @@ const SearchBar = () => {
 const SearchWrapper = styled.div`
   width: 30%;
   margin-right: 1vw;
-  flex-grow: 1;
+
+  @media screen and (max-width: 700px) {
+    flex-grow: 1;
+  }
 `;
 
 const SearchContainer = styled.div`

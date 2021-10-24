@@ -7,18 +7,22 @@ const Footer = () => {
   return (
     <FooterContainer>
       <FooterContent>
-        <Text>首頁</Text>
-        <Text>餐廳</Text>
+        <TextRow>
+          <Text>首 頁</Text>
+          <Text>餐 廳</Text>
+        </TextRow>
         <LogoImg src={Logo} />
-        <Text>關於</Text>
-        <Text>聯絡</Text>
+        <TextRow>
+          <Text>關 於</Text>
+          <Text>聯 絡</Text>
+        </TextRow>
       </FooterContent>
       <LogoRow>
         <FbLogo />
         <TwitterLogo />
         <InstagramLogo />
       </LogoRow>
-      <CompanyText>© ShengShi, Inc. 2019. We love our shares!</CompanyText>
+      <CompanyText>© ShengShi, Inc. 2021. We love our shares!</CompanyText>
     </FooterContainer>
   );
 };
@@ -32,14 +36,34 @@ const FooterContent = styled.div`
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid black;
+
+  @media screen and (max-width: 650px) {
+    flex-direction: column;
+  }
+`;
+
+const TextRow = styled.div`
+  display: flex;
+  @media screen and (max-width: 650px) {
+    order: 1;
+    margin-bottom: 3vw;
+  }
 `;
 
 const Text = styled.div`
   margin: auto 2rem;
+  letter-spacing: 0.5vw;
+  @media screen and (max-width: 650px) {
+    letter-spacing: 2vw;
+  }
 `;
 
 const LogoImg = styled.img`
   width: 100px;
+
+  @media screen and (max-width: 650px) {
+    order: 0;
+  }
 `;
 
 const LogoRow = styled.div`
@@ -70,6 +94,10 @@ const InstagramLogo = styled(IoLogoInstagram)`
 
 const CompanyText = styled.div`
   text-align: center;
+
+  @media screen and (max-width: 650px) {
+    font-size: 3vw;
+  }
 `;
 
 export default Footer;
