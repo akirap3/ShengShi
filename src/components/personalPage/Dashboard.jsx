@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import MemberImg from '../../images/PersonalPage/user-9.jpg';
 
@@ -11,6 +11,17 @@ import { IoMdPerson } from 'react-icons/io';
 import { BsGear } from 'react-icons/bs';
 
 const Dashbaord = () => {
+  const location = useLocation();
+  const menus = [
+    { name: '我的清單', count: 10, path: '/personal/list' },
+    { name: '我的勳章', count: 10, path: '/personal/badges' },
+    { name: '領取紀錄', count: 10, path: '/personal/received' },
+    { name: '尚未領取', count: 10, path: '/personal/toReceive' },
+    { name: '收藏清單', count: 10, path: '/personal/collectedShares' },
+    { name: '收藏店家', count: 10, path: '/personal/collectedRestaurants' },
+  ];
+
+  console.log(location);
   return (
     <DashboardContainer>
       <DashboardContext>
@@ -37,30 +48,17 @@ const Dashbaord = () => {
           </Row>
         </Details>
         <Grid>
-          <Button as={Link} to="/personal/list">
-            <ButtonName>我的清單</ButtonName>
-            <ItemNumber>10</ItemNumber>
-          </Button>
-          <Button as={Link} to="/personal/badges">
-            <ButtonName>我的勳章</ButtonName>
-            <ItemNumber>3</ItemNumber>
-          </Button>
-          <Button as={Link} to="/personal/received">
-            <ButtonName>領取紀錄</ButtonName>
-            <ItemNumber>10</ItemNumber>
-          </Button>
-          <Button as={Link} to="/personal/toReceive">
-            <ButtonName>尚未領取</ButtonName>
-            <ItemNumber>10</ItemNumber>
-          </Button>
-          <Button as={Link} to="/personal/collectedShares">
-            <ButtonName>收藏清單</ButtonName>
-            <ItemNumber>10</ItemNumber>
-          </Button>
-          <Button as={Link} to="/personal/collectedRestaurants">
-            <ButtonName>收藏店家</ButtonName>
-            <ItemNumber>10</ItemNumber>
-          </Button>
+          {menus.map((menu) => (
+            <Button
+              key={menu.name}
+              as={Link}
+              to={`${menu.path}`}
+              isActive={menu.path === location.pathname}
+            >
+              <ButtonName>{menu.name}</ButtonName>
+              <ItemNumber>{menu.count}</ItemNumber>
+            </Button>
+          ))}
         </Grid>
         <CheckButton as={Link} to="/search">
           查看他人的分享
@@ -225,6 +223,8 @@ const Button = styled.div`
   border: 1px solid black;
   border-radius: 8px;
   padding: 1vw;
+
+  background-color: ${({ isActive }) => (isActive ? '#2a9d8f' : 'white')};
 
   @media screen and (max-width: 700px) {
     flex-direction: row;

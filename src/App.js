@@ -9,20 +9,54 @@ import ContactPage from './components/contactPage/ContactPage';
 import SearchPage from './components/searchPage/SearchPage';
 import LoginPage from './components/loginPage/LoginPage';
 import SignupPage from './components/signupPage/SingupPage';
-import ListPage from './components/personalPage/ListPage';
-import BadgesPage from './components/personalPage/BadgesPage';
-import ReceivedPage from './components/personalPage/ReceivedPage';
-import ToReceivePage from './components/personalPage/toReceivePage';
-import CollectedSharesPage from './components/personalPage/CollectedSharesPage';
-import CollectedRestaurantsPage from './components/personalPage/CollectedRestaurantsPage';
-
+import Dashbaord from './components/personalPage/Dashboard';
+import Title from './components/personalPage/Title';
+import ShareCards from './components/personalPage/ShareCards';
+import Badges from './components/personalPage/Badges';
+import Received from './components/personalPage/Received';
+import ToReceive from './components/personalPage/toReceive';
+import CollectedShares from './components/personalPage/CollectedShares';
+import CollectedRestaurants from './components/personalPage/CollectedRestaurants';
 import './App.css';
+import Main from './components/common/Main';
 
 const App = () => {
   return (
     <>
       <Header />
       <Switch>
+        <Route path="/personal">
+          <Main>
+            <Dashbaord></Dashbaord>
+
+            <Switch>
+              <Route exact path="/personal/list">
+                <Title title="我的分享清單"></Title>
+                <ShareCards />
+              </Route>
+              <Route exact path="/personal/badges">
+                <Title title="我的勳章"></Title>
+                <Badges />
+              </Route>
+              <Route exact path="/personal/received">
+                <Title title="我已領取的清單"></Title>
+                <Received />
+              </Route>
+              <Route exact path="/personal/toReceive">
+                <Title title="我的尚未領取清單"></Title>
+                <ToReceive />
+              </Route>
+              <Route exact path="/personal/collectedShares">
+                <Title title="我的收藏清單"></Title>
+                <CollectedShares />
+              </Route>
+              <Route exact path="/personal/collectedRestaurants">
+                <Title title="我的收藏店家"></Title>
+                <CollectedRestaurants />
+              </Route>
+            </Switch>
+          </Main>
+        </Route>
         <Route exact path="/restaurants">
           <RestaurantPage />
         </Route>
@@ -43,24 +77,6 @@ const App = () => {
         </Route>
         <Route exact path="/signup">
           <SignupPage />
-        </Route>
-        <Route exact path="/personal/list">
-          <ListPage />
-        </Route>
-        <Route exact path="/personal/badges">
-          <BadgesPage />
-        </Route>
-        <Route exact path="/personal/received">
-          <ReceivedPage />
-        </Route>
-        <Route exact path="/personal/toReceive">
-          <ToReceivePage />
-        </Route>
-        <Route exact path="/personal/collectedShares">
-          <CollectedSharesPage />
-        </Route>
-        <Route exact path="/personal/collectedRestaurants">
-          <CollectedRestaurantsPage />
         </Route>
         <Route path="/">
           <LandingPage />
