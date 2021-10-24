@@ -6,8 +6,7 @@ import { themeColor } from '../../utils/commonVariables';
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 import '@reach/dialog/styles.css';
 
-import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
-import '@wojtekmaj/react-datetimerange-picker/dist/DateTimeRangePicker.css';
+import DateTimeSelector from '../common/DateTimeSelector';
 
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
 import { ImSpoonKnife } from 'react-icons/im';
@@ -25,7 +24,6 @@ const ShareCards = () => {
   const [showEdit, setShowEdit] = useState(false);
   const [showCalender, setShowCalendar] = useState(false);
   const [file, setFile] = useState(null);
-  const [value, setValue] = useState(new Date(), new Date());
 
   const openEditor = () => setShowEdit(true);
   const closeEditor = () => setShowEdit(false);
@@ -122,11 +120,7 @@ const ShareCards = () => {
           }}
         >
           <PopClose onClick={closeCalendar} />
-          <DateTimeRangePicker
-            onChange={(value) => {
-              console.log(value);
-            }}
-          />
+          <DateTimeSelector />
         </DialogContent>
       </DialogOverlay>
     </>

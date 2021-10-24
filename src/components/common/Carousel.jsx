@@ -18,8 +18,8 @@ const Carousel = ({ title, contentData }) => {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
+          slidesToShow: 2,
+          slidesToScroll: 2,
           infinite: true,
           dots: true,
         },
@@ -30,13 +30,17 @@ const Carousel = ({ title, contentData }) => {
           slidesToShow: 2,
           slidesToScroll: 2,
           initialSlide: 2,
+          infinite: true,
+          dots: true,
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 700,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+          infinite: true,
+          dots: true,
         },
       },
     ],
@@ -100,9 +104,19 @@ const CarouselContext = styled.div``;
 const StyledSlider = styled(Slider)``;
 
 const SlideWrapper = styled.div`
-  .slick-slide {
-    /* margin: 10px; */
+  .slick-slider {
+    width: 100%;
   }
+
+  .slick-active {
+    margin-right: 5px;
+  }
+
+  .slick-track {
+    display: flex;
+    /* width: 80vw; */
+  }
+
   .slick-arrow {
     background-color: #c7dbd5;
     padding: 5px;
@@ -119,16 +133,28 @@ const SlideWrapper = styled.div`
 `;
 
 const Card = styled.div`
-  display: flex;
-  flex-direction: column;
+  /* display: flex;s */
+  /* flex-direction: column; */
   border: 1px solid black;
   border-radius: 10px;
 `;
 
 const CardImg = styled.img`
   width: 100%;
-  height: 30vh;
+  height: 30vw;
   border-radius: 10px 10px 0 0;
+
+  @media screen and (min-width: 1120px) {
+    height: 20vw;
+  }
+
+  @media screen and (min-width: 1024px) {
+    height: 15vw;
+  }
+
+  @media screen and (min-width: 700px) {
+    height: 25vw;
+  }
 `;
 
 const CardTitle = styled.h4`
