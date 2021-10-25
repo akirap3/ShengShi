@@ -14,12 +14,15 @@ import Dashbaord from './components/personalPage/Dashboard';
 import Title from './components/personalPage/Title';
 import MyShareList from './components/personalPage/myShareList/MyShareList';
 import Badges from './components/personalPage/Badges';
-import Received from './components/personalPage/Received';
+import MyReceivedList from './components/personalPage/myReceivedList/MyReceivedList';
 import ToReceive from './components/personalPage/toReceive';
-import CollectedShares from './components/personalPage/CollectedShares';
+import MyCollectedList from './components/personalPage/myCollectedList/MyCollectedList';
 import CollectedRestaurants from './components/personalPage/CollectedRestaurants';
 import MemberUpdate from './components/memberUpdatePage/MemberUpdate';
+
 import './App.css';
+import '@reach/dialog/styles.css';
+
 import Main from './components/common/Main';
 import useCheckUser from './hooks/useCheckUser';
 import ReactLoading from 'react-loading';
@@ -47,7 +50,7 @@ const App = () => {
                   </Route>
                   <Route exact path="/personal/received">
                     <Title title="我已領取的清單"></Title>
-                    <Received />
+                    <MyReceivedList />
                   </Route>
                   <Route exact path="/personal/toReceive">
                     <Title title="我的尚未領取清單"></Title>
@@ -55,7 +58,7 @@ const App = () => {
                   </Route>
                   <Route exact path="/personal/collectedShares">
                     <Title title="我的收藏清單"></Title>
-                    <CollectedShares />
+                    <MyCollectedList />
                   </Route>
                   <Route exact path="/personal/collectedRestaurants">
                     <Title title="我的收藏店家"></Title>

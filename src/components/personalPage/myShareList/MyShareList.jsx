@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import '@reach/dialog/styles.css';
-
 import EditPopup from './EditPopup';
 import ShareCard from '../../common/ShareCard';
 
@@ -13,7 +11,7 @@ const MyShareList = () => {
 
   return (
     <>
-      <ShareCard openEditor={openEditor} />
+      <ShareCard openEditor={openEditor} btnName="編輯" />
       <EditPopup showEdit={showEdit} closeEditor={closeEditor} />
     </>
   );

@@ -14,14 +14,14 @@ import {
 } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
 
-const ShareCard = ({ openEditor }) => {
+const ShareCard = ({ openEditor, btnName, Tag, isReceived, tagName }) => {
   return (
     <SharesContainer>
       <ShareContext>
         <ShareImg src={Img} />
         <CardContent>
           <ShareTitle>好吃的麵包</ShareTitle>
-          <DeleteButton />
+          {isReceived ? <></> : <DeleteButton />}
           <CardRow>
             <CardItem>
               <ShareNameIcon />
@@ -38,7 +38,8 @@ const ShareCard = ({ openEditor }) => {
               <PlaceIcon />
               <Location>台北 板橋</Location>
             </CardItem>
-            <GetButton onClick={openEditor}>編輯</GetButton>
+            {Tag && <Tag>{tagName}</Tag>}
+            <GetButton onClick={openEditor}>{btnName || '查看'}</GetButton>
           </CardRow>
         </CardContent>
       </ShareContext>

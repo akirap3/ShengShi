@@ -1,26 +1,30 @@
-import React, { useRef, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
+import SelectDateTimePopup from './SelectDateTimePopup';
+import Map from './LocationMap';
+import ConfirmedPopup from './ConfirmedPopup';
 
-import ClendarPopup from './CalendarPopup';
-
+import FoodImg from '../../../images/homepage/food-5.jpg';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
 import { BiCrown } from 'react-icons/bi';
 import { BsCalendarCheckFill } from 'react-icons/bs';
 
-const EditPopup = ({ showEdit, closeEditor }) => {
-  const uploadRef = useRef();
-  const [showCalender, setShowCalendar] = useState(false);
-  const [file, setFile] = useState(null);
+const CollectedSharePopup = ({ showEdit, closeEditor }) => {
+  const [showDateTime, setShowDateTime] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const openCalendar = () => setShowCalendar(true);
-  const closeCalendar = () => setShowCalendar(false);
+  const openDateTime = () => setShowDateTime(true);
+  const closeDateTime = () => setShowDateTime(false);
+  const openConfirmation = () => setShowConfirmation(true);
+  const closeConfirmation = () => setShowConfirmation(false);
 
-  const previewImgUrl = file
-    ? URL.createObjectURL(file)
-    : 'https://react.semantic-ui.com/images/wireframe/image.png';
+  const handelConfirmation = () => {
+    openConfirmation();
+    closeEditor();
+  };
 
   return (
     <>
@@ -38,41 +42,40 @@ const EditPopup = ({ showEdit, closeEditor }) => {
             <PopTitle>好吃的麵包</PopTitle>
           </PopTitleContainer>
           <PopContent>
+            <PreviewImg src={FoodImg} />
             <PopRow>
-              <FoodLabel>食物名稱</FoodLabel>
-              <FoodName />
+              <CurrentNumberLabel>目前數量</CurrentNumberLabel>
+              <CurrentNumber>5</CurrentNumber>
             </PopRow>
             <PopRow>
-              <QuantityLabel>數量</QuantityLabel>
-              <Quantity />
+              <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
+              <Quantity placeholder="請輸入數量" />
             </PopRow>
             <PopRow>
-              <DateTimeLabel>日期及時間</DateTimeLabel>
+              <DateTimeLabel>領取日期及時間</DateTimeLabel>
               <DateTime>2021-10-15 20:00</DateTime>
-              <Calendar onClick={openCalendar} />
+              <Calendar onClick={openDateTime} />
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
               <PopPlace>台北．內湖</PopPlace>
               <PopPlaceIcon />
             </PopRow>
-            <PopRow>
-              <FoodImgLabel>食物照片</FoodImgLabel>
-              <ImgUpload ref={uploadRef} htmlFor="image-upload">
-                上傳
-              </ImgUpload>
-              <UploadBtn
-                type="file"
-                id="image-upload"
-                onChange={(e) => setFile(e.target.files[0])}
-              />
-            </PopRow>
-            <PreviewImg src={previewImgUrl} />
-            <SubmitBtn>確認更新</SubmitBtn>
+            <MapWrapper>
+              <Map />
+            </MapWrapper>
+            <SubmitBtn onClick={() => handelConfirmation()}>確認領取</SubmitBtn>
           </PopContent>
         </DialogContent>
       </DialogOverlay>
-      <ClendarPopup showCalender={showCalender} closeCalendar={closeCalendar} />
+      <SelectDateTimePopup
+        showDateTime={showDateTime}
+        closeDateTime={closeDateTime}
+      />
+      <ConfirmedPopup
+        showConfirmation={showConfirmation}
+        closeConfirmation={closeConfirmation}
+      />
     </>
   );
 };
@@ -127,15 +130,15 @@ const PopRow = styled.div`
   margin-bottom: 2vw;
 `;
 
-const FoodLabel = styled.label`
+const CurrentNumberLabel = styled.label`
   width: 9vw;
 `;
 
-const FoodName = styled.input`
+const CurrentNumber = styled.span`
   flex-grow: 1;
 `;
 
-const QuantityLabel = styled.label`
+const RegisterQuantityLabel = styled.label`
   width: 9vw;
 `;
 
@@ -173,18 +176,6 @@ const FoodImgLabel = styled.label`
   width: 9vw;
 `;
 
-const ImgUpload = styled.label`
-  border: 1px solid lightslategrey;
-  border-radius: 5px;
-  background-color: lightskyblue;
-  padding: 0.5vw;
-  cursor: pointer;
-`;
-
-const UploadBtn = styled.input`
-  display: none;
-`;
-
 const PreviewImg = styled.img`
   border-radius: 10px;
   margin-bottom: 2vw;
@@ -201,4 +192,8 @@ const SubmitBtn = styled.button`
   letter-spacing: 0.5vw;
 `;
 
-export default EditPopup;
+const MapWrapper = styled.div`
+  margin-bottom: 2vw;
+`;
+
+export default CollectedSharePopup;

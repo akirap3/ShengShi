@@ -2,15 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
-import '@reach/dialog/styles.css';
 
-import DateTimeRangeSelector from '../../common/DateTimeRangeSelector';
+import DateTimeSelector from '../../common/DateTimeSelector';
 
 import { AiFillCloseCircle } from 'react-icons/ai';
 
-const ClendarPopup = ({ showCalender, closeCalendar }) => {
+const ClendarPopup = ({ showDateTime, closeDateTime }) => {
   return (
-    <DialogOverlay isOpen={showCalender} onDismiss={closeCalendar}>
+    <DialogOverlay isOpen={showDateTime} onDismiss={closeDateTime}>
       <DialogContent
         style={{
           position: 'relative',
@@ -18,8 +17,8 @@ const ClendarPopup = ({ showCalender, closeCalendar }) => {
           borderRadius: '10px',
         }}
       >
-        <PopClose onClick={closeCalendar} />
-        <DateTimeRangeSelector />
+        <PopClose onClick={closeDateTime} />
+        <DateTimeSelector />
       </DialogContent>
     </DialogOverlay>
   );
