@@ -11,7 +11,7 @@ import LoginPage from './components/loginPage/LoginPage';
 import SignupPage from './components/signupPage/SingupPage';
 import Dashbaord from './components/personalPage/Dashboard';
 import Title from './components/personalPage/Title';
-import ShareCards from './components/personalPage/ShareCards';
+import MyShareList from './components/personalPage/myShareList/MyShareList';
 import Badges from './components/personalPage/Badges';
 import Received from './components/personalPage/Received';
 import ToReceive from './components/personalPage/toReceive';
@@ -37,7 +37,7 @@ const App = () => {
               <Switch>
                 <Route exact path="/personal/list">
                   <Title title="我的分享清單"></Title>
-                  <ShareCards />
+                  <MyShareList />
                 </Route>
                 <Route exact path="/personal/badges">
                   <Title title="我的勳章"></Title>

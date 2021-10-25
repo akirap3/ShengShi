@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import ShareCard from '../common/ShareCard';
 
 const Received = () => {
-  return <div>Received</div>;
+  return <ShareCard />;
 };
 
 export default Received;
