@@ -36,7 +36,9 @@ const Dashbaord = () => {
           <Row>
             <PersoanlUsernameIcon />
             <UserName>John Chen</UserName>
-            <Setting />
+            <Link to="/personal/memberUpdate/">
+              <Setting />
+            </Link>
           </Row>
           <Row>
             <Star />

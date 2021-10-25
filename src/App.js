@@ -17,6 +17,7 @@ import Received from './components/personalPage/Received';
 import ToReceive from './components/personalPage/toReceive';
 import CollectedShares from './components/personalPage/CollectedShares';
 import CollectedRestaurants from './components/personalPage/CollectedRestaurants';
+import MemberUpdate from './components/memberUpdatePage/MemberUpdate';
 import './App.css';
 import Main from './components/common/Main';
 import useCurrentUser from './hooks/useCurrentUser';
@@ -57,6 +58,10 @@ const App = () => {
                 <Route exact path="/personal/collectedRestaurants">
                   <Title title="我的收藏店家"></Title>
                   <CollectedRestaurants />
+                </Route>
+                <Route exact path="/personal/memberUpdate">
+                  <Title title="個人資料更新"></Title>
+                  <MemberUpdate />
                 </Route>
               </Switch>
             </Main>
