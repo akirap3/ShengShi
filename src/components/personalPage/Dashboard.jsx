@@ -29,7 +29,7 @@ const Dashbaord = () => {
           <Avatar src={MemberImg} />
           <NameContext>
             <AliasIcon />
-            <Alias>剩食達人</Alias>
+            <Alias>勝食達人</Alias>
           </NameContext>
         </LeftColumn>
         <Details>
@@ -104,6 +104,9 @@ const LeftColumn = styled.div`
 const Avatar = styled.img`
   max-width: 15vw;
   border-radius: 50%;
+  @media screen and (max-width: 600px) {
+    max-width: 25vw;
+  }
 `;
 
 const NameContext = styled.div`
@@ -124,12 +127,19 @@ const AliasIcon = styled(ImSpoonKnife)`
     width: 2.5vw;
     height: 2.5vw;
   }
+  @media screen and (max-width: 600px) {
+    width: 3vw;
+    height: 3vw;
+  }
 `;
 
 const Alias = styled.span`
   font-size: 1.8vw;
   @media screen and (max-width: 700px) {
     font-size: 2.5vw;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 3vw;
   }
 `;
 
@@ -143,6 +153,10 @@ const Details = styled.div`
 
   @media screen and (max-width: 700px) {
     font-size: 2.5vw;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 3vw;
   }
 `;
 
@@ -160,6 +174,10 @@ const PersoanlUsernameIcon = styled(IoMdPerson)`
     width: 2.5vw;
     height: 2.5vw;
   }
+  @media screen and (max-width: 600px) {
+    width: 3vw;
+    height: 3vw;
+  }
 `;
 
 const UserName = styled.span`
@@ -175,6 +193,10 @@ const Setting = styled(BsGear)`
     width: 2.5vw;
     height: 2.5vw;
   }
+  @media screen and (max-width: 600px) {
+    width: 3vw;
+    height: 3vw;
+  }
 `;
 
 const Star = styled(AiTwotoneStar)`
@@ -185,6 +207,10 @@ const Star = styled(AiTwotoneStar)`
     margin-right: 2vw;
     width: 2.5vw;
     height: 2.5vw;
+  }
+  @media screen and (max-width: 600px) {
+    width: 3vw;
+    height: 3vw;
   }
 `;
 
@@ -198,6 +224,10 @@ const PlaceIcon = styled(GrLocation)`
     margin-right: 2vw;
     width: 2.5vw;
     height: 2.5vw;
+  }
+  @media screen and (max-width: 600px) {
+    width: 3vw;
+    height: 3vw;
   }
 `;
 
@@ -215,6 +245,10 @@ const Grid = styled.div`
     grid-template-columns: repeat(2, 1fr);
     margin-top: 2vw;
     font-size: 2.5vw;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 3vw;
   }
 `;
 
@@ -257,6 +291,9 @@ const BigButton = styled.button`
   @media screen and (max-width: 700px) {
     padding: 2vw;
     font-size: 2.5vw;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 3vw;
   }
 `;
 
