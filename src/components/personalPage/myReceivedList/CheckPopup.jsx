@@ -1,27 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 
-import ClendarPopup from './CalendarPopup';
-
+import FoodImg from '../../../images/homepage/food-5.jpg';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
 import { BiCrown } from 'react-icons/bi';
-import { BsCalendarCheckFill } from 'react-icons/bs';
 
-const EditPopup = ({ showEdit, closeEditor }) => {
-  const uploadRef = useRef();
-  const [showCalender, setShowCalendar] = useState(false);
-  const [file, setFile] = useState(null);
-
-  const openCalendar = () => setShowCalendar(true);
-  const closeCalendar = () => setShowCalendar(false);
-
-  const previewImgUrl = file
-    ? URL.createObjectURL(file)
-    : 'https://react.semantic-ui.com/images/wireframe/image.png';
-
+const CheckPopup = ({ showEdit, closeEditor }) => {
   return (
     <>
       <DialogOverlay isOpen={showEdit} onDismiss={closeEditor}>
@@ -40,16 +27,15 @@ const EditPopup = ({ showEdit, closeEditor }) => {
           <PopContent>
             <PopRow>
               <FoodLabel>食物名稱</FoodLabel>
-              <FoodName />
+              <FoodName>非常好吃的蛋糕</FoodName>
             </PopRow>
             <PopRow>
               <QuantityLabel>數量</QuantityLabel>
-              <Quantity />
+              <Quantity>5</Quantity>
             </PopRow>
             <PopRow>
               <DateTimeLabel>日期及時間</DateTimeLabel>
               <DateTime>2021-10-15 20:00</DateTime>
-              <Calendar onClick={openCalendar} />
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
@@ -58,21 +44,11 @@ const EditPopup = ({ showEdit, closeEditor }) => {
             </PopRow>
             <PopRow>
               <FoodImgLabel>食物照片</FoodImgLabel>
-              <ImgUpload ref={uploadRef} htmlFor="image-upload">
-                上傳
-              </ImgUpload>
-              <UploadBtn
-                type="file"
-                id="image-upload"
-                onChange={(e) => setFile(e.target.files[0])}
-              />
             </PopRow>
-            <PreviewImg src={previewImgUrl} />
-            <SubmitBtn>確認更新</SubmitBtn>
+            <PreviewImg src={FoodImg} />
           </PopContent>
         </DialogContent>
       </DialogOverlay>
-      <ClendarPopup showCalender={showCalender} closeCalendar={closeCalendar} />
     </>
   );
 };
@@ -131,7 +107,7 @@ const FoodLabel = styled.label`
   width: 9vw;
 `;
 
-const FoodName = styled.input`
+const FoodName = styled.span`
   flex-grow: 1;
 `;
 
@@ -139,7 +115,7 @@ const QuantityLabel = styled.label`
   width: 9vw;
 `;
 
-const Quantity = styled.input``;
+const Quantity = styled.span``;
 
 const DateTimeLabel = styled.label`
   width: 9vw;
@@ -147,13 +123,6 @@ const DateTimeLabel = styled.label`
 
 const DateTime = styled.span`
   margin-right: 1vw;
-`;
-
-const Calendar = styled(BsCalendarCheckFill)`
-  width: 2vw;
-  height: 2vw;
-  fill: lightseagreen;
-  cursor: pointer;
 `;
 
 const PopPlaceLabel = styled.label`
@@ -173,32 +142,9 @@ const FoodImgLabel = styled.label`
   width: 9vw;
 `;
 
-const ImgUpload = styled.label`
-  border: 1px solid lightslategrey;
-  border-radius: 5px;
-  background-color: lightskyblue;
-  padding: 0.5vw;
-  cursor: pointer;
-`;
-
-const UploadBtn = styled.input`
-  display: none;
-`;
-
 const PreviewImg = styled.img`
   border-radius: 10px;
   margin-bottom: 2vw;
 `;
 
-const SubmitBtn = styled.button`
-  flex-grow: 1;
-  border: none;
-  border-radius: 5px;
-  background-color: lightskyblue;
-  color: white;
-  cursor: pointer;
-  padding: 1vw;
-  letter-spacing: 0.5vw;
-`;
-
-export default EditPopup;
+export default CheckPopup;

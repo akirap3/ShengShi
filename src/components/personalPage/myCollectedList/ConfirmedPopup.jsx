@@ -1,30 +1,19 @@
-import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
+import Map from './LocationMap';
+import MyQRcode from './MyQRcode';
 
-import ClendarPopup from './CalendarPopup';
-
+import FoodImg from '../../../images/homepage/food-5.jpg';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
 import { BiCrown } from 'react-icons/bi';
 import { BsCalendarCheckFill } from 'react-icons/bs';
 
-const EditPopup = ({ showEdit, closeEditor }) => {
-  const uploadRef = useRef();
-  const [showCalender, setShowCalendar] = useState(false);
-  const [file, setFile] = useState(null);
-
-  const openCalendar = () => setShowCalendar(true);
-  const closeCalendar = () => setShowCalendar(false);
-
-  const previewImgUrl = file
-    ? URL.createObjectURL(file)
-    : 'https://react.semantic-ui.com/images/wireframe/image.png';
-
+const CollectedSharePopup = ({ showConfirmation, closeConfirmation }) => {
   return (
     <>
-      <DialogOverlay isOpen={showEdit} onDismiss={closeEditor}>
+      <DialogOverlay isOpen={showConfirmation} onDismiss={closeConfirmation}>
         <DialogContent
           style={{
             position: 'relative',
@@ -32,47 +21,35 @@ const EditPopup = ({ showEdit, closeEditor }) => {
             borderRadius: '10px',
           }}
         >
-          <PopClose onClick={closeEditor} />
+          <PopClose onClick={closeConfirmation} />
           <PopTitleContainer>
             <CrownIcon />
             <PopTitle>好吃的麵包</PopTitle>
           </PopTitleContainer>
           <PopContent>
+            <PreviewImg src={FoodImg} />
             <PopRow>
-              <FoodLabel>食物名稱</FoodLabel>
-              <FoodName />
+              <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
+              <Quantity>3</Quantity>
             </PopRow>
             <PopRow>
-              <QuantityLabel>數量</QuantityLabel>
-              <Quantity />
-            </PopRow>
-            <PopRow>
-              <DateTimeLabel>日期及時間</DateTimeLabel>
+              <DateTimeLabel>領取日期及時間</DateTimeLabel>
               <DateTime>2021-10-15 20:00</DateTime>
-              <Calendar onClick={openCalendar} />
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
               <PopPlace>台北．內湖</PopPlace>
               <PopPlaceIcon />
             </PopRow>
-            <PopRow>
-              <FoodImgLabel>食物照片</FoodImgLabel>
-              <ImgUpload ref={uploadRef} htmlFor="image-upload">
-                上傳
-              </ImgUpload>
-              <UploadBtn
-                type="file"
-                id="image-upload"
-                onChange={(e) => setFile(e.target.files[0])}
-              />
-            </PopRow>
-            <PreviewImg src={previewImgUrl} />
-            <SubmitBtn>確認更新</SubmitBtn>
+            <MapWrapper>
+              <Map />
+            </MapWrapper>
+            <QRcodeWrapper>
+              <StyledQRcode />
+            </QRcodeWrapper>
           </PopContent>
         </DialogContent>
       </DialogOverlay>
-      <ClendarPopup showCalender={showCalender} closeCalendar={closeCalendar} />
     </>
   );
 };
@@ -127,19 +104,11 @@ const PopRow = styled.div`
   margin-bottom: 2vw;
 `;
 
-const FoodLabel = styled.label`
+const RegisterQuantityLabel = styled.label`
   width: 9vw;
 `;
 
-const FoodName = styled.input`
-  flex-grow: 1;
-`;
-
-const QuantityLabel = styled.label`
-  width: 9vw;
-`;
-
-const Quantity = styled.input``;
+const Quantity = styled.span``;
 
 const DateTimeLabel = styled.label`
   width: 9vw;
@@ -147,13 +116,6 @@ const DateTimeLabel = styled.label`
 
 const DateTime = styled.span`
   margin-right: 1vw;
-`;
-
-const Calendar = styled(BsCalendarCheckFill)`
-  width: 2vw;
-  height: 2vw;
-  fill: lightseagreen;
-  cursor: pointer;
 `;
 
 const PopPlaceLabel = styled.label`
@@ -169,36 +131,21 @@ const PopPlaceIcon = styled(GrLocation)`
   height: 2vw;
 `;
 
-const FoodImgLabel = styled.label`
-  width: 9vw;
-`;
-
-const ImgUpload = styled.label`
-  border: 1px solid lightslategrey;
-  border-radius: 5px;
-  background-color: lightskyblue;
-  padding: 0.5vw;
-  cursor: pointer;
-`;
-
-const UploadBtn = styled.input`
-  display: none;
-`;
-
 const PreviewImg = styled.img`
   border-radius: 10px;
   margin-bottom: 2vw;
 `;
 
-const SubmitBtn = styled.button`
-  flex-grow: 1;
-  border: none;
-  border-radius: 5px;
-  background-color: lightskyblue;
-  color: white;
-  cursor: pointer;
-  padding: 1vw;
-  letter-spacing: 0.5vw;
+const MapWrapper = styled.div`
+  margin-bottom: 2vw;
 `;
 
-export default EditPopup;
+const QRcodeWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledQRcode = styled(MyQRcode)``;
+
+export default CollectedSharePopup;

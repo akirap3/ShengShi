@@ -13,7 +13,7 @@ const useCurrentUser = () => {
       console.log(currentUser);
       dispatch({ type: 'currentUser/get', payload: currentUser });
     });
-  });
+  }, [dispatch, currentUser]);
 
   return currentUser;
 };
