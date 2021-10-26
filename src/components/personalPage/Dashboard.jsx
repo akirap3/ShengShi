@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
+import AddSharePopup from './AddSharePopup';
 
 import MemberImg from '../../images/PersonalPage/user-9.jpg';
 
@@ -11,6 +12,11 @@ import { IoMdPerson } from 'react-icons/io';
 import { BsGear } from 'react-icons/bs';
 
 const Dashbaord = () => {
+  const [showEdit, setShowEdit] = useState(false);
+
+  const openEditor = () => setShowEdit(true);
+  const closeEditor = () => setShowEdit(false);
+
   const location = useLocation();
   const menus = [
     { name: '我的清單', count: 10, path: '/personal/list' },
@@ -21,53 +27,55 @@ const Dashbaord = () => {
     { name: '收藏店家', count: 10, path: '/personal/collectedRestaurants' },
   ];
 
-  console.log(location);
   return (
-    <DashboardContainer>
-      <DashboardContext>
-        <LeftColumn>
-          <Avatar src={MemberImg} />
-          <NameContext>
-            <AliasIcon />
-            <Alias>勝食達人</Alias>
-          </NameContext>
-        </LeftColumn>
-        <Details>
-          <Row>
-            <PersoanlUsernameIcon />
-            <UserName>John Chen</UserName>
-            <Link to="/personal/memberUpdate/">
-              <Setting />
-            </Link>
-          </Row>
-          <Row>
-            <Star />
-            <Rating>5</Rating>
-          </Row>
-          <Row>
-            <PlaceIcon />
-            <Place>台北 內湖</Place>
-          </Row>
-        </Details>
-        <Grid>
-          {menus.map((menu) => (
-            <Button
-              key={menu.name}
-              as={Link}
-              to={`${menu.path}`}
-              active={menu.path === location.pathname}
-            >
-              <ButtonName>{menu.name}</ButtonName>
-              <ItemNumber>{menu.count}</ItemNumber>
-            </Button>
-          ))}
-        </Grid>
-        <CheckButton as={Link} to="/search">
-          查看他人的分享
-        </CheckButton>
-        <ShareButton>我要分享勝食</ShareButton>
-      </DashboardContext>
-    </DashboardContainer>
+    <>
+      <DashboardContainer>
+        <DashboardContext>
+          <LeftColumn>
+            <Avatar src={MemberImg} />
+            <NameContext>
+              <AliasIcon />
+              <Alias>勝食達人</Alias>
+            </NameContext>
+          </LeftColumn>
+          <Details>
+            <Row>
+              <PersoanlUsernameIcon />
+              <UserName>John Chen</UserName>
+              <Link to="/personal/memberUpdate/">
+                <Setting />
+              </Link>
+            </Row>
+            <Row>
+              <Star />
+              <Rating>5</Rating>
+            </Row>
+            <Row>
+              <PlaceIcon />
+              <Place>台北 內湖</Place>
+            </Row>
+          </Details>
+          <Grid>
+            {menus.map((menu) => (
+              <Button
+                key={menu.name}
+                as={Link}
+                to={`${menu.path}`}
+                active={menu.path === location.pathname}
+              >
+                <ButtonName>{menu.name}</ButtonName>
+                <ItemNumber>{menu.count}</ItemNumber>
+              </Button>
+            ))}
+          </Grid>
+          <CheckButton as={Link} to="/search">
+            查看他人的分享
+          </CheckButton>
+          <ShareButton onClick={openEditor}>我要分享勝食</ShareButton>
+        </DashboardContext>
+      </DashboardContainer>
+      <AddSharePopup showEdit={showEdit} closeEditor={closeEditor} />
+    </>
   );
 };
 

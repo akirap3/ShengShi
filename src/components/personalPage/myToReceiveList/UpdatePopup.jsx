@@ -1,30 +1,29 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
-import LocationMap from './LocationMap';
-import MyQRcode from './MyQRcode';
-import UpdatePopup from '../personalPage/myToReceiveList/UpdatePopup';
+import LocationMap from '../../common/LocationMap';
 
-import FoodImg from '../../images/homepage/food-5.jpg';
+import FoodImg from '../../../images/homepage/food-5.jpg';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
 import { BiCrown } from 'react-icons/bi';
-import { useState } from 'react';
+import { BsCalendarCheckFill } from 'react-icons/bs';
 
-const ConfirmedPopup = ({ showConfirmation, closeConfirmation, UpdateBtn }) => {
-  const [showUpdate, setShowUpdate] = useState(false);
+import SelectDateTimePopup from '../myCollectedList/SelectDateTimePopup';
 
-  const openUpdate = () => setShowUpdate(true);
-  const closeUpdate = () => setShowUpdate(false);
+const UpdatePopup = ({ showUpdate, closeUpdate }) => {
+  const [showDateTime, setShowDateTime] = useState(false);
 
-  const handleShowUpdate = () => {
-    openUpdate();
-    closeConfirmation();
+  const openDateTime = () => setShowDateTime(true);
+  const closeDateTime = () => setShowDateTime(false);
+
+  const handleUpdate = () => {
+    closeUpdate();
   };
-
   return (
     <>
-      <DialogOverlay isOpen={showConfirmation} onDismiss={closeConfirmation}>
+      <DialogOverlay isOpen={showUpdate} onDismiss={closeUpdate}>
         <DialogContent
           style={{
             position: 'relative',
@@ -32,7 +31,7 @@ const ConfirmedPopup = ({ showConfirmation, closeConfirmation, UpdateBtn }) => {
             borderRadius: '10px',
           }}
         >
-          <PopClose onClick={closeConfirmation} />
+          <PopClose onClick={closeUpdate} />
           <PopTitleContainer>
             <CrownIcon />
             <PopTitle>好吃的麵包</PopTitle>
@@ -41,31 +40,29 @@ const ConfirmedPopup = ({ showConfirmation, closeConfirmation, UpdateBtn }) => {
             <PreviewImg src={FoodImg} />
             <PopRow>
               <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
-              <Quantity>3</Quantity>
+              <Quantity />
             </PopRow>
             <PopRow>
               <DateTimeLabel>領取日期及時間</DateTimeLabel>
               <DateTime>2021-10-15 20:00</DateTime>
+              <Calendar onClick={openDateTime} />
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
               <PopPlace>台北．內湖</PopPlace>
               <PopPlaceIcon />
             </PopRow>
-
             <MapWrapper>
               <LocationMap />
             </MapWrapper>
-            <QRcodeWrapper>
-              <StyledQRcode />
-            </QRcodeWrapper>
-            {UpdateBtn && (
-              <UpdateBtn onClick={() => handleShowUpdate()}>我要更新</UpdateBtn>
-            )}
+            <SubmitBtn onClick={() => handleUpdate()}>確認更新</SubmitBtn>
           </PopContent>
         </DialogContent>
       </DialogOverlay>
-      <UpdatePopup showUpdate={showUpdate} closeUpdate={closeUpdate} />
+      <SelectDateTimePopup
+        showDateTime={showDateTime}
+        closeDateTime={closeDateTime}
+      />
     </>
   );
 };
@@ -124,7 +121,7 @@ const RegisterQuantityLabel = styled.label`
   width: 9vw;
 `;
 
-const Quantity = styled.span``;
+const Quantity = styled.input``;
 
 const DateTimeLabel = styled.label`
   width: 9vw;
@@ -132,6 +129,13 @@ const DateTimeLabel = styled.label`
 
 const DateTime = styled.span`
   margin-right: 1vw;
+`;
+
+const Calendar = styled(BsCalendarCheckFill)`
+  width: 2vw;
+  height: 2vw;
+  fill: lightseagreen;
+  cursor: pointer;
 `;
 
 const PopPlaceLabel = styled.label`
@@ -156,12 +160,15 @@ const MapWrapper = styled.div`
   margin-bottom: 2vw;
 `;
 
-const QRcodeWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const SubmitBtn = styled.button`
+  flex-grow: 1;
+  border: none;
+  border-radius: 5px;
+  background-color: lightskyblue;
+  color: white;
+  cursor: pointer;
+  padding: 1vw;
+  letter-spacing: 0.5vw;
 `;
 
-const StyledQRcode = styled(MyQRcode)``;
-
-export default ConfirmedPopup;
+export default UpdatePopup;
