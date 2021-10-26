@@ -5,6 +5,7 @@ import shares from './shares';
 import articles from './articles';
 import currentUser from './currentUser';
 import checkUser from './checkUser';
+import fromToDateTime from './fromToDateTime';
 
 const reducers = combineReducers({
   restaurants,
@@ -12,6 +13,7 @@ const reducers = combineReducers({
   articles,
   currentUser,
   checkUser,
+  fromToDateTime,
 });
 
 export default reducers;

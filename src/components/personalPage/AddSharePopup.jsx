@@ -1,5 +1,18 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import ReactLoading from 'react-loading';
+
+import {
+  collection,
+  doc,
+  setDoc,
+  getFirestore,
+  Timestamp,
+} from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
+import useCurrentUser from '../../hooks/useCurrentUser.js';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 
@@ -12,11 +25,45 @@ import { BsCalendarCheckFill } from 'react-icons/bs';
 
 const AddSharePopup = ({ showEdit, closeEditor }) => {
   const uploadRef = useRef();
+  const currentUser = useCurrentUser();
+  const fromToDateTime = useSelector((state) => state.fromToDateTime);
   const [showCalender, setShowCalendar] = useState(false);
+  const [foodName, setFoodName] = useState('');
+  const [quantity, setQuantity] = useState(1);
+  const [place, setPlace] = useState('');
   const [file, setFile] = useState(null);
+  const [isLoading, setIsLoaging] = useState(false);
 
   const openCalendar = () => setShowCalendar(true);
   const closeCalendar = () => setShowCalendar(false);
+
+  const handeleSubmit = async () => {
+    setIsLoaging(true);
+    const docRef = doc(collection(getFirestore(), `sharesTest`));
+    const fileRef = ref(getStorage(), `images/sharesTest/${docRef.id}`);
+    const metadata = {
+      contentType: file.type,
+    };
+    const uplaodTask = await uploadBytes(fileRef, file, metadata);
+    const imageUrl = await getDownloadURL(uplaodTask.ref);
+    await setDoc(
+      docRef,
+      {
+        exchangePlace: place,
+        fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
+        toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
+        imageUrl,
+        name: foodName,
+        postUserId: currentUser.uid,
+        rating: 5,
+        timestamp: Timestamp.fromDate(new Date()),
+        userLocation: '台北 信義區',
+      },
+      { merge: true }
+    );
+    setIsLoaging(false);
+    closeEditor();
+  };
 
   const previewImgUrl = file
     ? URL.createObjectURL(file)
@@ -25,6 +72,14 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
   return (
     <>
       <DialogOverlay isOpen={showEdit} onDismiss={closeEditor}>
+        {isLoading && (
+          <StyledReactLoading
+            type={'spin'}
+            color={'#2a9d8f'}
+            height={'10vw'}
+            width={'10vw'}
+          />
+        )}
         <DialogContent
           style={{
             position: 'relative',
@@ -40,20 +95,22 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
           <PopContent>
             <PopRow>
               <FoodLabel>食物名稱</FoodLabel>
-              <FoodName />
+              <FoodName onChange={(e) => setFoodName(e.target.value)} />
             </PopRow>
             <PopRow>
               <QuantityLabel>數量</QuantityLabel>
-              <Quantity />
+              <Quantity onChange={(e) => setQuantity(e.target.value)} />
             </PopRow>
             <PopRow>
               <DateTimeLabel>日期及時間</DateTimeLabel>
-              <DateTime>2021-10-15 20:00</DateTime>
+              <DateTime>
+                {`${fromToDateTime[0].toLocaleString()} - ${fromToDateTime[1].toLocaleString()}`}
+              </DateTime>
               <Calendar onClick={openCalendar} />
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
-              <PopPlace />
+              <PopPlace onChange={(e) => setPlace(e.target.value)} />
               <PopPlaceIcon />
             </PopRow>
             <PopRow>
@@ -68,7 +125,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
               />
             </PopRow>
             <PreviewImg src={previewImgUrl} />
-            <SubmitBtn>分享</SubmitBtn>
+            <SubmitBtn onClick={handeleSubmit}>分享</SubmitBtn>
           </PopContent>
         </DialogContent>
       </DialogOverlay>
@@ -79,6 +136,15 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
     </>
   );
 };
+
+const StyledReactLoading = styled(ReactLoading)`
+  display: flex;
+  position: relative;
+  z-index: 10;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+`;
 
 const StyledColse = styled(AiFillCloseCircle)`
   fill: lightblue;

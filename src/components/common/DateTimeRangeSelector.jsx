@@ -1,29 +1,21 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
-
-const now = new Date();
-const todayBegin = new Date(
-  now.getFullYear(),
-  now.getMonth(),
-  now.getDate(),
-  now.getHours()
-);
-const todayEnd = new Date(
-  now.getFullYear(),
-  now.getMonth(),
-  now.getDate(),
-  now.getHours() + 2
-);
+import { useDispatch, useSelector } from 'react-redux';
 
 const DateTimeRangeSelector = () => {
-  const [value, onChange] = useState([todayBegin, todayEnd]);
-
+  const dispatch = useDispatch();
+  const fromToDateTime = useSelector((state) => state.fromToDateTime);
   return (
     <>
       <Title>請選擇日期及時間區間</Title>
       <Container>
-        <DateTimeRangePicker onChange={onChange} value={value} />
+        <DateTimeRangePicker
+          onChange={(results) =>
+            dispatch({ type: 'fromToDateTime/selected', payload: results })
+          }
+          value={fromToDateTime}
+        />
       </Container>
     </>
   );
@@ -32,7 +24,6 @@ const DateTimeRangeSelector = () => {
 const Title = styled.div`
   font-size: 2.2vw;
 `;
-
 const Container = styled.div`
   .react-datetimerange-picker {
     display: flex;

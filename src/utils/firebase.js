@@ -11,6 +11,7 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 require('dotenv').config();
 
@@ -25,8 +26,9 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
-const auth = getAuth();
-const db = getFirestore();
+export const auth = getAuth();
+export const db = getFirestore();
+
 auth.languageCode = 'it';
 
 export const register = (email, password) => {
