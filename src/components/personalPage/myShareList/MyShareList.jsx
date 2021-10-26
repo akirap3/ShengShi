@@ -11,7 +11,7 @@ const MyShareList = () => {
 
   return (
     <>
-      <ShareCard openEditor={openEditor} btnName="編輯" />
+      <ShareCard openEditor={openEditor} btnName="編輯" category="分享" />
       <EditPopup showEdit={showEdit} closeEditor={closeEditor} />
     </>
   );

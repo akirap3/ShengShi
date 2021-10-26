@@ -16,6 +16,7 @@ const MyCollectedList = () => {
         Tag={ShareCardTag}
         tagName="#已收藏"
         btnName="領取"
+        category="收藏"
       />
       <CollectedSharePopup showEdit={showEdit} closeEditor={closeEditor} />
     </>
