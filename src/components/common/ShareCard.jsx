@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { themeColor } from '../../utils/commonVariables';
 
 import '@reach/dialog/styles.css';
+import DeletePopup from './DeletePopup';
 
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
 import { ImSpoonKnife } from 'react-icons/im';
@@ -21,36 +22,52 @@ const ShareCard = ({
   isReceived,
   tagName,
   cnannotDel,
+  category,
 }) => {
+  const [showDelete, setShowDelete] = useState(false);
+  const openDelete = () => setShowDelete(true);
+  const closeDelete = () => setShowDelete(false);
+
   return (
-    <SharesContainer>
-      <ShareContext>
-        <ShareImg src={Img} />
-        <CardContent>
-          <ShareTitle>好吃的麵包</ShareTitle>
-          {cnannotDel || isReceived ? <></> : <DeleteButton />}
-          <CardRow>
-            <CardItem>
-              <ShareNameIcon />
-              <ShareUseName>麵包超人</ShareUseName>
-            </CardItem>
-            <CardItem>
-              <Star />
-              <Rating>5</Rating>
-            </CardItem>
-            <Heart />
-          </CardRow>
-          <CardRow>
-            <CardItem>
-              <PlaceIcon />
-              <Location>台北 板橋</Location>
-            </CardItem>
-            {Tag && <Tag>{tagName}</Tag>}
-            <GetButton onClick={openEditor}>{btnName || '查看'}</GetButton>
-          </CardRow>
-        </CardContent>
-      </ShareContext>
-    </SharesContainer>
+    <>
+      <SharesContainer>
+        <ShareContext>
+          <ShareImg src={Img} />
+          <CardContent>
+            <ShareTitle>好吃的麵包</ShareTitle>
+            {cnannotDel || isReceived ? (
+              <></>
+            ) : (
+              <DeleteButton onClick={openDelete} />
+            )}
+            <CardRow>
+              <CardItem>
+                <ShareNameIcon />
+                <ShareUseName>麵包超人</ShareUseName>
+              </CardItem>
+              <CardItem>
+                <Star />
+                <Rating>5</Rating>
+              </CardItem>
+              <Heart />
+            </CardRow>
+            <CardRow>
+              <CardItem>
+                <PlaceIcon />
+                <Location>台北 板橋</Location>
+              </CardItem>
+              {Tag && <Tag>{tagName}</Tag>}
+              <GetButton onClick={openEditor}>{btnName || '查看'}</GetButton>
+            </CardRow>
+          </CardContent>
+        </ShareContext>
+      </SharesContainer>
+      <DeletePopup
+        showDelete={showDelete}
+        closeDelete={closeDelete}
+        category={category}
+      />
+    </>
   );
 };
 

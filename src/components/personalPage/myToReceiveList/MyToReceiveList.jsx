@@ -16,6 +16,7 @@ const MyToReceiveList = () => {
         openEditor={openConfirmation}
         Tag={ShareCardTag}
         tagName="#未領取"
+        category="領取"
       />
       <ConfirmedPopup
         showConfirmation={showConfirmation}
