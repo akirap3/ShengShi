@@ -1,16 +1,15 @@
 import styled from 'styled-components';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
-import Map from './LocationMap';
+import LocationMap from './LocationMap';
 import MyQRcode from './MyQRcode';
 
-import FoodImg from '../../../images/homepage/food-5.jpg';
+import FoodImg from '../../images/homepage/food-5.jpg';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
 import { BiCrown } from 'react-icons/bi';
-import { BsCalendarCheckFill } from 'react-icons/bs';
 
-const CollectedSharePopup = ({ showConfirmation, closeConfirmation }) => {
+const ConfirmedPopup = ({ showConfirmation, closeConfirmation }) => {
   return (
     <>
       <DialogOverlay isOpen={showConfirmation} onDismiss={closeConfirmation}>
@@ -42,7 +41,7 @@ const CollectedSharePopup = ({ showConfirmation, closeConfirmation }) => {
               <PopPlaceIcon />
             </PopRow>
             <MapWrapper>
-              <Map />
+              <LocationMap />
             </MapWrapper>
             <QRcodeWrapper>
               <StyledQRcode />
@@ -148,4 +147,4 @@ const QRcodeWrapper = styled.div`
 
 const StyledQRcode = styled(MyQRcode)``;
 
-export default CollectedSharePopup;
+export default ConfirmedPopup;

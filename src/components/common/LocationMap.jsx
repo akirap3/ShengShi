@@ -6,7 +6,7 @@ import {
   Marker,
 } from 'react-google-maps';
 
-const Map = compose(
+const LocationMap = compose(
   withProps({
     googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places`,
     loadingElement: (
@@ -43,4 +43,4 @@ const Map = compose(
   </GoogleMap>
 ));
 
-export default Map;
+export default LocationMap;
