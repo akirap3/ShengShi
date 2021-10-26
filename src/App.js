@@ -15,7 +15,7 @@ import Title from './components/personalPage/Title';
 import MyShareList from './components/personalPage/myShareList/MyShareList';
 import Badges from './components/personalPage/Badges';
 import MyReceivedList from './components/personalPage/myReceivedList/MyReceivedList';
-import ToReceive from './components/personalPage/toReceive';
+import MyToReceiveList from './components/personalPage/myToReceiveList/MyToReceiveList';
 import MyCollectedList from './components/personalPage/myCollectedList/MyCollectedList';
 import CollectedRestaurants from './components/personalPage/CollectedRestaurants';
 import MemberUpdate from './components/memberUpdatePage/MemberUpdate';
@@ -54,7 +54,7 @@ const App = () => {
                   </Route>
                   <Route exact path="/personal/toReceive">
                     <Title title="我的尚未領取清單"></Title>
-                    <ToReceive />
+                    <MyToReceiveList />
                   </Route>
                   <Route exact path="/personal/collectedShares">
                     <Title title="我的收藏清單"></Title>

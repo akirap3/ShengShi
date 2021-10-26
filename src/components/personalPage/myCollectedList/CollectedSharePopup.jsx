@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 import SelectDateTimePopup from './SelectDateTimePopup';
-import Map from './LocationMap';
-import ConfirmedPopup from './ConfirmedPopup';
+import LocationMap from '../../common/LocationMap';
+import ConfirmedPopup from '../../common/ConfirmedPopup';
 
 import FoodImg from '../../../images/homepage/food-5.jpg';
 import { AiFillCloseCircle } from 'react-icons/ai';
@@ -62,7 +62,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor }) => {
               <PopPlaceIcon />
             </PopRow>
             <MapWrapper>
-              <Map />
+              <LocationMap />
             </MapWrapper>
             <SubmitBtn onClick={() => handelConfirmation()}>確認領取</SubmitBtn>
           </PopContent>
@@ -170,10 +170,6 @@ const PopPlace = styled.span`
 const PopPlaceIcon = styled(GrLocation)`
   width: 2vw;
   height: 2vw;
-`;
-
-const FoodImgLabel = styled.label`
-  width: 9vw;
 `;
 
 const PreviewImg = styled.img`

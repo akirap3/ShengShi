@@ -55,7 +55,7 @@ const Dashbaord = () => {
               key={menu.name}
               as={Link}
               to={`${menu.path}`}
-              isActive={menu.path === location.pathname}
+              active={menu.path === location.pathname}
             >
               <ButtonName>{menu.name}</ButtonName>
               <ItemNumber>{menu.count}</ItemNumber>
@@ -261,7 +261,7 @@ const Button = styled.div`
   border-radius: 8px;
   padding: 1vw;
 
-  background-color: ${({ isActive }) => (isActive ? '#2a9d8f' : 'white')};
+  background-color: ${({ active }) => (active ? '#2a9d8f' : 'white')};
 
   @media screen and (max-width: 700px) {
     flex-direction: row;
