@@ -14,14 +14,21 @@ import {
 } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
 
-const ShareCard = ({ openEditor, btnName, Tag, isReceived, tagName }) => {
+const ShareCard = ({
+  openEditor,
+  btnName,
+  Tag,
+  isReceived,
+  tagName,
+  cnannotDel,
+}) => {
   return (
     <SharesContainer>
       <ShareContext>
         <ShareImg src={Img} />
         <CardContent>
           <ShareTitle>好吃的麵包</ShareTitle>
-          {isReceived ? <></> : <DeleteButton />}
+          {cnannotDel || isReceived ? <></> : <DeleteButton />}
           <CardRow>
             <CardItem>
               <ShareNameIcon />

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+
+import CollectedSharePopup from '../personalPage/myCollectedList/CollectedSharePopup';
 
 import { themeColor } from '../../utils/commonVariables';
 import Main from '../common/Main';
@@ -10,6 +12,11 @@ import Img from '../../images/restaurantPage/restaurant-8.jpg';
 import Hotpot from '../../images/searchPage/hotpot.svg';
 
 const SearchPage = () => {
+  const [showEdit, setShowEdit] = useState(false);
+
+  const openEditor = () => setShowEdit(true);
+  const closeEditor = () => setShowEdit(false);
+
   return (
     <Main>
       <Banner>
@@ -38,7 +45,8 @@ const SearchPage = () => {
         <TitleIcon src={Hotpot} />
         <SharesTitle>目前其他人分享的勝食</SharesTitle>
       </SharesTitleContainer>
-      <ShareCard />
+      <ShareCard openEditor={openEditor} btnName="領取" cnannotDel={true} />
+      <CollectedSharePopup showEdit={showEdit} closeEditor={closeEditor} />
     </Main>
   );
 };

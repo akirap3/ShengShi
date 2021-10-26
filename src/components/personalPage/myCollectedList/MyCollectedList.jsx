@@ -11,7 +11,12 @@ const MyCollectedList = () => {
 
   return (
     <>
-      <ShareCard openEditor={openEditor} Tag={ShareCardTag} tagName="#已收藏" />
+      <ShareCard
+        openEditor={openEditor}
+        Tag={ShareCardTag}
+        tagName="#已收藏"
+        btnName="領取"
+      />
       <CollectedSharePopup showEdit={showEdit} closeEditor={closeEditor} />
     </>
   );
