@@ -39,7 +39,7 @@ const RestaurantPage = () => {
       </SearchContent>
       {restaurants && <Carousel title="合作餐廳" contentData={restaurants} />}
       <MapWrapper>
-        {restaurants && <RestaurantMap contentData={restaurants} />}
+        <RestaurantMap />
       </MapWrapper>
     </Main>
   );
