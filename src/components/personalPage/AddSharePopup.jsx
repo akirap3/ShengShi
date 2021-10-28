@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import ReactLoading from 'react-loading';
 
 import {
@@ -16,7 +16,8 @@ import useCurrentUser from '../../hooks/useCurrentUser.js';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 
-import CalendarPopup from '../personalPage/myShareList/CalendarPopup';
+import CalendarPopup from './myShareList/CalendarPopup';
+import MapPopup from './myShareList/MapPopup.jsx';
 
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
@@ -24,18 +25,29 @@ import { BiCrown } from 'react-icons/bi';
 import { BsCalendarCheckFill } from 'react-icons/bs';
 
 const AddSharePopup = ({ showEdit, closeEditor }) => {
+  const dispatch = useDispatch();
   const uploadRef = useRef();
   const currentUser = useCurrentUser();
   const fromToDateTime = useSelector((state) => state.fromToDateTime);
+  const address = useSelector((state) => state.address);
   const [showCalender, setShowCalendar] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const [foodName, setFoodName] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [place, setPlace] = useState('');
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoaging] = useState(false);
 
   const openCalendar = () => setShowCalendar(true);
   const closeCalendar = () => setShowCalendar(false);
+  const openMap = () => setShowMap(true);
+  const closeMap = () => setShowMap(false);
+
+  const handleAddress = (payload) => {
+    dispatch({ type: 'address/get', payload: payload });
+  };
+  const handleLatLng = (payload) => {
+    dispatch({ type: 'latLng/get', payload: payload });
+  };
 
   const handeleSubmit = async () => {
     setIsLoaging(true);
@@ -49,7 +61,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
     await setDoc(
       docRef,
       {
-        exchangePlace: place,
+        exchangePlace: address,
         fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
         toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
         imageUrl,
@@ -110,8 +122,8 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
-              <PopPlace onChange={(e) => setPlace(e.target.value)} />
-              <PopPlaceIcon />
+              <PopPlace>{address}</PopPlace>
+              <PopPlaceIcon onClick={openMap} />
             </PopRow>
             <PopRow>
               <FoodImgLabel>食物照片</FoodImgLabel>
@@ -132,6 +144,12 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
       <CalendarPopup
         showCalender={showCalender}
         closeCalendar={closeCalendar}
+      />
+      <MapPopup
+        showMap={showMap}
+        closeMap={closeMap}
+        handleAddress={handleAddress}
+        handleLatLng={handleLatLng}
       />
     </>
   );
@@ -229,7 +247,7 @@ const PopPlaceLabel = styled.label`
   width: 9vw;
 `;
 
-const PopPlace = styled.input`
+const PopPlace = styled.span`
   margin-right: 1vw;
 `;
 

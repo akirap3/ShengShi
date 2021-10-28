@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 
 import ClendarPopup from './CalendarPopup';
+import MapPopup from './MapPopup';
 
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
@@ -12,11 +14,23 @@ import { BsCalendarCheckFill } from 'react-icons/bs';
 
 const EditPopup = ({ showEdit, closeEditor }) => {
   const uploadRef = useRef();
+  const dispatch = useDispatch();
+  const address = useSelector((state) => state.address);
   const [showCalender, setShowCalendar] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const [file, setFile] = useState(null);
 
   const openCalendar = () => setShowCalendar(true);
   const closeCalendar = () => setShowCalendar(false);
+  const openMap = () => setShowMap(true);
+  const closeMap = () => setShowMap(false);
+
+  const handleAddress = (payload) => {
+    dispatch({ type: 'address/get', payload: payload });
+  };
+  const handleLatLng = (payload) => {
+    dispatch({ type: 'latLng/get', payload: payload });
+  };
 
   const previewImgUrl = file
     ? URL.createObjectURL(file)
@@ -53,8 +67,8 @@ const EditPopup = ({ showEdit, closeEditor }) => {
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
-              <PopPlace>台北．內湖</PopPlace>
-              <PopPlaceIcon />
+              <PopPlace>{address}</PopPlace>
+              <PopPlaceIcon onClick={openMap} />
             </PopRow>
             <PopRow>
               <FoodImgLabel>食物照片</FoodImgLabel>
@@ -73,6 +87,12 @@ const EditPopup = ({ showEdit, closeEditor }) => {
         </DialogContent>
       </DialogOverlay>
       <ClendarPopup showCalender={showCalender} closeCalendar={closeCalendar} />
+      <MapPopup
+        showMap={showMap}
+        closeMap={closeMap}
+        handleAddress={handleAddress}
+        handleLatLng={handleLatLng}
+      />
     </>
   );
 };

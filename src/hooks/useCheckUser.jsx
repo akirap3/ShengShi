@@ -7,13 +7,19 @@ const useCheckUser = () => {
   const checkUser = useSelector((state) => state.checkUser);
 
   useEffect(() => {
+    let isMounted = true;
+
     firebase.observeUserChange((user) => {
-      if (user) {
-        dispatch({ type: 'user/loggedIn' });
-      } else {
-        dispatch({ type: 'user/loggedOut' });
+      if (isMounted) {
+        if (user) {
+          dispatch({ type: 'user/loggedIn' });
+        } else {
+          dispatch({ type: 'user/loggedOut' });
+        }
       }
     });
+
+    return () => (isMounted = false);
   }, [dispatch]);
 
   return checkUser;

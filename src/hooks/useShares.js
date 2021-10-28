@@ -7,11 +7,14 @@ const useShares = () => {
   const shares = useSelector((state) => state.shares);
 
   useEffect(() => {
+    let isMounted = true;
     if (shares) return;
 
     firebase.fetchShares().then((data) => {
-      dispatch({ type: 'shares/fetched', payload: data });
+      if (isMounted) dispatch({ type: 'shares/fetched', payload: data });
     });
+
+    return () => (isMounted = false);
   }, [dispatch, shares]);
 
   return shares;

@@ -7,12 +7,17 @@ const useCurrentUser = () => {
   const currentUser = useSelector((state) => state.currentUser);
 
   useEffect(() => {
+    let isMounted = true;
     if (currentUser) return;
 
     firebase.observeUserChange((currentUser) => {
       console.log(currentUser);
-      dispatch({ type: 'currentUser/get', payload: currentUser });
+
+      if (isMounted)
+        dispatch({ type: 'currentUser/get', payload: currentUser });
     });
+
+    return () => (isMounted = false);
   }, [dispatch, currentUser]);
 
   return currentUser;
