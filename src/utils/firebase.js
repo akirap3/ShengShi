@@ -11,7 +11,6 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
 
 require('dotenv').config();
 

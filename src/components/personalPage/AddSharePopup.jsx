@@ -9,6 +9,7 @@ import {
   setDoc,
   getFirestore,
   Timestamp,
+  GeoPoint,
 } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -30,10 +31,11 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
   const currentUser = useCurrentUser();
   const fromToDateTime = useSelector((state) => state.fromToDateTime);
   const address = useSelector((state) => state.address);
+  const latLng = useSelector((state) => state.latLng);
   const [showCalender, setShowCalendar] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const [foodName, setFoodName] = useState('');
-  const [quantity, setQuantity] = useState(1);
+  const [quantities, setQuantities] = useState(1);
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoaging] = useState(false);
 
@@ -49,10 +51,10 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
     dispatch({ type: 'latLng/get', payload: payload });
   };
 
-  const handeleSubmit = async () => {
+  const handleSubmit = async () => {
     setIsLoaging(true);
-    const docRef = doc(collection(getFirestore(), `sharesTest`));
-    const fileRef = ref(getStorage(), `images/sharesTest/${docRef.id}`);
+    const docRef = doc(collection(getFirestore(), `shares`));
+    const fileRef = ref(getStorage(), `images/shares/${docRef.id}`);
     const metadata = {
       contentType: file.type,
     };
@@ -65,16 +67,24 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
         fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
         toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
         imageUrl,
+        quantities: Number(quantities),
         name: foodName,
-        postUserId: currentUser.uid,
+        postUser: {
+          id: currentUser.uid,
+          displayName: currentUser.displayName,
+        },
         rating: 5,
         timestamp: Timestamp.fromDate(new Date()),
         userLocation: '台北 信義區',
+        exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
       },
       { merge: true }
     );
     setIsLoaging(false);
     closeEditor();
+    handleLatLng([]);
+    handleAddress('');
+    setFile(null);
   };
 
   const previewImgUrl = file
@@ -111,7 +121,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
             </PopRow>
             <PopRow>
               <QuantityLabel>數量</QuantityLabel>
-              <Quantity onChange={(e) => setQuantity(e.target.value)} />
+              <Quantity onChange={(e) => setQuantities(e.target.value)} />
             </PopRow>
             <PopRow>
               <DateTimeLabel>日期及時間</DateTimeLabel>
@@ -137,7 +147,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
               />
             </PopRow>
             <PreviewImg src={previewImgUrl} />
-            <SubmitBtn onClick={handeleSubmit}>分享</SubmitBtn>
+            <SubmitBtn onClick={handleSubmit}>分享</SubmitBtn>
           </PopContent>
         </DialogContent>
       </DialogOverlay>

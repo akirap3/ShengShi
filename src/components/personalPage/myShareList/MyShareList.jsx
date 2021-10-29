@@ -1,20 +1,38 @@
-import React, { useState } from 'react';
-
-import EditPopup from './EditPopup';
-import ShareCard from '../../common/ShareCard';
+import React, { useState, useEffect } from 'react';
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+  orderBy,
+} from '@firebase/firestore';
+import useCurrentUser from '../../../hooks/useCurrentUser';
+import MyShareCard from './MyShareCard';
 
 const MyShareList = () => {
-  const [showEdit, setShowEdit] = useState(false);
+  const [shares, setShares] = useState([]);
+  const currentUser = useCurrentUser();
 
-  const openEditor = () => setShowEdit(true);
-  const closeEditor = () => setShowEdit(false);
+  const getMyShareList = async () => {
+    const SharesCollectionRef = collection(getFirestore(), 'shares');
+    const queryDocRef = query(
+      SharesCollectionRef,
+      where('postUser.id', '==', currentUser.uid)
+    );
 
-  return (
-    <>
-      <ShareCard openEditor={openEditor} btnName="編輯" category="分享" />
-      <EditPopup showEdit={showEdit} closeEditor={closeEditor} />
-    </>
-  );
+    const myshares = await getDocs(queryDocRef);
+    const mySharesArr = [];
+    myshares.forEach((doc) => mySharesArr.push({ ...doc.data(), id: doc.id }));
+    setShares(mySharesArr);
+    console.log(mySharesArr);
+  };
+
+  useEffect(() => {
+    getMyShareList();
+  }, []);
+
+  return <>{shares && shares.map((share) => <MyShareCard share={share} />)}</>;
 };
 
 export default MyShareList;

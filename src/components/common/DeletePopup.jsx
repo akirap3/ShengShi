@@ -1,14 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+
+import { getFirestore, doc, deleteDoc } from '@firebase/firestore';
+import { getStorage, ref, deleteObject } from '@firebase/storage';
+import Loading from './Loading';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 import '@reach/dialog/styles.css';
 
 import { AiFillCloseCircle } from 'react-icons/ai';
 
-const DeletePopup = ({ showDelete, closeDelete, category }) => {
+const DeletePopup = ({ showDelete, closeDelete, category, shareId }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDeleteShare = async () => {
+    setIsLoading(true);
+    const deleteImgFileRef = ref(getStorage(), `images/shares/${shareId}`);
+    await deleteObject(deleteImgFileRef);
+    await deleteDoc(doc(getFirestore(), 'shares', shareId));
+    setIsLoading(false);
+    closeDelete();
+  };
+
   return (
-    <DialogOverlay isOpen={showDelete} onDismiss={closeDelete}>
+    <DialogOverlay
+      isOpen={showDelete}
+      onDismiss={closeDelete}
+      disabled={isLoading}
+    >
       <DialogContent
         style={{
           position: 'relative',
@@ -16,11 +35,16 @@ const DeletePopup = ({ showDelete, closeDelete, category }) => {
           borderRadius: '10px',
         }}
       >
-        <PopClose onClick={closeDelete} />
+        {isLoading && <Loading />}
+        <PopClose onClick={closeDelete} disabled={isLoading} />
         <Title>{`確認刪除此${category}`}</Title>
         <Row>
-          <ConfirmBtn>確認</ConfirmBtn>
-          <CancelBtn onClick={closeDelete}>取消</CancelBtn>
+          <ConfirmBtn onClick={() => handleDeleteShare()} disabled={isLoading}>
+            確認
+          </ConfirmBtn>
+          <CancelBtn onClick={closeDelete} disabled={isLoading}>
+            取消
+          </CancelBtn>
         </Row>
       </DialogContent>
     </DialogOverlay>

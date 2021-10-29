@@ -23,6 +23,7 @@ const ShareCard = ({
   tagName,
   cnannotDel,
   category,
+  share,
 }) => {
   const [showDelete, setShowDelete] = useState(false);
   const openDelete = () => setShowDelete(true);
@@ -32,9 +33,9 @@ const ShareCard = ({
     <>
       <SharesContainer>
         <ShareContext>
-          <ShareImg src={Img} />
+          <ShareImg src={share.imageUrl} />
           <CardContent>
-            <ShareTitle>好吃的麵包</ShareTitle>
+            <ShareTitle>{share.name}</ShareTitle>
             {cnannotDel || isReceived ? (
               <></>
             ) : (
@@ -43,18 +44,18 @@ const ShareCard = ({
             <CardRow>
               <CardItem>
                 <ShareNameIcon />
-                <ShareUseName>麵包超人</ShareUseName>
+                <ShareUseName>{share.postUser.displayName}</ShareUseName>
               </CardItem>
               <CardItem>
                 <Star />
-                <Rating>5</Rating>
+                <Rating>{share.rating}</Rating>
               </CardItem>
               <Heart />
             </CardRow>
             <CardRow>
               <CardItem>
                 <PlaceIcon />
-                <Location>台北 板橋</Location>
+                <Location>{share.userLocation}</Location>
               </CardItem>
               {Tag && <Tag>{tagName}</Tag>}
               <GetButton onClick={openEditor}>{btnName || '查看'}</GetButton>
@@ -66,6 +67,7 @@ const ShareCard = ({
         showDelete={showDelete}
         closeDelete={closeDelete}
         category={category}
+        shareId={share.id}
       />
     </>
   );

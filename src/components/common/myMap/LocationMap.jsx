@@ -34,10 +34,6 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    this.props.handleLatLng([
-      this.state.mapPosition.lat,
-      this.state.mapPosition.lng,
-    ]);
     Geocode.fromLatLng(
       this.state.mapPosition.lat,
       this.state.mapPosition.lng
@@ -45,6 +41,10 @@ class Map extends Component {
       (response) => {
         const address = response.results[0].formatted_address;
         this.props.handleAddress(address);
+        this.props.handleLatLng([
+          this.state.mapPosition.lat,
+          this.state.mapPosition.lng,
+        ]);
         this.setState({
           address: address ? address : '',
         });
