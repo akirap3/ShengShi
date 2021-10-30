@@ -1,43 +1,50 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import ShareCard from '../../common/ShareCard';
-import ShareCardTag from '../../common/ShareCardTag';
-import ConfirmedPopup from '../../common/ConfirmedPopup';
+import React, { useState, useCallback, useEffect } from 'react';
+import {
+  getFirestore,
+  query,
+  where,
+  onSnapshot,
+  collection,
+} from '@firebase/firestore';
+
+import useCurrentUser from '../../../hooks/useCurrentUser';
+import MyToReceiveCard from './MyToReceiveCard';
+import SharesContainer from '../../common/SharesContainer';
 
 const MyToReceiveList = () => {
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const currentUser = useCurrentUser();
+  const [toReceiveShares, setToReceiveShares] = useState('');
 
-  const openConfirmation = () => setShowConfirmation(true);
-  const closeConfirmation = () => setShowConfirmation(false);
+  const getToReceiveShares = useCallback(() => {
+    const q = query(
+      collection(getFirestore(), 'shares'),
+      where('toReceiveUserId', 'array-contains', currentUser.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const toReceivedShares = querySnapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+      setToReceiveShares(toReceivedShares);
+      console.log(toReceiveShares);
+    });
+
+    return unsubscribe;
+  }, [currentUser.uid]);
+
+  useEffect(() => {
+    return getToReceiveShares();
+  }, [getToReceiveShares]);
 
   return (
-    <>
-      <ShareCard
-        openEditor={openConfirmation}
-        Tag={ShareCardTag}
-        tagName="#未領取"
-        category="領取"
-      />
-      <ConfirmedPopup
-        showConfirmation={showConfirmation}
-        closeConfirmation={closeConfirmation}
-        UpdateBtn={UpdateBtn}
-      />
-    </>
+    toReceiveShares && (
+      <SharesContainer>
+        {toReceiveShares.map((share) => (
+          <MyToReceiveCard share={share} />
+        ))}
+      </SharesContainer>
+    )
   );
 };
-
-const UpdateBtn = styled.button`
-  flex-grow: 1;
-  border: none;
-  border-radius: 5px;
-  background-color: lightskyblue;
-  color: white;
-  cursor: pointer;
-  padding: 1vw;
-  margin-top: 2vw;
-  letter-spacing: 0.5vw;
-  text-align: center;
-`;
 
 export default MyToReceiveList;

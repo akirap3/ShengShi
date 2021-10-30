@@ -8,6 +8,7 @@ import checkUser from './checkUser';
 import fromToDateTime from './fromToDateTime';
 import latLng from './latLng';
 import address from './address';
+import specificDateTime from './specificDateTime';
 
 const reducers = combineReducers({
   restaurants,
@@ -18,6 +19,7 @@ const reducers = combineReducers({
   fromToDateTime,
   latLng,
   address,
+  specificDateTime,
 });
 
 export default reducers;

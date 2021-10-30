@@ -15,7 +15,7 @@ const MyReceivedList = () => {
   const currentUser = useCurrentUser();
   const [receivedShares, setReceivedShares] = useState('');
 
-  const getReceivedShare = useCallback(() => {
+  const getReceivedShares = useCallback(() => {
     const q = query(
       collection(getFirestore(), 'shares'),
       where('receivedUserId', 'array-contains', currentUser.uid)
@@ -32,13 +32,12 @@ const MyReceivedList = () => {
   }, [currentUser.uid]);
 
   useEffect(() => {
-    return getReceivedShare();
-  }, [getReceivedShare]);
+    return getReceivedShares();
+  }, [getReceivedShares]);
 
   return (
     receivedShares && (
       <SharesContainer>
-        {console.log(receivedShares)}
         {receivedShares.map((share) => (
           <MyReceivedCard share={share} />
         ))}

@@ -1,29 +1,62 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 import LocationMap from '../../common/LocationMap';
+import Loading from '../../common/Loading';
 
-import FoodImg from '../../../images/homepage/food-5.jpg';
+import { getFirestore, doc, updateDoc, Timestamp } from '@firebase/firestore';
+
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
 import { BiCrown } from 'react-icons/bi';
 import { BsCalendarCheckFill } from 'react-icons/bs';
 
 import SelectDateTimePopup from '../myCollectedList/SelectDateTimePopup';
+import useCurrentUser from '../../../hooks/useCurrentUser';
 
-const UpdatePopup = ({ showUpdate, closeUpdate }) => {
+const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
+  const dispatch = useDispatch();
+  const currentUser = useCurrentUser();
   const [showDateTime, setShowDateTime] = useState(false);
+  const [newQuantities, setNewQuantities] = useState(
+    share?.toReceiveInfo[currentUser.uid].quantities || 1
+  );
+  const specificDateTime = useSelector((state) => state.specificDateTime);
+  const [isLoading, setIsLoading] = useState(false);
 
   const openDateTime = () => setShowDateTime(true);
   const closeDateTime = () => setShowDateTime(false);
 
-  const handleUpdate = () => {
+  const handleSpecificDateTime = () => {
+    dispatch({ type: 'specificDateTime/selected', payload: null });
+  };
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    const docRef = doc(getFirestore(), 'shares', share.id);
+    const updateQuantities = `toReceiveInfo.${currentUser.uid}.quantities`;
+    const updateUpcomingTimestamp = `toReceiveInfo.${currentUser.uid}.upcomingTimestamp`;
+    await updateDoc(docRef, {
+      [updateQuantities]: newQuantities,
+      [updateUpcomingTimestamp]: Timestamp.fromDate(specificDateTime),
+    });
+    setIsLoading(false);
+    handleSpecificDateTime();
     closeUpdate();
   };
   return (
     <>
       <DialogOverlay isOpen={showUpdate} onDismiss={closeUpdate}>
+        {isLoading && (
+          <Loading
+            type={'spin'}
+            color={'#2a9d8f'}
+            height={'10vw'}
+            width={'10vw'}
+          />
+        )}
         <DialogContent
           style={{
             position: 'relative',
@@ -34,28 +67,41 @@ const UpdatePopup = ({ showUpdate, closeUpdate }) => {
           <PopClose onClick={closeUpdate} />
           <PopTitleContainer>
             <CrownIcon />
-            <PopTitle>好吃的麵包</PopTitle>
+            <PopTitle>{share?.name || ''}</PopTitle>
           </PopTitleContainer>
           <PopContent>
-            <PreviewImg src={FoodImg} />
+            <PreviewImg src={share?.imageUrl || ''} />
             <PopRow>
               <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
-              <Quantity />
+              <Quantity
+                placeholder={
+                  share?.toReceiveInfo[currentUser.uid].quantities || ''
+                }
+                onChange={(e) => setNewQuantities(e.target.value)}
+                disabled={isLoading}
+              />
             </PopRow>
             <PopRow>
               <DateTimeLabel>領取日期及時間</DateTimeLabel>
-              <DateTime>2021-10-15 20:00</DateTime>
+              <DateTime>
+                {specificDateTime?.toLocaleString() ||
+                  share?.toReceiveInfo[currentUser.uid].upcomingTimestamp
+                    ?.toDate()
+                    .toLocaleString()}
+              </DateTime>
               <Calendar onClick={openDateTime} />
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
-              <PopPlace>台北．內湖</PopPlace>
+              <PopPlace>{share?.exchangePlace}</PopPlace>
               <PopPlaceIcon />
             </PopRow>
             <MapWrapper>
               <LocationMap />
             </MapWrapper>
-            <SubmitBtn onClick={() => handleUpdate()}>確認更新</SubmitBtn>
+            <SubmitBtn onClick={() => handleSubmit()} disabled={isLoading}>
+              確認更新
+            </SubmitBtn>
           </PopContent>
         </DialogContent>
       </DialogOverlay>
@@ -130,6 +176,8 @@ const DateTimeLabel = styled.label`
 const DateTime = styled.span`
   margin-right: 1vw;
 `;
+
+const AsButton = styled.button``;
 
 const Calendar = styled(BsCalendarCheckFill)`
   width: 2vw;
