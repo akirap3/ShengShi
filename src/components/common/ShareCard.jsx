@@ -31,38 +31,37 @@ const ShareCard = ({
 
   return (
     <>
-      <SharesContainer>
-        <ShareContext>
-          <ShareImg src={share?.imageUrl} />
-          <CardContent>
-            <ShareTitle>{share?.name}</ShareTitle>
-            {cnannotDel || isReceived ? (
-              <></>
-            ) : (
-              <DeleteButton onClick={openDelete} />
-            )}
-            <CardRow>
-              <CardItem>
-                <ShareNameIcon />
-                <ShareUseName>{share?.postUser?.displayName}</ShareUseName>
-              </CardItem>
-              <CardItem>
-                <Star />
-                <Rating>{share?.rating}</Rating>
-              </CardItem>
-              <Heart />
-            </CardRow>
-            <CardRow>
-              <CardItem>
-                <PlaceIcon />
-                <Location>{share?.userLocation}</Location>
-              </CardItem>
-              {Tag && <Tag>{tagName}</Tag>}
-              <GetButton onClick={openEditor}>{btnName || '查看'}</GetButton>
-            </CardRow>
-          </CardContent>
-        </ShareContext>
-      </SharesContainer>
+      <ShareContext>
+        <ShareImg src={share?.imageUrl} />
+        <CardContent>
+          <ShareTitle>{share?.name}</ShareTitle>
+          {cnannotDel || isReceived ? (
+            <></>
+          ) : (
+            <DeleteButton onClick={openDelete} />
+          )}
+          <CardRow>
+            <CardItem>
+              <ShareNameIcon />
+              <ShareUseName>{share?.postUser?.displayName}</ShareUseName>
+            </CardItem>
+            <CardItem>
+              <Star />
+              <Rating>{share?.rating}</Rating>
+            </CardItem>
+            <Heart />
+          </CardRow>
+          <CardRow>
+            <CardItem>
+              <PlaceIcon />
+              <Location>{share?.userLocation}</Location>
+            </CardItem>
+            {Tag && <Tag>{tagName}</Tag>}
+            <GetButton onClick={openEditor}>{btnName || '查看'}</GetButton>
+          </CardRow>
+        </CardContent>
+      </ShareContext>
+
       <DeletePopup
         showDelete={showDelete}
         closeDelete={closeDelete}
