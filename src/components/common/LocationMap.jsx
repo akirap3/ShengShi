@@ -32,13 +32,24 @@ const LocationMap = compose(
 )((props) => (
   <GoogleMap
     defaultZoom={12}
-    defaultCenter={{ lat: 25.04267234987771, lng: 121.56497334150076 }}
+    defaultCenter={
+      props.exchangeLocation
+        ? {
+            lat: props.exchangeLocation._lat,
+            lng: props.exchangeLocation._long,
+          }
+        : { lat: 25.04267234987771, lng: 121.56497334150076 }
+    }
   >
     <Marker
-      position={{
-        lat: 25.04267234987771,
-        lng: 121.56497334150076,
-      }}
+      position={
+        props.exchangeLocation
+          ? {
+              lat: props.exchangeLocation._lat,
+              lng: props.exchangeLocation._long,
+            }
+          : { lat: 25.04267234987771, lng: 121.56497334150076 }
+      }
     />
   </GoogleMap>
 ));

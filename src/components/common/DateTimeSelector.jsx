@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import DateTimePicker from 'react-datetime-picker';
+import { useDispatch, useSelector } from 'react-redux';
 
 const DateTimeSelector = () => {
-  const [value, onChange] = useState(new Date());
+  const dispatch = useDispatch();
+  const specificDateTime = useSelector((state) => state.specificDateTime);
 
   return (
     <>
@@ -19,9 +21,11 @@ const DateTimeSelector = () => {
           minuteAriaLabel="Minute"
           monthAriaLabel="Month"
           nativeInputAriaLabel="Date and time"
-          onChange={onChange}
+          onChange={(result) => {
+            dispatch({ type: 'specificDateTime/selected', payload: result });
+          }}
           secondAriaLabel="Second"
-          value={value}
+          value={specificDateTime}
           yearAriaLabel="Year"
         />
       </Container>

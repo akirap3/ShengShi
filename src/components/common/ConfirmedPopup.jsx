@@ -5,14 +5,20 @@ import LocationMap from './LocationMap';
 import MyQRcode from './MyQRcode';
 import UpdatePopup from '../personalPage/myToReceiveList/UpdatePopup';
 
-import FoodImg from '../../images/homepage/food-5.jpg';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
 import { BiCrown } from 'react-icons/bi';
 import { useState } from 'react';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
-const ConfirmedPopup = ({ showConfirmation, closeConfirmation, UpdateBtn }) => {
+const ConfirmedPopup = ({
+  showConfirmation,
+  closeConfirmation,
+  UpdateBtn,
+  share,
+}) => {
   const [showUpdate, setShowUpdate] = useState(false);
+  const currentUser = useCurrentUser();
 
   const openUpdate = () => setShowUpdate(true);
   const closeUpdate = () => setShowUpdate(false);
@@ -35,29 +41,35 @@ const ConfirmedPopup = ({ showConfirmation, closeConfirmation, UpdateBtn }) => {
           <PopClose onClick={closeConfirmation} />
           <PopTitleContainer>
             <CrownIcon />
-            <PopTitle>好吃的麵包</PopTitle>
+            <PopTitle>{share?.name || ''}</PopTitle>
           </PopTitleContainer>
           <PopContent>
-            <PreviewImg src={FoodImg} />
+            <PreviewImg src={share?.imageUrl || ''} />
             <PopRow>
               <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
-              <Quantity>3</Quantity>
+              <Quantity>
+                {share?.toReceiveInfo[currentUser.uid].quantities || 0}
+              </Quantity>
             </PopRow>
             <PopRow>
               <DateTimeLabel>領取日期及時間</DateTimeLabel>
-              <DateTime>2021-10-15 20:00</DateTime>
+              <DateTime>
+                {share?.toReceiveInfo[currentUser.uid].upcomingTimestamp
+                  ?.toDate()
+                  .toLocaleString()}
+              </DateTime>
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
-              <PopPlace>台北．內湖</PopPlace>
+              <PopPlace>{share?.exchangePlace || ''}</PopPlace>
               <PopPlaceIcon />
             </PopRow>
 
             <MapWrapper>
-              <LocationMap />
+              <LocationMap exchangeLocation={share?.exchangeLocation} />
             </MapWrapper>
             <QRcodeWrapper>
-              <StyledQRcode />
+              <StyledQRcode info={`${share.id}/${currentUser.uid}`} />
             </QRcodeWrapper>
             {UpdateBtn && (
               <UpdateBtn onClick={() => handleShowUpdate()}>我要更新</UpdateBtn>
@@ -65,7 +77,11 @@ const ConfirmedPopup = ({ showConfirmation, closeConfirmation, UpdateBtn }) => {
           </PopContent>
         </DialogContent>
       </DialogOverlay>
-      <UpdatePopup showUpdate={showUpdate} closeUpdate={closeUpdate} />
+      <UpdatePopup
+        showUpdate={showUpdate}
+        closeUpdate={closeUpdate}
+        share={share}
+      />
     </>
   );
 };

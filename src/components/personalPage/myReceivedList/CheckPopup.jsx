@@ -11,9 +11,6 @@ import { BiCrown } from 'react-icons/bi';
 const CheckPopup = ({ showEdit, closeEditor, share }) => {
   const currentUser = useCurrentUser();
 
-  const confirmedTimestamp =
-    share.receivedInfo[currentUser.uid].confirmedTimestamp;
-
   return (
     <>
       <DialogOverlay isOpen={showEdit} onDismiss={closeEditor}>
@@ -27,34 +24,36 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
           <PopClose onClick={closeEditor} />
           <PopTitleContainer>
             <CrownIcon />
-            <PopTitle>{share.name}</PopTitle>
+            <PopTitle>{share?.name || ''}</PopTitle>
           </PopTitleContainer>
           <PopContent>
             <PopRow>
               <FoodLabel>食物名稱</FoodLabel>
-              <FoodName>{share.name}</FoodName>
+              <FoodName>{share?.name || ''}</FoodName>
             </PopRow>
             <PopRow>
               <QuantityLabel>數量</QuantityLabel>
               <Quantity>
-                {share.receivedInfo[currentUser.uid].quantities}
+                {share?.receivedInfo[currentUser.uid].quantities || 0}
               </Quantity>
             </PopRow>
             <PopRow>
               <DateTimeLabel>日期及時間</DateTimeLabel>
               <DateTime>
-                {confirmedTimestamp?.toDate().toLocaleString()}
+                {share?.receivedInfo[currentUser.uid].confirmedTimestamp
+                  ?.toDate()
+                  .toLocaleString()}
               </DateTime>
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
-              <PopPlace>{share.exchangePlace}</PopPlace>
+              <PopPlace>{share?.exchangePlace || ''}</PopPlace>
               <PopPlaceIcon />
             </PopRow>
             <PopRow>
               <FoodImgLabel>食物照片</FoodImgLabel>
             </PopRow>
-            <PreviewImg src={share.imageUrl} />
+            <PreviewImg src={share?.imageUrl || ''} />
           </PopContent>
         </DialogContent>
       </DialogOverlay>
