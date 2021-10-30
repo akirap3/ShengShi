@@ -1,38 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   collection,
-  getDocs,
   getFirestore,
   query,
   where,
-  orderBy,
+  onSnapshot,
 } from '@firebase/firestore';
 import useCurrentUser from '../../../hooks/useCurrentUser';
+import SharesContainer from '../../common/SharesContainer';
 import MyShareCard from './MyShareCard';
 
 const MyShareList = () => {
   const [shares, setShares] = useState([]);
   const currentUser = useCurrentUser();
 
-  const getMyShareList = async () => {
-    const SharesCollectionRef = collection(getFirestore(), 'shares');
-    const queryDocRef = query(
-      SharesCollectionRef,
+  const getMyShareList = useCallback(() => {
+    const q = query(
+      collection(getFirestore(), 'shares'),
       where('postUser.id', '==', currentUser.uid)
     );
 
-    const myshares = await getDocs(queryDocRef);
-    const mySharesArr = [];
-    myshares.forEach((doc) => mySharesArr.push({ ...doc.data(), id: doc.id }));
-    setShares(mySharesArr);
-    console.log(mySharesArr);
-  };
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const myShares = [];
+      querySnapshot.forEach((doc) =>
+        myShares.push({ ...doc.data(), id: doc.id })
+      );
+      setShares(myShares);
+      console.log(myShares);
+    });
+
+    return unsubscribe;
+  }, [currentUser.uid]);
 
   useEffect(() => {
-    getMyShareList();
-  }, []);
+    return getMyShareList();
+  }, [getMyShareList]);
 
-  return <>{shares && shares.map((share) => <MyShareCard share={share} />)}</>;
+  return (
+    shares && (
+      <SharesContainer>
+        {shares.map((share) => (
+          <MyShareCard share={share} />
+        ))}
+      </SharesContainer>
+    )
+  );
 };
 
 export default MyShareList;

@@ -107,7 +107,6 @@ const App = () => {
           width={'10vw'}
         />
       )}
-      )
       <Footer />
     </>
   );

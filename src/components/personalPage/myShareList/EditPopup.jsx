@@ -101,7 +101,6 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
             borderRadius: '10px',
           }}
         >
-          {console.log(share)}
           <PopClose onClick={closeEditor} />
           <PopTitleContainer>
             <CrownIcon />
