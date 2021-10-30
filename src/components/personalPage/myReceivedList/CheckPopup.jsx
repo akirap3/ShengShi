@@ -2,13 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
+import useCurrentUser from '../../../hooks/useCurrentUser';
 
-import FoodImg from '../../../images/homepage/food-5.jpg';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
 import { BiCrown } from 'react-icons/bi';
 
-const CheckPopup = ({ showEdit, closeEditor }) => {
+const CheckPopup = ({ showEdit, closeEditor, share }) => {
+  const currentUser = useCurrentUser();
+
+  const confirmedTimestamp =
+    share.receivedInfo[currentUser.uid].confirmedTimestamp;
+
   return (
     <>
       <DialogOverlay isOpen={showEdit} onDismiss={closeEditor}>
@@ -22,30 +27,34 @@ const CheckPopup = ({ showEdit, closeEditor }) => {
           <PopClose onClick={closeEditor} />
           <PopTitleContainer>
             <CrownIcon />
-            <PopTitle>好吃的麵包</PopTitle>
+            <PopTitle>{share.name}</PopTitle>
           </PopTitleContainer>
           <PopContent>
             <PopRow>
               <FoodLabel>食物名稱</FoodLabel>
-              <FoodName>非常好吃的蛋糕</FoodName>
+              <FoodName>{share.name}</FoodName>
             </PopRow>
             <PopRow>
               <QuantityLabel>數量</QuantityLabel>
-              <Quantity>5</Quantity>
+              <Quantity>
+                {share.receivedInfo[currentUser.uid].quantities}
+              </Quantity>
             </PopRow>
             <PopRow>
               <DateTimeLabel>日期及時間</DateTimeLabel>
-              <DateTime>2021-10-15 20:00</DateTime>
+              <DateTime>
+                {confirmedTimestamp?.toDate().toLocaleString()}
+              </DateTime>
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
-              <PopPlace>台北．內湖</PopPlace>
+              <PopPlace>{share.exchangePlace}</PopPlace>
               <PopPlaceIcon />
             </PopRow>
             <PopRow>
               <FoodImgLabel>食物照片</FoodImgLabel>
             </PopRow>
-            <PreviewImg src={FoodImg} />
+            <PreviewImg src={share.imageUrl} />
           </PopContent>
         </DialogContent>
       </DialogOverlay>

@@ -1,24 +1,49 @@
-import React, { useState } from 'react';
-import ShareCard from '../../common/ShareCard';
-import ShareCardTag from '../../common/ShareCardTag';
-import CheckPopup from './CheckPopup';
+import React, { useCallback, useState, useEffect } from 'react';
+import {
+  getFirestore,
+  query,
+  where,
+  onSnapshot,
+  collection,
+} from '@firebase/firestore';
+
+import useCurrentUser from '../../../hooks/useCurrentUser';
+import MyReceivedCard from './MyRecievedCard';
+import SharesContainer from '../../common/SharesContainer';
 
 const MyReceivedList = () => {
-  const [showEdit, setShowEdit] = useState(false);
+  const currentUser = useCurrentUser();
+  const [receivedShares, setReceivedShares] = useState('');
 
-  const openEditor = () => setShowEdit(true);
-  const closeEditor = () => setShowEdit(false);
+  const getReceivedShare = useCallback(() => {
+    const q = query(
+      collection(getFirestore(), 'shares'),
+      where('receivedUserId', 'array-contains', currentUser.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const receivedShares = querySnapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+      setReceivedShares(receivedShares);
+    });
+
+    return unsubscribe;
+  }, [currentUser.uid]);
+
+  useEffect(() => {
+    return getReceivedShare();
+  }, [getReceivedShare]);
 
   return (
-    <>
-      <ShareCard
-        openEditor={openEditor}
-        Tag={ShareCardTag}
-        isReceived="true"
-        tagName="＃已領取"
-      />
-      <CheckPopup showEdit={showEdit} closeEditor={closeEditor} />
-    </>
+    receivedShares && (
+      <SharesContainer>
+        {console.log(receivedShares)}
+        {receivedShares.map((share) => (
+          <MyReceivedCard share={share} />
+        ))}
+      </SharesContainer>
+    )
   );
 };
 
