@@ -8,12 +8,15 @@ const useRestaurants = () => {
   const restaurants = useSelector((state) => state.restaurants);
 
   useEffect(() => {
+    let isMounted = true;
     if (restaurants) return;
 
     firebase.fetchRestaurants().then((data) => {
       console.log(data);
-      dispatch({ type: 'restaurants/fetched', payload: data });
+      if (isMounted) dispatch({ type: 'restaurants/fetched', payload: data });
     });
+
+    return () => (isMounted = false);
   }, [dispatch, restaurants]);
 
   return restaurants;

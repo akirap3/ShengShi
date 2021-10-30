@@ -1,19 +1,60 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import BadgeTemplateImg from '../../images/badgePage/badge-2.png';
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+} from '@firebase/firestore';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 const Badges = () => {
+  const [badges, setBadges] = useState();
+  const currentUser = useCurrentUser();
+
+  const getBadges = useCallback(() => {
+    const q = query(
+      collection(getFirestore(), 'badges'),
+      where('ownedBy', 'array-contains', currentUser.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const myBadges = [];
+      querySnapshot.forEach((doc) => {
+        myBadges.push({ ...doc.data(), id: doc.id });
+      });
+      setBadges(myBadges);
+      console.log(myBadges);
+    });
+
+    return unsubscribe;
+  }, [currentUser.uid]);
+
+  useEffect(() => {
+    return getBadges();
+  }, [getBadges]);
+
   return (
-    <BadgeContainer>
-      {Array(9)
-        .fill(0)
-        .map(() => (
-          <BadgeContext>
-            <BadgeImg src={BadgeTemplateImg} />
-            <BadgeName>勳章 x</BadgeName>
-          </BadgeContext>
-        ))}
-    </BadgeContainer>
+    <>
+      {badges?.length !== 0 ? (
+        badges && (
+          <BadgeContainer>
+            {badges.map((badge) => (
+              <BadgeContext>
+                <BadgeImg src={badge.imageUrl} />
+                <BadgeName>{badge.name}</BadgeName>
+              </BadgeContext>
+            ))}
+          </BadgeContainer>
+        )
+      ) : (
+        <NoBagdeContainer>
+          <NoBagde>你沒有任何的勳章</NoBagde>
+        </NoBagdeContainer>
+      )}
+    </>
   );
 };
 
@@ -60,6 +101,17 @@ const BadgeImg = styled.img`
 const BadgeName = styled.div`
   margin-top: 1vw;
   text-align: center;
+`;
+
+const NoBagdeContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10vw;
+`;
+
+const NoBagde = styled.div`
+  font-size: 3vw;
 `;
 
 export default Badges;

@@ -1,19 +1,49 @@
-import React, { useState } from 'react';
-
-import EditPopup from './EditPopup';
-import ShareCard from '../../common/ShareCard';
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  collection,
+  getFirestore,
+  query,
+  where,
+  onSnapshot,
+} from '@firebase/firestore';
+import useCurrentUser from '../../../hooks/useCurrentUser';
+import SharesContainer from '../../common/SharesContainer';
+import MyShareCard from './MyShareCard';
 
 const MyShareList = () => {
-  const [showEdit, setShowEdit] = useState(false);
+  const [shares, setShares] = useState([]);
+  const currentUser = useCurrentUser();
 
-  const openEditor = () => setShowEdit(true);
-  const closeEditor = () => setShowEdit(false);
+  const getMyShareList = useCallback(() => {
+    const q = query(
+      collection(getFirestore(), 'shares'),
+      where('postUser.id', '==', currentUser.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const myShares = [];
+      querySnapshot.forEach((doc) =>
+        myShares.push({ ...doc.data(), id: doc.id })
+      );
+      setShares(myShares);
+      console.log(myShares);
+    });
+
+    return unsubscribe;
+  }, [currentUser.uid]);
+
+  useEffect(() => {
+    return getMyShareList();
+  }, [getMyShareList]);
 
   return (
-    <>
-      <ShareCard openEditor={openEditor} btnName="編輯" category="分享" />
-      <EditPopup showEdit={showEdit} closeEditor={closeEditor} />
-    </>
+    shares && (
+      <SharesContainer>
+        {shares.map((share) => (
+          <MyShareCard share={share} />
+        ))}
+      </SharesContainer>
+    )
   );
 };
 

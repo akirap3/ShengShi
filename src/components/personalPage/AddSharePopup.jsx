@@ -1,9 +1,24 @@
 import React, { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import ReactLoading from 'react-loading';
+
+import {
+  collection,
+  doc,
+  setDoc,
+  getFirestore,
+  Timestamp,
+  GeoPoint,
+} from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
+import useCurrentUser from '../../hooks/useCurrentUser.js';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 
-import CalendarPopup from '../personalPage/myShareList/CalendarPopup';
+import CalendarPopup from './myShareList/CalendarPopup';
+import MapPopup from './myShareList/MapPopup.jsx';
 
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
@@ -11,12 +26,66 @@ import { BiCrown } from 'react-icons/bi';
 import { BsCalendarCheckFill } from 'react-icons/bs';
 
 const AddSharePopup = ({ showEdit, closeEditor }) => {
+  const dispatch = useDispatch();
   const uploadRef = useRef();
+  const currentUser = useCurrentUser();
+  const fromToDateTime = useSelector((state) => state.fromToDateTime);
+  const address = useSelector((state) => state.address);
+  const latLng = useSelector((state) => state.latLng);
   const [showCalender, setShowCalendar] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+  const [foodName, setFoodName] = useState('');
+  const [quantities, setQuantities] = useState(1);
   const [file, setFile] = useState(null);
+  const [isLoading, setIsLoaging] = useState(false);
 
   const openCalendar = () => setShowCalendar(true);
   const closeCalendar = () => setShowCalendar(false);
+  const openMap = () => setShowMap(true);
+  const closeMap = () => setShowMap(false);
+
+  const handleAddress = (payload) => {
+    dispatch({ type: 'address/get', payload: payload });
+  };
+  const handleLatLng = (payload) => {
+    dispatch({ type: 'latLng/get', payload: payload });
+  };
+
+  const handleSubmit = async () => {
+    setIsLoaging(true);
+    const docRef = doc(collection(getFirestore(), `shares`));
+    const fileRef = ref(getStorage(), `images/shares/${docRef.id}`);
+    const metadata = {
+      contentType: file.type,
+    };
+    const uplaodTask = await uploadBytes(fileRef, file, metadata);
+    const imageUrl = await getDownloadURL(uplaodTask.ref);
+    await setDoc(
+      docRef,
+      {
+        exchangePlace: address,
+        fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
+        toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
+        imageUrl,
+        quantities: Number(quantities),
+        name: foodName,
+        postUser: {
+          id: currentUser.uid,
+          displayName: currentUser.displayName,
+        },
+        rating: 5,
+        timestamp: Timestamp.fromDate(new Date()),
+        userLocation: '台北 信義區',
+        exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
+      },
+      { merge: true }
+    );
+    setIsLoaging(false);
+    closeEditor();
+    handleLatLng([]);
+    handleAddress('');
+    setFile(null);
+  };
 
   const previewImgUrl = file
     ? URL.createObjectURL(file)
@@ -25,6 +94,14 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
   return (
     <>
       <DialogOverlay isOpen={showEdit} onDismiss={closeEditor}>
+        {isLoading && (
+          <StyledReactLoading
+            type={'spin'}
+            color={'#2a9d8f'}
+            height={'10vw'}
+            width={'10vw'}
+          />
+        )}
         <DialogContent
           style={{
             position: 'relative',
@@ -40,21 +117,23 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
           <PopContent>
             <PopRow>
               <FoodLabel>食物名稱</FoodLabel>
-              <FoodName />
+              <FoodName onChange={(e) => setFoodName(e.target.value)} />
             </PopRow>
             <PopRow>
               <QuantityLabel>數量</QuantityLabel>
-              <Quantity />
+              <Quantity onChange={(e) => setQuantities(e.target.value)} />
             </PopRow>
             <PopRow>
               <DateTimeLabel>日期及時間</DateTimeLabel>
-              <DateTime>2021-10-15 20:00</DateTime>
+              <DateTime>
+                {`${fromToDateTime[0].toLocaleString()} - ${fromToDateTime[1].toLocaleString()}`}
+              </DateTime>
               <Calendar onClick={openCalendar} />
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
-              <PopPlace />
-              <PopPlaceIcon />
+              <PopPlace>{address}</PopPlace>
+              <PopPlaceIcon onClick={openMap} />
             </PopRow>
             <PopRow>
               <FoodImgLabel>食物照片</FoodImgLabel>
@@ -68,7 +147,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
               />
             </PopRow>
             <PreviewImg src={previewImgUrl} />
-            <SubmitBtn>分享</SubmitBtn>
+            <SubmitBtn onClick={handleSubmit}>分享</SubmitBtn>
           </PopContent>
         </DialogContent>
       </DialogOverlay>
@@ -76,9 +155,24 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
         showCalender={showCalender}
         closeCalendar={closeCalendar}
       />
+      <MapPopup
+        showMap={showMap}
+        closeMap={closeMap}
+        handleAddress={handleAddress}
+        handleLatLng={handleLatLng}
+      />
     </>
   );
 };
+
+const StyledReactLoading = styled(ReactLoading)`
+  display: flex;
+  position: relative;
+  z-index: 10;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+`;
 
 const StyledColse = styled(AiFillCloseCircle)`
   fill: lightblue;
@@ -163,7 +257,7 @@ const PopPlaceLabel = styled.label`
   width: 9vw;
 `;
 
-const PopPlace = styled.input`
+const PopPlace = styled.span`
   margin-right: 1vw;
 `;
 

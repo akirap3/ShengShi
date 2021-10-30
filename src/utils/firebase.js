@@ -25,8 +25,9 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
-const auth = getAuth();
-const db = getFirestore();
+export const auth = getAuth();
+export const db = getFirestore();
+
 auth.languageCode = 'it';
 
 export const register = (email, password) => {
