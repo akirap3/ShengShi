@@ -93,7 +93,7 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
-              <PopPlace>{share?.exchangePlace}</PopPlace>
+              <PopPlace>{share?.exchangePlace || ''}</PopPlace>
               <PopPlaceIcon />
             </PopRow>
             <MapWrapper>

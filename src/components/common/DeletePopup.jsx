@@ -24,6 +24,7 @@ const DeletePopup = ({
   category,
   share,
   isToReceive,
+  isCollected,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const currentUser = useCurrentUser();
@@ -42,9 +43,17 @@ const DeletePopup = ({
     const docRef = doc(getFirestore(), 'shares', share?.id);
     await updateDoc(docRef, {
       [`toReceiveInfo.${currentUser.uid}`]: deleteField(),
-    });
-    await updateDoc(docRef, {
       toReceiveUserId: arrayRemove(currentUser.uid),
+    });
+    setIsLoading(false);
+    closeDelete();
+  };
+
+  const handleDeleteCollected = async () => {
+    setIsLoading(true);
+    const docRef = doc(getFirestore(), 'shares', share?.id);
+    await updateDoc(docRef, {
+      savedUserId: arrayRemove(currentUser.uid),
     });
     setIsLoading(false);
     closeDelete();
@@ -71,6 +80,8 @@ const DeletePopup = ({
             onClick={
               isToReceive
                 ? () => handleDeleteToReceive()
+                : isCollected
+                ? () => handleDeleteCollected()
                 : () => handleDeleteShare()
             }
             disabled={isLoading}

@@ -30,6 +30,7 @@ const MyShareCard = ({ share }) => {
         btnName="編輯"
         category="分享"
         share={listenedShare}
+        isMyShare={true}
       />
       <EditPopup
         showEdit={showEdit}
