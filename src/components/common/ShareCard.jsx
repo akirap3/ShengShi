@@ -2,18 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 
-import {
-  getFirestore,
-  doc,
-  updateDoc,
-  arrayRemove,
-  arrayUnion,
-} from '@firebase/firestore';
-
 import { themeColor } from '../../utils/commonVariables';
 
 import '@reach/dialog/styles.css';
 import DeletePopup from './DeletePopup';
+import { handleCollection } from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
 
 import { ImSpoonKnife } from 'react-icons/im';
@@ -51,19 +44,6 @@ const ShareCard = ({
     openEditor();
   };
 
-  const handleCollection = async () => {
-    const docRef = doc(getFirestore(), 'shares', share.id);
-    if (share?.savedUserId.includes(currentUser.uid)) {
-      await updateDoc(docRef, {
-        savedUserId: arrayRemove(currentUser.uid),
-      });
-    } else {
-      await updateDoc(docRef, {
-        savedUserId: arrayUnion(currentUser.uid),
-      });
-    }
-  };
-
   return (
     <>
       <ShareContext>
@@ -87,7 +67,7 @@ const ShareCard = ({
             {!isMyShare && (
               <Heart
                 isLiked={share?.savedUserId.includes(currentUser.uid)}
-                onClick={() => handleCollection()}
+                onClick={() => handleCollection(share, 'shares', currentUser)}
               />
             )}
           </CardRow>
@@ -240,6 +220,7 @@ const Heart = styled(AiTwotoneHeart)`
   fill: ${(props) => (props.isLiked ? 'red' : 'black')};
   width: 1.8vw;
   height: 1.8vw;
+  cursor: pointer;
   @media screen and (max-width: 700px) {
     width: 2.6vw;
     height: 2.6vw;

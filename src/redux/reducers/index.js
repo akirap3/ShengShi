@@ -1,7 +1,5 @@
 import { combineReducers } from 'redux';
 
-import restaurants from './restaurants';
-import shares from './shares';
 import articles from './articles';
 import currentUser from './currentUser';
 import checkUser from './checkUser';
@@ -11,8 +9,6 @@ import address from './address';
 import specificDateTime from './specificDateTime';
 
 const reducers = combineReducers({
-  restaurants,
-  shares,
   articles,
   currentUser,
   checkUser,

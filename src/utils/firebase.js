@@ -10,7 +10,18 @@ import {
   signOut,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  arrayUnion,
+  arrayRemove,
+  updateDoc,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
 
 require('dotenv').config();
 
@@ -92,7 +103,7 @@ export const logOut = () => {
 const fetchAllDocs = async (collectionName) => {
   const arr = [];
   const querySnapshot = await getDocs(collection(db, collectionName));
-  querySnapshot.forEach((doc) => arr.push(doc.data()));
+  querySnapshot.forEach((doc) => arr.push({ ...doc.data(), id: doc.id }));
   return arr;
 };
 
@@ -110,4 +121,56 @@ export const fetchArticles = async () => {
 
 export const observeUserChange = (callback) => {
   onAuthStateChanged(auth, callback);
+};
+
+export const handleCollection = async (
+  content,
+  collectionName,
+  currentUser
+) => {
+  const docRef = doc(getFirestore(), collectionName, content.id);
+  if (content?.savedUserId?.includes(currentUser.uid)) {
+    await updateDoc(docRef, {
+      savedUserId: arrayRemove(currentUser.uid),
+    });
+  } else {
+    await updateDoc(docRef, {
+      savedUserId: arrayUnion(currentUser.uid),
+    });
+  }
+};
+
+export const getSpecificShares = (
+  collectionName,
+  field,
+  operator,
+  currentUser,
+  setShares
+) => {
+  const q = query(
+    collection(db, collectionName),
+    where(field, operator, currentUser?.uid)
+  );
+
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const specificShares = querySnapshot.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+    });
+    setShares(specificShares);
+  });
+
+  return unsubscribe;
+};
+
+export const getAllContents = (collectionName, setContents) => {
+  const q = query(collection(db, collectionName));
+
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const contents = querySnapshot.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+    });
+    setContents(contents);
+  });
+
+  return unsubscribe;
 };

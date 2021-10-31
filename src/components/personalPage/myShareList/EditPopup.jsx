@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import ReactLoading from 'react-loading';
-import { useHistory } from 'react-router-dom';
 
 import {
   getFirestore,

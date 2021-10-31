@@ -1,30 +1,50 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
-
+import { getSpecificShares } from '../../utils/firebase';
+import { handleCollection } from '../../utils/firebase';
 import { v4 as uuidv4 } from 'uuid';
 import { AiTwotoneStar, AiTwotoneHeart } from 'react-icons/ai';
-
-import useRestaurants from '../../hooks/useRestaurants';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 const CollectedRestaurants = () => {
-  const restaurants = useRestaurants();
+  const currentUser = useCurrentUser();
+  const [savedRestaurants, setSavedRestaurants] = useState('');
+
+  const getCollectedRestaurants = useCallback(
+    () =>
+      getSpecificShares(
+        'restaurants',
+        'savedUserId',
+        'array-contains',
+        currentUser,
+        setSavedRestaurants
+      ),
+    [currentUser]
+  );
+
+  useEffect(() => {
+    return getCollectedRestaurants();
+  }, [getCollectedRestaurants]);
+
   return (
-    restaurants && (
+    savedRestaurants && (
       <Container>
-        {restaurants.map((content) => {
-          return (
-            <Card key={content.id}>
-              <CardImg src={content.imageUrl} />
-              <CardTitle>{content.name}</CardTitle>
-              <Row>
-                {Array.from(Array(content.rating).keys()).map(() => (
-                  <Star key={uuidv4()} />
-                ))}
-                <Heart />
-              </Row>
-            </Card>
-          );
-        })}
+        {savedRestaurants.map((restaurant) => (
+          <Card key={restaurant.id}>
+            <CardImg src={restaurant.imageUrl} />
+            <CardTitle>{restaurant.name}</CardTitle>
+            <Row>
+              {Array.from(Array(restaurant.rating).keys()).map(() => (
+                <Star key={uuidv4()} />
+              ))}
+              <Heart
+                onClick={() =>
+                  handleCollection(restaurant, 'restaurants', currentUser)
+                }
+              />
+            </Row>
+          </Card>
+        ))}
       </Container>
     )
   );
@@ -89,6 +109,7 @@ const Star = styled(AiTwotoneStar)`
 const Heart = styled(AiTwotoneHeart)`
   fill: red;
   margin-left: 1vw;
+  cursor: pointer;
 `;
 
 export default CollectedRestaurants;
