@@ -1,23 +1,51 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { getFirestore, doc, deleteDoc } from '@firebase/firestore';
+import {
+  getFirestore,
+  doc,
+  deleteDoc,
+  deleteField,
+  updateDoc,
+  arrayRemove,
+} from '@firebase/firestore';
 import { getStorage, ref, deleteObject } from '@firebase/storage';
 import Loading from './Loading';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 import '@reach/dialog/styles.css';
 
 import { AiFillCloseCircle } from 'react-icons/ai';
 
-const DeletePopup = ({ showDelete, closeDelete, category, shareId }) => {
+const DeletePopup = ({
+  showDelete,
+  closeDelete,
+  category,
+  share,
+  isToReceive,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
+  const currentUser = useCurrentUser();
 
   const handleDeleteShare = async () => {
     setIsLoading(true);
-    const deleteImgFileRef = ref(getStorage(), `images/shares/${shareId}`);
+    const deleteImgFileRef = ref(getStorage(), `images/shares/${share?.id}`);
     await deleteObject(deleteImgFileRef);
-    await deleteDoc(doc(getFirestore(), 'shares', shareId));
+    await deleteDoc(doc(getFirestore(), 'shares', share?.id));
+    setIsLoading(false);
+    closeDelete();
+  };
+
+  const handleDeleteToReceive = async () => {
+    setIsLoading(true);
+    const docRef = doc(getFirestore(), 'shares', share?.id);
+    await updateDoc(docRef, {
+      [`toReceiveInfo.${currentUser.uid}`]: deleteField(),
+    });
+    await updateDoc(docRef, {
+      toReceiveUserId: arrayRemove(currentUser.uid),
+    });
     setIsLoading(false);
     closeDelete();
   };
@@ -39,7 +67,14 @@ const DeletePopup = ({ showDelete, closeDelete, category, shareId }) => {
         <PopClose onClick={closeDelete} disabled={isLoading} />
         <Title>{`確認刪除此${category}`}</Title>
         <Row>
-          <ConfirmBtn onClick={() => handleDeleteShare()} disabled={isLoading}>
+          <ConfirmBtn
+            onClick={
+              isToReceive
+                ? () => handleDeleteToReceive()
+                : () => handleDeleteShare()
+            }
+            disabled={isLoading}
+          >
             確認
           </ConfirmBtn>
           <CancelBtn onClick={closeDelete} disabled={isLoading}>
