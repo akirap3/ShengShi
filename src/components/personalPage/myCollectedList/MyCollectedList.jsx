@@ -1,25 +1,49 @@
-import React, { useState } from 'react';
-import ShareCard from '../../common/ShareCard';
-import ShareCardTag from '../../common/ShareCardTag';
-import CollectedSharePopup from './CollectedSharePopup';
+import React, { useState, useEffect, useCallback } from 'react';
+
+import {
+  getFirestore,
+  query,
+  where,
+  onSnapshot,
+  collection,
+} from '@firebase/firestore';
+
+import useCurrentUser from '../../../hooks/useCurrentUser';
+import SharesContainer from '../../common/SharesContainer';
+import MyCollectedCard from './MyCollectedCard';
 
 const MyCollectedList = () => {
-  const [showEdit, setShowEdit] = useState(false);
+  const currentUser = useCurrentUser();
+  const [savedShares, setSavedShares] = useState('');
 
-  const openEditor = () => setShowEdit(true);
-  const closeEditor = () => setShowEdit(false);
+  const getSavedShares = useCallback(() => {
+    const q = query(
+      collection(getFirestore(), 'shares'),
+      where('savedUserId', 'array-contains', currentUser.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const savedShares = querySnapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+      setSavedShares(savedShares);
+    });
+
+    return unsubscribe;
+  }, [currentUser.uid]);
+
+  useEffect(() => {
+    return getSavedShares();
+  }, [getSavedShares]);
 
   return (
-    <>
-      <ShareCard
-        openEditor={openEditor}
-        Tag={ShareCardTag}
-        tagName="#已收藏"
-        btnName="領取"
-        category="收藏"
-      />
-      <CollectedSharePopup showEdit={showEdit} closeEditor={closeEditor} />
-    </>
+    savedShares && (
+      <SharesContainer>
+        {savedShares.map((share) => (
+          <MyCollectedCard share={share} />
+        ))}
+      </SharesContainer>
+    )
   );
 };
 

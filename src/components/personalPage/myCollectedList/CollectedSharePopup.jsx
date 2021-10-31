@@ -1,27 +1,60 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 import SelectDateTimePopup from './SelectDateTimePopup';
 import LocationMap from '../../common/LocationMap';
+import Loading from '../../common/Loading';
 import ConfirmedPopup from '../../common/ConfirmedPopup';
+import useCurrentUser from '../../../hooks/useCurrentUser';
 
-import FoodImg from '../../../images/homepage/food-5.jpg';
+import {
+  getFirestore,
+  doc,
+  Timestamp,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+} from '@firebase/firestore';
+
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
 import { BiCrown } from 'react-icons/bi';
 import { BsCalendarCheckFill } from 'react-icons/bs';
 
-const CollectedSharePopup = ({ showEdit, closeEditor }) => {
+const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
+  const dispatch = useDispatch();
+  const currentUser = useCurrentUser();
   const [showDateTime, setShowDateTime] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [reqQuantities, setReqQuantities] = useState();
+  const specificDateTime = useSelector((state) => state.specificDateTime);
+  const [isLoading, setIsLoading] = useState(false);
 
   const openDateTime = () => setShowDateTime(true);
   const closeDateTime = () => setShowDateTime(false);
   const openConfirmation = () => setShowConfirmation(true);
   const closeConfirmation = () => setShowConfirmation(false);
 
-  const handleConfirmation = () => {
+  const handleSpecificDateTime = () => {
+    dispatch({ type: 'specificDateTime/selected', payload: null });
+  };
+
+  const handleConfirmation = async () => {
+    setIsLoading(true);
+    const docRef = doc(getFirestore(), 'shares', share.id);
+    await updateDoc(docRef, {
+      toReceiveUserId: arrayUnion(currentUser.uid),
+      toReceiveInfo: {
+        [`${currentUser.uid}`]: {
+          quantities: Number(reqQuantities),
+          upcomingTimestamp: Timestamp.fromDate(specificDateTime),
+        },
+      },
+    });
+    setIsLoading(false);
+    handleSpecificDateTime();
     openConfirmation();
     closeEditor();
   };
@@ -29,6 +62,14 @@ const CollectedSharePopup = ({ showEdit, closeEditor }) => {
   return (
     <>
       <DialogOverlay isOpen={showEdit} onDismiss={closeEditor}>
+        {isLoading && (
+          <Loading
+            type={'spin'}
+            color={'#2a9d8f'}
+            height={'10vw'}
+            width={'10vw'}
+          />
+        )}
         <DialogContent
           style={{
             position: 'relative',
@@ -39,26 +80,37 @@ const CollectedSharePopup = ({ showEdit, closeEditor }) => {
           <PopClose onClick={closeEditor} />
           <PopTitleContainer>
             <CrownIcon />
-            <PopTitle>好吃的麵包</PopTitle>
+            <PopTitle>{share?.name || ''}</PopTitle>
           </PopTitleContainer>
           <PopContent>
-            <PreviewImg src={FoodImg} />
+            <PreviewImg src={share?.imageUrl || ''} />
             <PopRow>
               <CurrentNumberLabel>目前數量</CurrentNumberLabel>
-              <CurrentNumber>5</CurrentNumber>
+              <CurrentNumber>{share?.quantities || ''}</CurrentNumber>
             </PopRow>
             <PopRow>
               <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
-              <Quantity placeholder="請輸入數量" />
+              <Quantity
+                placeholder="請輸入數量"
+                onChange={(e) => setReqQuantities(e.target.value)}
+              />
+            </PopRow>
+            <PopRow>
+              <DateTimeLabel>可領取時段</DateTimeLabel>
+              <DateTime>
+                {share?.fromTimeStamp.toDate().toLocaleString()}
+                {`~`}
+                {share?.toTimeStamp.toDate().toLocaleString()}
+              </DateTime>
             </PopRow>
             <PopRow>
               <DateTimeLabel>領取日期及時間</DateTimeLabel>
-              <DateTime>2021-10-15 20:00</DateTime>
+              <DateTime>{specificDateTime?.toLocaleString() || ''}</DateTime>
               <Calendar onClick={openDateTime} />
             </PopRow>
             <PopRow>
               <PopPlaceLabel>地點</PopPlaceLabel>
-              <PopPlace>台北．內湖</PopPlace>
+              <PopPlace>{share?.exchangePlace || ''}</PopPlace>
               <PopPlaceIcon />
             </PopRow>
             <MapWrapper>
@@ -75,6 +127,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor }) => {
       <ConfirmedPopup
         showConfirmation={showConfirmation}
         closeConfirmation={closeConfirmation}
+        share={share}
       />
     </>
   );

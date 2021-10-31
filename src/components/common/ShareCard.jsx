@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+
+import {
+  getFirestore,
+  doc,
+  updateDoc,
+  arrayRemove,
+  arrayUnion,
+} from '@firebase/firestore';
 
 import { themeColor } from '../../utils/commonVariables';
 
 import '@reach/dialog/styles.css';
 import DeletePopup from './DeletePopup';
-import SharesContainer from './SharesContainer';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 import { ImSpoonKnife } from 'react-icons/im';
 import {
@@ -25,10 +34,35 @@ const ShareCard = ({
   category,
   share,
   isToReceive,
+  isCollected,
+  isMyShare,
 }) => {
+  const dispatch = useDispatch();
+  const currentUser = useCurrentUser();
   const [showDelete, setShowDelete] = useState(false);
   const openDelete = () => setShowDelete(true);
   const closeDelete = () => setShowDelete(false);
+
+  const handleCollectedOpen = () => {
+    dispatch({
+      type: 'specificDateTime/selected',
+      payload: share?.fromTimeStamp.toDate(),
+    });
+    openEditor();
+  };
+
+  const handleCollection = async () => {
+    const docRef = doc(getFirestore(), 'shares', share.id);
+    if (share?.savedUserId.includes(currentUser.uid)) {
+      await updateDoc(docRef, {
+        savedUserId: arrayRemove(currentUser.uid),
+      });
+    } else {
+      await updateDoc(docRef, {
+        savedUserId: arrayUnion(currentUser.uid),
+      });
+    }
+  };
 
   return (
     <>
@@ -50,7 +84,12 @@ const ShareCard = ({
               <Star />
               <Rating>{share?.rating}</Rating>
             </CardItem>
-            <Heart />
+            {!isMyShare && (
+              <Heart
+                isLiked={share?.savedUserId.includes(currentUser.uid)}
+                onClick={() => handleCollection()}
+              />
+            )}
           </CardRow>
           <CardRow>
             <CardItem>
@@ -58,7 +97,9 @@ const ShareCard = ({
               <Location>{share?.userLocation}</Location>
             </CardItem>
             {Tag && <Tag>{tagName}</Tag>}
-            <GetButton onClick={openEditor}>{btnName || '查看'}</GetButton>
+            <GetButton onClick={isCollected ? handleCollectedOpen : openEditor}>
+              {btnName || '查看'}
+            </GetButton>
           </CardRow>
         </CardContent>
       </ShareContext>
@@ -69,6 +110,7 @@ const ShareCard = ({
         category={category}
         share={share}
         isToReceive={isToReceive}
+        isCollected={isCollected}
       />
     </>
   );
@@ -195,7 +237,7 @@ const Star = styled(AiTwotoneStar)`
 const Rating = styled.span``;
 
 const Heart = styled(AiTwotoneHeart)`
-  fill: red;
+  fill: ${(props) => (props.isLiked ? 'red' : 'black')};
   width: 1.8vw;
   height: 1.8vw;
   @media screen and (max-width: 700px) {
