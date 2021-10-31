@@ -1,10 +1,15 @@
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { v4 as uuidv4 } from 'uuid';
+import { handleCollection } from '../../utils/firebase';
+import useCurrentUser from '../../hooks/useCurrentUser';
+
 import { AiTwotoneStar, AiTwotoneHeart } from 'react-icons/ai';
 import { IoIosArrowDropleft, IoIosArrowDropright } from 'react-icons/io';
 
-const Carousel = ({ title, contentData }) => {
+const Carousel = ({ title, contentData, isRestaurants }) => {
+  const currentUser = useCurrentUser();
+
   const settings = {
     className: 'slider variable-width',
     dots: true,
@@ -62,7 +67,32 @@ const Carousel = ({ title, contentData }) => {
                       {Array.from(Array(content.rating).keys()).map(() => (
                         <Star key={uuidv4()} />
                       ))}
-                      <Heart />
+                      <Heart
+                        onClick={
+                          currentUser
+                            ? isRestaurants
+                              ? () =>
+                                  handleCollection(
+                                    content,
+                                    'restaurants',
+                                    currentUser
+                                  )
+                              : () =>
+                                  handleCollection(
+                                    content,
+                                    'shares',
+                                    currentUser
+                                  )
+                            : () => {}
+                        }
+                        like={
+                          currentUser
+                            ? content?.savedUserId?.includes(currentUser.uid)
+                              ? 'red'
+                              : 'black'
+                            : 'black'
+                        }
+                      />
                     </Row>
                   </Card>
                 );
@@ -174,7 +204,8 @@ const Star = styled(AiTwotoneStar)``;
 
 const Heart = styled(AiTwotoneHeart)`
   margin-left: auto;
-  fill: red;
+  fill: ${(props) => props.like};
+  cursor: pointer;
 `;
 
 export default Carousel;

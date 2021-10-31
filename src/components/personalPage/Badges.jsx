@@ -1,36 +1,23 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  onSnapshot,
-  orderBy,
-} from '@firebase/firestore';
+import { getSpecificShares } from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
 
 const Badges = () => {
   const [badges, setBadges] = useState();
   const currentUser = useCurrentUser();
 
-  const getBadges = useCallback(() => {
-    const q = query(
-      collection(getFirestore(), 'badges'),
-      where('ownedBy', 'array-contains', currentUser.uid)
-    );
-
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const myBadges = [];
-      querySnapshot.forEach((doc) => {
-        myBadges.push({ ...doc.data(), id: doc.id });
-      });
-      setBadges(myBadges);
-      console.log(myBadges);
-    });
-
-    return unsubscribe;
-  }, [currentUser.uid]);
+  const getBadges = useCallback(
+    () =>
+      getSpecificShares(
+        'badges',
+        'ownedBy',
+        'array-contains',
+        currentUser,
+        setBadges
+      ),
+    [currentUser]
+  );
 
   useEffect(() => {
     return getBadges();

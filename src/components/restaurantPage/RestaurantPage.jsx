@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import { layoutConfig, themeColor } from '../../utils/commonVariables';
+import { getAllContents } from '../../utils/firebase';
 import Carousel from '../common/Carousel';
-import useRestaurants from '../../hooks/useRestaurants';
 
 import RestaurantMap from './RestaurantMap';
 
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
 
 const RestaurantPage = () => {
-  const restaurants = useRestaurants();
+  const [restaurants, setRestaurants] = useState();
+
+  const getRestaurants = useCallback(() => {
+    getAllContents('restaurants', setRestaurants);
+  }, []);
+
+  useEffect(() => {
+    return getRestaurants();
+  }, [getRestaurants]);
+
   console.log(restaurants);
   return (
     <Main>
@@ -37,7 +46,13 @@ const RestaurantPage = () => {
         <SearchBar placeholder="餐廳搜尋" />
         <SearchButton>搜尋</SearchButton>
       </SearchContent>
-      {restaurants && <Carousel title="合作餐廳" contentData={restaurants} />}
+      {restaurants && (
+        <Carousel
+          title="合作餐廳"
+          contentData={restaurants}
+          isRestaurants={true}
+        />
+      )}
       <MapWrapper>
         <RestaurantMap />
       </MapWrapper>

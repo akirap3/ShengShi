@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar';
@@ -40,7 +40,9 @@ const Header = () => {
         {currentUser ? (
           <>
             <MyDashboard to="/personal/list">我的看板</MyDashboard>
-            <LogoutButton onClick={() => logout()}>登出</LogoutButton>
+            <LogoutButton as={Link} to="/" onClick={() => logout()}>
+              登出
+            </LogoutButton>
           </>
         ) : (
           <>
@@ -158,10 +160,12 @@ const SignupButton = styled(StyledLink)`
 
 const MyDashboard = styled(StyledLink)`
   width: 70px;
+  cursor: pointer;
 `;
 
 const LogoutButton = styled.div`
   width: 35px;
+  cursor: pointer;
 `;
 
 const MobileHeader = styled.div`
