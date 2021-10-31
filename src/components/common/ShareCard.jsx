@@ -24,6 +24,7 @@ const ShareCard = ({
   cnannotDel,
   category,
   share,
+  isToReceive,
 }) => {
   const [showDelete, setShowDelete] = useState(false);
   const openDelete = () => setShowDelete(true);
@@ -66,7 +67,8 @@ const ShareCard = ({
         showDelete={showDelete}
         closeDelete={closeDelete}
         category={category}
-        shareId={share?.id}
+        share={share}
+        isToReceive={isToReceive}
       />
     </>
   );

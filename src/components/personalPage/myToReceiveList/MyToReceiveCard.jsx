@@ -18,6 +18,7 @@ const MyToReceiveCard = ({ share }) => {
         tagName="#未領取"
         category="領取"
         share={share}
+        isToReceive={true}
       />
       <ConfirmedPopup
         showConfirmation={showConfirmation}
