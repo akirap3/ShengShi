@@ -4,9 +4,8 @@ import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar';
 
 import { useHistory } from 'react-router';
-
-import useCurrentUser from '../../hooks/useCurrentUser';
-import * as firebase from '../../utils/firebase';
+import { useSelector } from 'react-redux';
+import { logOut } from '../../utils/firebase';
 
 import LogoImg from '../../images/common/logo-1.png';
 import { BsPersonCircle } from 'react-icons/bs';
@@ -16,10 +15,10 @@ import { FcMenu } from 'react-icons/fc';
 const Header = () => {
   const history = useHistory();
   const [showMenu, setShowMenu] = useState(false);
-  const currentUser = useCurrentUser();
+  const checkUser = useSelector((state) => state.checkUser);
 
   const logout = () => {
-    firebase.logOut().then(() => {
+    logOut().then(() => {
       history.push('/');
     });
   };
@@ -37,7 +36,7 @@ const Header = () => {
         <ContactNav to="/contact">聯絡我們</ContactNav>
         <SearchBar />
         <MemberIcon />
-        {currentUser ? (
+        {checkUser.isLoggedIn ? (
           <>
             <MyDashboard to="/personal/list">我的看板</MyDashboard>
             <LogoutButton as={Link} to="/" onClick={() => logout()}>
@@ -67,7 +66,7 @@ const Header = () => {
           <MobileArticleNav to="/articles">文章</MobileArticleNav>
           <MobileAboutNav to="/about">關於我們</MobileAboutNav>
           <MobileContactNav to="/contact">聯絡我們</MobileContactNav>
-          {currentUser ? (
+          {checkUser.isLoggedIn ? (
             <>
               <MyMobileDashboard to="/personal/list">
                 我的看板

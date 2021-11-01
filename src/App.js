@@ -18,7 +18,7 @@ import MyReceivedList from './components/personalPage/myReceivedList/MyReceivedL
 import MyToReceiveList from './components/personalPage/myToReceiveList/MyToReceiveList';
 import MyCollectedList from './components/personalPage/myCollectedList/MyCollectedList';
 import CollectedRestaurants from './components/personalPage/CollectedRestaurants';
-import MemberUpdate from './components/memberUpdatePage/MemberUpdate';
+import MemberUpdate from './components/personalPage/memberUpdatePage/MemberUpdate';
 
 import './App.css';
 import '@reach/dialog/styles.css';
