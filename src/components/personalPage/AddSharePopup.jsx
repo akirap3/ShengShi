@@ -77,6 +77,12 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
         timestamp: Timestamp.fromDate(new Date()),
         userLocation: '台北 信義區',
         exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
+        receivedInfo: {},
+        receivedUserId: [],
+        toReceiveInfo: {},
+        toReceiveUserId: [],
+        savedUserId: [],
+        bookedQuantities: 0,
       },
       { merge: true }
     );
@@ -112,7 +118,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
           <PopClose onClick={closeEditor} />
           <PopTitleContainer>
             <CrownIcon />
-            <PopTitle>好吃的麵包</PopTitle>
+            <PopTitle>分享勝食</PopTitle>
           </PopTitleContainer>
           <PopContent>
             <PopRow>
