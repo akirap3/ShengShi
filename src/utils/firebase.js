@@ -9,6 +9,7 @@ import {
   fetchSignInMethodsForEmail,
   signOut,
   onAuthStateChanged,
+  deleteUser,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -21,7 +22,10 @@ import {
   onSnapshot,
   query,
   where,
+  deleteField,
+  deleteDoc,
 } from 'firebase/firestore';
+import { getStorage, ref, deleteObject } from 'firebase/storage';
 
 require('dotenv').config();
 
@@ -100,19 +104,53 @@ export const logOut = () => {
   return signOut(auth);
 };
 
+export const handleDeleteMember = () => {
+  deleteUser(auth.currentUser);
+};
+
+export const handleDeleteShare = async (setIsLoading, content, closeDelete) => {
+  setIsLoading(true);
+  const deleteImgFileRef = ref(getStorage(), `images/shares/${content?.id}`);
+  await deleteObject(deleteImgFileRef);
+  await deleteDoc(doc(getFirestore(), 'shares', content?.id));
+  setIsLoading(false);
+  closeDelete();
+};
+
+export const handleDeleteToReceive = async (
+  setIsLoading,
+  content,
+  closeDelete
+) => {
+  setIsLoading(true);
+  const docRef = doc(getFirestore(), 'shares', content?.id);
+  await updateDoc(docRef, {
+    [`toReceiveInfo.${auth.currentUser.uid}`]: deleteField(),
+    toReceiveUserId: arrayRemove(auth.currentUser.uid),
+  });
+  setIsLoading(false);
+  closeDelete();
+};
+
+export const handleDeleteCollected = async (
+  setIsLoading,
+  content,
+  closeDelete
+) => {
+  setIsLoading(true);
+  const docRef = doc(getFirestore(), 'shares', content?.id);
+  await updateDoc(docRef, {
+    savedUserId: arrayRemove(auth.currentUser.uid),
+  });
+  setIsLoading(false);
+  closeDelete();
+};
+
 const fetchAllDocs = async (collectionName) => {
   const arr = [];
   const querySnapshot = await getDocs(collection(db, collectionName));
   querySnapshot.forEach((doc) => arr.push({ ...doc.data(), id: doc.id }));
   return arr;
-};
-
-export const fetchRestaurants = async () => {
-  return fetchAllDocs('restaurants');
-};
-
-export const fetchShares = async () => {
-  return fetchAllDocs('shares');
 };
 
 export const fetchArticles = async () => {
@@ -147,19 +185,21 @@ export const getSpecificShares = (
   currentUser,
   setShares
 ) => {
-  const q = query(
-    collection(db, collectionName),
-    where(field, operator, currentUser?.uid)
-  );
+  if (currentUser) {
+    const q = query(
+      collection(db, collectionName),
+      where(field, operator, currentUser.uid)
+    );
 
-  const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    const specificShares = querySnapshot.docs.map((doc) => {
-      return { ...doc.data(), id: doc.id };
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const specificShares = querySnapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+      setShares(specificShares);
     });
-    setShares(specificShares);
-  });
 
-  return unsubscribe;
+    return unsubscribe;
+  }
 };
 
 export const getAllContents = (collectionName, setContents) => {

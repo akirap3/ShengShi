@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-
 import {
-  getFirestore,
-  doc,
-  deleteDoc,
-  deleteField,
-  updateDoc,
-  arrayRemove,
-} from '@firebase/firestore';
-import { getStorage, ref, deleteObject } from '@firebase/storage';
+  handleDeleteMember,
+  handleDeleteShare,
+  handleDeleteToReceive,
+  handleDeleteCollected,
+} from '../../utils/firebase';
 import Loading from './Loading';
-import useCurrentUser from '../../hooks/useCurrentUser';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 import '@reach/dialog/styles.css';
@@ -25,39 +20,9 @@ const DeletePopup = ({
   share,
   isToReceive,
   isCollected,
+  toDeleteMember,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const currentUser = useCurrentUser();
-
-  const handleDeleteShare = async () => {
-    setIsLoading(true);
-    const deleteImgFileRef = ref(getStorage(), `images/shares/${share?.id}`);
-    await deleteObject(deleteImgFileRef);
-    await deleteDoc(doc(getFirestore(), 'shares', share?.id));
-    setIsLoading(false);
-    closeDelete();
-  };
-
-  const handleDeleteToReceive = async () => {
-    setIsLoading(true);
-    const docRef = doc(getFirestore(), 'shares', share?.id);
-    await updateDoc(docRef, {
-      [`toReceiveInfo.${currentUser.uid}`]: deleteField(),
-      toReceiveUserId: arrayRemove(currentUser.uid),
-    });
-    setIsLoading(false);
-    closeDelete();
-  };
-
-  const handleDeleteCollected = async () => {
-    setIsLoading(true);
-    const docRef = doc(getFirestore(), 'shares', share?.id);
-    await updateDoc(docRef, {
-      savedUserId: arrayRemove(currentUser.uid),
-    });
-    setIsLoading(false);
-    closeDelete();
-  };
 
   return (
     <DialogOverlay
@@ -79,10 +44,12 @@ const DeletePopup = ({
           <ConfirmBtn
             onClick={
               isToReceive
-                ? () => handleDeleteToReceive()
+                ? () => handleDeleteToReceive(setIsLoading, share, closeDelete)
                 : isCollected
-                ? () => handleDeleteCollected()
-                : () => handleDeleteShare()
+                ? () => handleDeleteCollected(setIsLoading, share, closeDelete)
+                : toDeleteMember
+                ? () => handleDeleteMember()
+                : () => handleDeleteShare(setIsLoading, share, closeDelete)
             }
             disabled={isLoading}
           >

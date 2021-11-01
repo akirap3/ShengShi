@@ -15,6 +15,7 @@ require('dotenv').config();
 const GoogleMapsAPI = process.env.REACT_APP_GOOGLE_API_KEY;
 
 Geocode.setApiKey(GoogleMapsAPI);
+Geocode.setLanguage('zh-TW');
 Geocode.enableDebug();
 
 class Map extends Component {
@@ -101,21 +102,27 @@ class Map extends Component {
 
   onPlaceSelected = (place) => {
     console.log('plc', place);
-    const address = place.formatted_address,
-      latValue = place.geometry.location.lat(),
-      lngValue = place.geometry.location.lng();
-    this.props.handleAddress(address);
-    this.setState({
-      address: address ? address : '',
-      markerPosition: {
-        lat: latValue,
-        lng: lngValue,
-      },
-      mapPosition: {
-        lat: latValue,
-        lng: lngValue,
-      },
-    });
+    if (place['formatted_address'] === undefined) {
+      alert(
+        '請選擇有搜尋出的地址或使用拖拉 Marker 來取得地址(本站僅提供台灣的地址搜尋)'
+      );
+    } else {
+      const address = place.formatted_address,
+        latValue = place.geometry.location.lat(),
+        lngValue = place.geometry.location.lng();
+      this.props.handleAddress(address);
+      this.setState({
+        address: address ? address : '',
+        markerPosition: {
+          lat: latValue,
+          lng: lngValue,
+        },
+        mapPosition: {
+          lat: latValue,
+          lng: lngValue,
+        },
+      });
+    }
   };
 
   render() {
@@ -164,7 +171,10 @@ class Map extends Component {
             }}
             onPlaceSelected={this.onPlaceSelected}
             placeholder="查詢區域"
-            types={['(regions)']}
+            options={{
+              types: ['geocode'],
+              componentRestrictions: { country: 'TW' },
+            }}
           />
         </GoogleMap>
       ))
