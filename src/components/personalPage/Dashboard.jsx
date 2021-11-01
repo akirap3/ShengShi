@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import AddSharePopup from './AddSharePopup';
 
 import MemberImg from '../../images/PersonalPage/user-9.jpg';
+import useCurrentUser from '../../hooks/useCurrentUser';
+import { getCurrentUserData, getContentCounts } from '../../utils/firebase';
 
 import { ImSpoonKnife } from 'react-icons/im';
 import { AiTwotoneStar } from 'react-icons/ai';
@@ -12,47 +14,176 @@ import { IoMdPerson } from 'react-icons/io';
 import { BsGear } from 'react-icons/bs';
 
 const Dashbaord = () => {
+  const [userData, setUserDate] = useState(null);
   const [showEdit, setShowEdit] = useState(false);
+  const [myListCounts, setMyListCounts] = useState(0);
+  const [myBadgeCounts, setMyBadgeCounts] = useState(0);
+  const [myReceivedCounts, setMyReceivedCounts] = useState(0);
+  const [myToReceiveCounts, setMyToReceiveCounts] = useState(0);
+  const [myCollectedShareCounts, setMyCollectedShareCounts] = useState(0);
+  const [myCollectedStoreCounts, setMyCollectedStoreCounts] = useState(0);
+  const currentUser = useCurrentUser();
 
   const openEditor = () => setShowEdit(true);
   const closeEditor = () => setShowEdit(false);
 
   const location = useLocation();
   const menus = [
-    { name: '我的清單', count: 10, path: '/personal/list' },
-    { name: '我的勳章', count: 10, path: '/personal/badges' },
-    { name: '領取紀錄', count: 10, path: '/personal/received' },
-    { name: '尚未領取', count: 10, path: '/personal/toReceive' },
-    { name: '收藏清單', count: 10, path: '/personal/collectedShares' },
-    { name: '收藏店家', count: 10, path: '/personal/collectedRestaurants' },
+    { name: '我的清單', count: myListCounts || 0, path: '/personal/list' },
+    { name: '我的勳章', count: myBadgeCounts || 0, path: '/personal/badges' },
+    {
+      name: '領取紀錄',
+      count: myReceivedCounts || 0,
+      path: '/personal/received',
+    },
+    {
+      name: '尚未領取',
+      count: myToReceiveCounts || 0,
+      path: '/personal/toReceive',
+    },
+    {
+      name: '收藏清單',
+      count: myCollectedShareCounts || 0,
+      path: '/personal/collectedShares',
+    },
+    {
+      name: '收藏店家',
+      count: myCollectedStoreCounts || 0,
+      path: '/personal/collectedRestaurants',
+    },
   ];
+
+  const getUserData = useCallback(
+    () => getCurrentUserData(currentUser, setUserDate),
+    [currentUser]
+  );
+
+  const getMyListCounts = useCallback(
+    () =>
+      getContentCounts(
+        'shares',
+        'postUser.id',
+        '==',
+        currentUser,
+        setMyListCounts
+      ),
+    [currentUser]
+  );
+
+  const getBadgeCounts = useCallback(
+    () =>
+      getContentCounts(
+        'badges',
+        'ownedBy',
+        'array-contains',
+        currentUser,
+        setMyBadgeCounts
+      ),
+    [currentUser]
+  );
+
+  const getReceivedCounts = useCallback(
+    () =>
+      getContentCounts(
+        'shares',
+        'receivedUserId',
+        'array-contains',
+        currentUser,
+        setMyReceivedCounts
+      ),
+    [currentUser]
+  );
+
+  const getToReceiveCounts = useCallback(
+    () =>
+      getContentCounts(
+        'shares',
+        'toReceiveUserId',
+        'array-contains',
+        currentUser,
+        setMyToReceiveCounts
+      ),
+    [currentUser]
+  );
+
+  const getCollectedShareCounts = useCallback(
+    () =>
+      getContentCounts(
+        'shares',
+        'savedUserId',
+        'array-contains',
+        currentUser,
+        setMyCollectedShareCounts
+      ),
+    [currentUser]
+  );
+
+  const getCollectedStoreCounts = useCallback(
+    () =>
+      getContentCounts(
+        'restaurants',
+        'savedUserId',
+        'array-contains',
+        currentUser,
+        setMyCollectedStoreCounts
+      ),
+    [currentUser]
+  );
+
+  useEffect(() => {
+    return getUserData();
+  }, [getUserData]);
+
+  useEffect(() => {
+    return getMyListCounts();
+  }, [getMyListCounts]);
+
+  useEffect(() => {
+    return getBadgeCounts();
+  }, [getBadgeCounts]);
+
+  useEffect(() => {
+    return getReceivedCounts();
+  }, [getReceivedCounts]);
+
+  useEffect(() => {
+    return getToReceiveCounts();
+  }, [getToReceiveCounts]);
+
+  useEffect(() => {
+    return getCollectedShareCounts();
+  }, [getCollectedShareCounts]);
+
+  useEffect(() => {
+    return getCollectedStoreCounts();
+  }, [getCollectedStoreCounts]);
 
   return (
     <>
       <DashboardContainer>
         <DashboardContext>
           <LeftColumn>
-            <Avatar src={MemberImg} />
+            <Avatar src={userData?.imageUrl} />
             <NameContext>
               <AliasIcon />
-              <Alias>勝食達人</Alias>
+              <Alias>{userData?.alias}</Alias>
             </NameContext>
           </LeftColumn>
           <Details>
             <Row>
               <PersoanlUsernameIcon />
-              <UserName>John Chen</UserName>
+              <UserName>{userData?.displayName}</UserName>
               <Link to="/personal/memberUpdate/">
                 <Setting />
               </Link>
             </Row>
             <Row>
               <Star />
-              <Rating>5</Rating>
+              <Rating>{`我的積點： ${userData?.myPoints}`}</Rating>
             </Row>
             <Row>
               <PlaceIcon />
-              <Place>台北 內湖</Place>
+              <Place> 我的地點： {userData?.myPlace || '尚未設定'}</Place>
             </Row>
           </Details>
           <Grid>
@@ -285,6 +416,12 @@ const ButtonName = styled.div`
 
 const ItemNumber = styled.div`
   margin-top: 0.8vw;
+  background-color: lightblue;
+  padding: 5px 8px;
+  border-radius: 50%;
+  border: 0.5px solid lightseagreen;
+  font-weight: 500;
+  opacity: 0.8;
   @media screen and (max-width: 700px) {
     margin-top: 0;
   }

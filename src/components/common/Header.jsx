@@ -1,27 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar';
 
 import { useHistory } from 'react-router';
-import { useSelector } from 'react-redux';
-import { logOut } from '../../utils/firebase';
+import { useSelector, useDispatch } from 'react-redux';
+import { logOut, getCurrentUserData } from '../../utils/firebase';
 
 import LogoImg from '../../images/common/logo-1.png';
 import { BsPersonCircle } from 'react-icons/bs';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { FcMenu } from 'react-icons/fc';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 const Header = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
+  const [userData, setUserDate] = useState(null);
   const checkUser = useSelector((state) => state.checkUser);
+  const currentUser = useCurrentUser();
 
   const logout = () => {
     logOut().then(() => {
+      dispatch({ type: 'currentUser/get', payload: null });
       history.push('/');
     });
   };
+
+  const getUserData = useCallback(
+    () => getCurrentUserData(currentUser, setUserDate),
+    [currentUser]
+  );
+
+  useEffect(() => {
+    return getUserData();
+  }, [getUserData]);
 
   return (
     <>
@@ -35,9 +49,10 @@ const Header = () => {
         <AboutNav to="/about">關於我們</AboutNav>
         <ContactNav to="/contact">聯絡我們</ContactNav>
         <SearchBar />
-        <MemberIcon />
+
         {checkUser.isLoggedIn ? (
           <>
+            <MemberLoggedIcon src={userData?.imageUrl} />
             <MyDashboard to="/personal/list">我的看板</MyDashboard>
             <LogoutButton as={Link} to="/" onClick={() => logout()}>
               登出
@@ -45,6 +60,7 @@ const Header = () => {
           </>
         ) : (
           <>
+            <MemberIcon />
             <LoginButton to="/login">登入</LoginButton>
             <SignupButton to="/signup">註冊</SignupButton>
           </>
@@ -144,10 +160,18 @@ const ContactNav = styled(StyledLink)`
   }
 `;
 
+const MemberLoggedIcon = styled.img`
+  margin-right: 1rem;
+  border-radius: 50%;
+  border: 1px solid skyblue;
+  height: 30px;
+  width: 30px;
+`;
+
 const MemberIcon = styled(BsPersonCircle)`
   margin-right: 1rem;
-  height: 2vw;
-  width: 2vw;
+  height: 30px;
+  width: 30px;
 `;
 
 const LoginButton = styled(StyledLink)`

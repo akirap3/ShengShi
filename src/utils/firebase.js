@@ -15,6 +15,8 @@ import {
   getFirestore,
   collection,
   getDocs,
+  getDoc,
+  setDoc,
   doc,
   arrayUnion,
   arrayRemove,
@@ -46,14 +48,13 @@ export const db = getFirestore();
 auth.languageCode = 'it';
 
 export const register = (email, password) => {
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      console.log(userCredential.user);
-      alert(`You have signed up with ${userCredential.user.email}`);
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
+  return createUserWithEmailAndPassword(auth, email, password);
+};
+
+export const handleSignUpWithEmail = async (initialUserData, uid) => {
+  initialUserData.imageUrl =
+    'https://firebasestorage.googleapis.com/v0/b/shengshi-8bc48.appspot.com/o/images%2Fusers%2FdefaultAvatar.png?alt=media&token=475cb8f7-dc3b-456e-b36e-fb66a8a06012';
+  await setDoc(doc(db, 'users', uid), initialUserData);
 };
 
 export const login = (email, password) => {
@@ -69,6 +70,33 @@ export const loginWithFB = () => {
 
 export const loginWithGoogle = () => {
   return signInWithPopup(auth, googleProvider);
+};
+
+export const handleSignUpWithProvider = async (
+  displayName,
+  email,
+  uid,
+  photoURL,
+  imageSize
+) => {
+  await setDoc(doc(db, 'users', uid), {
+    displayName,
+    email,
+    alias: displayName,
+    imageUrl:
+      `${photoURL}${imageSize}` ||
+      'https://firebasestorage.googleapis.com/v0/b/shengshi-8bc48.appspot.com/o/images%2Fusers%2FdefaultAvatar.png?alt=media&token=475cb8f7-dc3b-456e-b36e-fb66a8a06012',
+    myPoints: 0,
+    myPlace: '',
+  });
+};
+
+export const getCurrentUserData = (currentUser, setUserData) => {
+  if (currentUser) {
+    return onSnapshot(doc(db, 'users', currentUser.uid), (doc) => {
+      setUserData(doc.data());
+    });
+  }
 };
 
 // const handleDiffCredential = (error) => {
@@ -196,6 +224,28 @@ export const getSpecificShares = (
         return { ...doc.data(), id: doc.id };
       });
       setShares(specificShares);
+    });
+
+    return unsubscribe;
+  }
+};
+
+export const getContentCounts = (
+  collectionName,
+  field,
+  operator,
+  currentUser,
+  setCount
+) => {
+  if (currentUser) {
+    const q = query(
+      collection(db, collectionName),
+      where(field, operator, currentUser.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const count = querySnapshot.docs.length;
+      setCount(count);
     });
 
     return unsubscribe;

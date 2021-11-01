@@ -11,9 +11,19 @@ import { FcGoogle } from 'react-icons/fc';
 const SignupPage = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [alias, setAlias] = useState('');
   const [email, setEmail] = useState('');
+  const [place, setPlace] = useState('');
   const [password, setPassword] = useState('');
   const [secPassword, setSecPassword] = useState('');
+
+  const initialUserData = {
+    displayName: `${firstName}．${lastName}`,
+    email: email,
+    alias: alias,
+    myPoints: 0,
+    myPlace: place,
+  };
 
   const checkNames = () => {
     const regex = /[a-zA-Z0-9]+/;
@@ -35,9 +45,56 @@ const SignupPage = () => {
     return true;
   };
 
-  const checkSignup = () => {
-    if (checkNames() && validation.checkEmail(email) && checkPassword())
-      firebase.register(email, password);
+  const checkAlias = () => {
+    if (alias === '') {
+      alert('請輸入暱稱');
+      return false;
+    }
+    return true;
+  };
+
+  const checkPlace = () => {
+    if (place === '') {
+      alert('請輸入暱稱');
+      return false;
+    }
+    return true;
+  };
+
+  const checkSignup = (initialUserData) => {
+    if (
+      checkNames() &&
+      validation.checkEmail(email) &&
+      checkPassword() &&
+      checkAlias() &&
+      checkPlace()
+    ) {
+      firebase
+        .register(email, password)
+        .then((userCredential) => {
+          firebase.handleSignUpWithEmail(
+            initialUserData,
+            userCredential.user.uid
+          );
+          alert(`You have signed up with ${email}`);
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    }
+  };
+
+  const handleClickProvider = (loginWithProvider, imageSize) => {
+    loginWithProvider().then((result) => {
+      const { displayName, photoURL, email, uid } = result.user;
+      firebase.handleSignUpWithProvider(
+        displayName,
+        email,
+        uid,
+        photoURL,
+        imageSize
+      );
+    });
   };
 
   return (
@@ -59,6 +116,18 @@ const SignupPage = () => {
           />
         </NameContainer>
         <Field
+          placeholder="請輸入你的暱稱"
+          onChange={(e) => {
+            setAlias(e.target.value);
+          }}
+        />
+        <Field
+          placeholder="請輸入你的居住地"
+          onChange={(e) => {
+            setPlace(e.target.value);
+          }}
+        />
+        <Field
           placeholder="請輸入電子郵件"
           onChange={(e) => {
             setEmail(e.target.value);
@@ -79,11 +148,19 @@ const SignupPage = () => {
           }}
         />
         <ButtonContainer>
-          <NativeButton onClick={() => checkSignup()}>確認</NativeButton>
-          <FBButton onClick={() => firebase.loginWithFB()}>
+          <NativeButton onClick={() => checkSignup(initialUserData)}>
+            確認
+          </NativeButton>
+          <FBButton
+            onClick={() =>
+              handleClickProvider(firebase.loginWithFB, '?type=large')
+            }
+          >
             <FbIcon /> <span>FB 登入</span>
           </FBButton>
-          <GoogleButton onClick={() => firebase.loginWithGoogle()}>
+          <GoogleButton
+            onClick={() => handleClickProvider(firebase.loginWithGoogle, '')}
+          >
             <GoogleIcon /> <span>Google 登入</span>
           </GoogleButton>
         </ButtonContainer>
