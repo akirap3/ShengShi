@@ -11,8 +11,6 @@ const useCurrentUser = () => {
     if (currentUser) return;
 
     firebase.observeUserChange((currentUser) => {
-      console.log(currentUser);
-
       if (isMounted)
         dispatch({ type: 'currentUser/get', payload: currentUser });
     });
