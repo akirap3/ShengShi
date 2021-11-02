@@ -15,7 +15,6 @@ import {
   getFirestore,
   collection,
   getDocs,
-  getDoc,
   setDoc,
   doc,
   arrayUnion,
@@ -26,6 +25,7 @@ import {
   where,
   deleteField,
   deleteDoc,
+  orderBy,
 } from 'firebase/firestore';
 import { getStorage, ref, deleteObject } from 'firebase/storage';
 
@@ -98,7 +98,6 @@ export const getCurrentUserData = (currentUser, setUserData) => {
     });
   }
 };
-
 // const handleDiffCredential = (error) => {
 //   if (error.code === 'auth/account-exists-with-different-credential') {
 //     const pendingCred = error.credential;
@@ -151,7 +150,7 @@ export const handleDeleteToReceive = async (
   closeDelete
 ) => {
   setIsLoading(true);
-  const docRef = doc(getFirestore(), 'shares', content?.id);
+  const docRef = doc(db, 'shares', content?.id);
   await updateDoc(docRef, {
     [`toReceiveInfo.${auth.currentUser.uid}`]: deleteField(),
     toReceiveUserId: arrayRemove(auth.currentUser.uid),
@@ -216,7 +215,8 @@ export const getSpecificShares = (
   if (currentUser) {
     const q = query(
       collection(db, collectionName),
-      where(field, operator, currentUser.uid)
+      where(field, operator, currentUser.uid),
+      orderBy('timestamp', 'desc')
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
