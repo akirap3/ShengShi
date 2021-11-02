@@ -241,7 +241,8 @@ const LeftColumn = styled.div`
 `;
 
 const Avatar = styled.img`
-  max-width: 15vw;
+  width: 15vw;
+  height: 15vw;
   border-radius: 50%;
   @media screen and (max-width: 600px) {
     max-width: 25vw;
