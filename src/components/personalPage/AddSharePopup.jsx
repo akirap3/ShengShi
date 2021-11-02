@@ -114,6 +114,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
             border: 'solid 1px lightBlue',
             borderRadius: '10px',
           }}
+          aria-label="add-share-popup"
         >
           <PopClose onClick={closeEditor} />
           <PopTitleContainer>

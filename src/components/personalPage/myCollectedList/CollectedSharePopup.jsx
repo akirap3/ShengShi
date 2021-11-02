@@ -13,7 +13,6 @@ import {
   getFirestore,
   doc,
   Timestamp,
-  setDoc,
   updateDoc,
   arrayUnion,
 } from '@firebase/firestore';
@@ -76,6 +75,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
             border: 'solid 1px lightBlue',
             borderRadius: '10px',
           }}
+          aria-label="collected-share-popup"
         >
           <PopClose onClick={closeEditor} />
           <PopTitleContainer>

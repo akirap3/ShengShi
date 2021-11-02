@@ -66,7 +66,11 @@ const ShareCard = ({
             </CardItem>
             {!isMyShare && (
               <Heart
-                isLiked={share?.savedUserId.includes(currentUser.uid)}
+                isliked={
+                  share?.savedUserId?.includes(currentUser.uid)
+                    ? 'red'
+                    : 'black'
+                }
                 onClick={() => handleCollection(share, 'shares', currentUser)}
               />
             )}
@@ -217,7 +221,7 @@ const Star = styled(AiTwotoneStar)`
 const Rating = styled.span``;
 
 const Heart = styled(AiTwotoneHeart)`
-  fill: ${(props) => (props.isLiked ? 'red' : 'black')};
+  fill: ${(props) => props.isliked};
   width: 1.8vw;
   height: 1.8vw;
   cursor: pointer;

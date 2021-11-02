@@ -37,6 +37,7 @@ const ConfirmedPopup = ({
             border: 'solid 1px lightBlue',
             borderRadius: '10px',
           }}
+          aria-label="confirmed-popup"
         >
           <PopClose onClick={closeConfirmation} />
           <PopTitleContainer>

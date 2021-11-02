@@ -18,20 +18,19 @@ const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  const setCurrentLocation = (position) => {
-    setDefaultCenter({
-      lat: position.coords.latitude,
-      lng: position.coords.longitude,
-    });
-    dispatch({
-      type: 'latLng/get',
-      payload: [position.coords.latitude, position.coords.longitude],
-    });
-    setIsLoading(false);
-  };
-
   useEffect(() => {
     setIsLoading(true);
+    const setCurrentLocation = (position) => {
+      setDefaultCenter({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      });
+      dispatch({
+        type: 'latLng/get',
+        payload: [position.coords.latitude, position.coords.longitude],
+      });
+      setIsLoading(false);
+    };
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(setCurrentLocation);
     } else {
@@ -40,7 +39,7 @@ const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
         payload: [25.04267234987771, 121.56497334150076],
       });
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <DialogOverlay isOpen={showMap} onDismiss={closeMap}>
@@ -60,6 +59,7 @@ const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
           width: '80vw',
           padding: '0%',
         }}
+        aria-label="popup"
       >
         <PopClose onClick={closeMap} />
         <MyMap

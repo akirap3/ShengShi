@@ -36,6 +36,7 @@ const DeletePopup = ({
           border: 'solid 1px lightBlue',
           borderRadius: '10px',
         }}
+        aria-label="delete-popup"
       >
         {isLoading && <Loading />}
         <PopClose onClick={closeDelete} disabled={isLoading} />

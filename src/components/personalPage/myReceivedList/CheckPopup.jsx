@@ -20,6 +20,7 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
             border: 'solid 1px lightBlue',
             borderRadius: '10px',
           }}
+          aria-label="popup"
         >
           <PopClose onClick={closeEditor} />
           <PopTitleContainer>

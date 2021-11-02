@@ -28,7 +28,7 @@ const MyReceivedList = () => {
     receivedShares && (
       <SharesContainer>
         {receivedShares.map((share) => (
-          <MyReceivedCard share={share} />
+          <MyReceivedCard key={share.id} share={share} />
         ))}
       </SharesContainer>
     )
