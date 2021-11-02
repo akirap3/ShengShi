@@ -230,6 +230,30 @@ export const getSpecificShares = (
   }
 };
 
+export const getSpecificContents = (
+  collectionName,
+  field,
+  operator,
+  currentUser,
+  setShares
+) => {
+  if (currentUser) {
+    const q = query(
+      collection(db, collectionName),
+      where(field, operator, currentUser.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const specificShares = querySnapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+      setShares(specificShares);
+    });
+
+    return unsubscribe;
+  }
+};
+
 export const getContentCounts = (
   collectionName,
   field,

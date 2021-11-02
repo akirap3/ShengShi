@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { getSpecificShares } from '../../utils/firebase';
+import { getSpecificContents } from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
 
 const Badges = () => {
@@ -9,7 +9,7 @@ const Badges = () => {
 
   const getBadges = useCallback(
     () =>
-      getSpecificShares(
+      getSpecificContents(
         'badges',
         'ownedBy',
         'array-contains',

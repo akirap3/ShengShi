@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
-import { getSpecificShares } from '../../utils/firebase';
+import { getSpecificContents } from '../../utils/firebase';
 import { handleCollection } from '../../utils/firebase';
 import { v4 as uuidv4 } from 'uuid';
 import { AiTwotoneStar, AiTwotoneHeart } from 'react-icons/ai';
@@ -12,7 +12,7 @@ const CollectedRestaurants = () => {
 
   const getCollectedRestaurants = useCallback(
     () =>
-      getSpecificShares(
+      getSpecificContents(
         'restaurants',
         'savedUserId',
         'array-contains',
