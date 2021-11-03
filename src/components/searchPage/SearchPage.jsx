@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import SearchPageCard from './SearchPageCard';
 import SharesContainer from '../common/SharesContainer';
-import { getSingleShare, getSingleShareTest } from '../../utils/firebase';
+import { getSingleShare } from '../../utils/firebase';
 import { useDispatch } from 'react-redux';
 
 import { themeColor } from '../../utils/commonVariables';
