@@ -4,11 +4,13 @@ import Banner from './Banner';
 import Advantages from './Advantages';
 import UserShares from './UserShares';
 import Carousel from '../common/Carousel';
-import { getAllContents } from '../../utils/firebase';
+import { getAllContents, getAllOtherShares } from '../../utils/firebase';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 const LandingPage = () => {
   const [restaurants, setRestaurants] = useState();
   const [shares, setShares] = useState();
+  const currentUser = useCurrentUser();
 
   const getRestaurants = useCallback(() => {
     getAllContents('restaurants', setRestaurants);
@@ -18,13 +20,21 @@ const LandingPage = () => {
     getAllContents('shares', setShares);
   }, []);
 
+  const getOtherShares = useCallback(() => {
+    getAllOtherShares('shares', setShares, currentUser);
+  }, [currentUser]);
+
   useEffect(() => {
-    return getRestaurants();
+    getRestaurants();
   }, [getRestaurants]);
 
   useEffect(() => {
-    return getShares();
-  }, [getShares]);
+    if (currentUser) {
+      return getOtherShares();
+    } else {
+      return getShares();
+    }
+  }, [getOtherShares, getShares, currentUser]);
 
   return (
     <Main>

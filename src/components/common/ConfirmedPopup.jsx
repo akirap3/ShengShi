@@ -49,13 +49,13 @@ const ConfirmedPopup = ({
             <PopRow>
               <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
               <Quantity>
-                {share?.toReceiveInfo[currentUser.uid]?.quantities || 0}
+                {share?.toReceiveInfo[currentUser?.uid]?.quantities || 0}
               </Quantity>
             </PopRow>
             <PopRow>
               <DateTimeLabel>領取日期及時間</DateTimeLabel>
               <DateTime>
-                {share?.toReceiveInfo[currentUser.uid]?.upcomingTimestamp
+                {share?.toReceiveInfo[currentUser?.uid]?.upcomingTimestamp
                   ?.toDate()
                   .toLocaleString()}
               </DateTime>
@@ -70,7 +70,7 @@ const ConfirmedPopup = ({
               <LocationMap exchangeLocation={share?.exchangeLocation} />
             </MapWrapper>
             <QRcodeWrapper>
-              <StyledQRcode info={`${share?.id}/${currentUser.uid}`} />
+              <StyledQRcode info={`${share?.id}/${currentUser?.uid}`} />
             </QRcodeWrapper>
             {UpdateBtn && (
               <UpdateBtn onClick={() => handleShowUpdate()}>我要更新</UpdateBtn>

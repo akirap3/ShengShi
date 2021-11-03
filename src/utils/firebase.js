@@ -295,3 +295,22 @@ export const getAllContents = (collectionName, setContents) => {
 
   return unsubscribe;
 };
+
+export const getAllOtherShares = (collectionName, setContents, currentUser) => {
+  console.log(currentUser);
+  if (currentUser) {
+    const q = query(
+      collection(db, collectionName),
+      where('postUser.id', '!=', currentUser.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const contents = querySnapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+      setContents(contents);
+    });
+
+    return unsubscribe;
+  }
+};

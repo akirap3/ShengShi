@@ -67,32 +67,37 @@ const Carousel = ({ title, contentData, isRestaurants }) => {
                       {Array.from(Array(content.rating).keys()).map(() => (
                         <Star key={uuidv4()} />
                       ))}
-                      <Heart
-                        onClick={
-                          currentUser
-                            ? isRestaurants
-                              ? () =>
-                                  handleCollection(
-                                    content,
-                                    'restaurants',
-                                    currentUser
-                                  )
-                              : () =>
-                                  handleCollection(
-                                    content,
-                                    'shares',
-                                    currentUser
-                                  )
-                            : () => {}
-                        }
-                        like={
-                          currentUser
-                            ? content?.savedUserId?.includes(currentUser.uid)
-                              ? 'red'
+                      {console.log(content)}
+                      {content.postUser?.id !== currentUser?.uid ? (
+                        <Heart
+                          onClick={
+                            currentUser
+                              ? isRestaurants
+                                ? () =>
+                                    handleCollection(
+                                      content,
+                                      'restaurants',
+                                      currentUser
+                                    )
+                                : () =>
+                                    handleCollection(
+                                      content,
+                                      'shares',
+                                      currentUser
+                                    )
+                              : () => {}
+                          }
+                          like={
+                            currentUser
+                              ? content?.savedUserId?.includes(currentUser.uid)
+                                ? 'red'
+                                : 'black'
                               : 'black'
-                            : 'black'
-                        }
-                      />
+                          }
+                        />
+                      ) : (
+                        <></>
+                      )}
                     </Row>
                   </Card>
                 );
