@@ -64,7 +64,7 @@ const ShareCard = ({
               <Star />
               <Rating>{share?.rating}</Rating>
             </CardItem>
-            {!isMyShare && (
+            {share?.postUser.id !== currentUser.uid && (
               <Heart
                 isliked={
                   share?.savedUserId?.includes(currentUser.uid)

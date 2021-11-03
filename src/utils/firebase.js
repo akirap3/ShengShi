@@ -280,7 +280,7 @@ export const getContentCounts = (
 export const getSingleShare = async (docId) => {
   const docRef = doc(db, 'shares', docId);
   const docSnap = await getDoc(docRef);
-  return docSnap.data();
+  return { ...docSnap.data(), id: docId };
 };
 
 export const getAllContents = (collectionName, setContents) => {

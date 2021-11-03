@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import SearchPageCard from './SearchPageCard';
 import SharesContainer from '../common/SharesContainer';
+import { getSingleShare, getSingleShareTest } from '../../utils/firebase';
+import { useDispatch } from 'react-redux';
 
 import { themeColor } from '../../utils/commonVariables';
 import Main from '../common/Main';
@@ -13,18 +15,24 @@ import Hotpot from '../../images/searchPage/hotpot.svg';
 import algolia from '../../utils/algolia';
 
 const SearchPage = () => {
+  const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState('');
-  const [results, setResults] = useState([]);
-  const onSearchChange = (value) => {
-    setInputValue(value);
-    algolia.search(value).then((result) => {
+  const handleSearch = () => {
+    algolia.search(inputValue).then((result) => {
       console.log(result.hits);
       const searchResults = result.hits.map((hit) => {
         return {
           docId: hit.objectID,
         };
       });
-      setResults(searchResults);
+      const contents = searchResults.map((result) =>
+        getSingleShare(result.docId)
+      );
+      console.log(contents);
+      Promise.all(contents).then((values) => {
+        console.log(values);
+        dispatch({ type: 'searchedShares/get', payload: values });
+      });
     });
   };
 
@@ -52,17 +60,17 @@ const SearchPage = () => {
         <SearchBar
           placeholder="勝食搜尋"
           value={inputValue}
-          onChange={(e) => onSearchChange(e.target.value)}
+          onChange={(e) => setInputValue(e.target.value)}
         />
 
-        <SearchButton>搜尋</SearchButton>
+        <SearchButton onClick={() => handleSearch()}>搜尋</SearchButton>
       </SearchContent>
       <SharesTitleContainer>
         <TitleIcon src={Hotpot} />
         <SharesTitle>目前其他人分享的勝食</SharesTitle>
       </SharesTitleContainer>
       <SharesContainer>
-        <SearchPageCard results={results} />
+        <SearchPageCard />
       </SharesContainer>
     </Main>
   );
