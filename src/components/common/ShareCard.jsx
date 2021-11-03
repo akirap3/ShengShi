@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import { themeColor } from '../../utils/commonVariables';
 
@@ -31,6 +32,7 @@ const ShareCard = ({
   isMyShare,
 }) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const currentUser = useCurrentUser();
   const [showDelete, setShowDelete] = useState(false);
   const openDelete = () => setShowDelete(true);
@@ -42,6 +44,11 @@ const ShareCard = ({
       payload: share?.fromTimeStamp.toDate(),
     });
     openEditor();
+  };
+
+  const handleNeedLogin = () => {
+    alert('請先登入');
+    history.push('/login');
   };
 
   return (
@@ -64,16 +71,24 @@ const ShareCard = ({
               <Star />
               <Rating>{share?.rating}</Rating>
             </CardItem>
-            {share?.postUser.id !== currentUser.uid && (
-              <Heart
-                isliked={
-                  share?.savedUserId?.includes(currentUser.uid)
+            <Heart
+              isliked={
+                currentUser
+                  ? share.postUser.id === currentUser.uid
+                    ? 'blue'
+                    : share?.savedUserId?.includes(currentUser.uid)
                     ? 'red'
                     : 'black'
-                }
-                onClick={() => handleCollection(share, 'shares', currentUser)}
-              />
-            )}
+                  : 'black'
+              }
+              onClick={
+                currentUser
+                  ? share.postUser.id === currentUser.uid
+                    ? () => {}
+                    : () => handleCollection(share, 'shares', currentUser)
+                  : () => {}
+              }
+            />
           </CardRow>
           <CardRow>
             <CardItem>
@@ -81,7 +96,21 @@ const ShareCard = ({
               <Location>{share?.userLocation}</Location>
             </CardItem>
             {Tag && <Tag>{tagName}</Tag>}
-            <GetButton onClick={isCollected ? handleCollectedOpen : openEditor}>
+            <GetButton
+              onClick={
+                isCollected
+                  ? handleCollectedOpen
+                  : currentUser
+                  ? share.postUser.id === currentUser.uid
+                    ? !isMyShare
+                      ? () => {
+                          alert('無法領取自己的勝食，可以到 "我的清單" 編輯');
+                        }
+                      : openEditor
+                    : openEditor
+                  : handleNeedLogin
+              }
+            >
               {btnName || '查看'}
             </GetButton>
           </CardRow>

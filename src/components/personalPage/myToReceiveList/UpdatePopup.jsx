@@ -21,7 +21,7 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
   const currentUser = useCurrentUser();
   const [showDateTime, setShowDateTime] = useState(false);
   const [newQuantities, setNewQuantities] = useState(
-    share?.toReceiveInfo[currentUser.uid]?.quantities || 1
+    share?.toReceiveInfo[currentUser?.uid]?.quantities || 1
   );
   const specificDateTime = useSelector((state) => state.specificDateTime);
   const [isLoading, setIsLoading] = useState(false);
@@ -76,7 +76,7 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
               <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
               <Quantity
                 placeholder={
-                  share?.toReceiveInfo[currentUser.uid]?.quantities || ''
+                  share?.toReceiveInfo[currentUser?.uid]?.quantities || ''
                 }
                 onChange={(e) => setNewQuantities(e.target.value)}
                 disabled={isLoading}
@@ -86,7 +86,7 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
               <DateTimeLabel>領取日期及時間</DateTimeLabel>
               <DateTime>
                 {specificDateTime?.toLocaleString() ||
-                  share?.toReceiveInfo[currentUser.uid]?.upcomingTimestamp
+                  share?.toReceiveInfo[currentUser?.uid]?.upcomingTimestamp
                     ?.toDate()
                     .toLocaleString()}
               </DateTime>

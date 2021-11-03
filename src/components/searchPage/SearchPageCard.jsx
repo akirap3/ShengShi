@@ -29,7 +29,6 @@ const SearchPageCard = ({ results }) => {
               <CollectedSharePopup
                 showEdit={showEdit}
                 closeEditor={closeEditor}
-                key={share.id}
                 share={share}
               />
             </>

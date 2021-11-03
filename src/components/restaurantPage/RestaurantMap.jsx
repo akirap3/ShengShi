@@ -1,8 +1,7 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import useSupercluster from 'use-supercluster';
 import GoogleMapReact from 'google-map-react';
 import styled from 'styled-components';
-import { getAllContents } from '../../utils/firebase';
 import InfoView from './InfoView';
 import ReactLoading from 'react-loading';
 
@@ -10,12 +9,11 @@ require('dotenv').config();
 
 const Marker = ({ children }) => children;
 
-const RestaurantMap = () => {
+const RestaurantMap = ({ restaurants }) => {
   const myAPIKey = process.env.REACT_APP_GOOGLE_API_KEY;
   const mapRef = useRef();
   const [zoom, setZoom] = useState(10);
   const [bounds, setBounds] = useState(null);
-  const [restaurants, setRestaurants] = useState();
   const [defaultCenter, setDefaultCenter] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,14 +34,6 @@ const RestaurantMap = () => {
       setIsLoading(false);
     }
   }, []);
-
-  const getRestaurants = useCallback(() => {
-    getAllContents('restaurants', setRestaurants);
-  }, []);
-
-  useEffect(() => {
-    return getRestaurants();
-  }, [getRestaurants]);
 
   const points =
     restaurants?.map((restaurant) => ({

@@ -3,23 +3,36 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import { layoutConfig, themeColor } from '../../utils/commonVariables';
-import { getAllContents } from '../../utils/firebase';
+import { getAllContents, getSearchedRestaurants } from '../../utils/firebase';
 import Carousel from '../common/Carousel';
 
 import RestaurantMap from './RestaurantMap';
-
+import RestaurantSearchCard from './RestaurantSearchCard';
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
+import { reject } from 'lodash';
 
 const RestaurantPage = () => {
   const [restaurants, setRestaurants] = useState();
+  const [inputValue, setInputValue] = useState('');
+  const [isSearch, setIsSearch] = useState(false);
 
   const getRestaurants = useCallback(() => {
     getAllContents('restaurants', setRestaurants);
   }, []);
 
   useEffect(() => {
-    return getRestaurants();
-  }, [getRestaurants]);
+    if (!isSearch) return getRestaurants();
+  }, [getRestaurants, isSearch]);
+
+  const handleSearch = () => {
+    setIsSearch(true);
+    getSearchedRestaurants(setRestaurants, inputValue);
+  };
+
+  const handleClearSearch = () => {
+    setIsSearch(false);
+    setInputValue('');
+  };
 
   console.log(restaurants);
   return (
@@ -43,18 +56,26 @@ const RestaurantPage = () => {
         </BannerContent>
       </Banner>
       <SearchContent>
-        <SearchBar placeholder="餐廳搜尋" />
-        <SearchButton>搜尋</SearchButton>
+        <SearchBar
+          placeholder="餐廳搜尋"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <SearchButton onClick={() => handleSearch()}>搜尋</SearchButton>
+        <ResetButton onClick={() => handleClearSearch()}>清除搜尋</ResetButton>
       </SearchContent>
-      {restaurants && (
+      {!isSearch && restaurants ? (
         <Carousel
           title="合作餐廳"
           contentData={restaurants}
           isRestaurants={true}
         />
+      ) : (
+        <RestaurantSearchCard restaurant={restaurants} isRestaurants={true} />
       )}
+
       <MapWrapper>
-        <RestaurantMap />
+        <RestaurantMap restaurants={restaurants} />
       </MapWrapper>
     </Main>
   );
@@ -157,6 +178,8 @@ const SearchButton = styled.button`
   border-radius: 8px;
   background-color: ${themeColor.blue};
 `;
+
+const ResetButton = styled(SearchButton)``;
 
 const MapWrapper = styled.div`
   margin: 0 4rem 6rem;
