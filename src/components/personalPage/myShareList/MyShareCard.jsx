@@ -26,11 +26,10 @@ const MyShareCard = ({ share }) => {
   return (
     <>
       <ShareCard
-        openEditor={openEditor}
+        handleClick={openEditor}
         btnName="編輯"
         category="分享"
         share={listenedShare}
-        isMyShare={true}
       />
       <EditPopup
         showEdit={showEdit}

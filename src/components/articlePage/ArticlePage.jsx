@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -6,9 +6,41 @@ import { themeColor } from '../../utils/commonVariables';
 import Main from '../common/Main';
 import { Link } from 'react-router-dom';
 import useArticles from '../../hooks/useArticles';
+import { getAllContents, getSearchedContents } from '../../utils/firebase';
 
 const ArticlePage = () => {
-  const articles = useArticles();
+  const [inputValue, setInputValue] = useState('');
+  const [articles, setArticles] = useState();
+  const [isSearch, setIsSearch] = useState(false);
+
+  const getArticles = useCallback(() => {
+    getAllContents('articles', setArticles);
+  }, []);
+
+  useEffect(() => {
+    if (!isSearch) return getArticles();
+  }, [getArticles, isSearch]);
+
+  const handleSearch = () => {
+    setIsSearch(true);
+    getSearchedContents(
+      'articles',
+      'tags',
+      'array-contains',
+      inputValue,
+      setArticles
+    );
+  };
+
+  const handleTagSearch = (tag) => {
+    setInputValue(tag);
+    handleSearch();
+  };
+
+  const handleClearSearch = () => {
+    setIsSearch(false);
+    setInputValue('');
+  };
 
   return (
     <Main>
@@ -24,8 +56,15 @@ const ArticlePage = () => {
           </BannerSubtitle>
         </BannerContent>
         <SearchContainer>
-          <SearchBar placeholder="文章搜尋" />
-          <SearchButton to="/search">搜尋</SearchButton>
+          <SearchBar
+            value={inputValue}
+            placeholder="文章搜尋"
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <SearchButton onClick={() => handleSearch()}>搜尋</SearchButton>
+          <ResetButton onClick={() => handleClearSearch()}>
+            清除搜尋
+          </ResetButton>
         </SearchContainer>
       </Banner>
       <ArticleContainer>
@@ -38,7 +77,9 @@ const ArticlePage = () => {
               <CardContent>
                 <TagContainer>
                   {article.tags.map((tag) => (
-                    <Tag key={uuidv4()}>{tag}</Tag>
+                    <Tag key={uuidv4()} onClick={() => handleTagSearch(tag)}>
+                      {tag}
+                    </Tag>
                   ))}
                 </TagContainer>
                 <CardTitle>{article.title}</CardTitle>
@@ -98,11 +139,14 @@ const SearchBar = styled.input`
   border-radius: 10px;
 `;
 
-const SearchButton = styled(Link)`
+const SearchButton = styled.button`
   border: 1px solid black;
   padding: 0.7rem 0.8rem;
   border-radius: 10px;
+  cursor: pointer;
 `;
+
+const ResetButton = styled(SearchButton)``;
 
 const ArticleContainer = styled.div`
   display: grid;
@@ -129,13 +173,15 @@ const CardContent = styled.div`
 
 const TagContainer = styled.div`
   margin-bottom: 1rem;
+  display: flex;
 `;
 
-const Tag = styled.span`
+const Tag = styled.div`
   border: 1px solid black;
   padding: 0.2rem 0.3rem;
   border-radius: 5px;
   margin-right: 0.5rem;
+  cursor: pointer;
 `;
 
 const CardTitle = styled.div`

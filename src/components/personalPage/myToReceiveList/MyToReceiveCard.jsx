@@ -13,7 +13,7 @@ const MyToReceiveCard = ({ share }) => {
   return (
     <>
       <ShareCard
-        openEditor={openConfirmation}
+        handleClick={openConfirmation}
         Tag={ShareCardTag}
         tagName="#未領取"
         category="領取"

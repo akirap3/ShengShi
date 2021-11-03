@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { themeColor } from '../../utils/commonVariables';
@@ -19,7 +18,6 @@ import {
 import { GrLocation } from 'react-icons/gr';
 
 const ShareCard = ({
-  openEditor,
   btnName,
   Tag,
   isReceived,
@@ -29,22 +27,14 @@ const ShareCard = ({
   share,
   isToReceive,
   isCollected,
-  isMyShare,
+  isSearch,
+  handleClick,
 }) => {
-  const dispatch = useDispatch();
   const history = useHistory();
   const currentUser = useCurrentUser();
   const [showDelete, setShowDelete] = useState(false);
   const openDelete = () => setShowDelete(true);
   const closeDelete = () => setShowDelete(false);
-
-  const handleCollectedOpen = () => {
-    dispatch({
-      type: 'specificDateTime/selected',
-      payload: share?.fromTimeStamp.toDate(),
-    });
-    openEditor();
-  };
 
   const handleNeedLogin = () => {
     alert('請先登入');
@@ -98,17 +88,15 @@ const ShareCard = ({
             {Tag && <Tag>{tagName}</Tag>}
             <GetButton
               onClick={
-                isCollected
-                  ? handleCollectedOpen
-                  : currentUser
-                  ? share.postUser.id === currentUser.uid
-                    ? !isMyShare
+                currentUser
+                  ? isCollected || isSearch
+                    ? share.postUser.id === currentUser.uid
                       ? () => {
                           alert('無法領取自己的勝食，可以到 "我的清單" 編輯');
                         }
-                      : openEditor
-                    : openEditor
-                  : handleNeedLogin
+                      : () => handleClick(share)
+                    : () => handleClick()
+                  : () => handleNeedLogin()
               }
             >
               {btnName || '查看'}

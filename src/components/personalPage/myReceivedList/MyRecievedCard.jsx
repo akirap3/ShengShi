@@ -12,7 +12,7 @@ const MyReceivedCard = ({ share }) => {
   return (
     <>
       <ShareCard
-        openEditor={openEditor}
+        handleClick={openEditor}
         Tag={ShareCardTag}
         isReceived="true"
         tagName="＃已領取"

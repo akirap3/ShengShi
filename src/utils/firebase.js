@@ -255,14 +255,22 @@ export const getSpecificContents = (
   }
 };
 
-export const getSearchedRestaurants = (setRestaurants, keywords) => {
-  const q = query(collection(db, 'restaurants'), where('name', '==', keywords));
+export const getSearchedContents = (
+  collectionName,
+  field,
+  operator,
+  keywords,
+  setContents
+) => {
+  const q = query(
+    collection(db, collectionName),
+    where(field, operator, keywords)
+  );
   onSnapshot(q, (querySnapshot) => {
-    const specificRestaurants = querySnapshot.docs.map((doc) => {
+    const specificContents = querySnapshot.docs.map((doc) => {
       return { ...doc.data(), id: doc.id };
     });
-    console.log(specificRestaurants);
-    setRestaurants(specificRestaurants);
+    setContents(specificContents);
   });
 };
 

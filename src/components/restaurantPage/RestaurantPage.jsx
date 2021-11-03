@@ -3,13 +3,12 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import { layoutConfig, themeColor } from '../../utils/commonVariables';
-import { getAllContents, getSearchedRestaurants } from '../../utils/firebase';
+import { getAllContents, getSearchedContents } from '../../utils/firebase';
 import Carousel from '../common/Carousel';
 
 import RestaurantMap from './RestaurantMap';
 import RestaurantSearchCard from './RestaurantSearchCard';
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
-import { reject } from 'lodash';
 
 const RestaurantPage = () => {
   const [restaurants, setRestaurants] = useState();
@@ -26,7 +25,13 @@ const RestaurantPage = () => {
 
   const handleSearch = () => {
     setIsSearch(true);
-    getSearchedRestaurants(setRestaurants, inputValue);
+    getSearchedContents(
+      'restaurants',
+      'name',
+      '==',
+      inputValue,
+      setRestaurants
+    );
   };
 
   const handleClearSearch = () => {
