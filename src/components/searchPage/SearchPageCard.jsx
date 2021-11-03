@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ShareCard from '../common/ShareCard';
 import CollectedSharePopup from '../personalPage/myCollectedList/CollectedSharePopup';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const SearchPageCard = ({ results }) => {
   const searchedShares = useSelector((state) => state.searchedShares);
