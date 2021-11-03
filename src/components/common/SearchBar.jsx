@@ -1,13 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { IoIosSearch } from 'react-icons/io';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
+import algolia from '../../utils/algolia';
+import { getSingleShare } from '../../utils/firebase';
 
 const SearchBar = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const [inputValue, setInputValue] = useState('');
+
+  const handleSearch = () => {
+    algolia.search(inputValue).then((result) => {
+      console.log(result.hits);
+      const searchResults = result.hits.map((hit) => {
+        return {
+          docId: hit.objectID,
+        };
+      });
+      const contents = searchResults.map((result) =>
+        getSingleShare(result.docId)
+      );
+      console.log(contents);
+      Promise.all(contents).then((values) => {
+        console.log(values);
+        dispatch({ type: 'searchedShares/get', payload: values });
+      });
+      history.push('/search');
+    });
+  };
+
   return (
     <SearchWrapper>
       <SearchContainer>
-        <SearchBox />
-        <SearchButton>
+        <SearchBox
+          placeholder="勝食搜尋"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <SearchButton onClick={() => handleSearch()}>
           <SearchIcon />
         </SearchButton>
       </SearchContainer>

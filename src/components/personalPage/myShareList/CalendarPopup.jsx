@@ -17,6 +17,7 @@ const ClendarPopup = ({ showCalender, closeCalendar }) => {
           border: 'solid 1px lightBlue',
           borderRadius: '10px',
         }}
+        aria-label="popup"
       >
         <PopClose onClick={closeCalendar} />
         <DateTimeRangeSelector />

@@ -29,7 +29,7 @@ const Badges = () => {
         badges && (
           <BadgeContainer>
             {badges.map((badge) => (
-              <BadgeContext>
+              <BadgeContext key={badge.id}>
                 <BadgeImg src={badge.imageUrl} />
                 <BadgeName>{badge.name}</BadgeName>
               </BadgeContext>

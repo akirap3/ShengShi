@@ -15,6 +15,7 @@ import {
   getFirestore,
   collection,
   getDocs,
+  getDoc,
   setDoc,
   doc,
   arrayUnion,
@@ -274,6 +275,12 @@ export const getContentCounts = (
 
     return unsubscribe;
   }
+};
+
+export const getSingleShare = async (docId) => {
+  const docRef = doc(db, 'shares', docId);
+  const docSnap = await getDoc(docRef);
+  return { ...docSnap.data(), id: docId };
 };
 
 export const getAllContents = (collectionName, setContents) => {

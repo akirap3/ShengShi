@@ -63,6 +63,7 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
             border: 'solid 1px lightBlue',
             borderRadius: '10px',
           }}
+          aria-label="popup"
         >
           <PopClose onClick={closeUpdate} />
           <PopTitleContainer>
@@ -176,8 +177,6 @@ const DateTimeLabel = styled.label`
 const DateTime = styled.span`
   margin-right: 1vw;
 `;
-
-const AsButton = styled.button``;
 
 const Calendar = styled(BsCalendarCheckFill)`
   width: 2vw;

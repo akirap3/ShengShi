@@ -22,7 +22,7 @@ const MyShareList = () => {
     shares && (
       <SharesContainer>
         {shares.map((share) => (
-          <MyShareCard share={share} />
+          <MyShareCard key={share.id} share={share} />
         ))}
       </SharesContainer>
     )

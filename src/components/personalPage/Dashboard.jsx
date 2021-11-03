@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import AddSharePopup from './AddSharePopup';
 
-import MemberImg from '../../images/PersonalPage/user-9.jpg';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import { getCurrentUserData, getContentCounts } from '../../utils/firebase';
 

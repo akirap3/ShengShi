@@ -1,21 +1,40 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-
-import CollectedSharePopup from '../personalPage/myCollectedList/CollectedSharePopup';
+import SearchPageCard from './SearchPageCard';
+import SharesContainer from '../common/SharesContainer';
+import { getSingleShare, getSingleShareTest } from '../../utils/firebase';
+import { useDispatch } from 'react-redux';
 
 import { themeColor } from '../../utils/commonVariables';
 import Main from '../common/Main';
-import ShareCard from '../common/ShareCard';
 
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
 import Hotpot from '../../images/searchPage/hotpot.svg';
 
-const SearchPage = () => {
-  const [showEdit, setShowEdit] = useState(false);
+import algolia from '../../utils/algolia';
 
-  const openEditor = () => setShowEdit(true);
-  const closeEditor = () => setShowEdit(false);
+const SearchPage = () => {
+  const dispatch = useDispatch();
+  const [inputValue, setInputValue] = useState('');
+  const handleSearch = () => {
+    algolia.search(inputValue).then((result) => {
+      console.log(result.hits);
+      const searchResults = result.hits.map((hit) => {
+        return {
+          docId: hit.objectID,
+        };
+      });
+      const contents = searchResults.map((result) =>
+        getSingleShare(result.docId)
+      );
+      console.log(contents);
+      Promise.all(contents).then((values) => {
+        console.log(values);
+        dispatch({ type: 'searchedShares/get', payload: values });
+      });
+    });
+  };
 
   return (
     <Main>
@@ -38,15 +57,21 @@ const SearchPage = () => {
         <BannerImg src={Img} />
       </Banner>
       <SearchContent>
-        <SearchBar placeholder="勝食搜尋" />
-        <SearchButton>搜尋</SearchButton>
+        <SearchBar
+          placeholder="勝食搜尋"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+
+        <SearchButton onClick={() => handleSearch()}>搜尋</SearchButton>
       </SearchContent>
       <SharesTitleContainer>
         <TitleIcon src={Hotpot} />
         <SharesTitle>目前其他人分享的勝食</SharesTitle>
       </SharesTitleContainer>
-      <ShareCard openEditor={openEditor} btnName="領取" cnannotDel={true} />
-      <CollectedSharePopup showEdit={showEdit} closeEditor={closeEditor} />
+      <SharesContainer>
+        <SearchPageCard />
+      </SharesContainer>
     </Main>
   );
 };
