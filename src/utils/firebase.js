@@ -255,6 +255,17 @@ export const getSpecificContents = (
   }
 };
 
+export const getSearchedRestaurants = (setRestaurants, keywords) => {
+  const q = query(collection(db, 'restaurants'), where('name', '==', keywords));
+  onSnapshot(q, (querySnapshot) => {
+    const specificRestaurants = querySnapshot.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+    });
+    console.log(specificRestaurants);
+    setRestaurants(specificRestaurants);
+  });
+};
+
 export const getContentCounts = (
   collectionName,
   field,
