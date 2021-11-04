@@ -56,9 +56,9 @@ const DeletePopup = ({
           >
             確認
           </ConfirmBtn>
-          <CancelBtn onClick={closeDelete} disabled={isLoading}>
+          <CancleBtn onClick={closeDelete} disabled={isLoading}>
             取消
-          </CancelBtn>
+          </CancleBtn>
         </Row>
       </DialogContent>
     </DialogOverlay>
@@ -98,7 +98,7 @@ const ConfirmBtn = styled.button`
   color: white;
 `;
 
-const CancelBtn = styled.button`
+const CancleBtn = styled.button`
   border: 1px solid black;
   padding: 1vw;
   border-radius: 10px;

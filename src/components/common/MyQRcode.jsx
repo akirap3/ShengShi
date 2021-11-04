@@ -2,7 +2,7 @@ const QRCode = require('qrcode.react');
 
 const MyQRcode = ({ info }) => {
   const initialProps = {
-    value: `https://shengshi-8bc48.web.app/personal/${info}`,
+    value: `http://localhost:3000/personal/${info}`,
     size: 150,
     bgColor: '#ffffff',
     fgColor: '#000000',

@@ -15,6 +15,7 @@ import {
   Timestamp,
   updateDoc,
   arrayUnion,
+  increment,
 } from '@firebase/firestore';
 
 import { AiFillCloseCircle } from 'react-icons/ai';
@@ -47,10 +48,11 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
       toReceiveUserId: arrayUnion(currentUser.uid),
       toReceiveInfo: {
         [`${currentUser.uid}`]: {
-          quantities: Number(reqQuantities),
+          quantities: Number(reqQuantities) || 1,
           upcomingTimestamp: Timestamp.fromDate(specificDateTime),
         },
       },
+      bookedQuantities: increment(Number(reqQuantities) || 1),
     });
     setIsLoading(false);
     handleSpecificDateTime();

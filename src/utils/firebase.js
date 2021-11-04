@@ -27,6 +27,8 @@ import {
   deleteField,
   deleteDoc,
   orderBy,
+  Timestamp,
+  increment,
 } from 'firebase/firestore';
 import { getStorage, ref, deleteObject } from 'firebase/storage';
 
@@ -158,6 +160,14 @@ export const handleDeleteToReceive = async (
   });
   setIsLoading(false);
   closeDelete();
+};
+
+export const handleDeleteExchange = async (shareId, requesterId, qty) => {
+  await updateDoc(doc(db, 'shares', shareId), {
+    [`toReceiveInfo.${requesterId}`]: deleteField(),
+    toReceiveUserId: arrayRemove(requesterId),
+    bookedQuantities: increment(-qty),
+  });
 };
 
 export const handleDeleteCollected = async (
@@ -302,6 +312,13 @@ export const getSingleShare = async (docId) => {
   return { ...docSnap.data(), id: docId };
 };
 
+export const getListenedSingleContent = (collectionName, docId, setShare) => {
+  const unsubscribe = onSnapshot(doc(db, collectionName, docId), (doc) => {
+    setShare({ ...doc.data(), id: docId });
+  });
+  return unsubscribe;
+};
+
 export const getAllContents = (collectionName, setContents) => {
   const q = query(collection(db, collectionName));
 
@@ -316,7 +333,6 @@ export const getAllContents = (collectionName, setContents) => {
 };
 
 export const getAllOtherShares = (collectionName, setContents, currentUser) => {
-  console.log(currentUser);
   if (currentUser) {
     const q = query(
       collection(db, collectionName),
@@ -332,4 +348,23 @@ export const getAllOtherShares = (collectionName, setContents, currentUser) => {
 
     return unsubscribe;
   }
+};
+
+export const updateAfterExchanged = async (
+  shareId,
+  requesterId,
+  qty,
+  dateTime
+) => {
+  await updateDoc(doc(db, 'shares', shareId), {
+    bookedQuantities: increment(-qty),
+    quantities: increment(-qty),
+    [`receivedInfo.${requesterId}`]: {
+      quantities: qty,
+      confirmedTimestamp: Timestamp.fromDate(dateTime),
+    },
+    receivedUserId: arrayUnion(requesterId),
+    [`toReceiveInfo.${requesterId}`]: deleteField(),
+    toReceiveUserId: arrayRemove(requesterId),
+  });
 };

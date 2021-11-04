@@ -4,8 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { themeColor } from '../../utils/commonVariables';
 import Main from '../common/Main';
-import { Link } from 'react-router-dom';
-import useArticles from '../../hooks/useArticles';
 import { getAllContents, getSearchedContents } from '../../utils/firebase';
 
 const ArticlePage = () => {
