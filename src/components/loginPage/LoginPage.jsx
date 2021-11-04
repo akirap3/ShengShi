@@ -23,7 +23,7 @@ const LoginPage = () => {
         .login(email, password)
         .then(() => {
           setIsLoading(false);
-          history.push('personal/list');
+          history.push('/personal/list');
         })
         .catch((error) => {
           console.log(error.message);
@@ -37,7 +37,7 @@ const LoginPage = () => {
       .loginWithFB()
       .then((reslut) => {
         setIsLoading(false);
-        history.push('personal/list');
+        history.push('/personal/list');
       })
       .catch((error) => {
         console.log(error.message);

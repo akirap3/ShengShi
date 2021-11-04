@@ -45,7 +45,7 @@ const Carousel = ({ title, contentData, isRestaurants }) => {
           slidesToShow: 1,
           slidesToScroll: 1,
           infinite: true,
-          dots: true,
+          dots: false,
         },
       },
     ],
@@ -67,7 +67,6 @@ const Carousel = ({ title, contentData, isRestaurants }) => {
                       {Array.from(Array(content.rating).keys()).map(() => (
                         <Star key={uuidv4()} />
                       ))}
-                      {console.log(content)}
                       {content.postUser?.id !== currentUser?.uid ? (
                         <Heart
                           onClick={

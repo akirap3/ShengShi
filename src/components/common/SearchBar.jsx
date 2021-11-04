@@ -26,7 +26,7 @@ const SearchBar = () => {
       console.log(contents);
       Promise.all(contents).then((values) => {
         console.log(values);
-        dispatch({ type: 'searchedShares/get', payload: values });
+        dispatch({ type: 'searchedShares/get', payload: values || [] });
       });
       history.push('/search');
     });

@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import SearchPageCard from './SearchPageCard';
 import SharesContainer from '../common/SharesContainer';
 import { getSingleShare } from '../../utils/firebase';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { getAllContents, getAllOtherShares } from '../../utils/firebase';
+import useCurrentUser from '../../hooks/useCurrentUser';
 import { themeColor } from '../../utils/commonVariables';
 import Main from '../common/Main';
 
@@ -16,7 +18,10 @@ import algolia from '../../utils/algolia';
 
 const SearchPage = () => {
   const dispatch = useDispatch();
+  const currentUser = useCurrentUser();
   const [inputValue, setInputValue] = useState('');
+  const [shares, setShares] = useState();
+  const searchedShares = useSelector((state) => state.searchedShares);
   const handleSearch = () => {
     algolia.search(inputValue).then((result) => {
       console.log(result.hits);
@@ -35,6 +40,31 @@ const SearchPage = () => {
       });
     });
   };
+
+  const getShares = useCallback(() => {
+    getAllContents('shares', setShares);
+  }, []);
+
+  const getOtherShares = useCallback(() => {
+    getAllOtherShares('shares', setShares, currentUser);
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (currentUser) {
+      return getOtherShares();
+    } else {
+      return getShares();
+    }
+  }, [getOtherShares, getShares, currentUser]);
+
+  useEffect(() => {
+    if (searchedShares) {
+      const otherShares = searchedShares.filter(
+        (share) => share.postUser.id !== currentUser?.uid
+      );
+      setShares(otherShares);
+    }
+  }, [currentUser?.uid, searchedShares]);
 
   return (
     <Main>
@@ -70,7 +100,21 @@ const SearchPage = () => {
         <SharesTitle>目前其他人分享的勝食</SharesTitle>
       </SharesTitleContainer>
       <SharesContainer>
-        <SearchPageCard />
+        {shares ? (
+          <>
+            {shares.length !== 0 ? (
+              shares.map((share) => (
+                <>
+                  <SearchPageCard share={share} />
+                </>
+              ))
+            ) : (
+              <div>搜尋不到</div>
+            )}
+          </>
+        ) : (
+          <div>搜尋不到</div>
+        )}
       </SharesContainer>
     </Main>
   );
