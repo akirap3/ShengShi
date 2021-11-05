@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import ReactLoading from 'react-loading';
@@ -10,10 +10,14 @@ import {
   getFirestore,
   Timestamp,
   GeoPoint,
+  increment,
+  updateDoc,
 } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
+import { isFieldsChecked } from '../../utils/validation.js';
 import useCurrentUser from '../../hooks/useCurrentUser.js';
+import { getListenedSingleContent, handleAddBadge } from '../../utils/firebase';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 
@@ -37,6 +41,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
   const [foodName, setFoodName] = useState('');
   const [quantities, setQuantities] = useState(1);
   const [file, setFile] = useState(null);
+  const [userData, setUserData] = useState('');
   const [isLoading, setIsLoaging] = useState(false);
 
   const openCalendar = () => setShowCalendar(true);
@@ -51,46 +56,63 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
     dispatch({ type: 'latLng/get', payload: payload });
   };
 
+  const getListenedUserData = useCallback(() => {
+    return getListenedSingleContent('users', currentUser.uid, setUserData);
+  }, [currentUser.uid]);
+
+  useEffect(() => {
+    return getListenedUserData();
+  }, [getListenedUserData]);
+
   const handleSubmit = async () => {
-    setIsLoaging(true);
-    const docRef = doc(collection(getFirestore(), `shares`));
-    const fileRef = ref(getStorage(), `images/shares/${docRef.id}`);
-    const metadata = {
-      contentType: file.type,
-    };
-    const uplaodTask = await uploadBytes(fileRef, file, metadata);
-    const imageUrl = await getDownloadURL(uplaodTask.ref);
-    await setDoc(
-      docRef,
-      {
-        exchangePlace: address,
-        fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
-        toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
-        imageUrl,
-        quantities: Number(quantities),
-        name: foodName,
-        postUser: {
-          id: currentUser.uid,
-          displayName: currentUser.displayName,
+    if (isFieldsChecked(foodName, quantities, address, file)) {
+      setIsLoaging(true);
+      const docRef = doc(collection(getFirestore(), `shares`));
+      const fileRef = ref(getStorage(), `images/shares/${docRef.id}`);
+      const metadata = {
+        contentType: file.type,
+      };
+      const uplaodTask = await uploadBytes(fileRef, file, metadata);
+      const imageUrl = await getDownloadURL(uplaodTask.ref);
+      await setDoc(
+        docRef,
+        {
+          exchangePlace: address,
+          fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
+          toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
+          imageUrl,
+          quantities: Number(quantities),
+          name: foodName,
+          postUser: {
+            id: currentUser.uid,
+            displayName: currentUser.displayName,
+          },
+          rating: 5,
+          timestamp: Timestamp.fromDate(new Date()),
+          userLocation: userData.myPlace || '未提供',
+          exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
+          receivedInfo: {},
+          receivedUserId: [],
+          toReceiveInfo: {},
+          toReceiveUserId: [],
+          savedUserId: [],
+          bookedQuantities: 0,
         },
-        rating: 5,
-        timestamp: Timestamp.fromDate(new Date()),
-        userLocation: '台北 信義區',
-        exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
-        receivedInfo: {},
-        receivedUserId: [],
-        toReceiveInfo: {},
-        toReceiveUserId: [],
-        savedUserId: [],
-        bookedQuantities: 0,
-      },
-      { merge: true }
-    );
-    setIsLoaging(false);
-    closeEditor();
-    handleLatLng([]);
-    handleAddress('');
-    setFile(null);
+        { merge: true }
+      );
+
+      await updateDoc(doc(getFirestore(), 'users', currentUser.uid), {
+        myPoints: increment(10),
+      });
+
+      handleAddBadge(currentUser);
+
+      setIsLoaging(false);
+      closeEditor();
+      handleLatLng([]);
+      handleAddress('');
+      setFile(null);
+    }
   };
 
   const previewImgUrl = file
@@ -116,7 +138,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
           }}
           aria-label="add-share-popup"
         >
-          <PopClose onClick={closeEditor} />
+          <PopClose onClick={closeEditor} disabled={isLoading} />
           <PopTitleContainer>
             <CrownIcon />
             <PopTitle>分享勝食</PopTitle>
@@ -144,17 +166,24 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
             </PopRow>
             <PopRow>
               <FoodImgLabel>食物照片</FoodImgLabel>
-              <ImgUpload ref={uploadRef} htmlFor="image-upload">
+              <ImgUpload
+                ref={uploadRef}
+                htmlFor="image-upload"
+                disabled={isLoading}
+              >
                 上傳
               </ImgUpload>
               <UploadBtn
                 type="file"
                 id="image-upload"
                 onChange={(e) => setFile(e.target.files[0])}
+                disabled={isLoading}
               />
             </PopRow>
             <PreviewImg src={previewImgUrl} />
-            <SubmitBtn onClick={handleSubmit}>分享</SubmitBtn>
+            <SubmitBtn onClick={handleSubmit} disabled={isLoading}>
+              分享
+            </SubmitBtn>
           </PopContent>
         </DialogContent>
       </DialogOverlay>

@@ -37,27 +37,41 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   const openConfirmation = () => setShowConfirmation(true);
   const closeConfirmation = () => setShowConfirmation(false);
 
-  const handleSpecificDateTime = () => {
-    dispatch({ type: 'specificDateTime/selected', payload: null });
+  const handleSpecificDateTime = (payload) => {
+    dispatch({ type: 'specificDateTime/selected', payload: payload });
   };
 
-  const handleConfirmation = async () => {
-    setIsLoading(true);
-    const docRef = doc(getFirestore(), 'shares', share.id);
-    await updateDoc(docRef, {
-      toReceiveUserId: arrayUnion(currentUser.uid),
-      toReceiveInfo: {
-        [`${currentUser.uid}`]: {
-          quantities: Number(reqQuantities) || 1,
-          upcomingTimestamp: Timestamp.fromDate(specificDateTime),
+  const isFieldsChecked = (share) => {
+    const newQty = Number(reqQuantities);
+    if (isNaN(newQty)) {
+      alert('數量請輸入數字');
+      return false;
+    } else if (newQty < 0 || newQty > share.quantities) {
+      alert(`請輸入介於 1 ~ ${share.quantities} 的數字`);
+      return false;
+    }
+    return true;
+  };
+
+  const handleConfirmation = async (share) => {
+    if (isFieldsChecked(share)) {
+      setIsLoading(true);
+      const docRef = doc(getFirestore(), 'shares', share.id);
+      await updateDoc(docRef, {
+        toReceiveUserId: arrayUnion(currentUser.uid),
+        toReceiveInfo: {
+          [`${currentUser.uid}`]: {
+            quantities: Number(reqQuantities) || 1,
+            upcomingTimestamp: Timestamp.fromDate(specificDateTime),
+          },
         },
-      },
-      bookedQuantities: increment(Number(reqQuantities) || 1),
-    });
-    setIsLoading(false);
-    handleSpecificDateTime();
-    openConfirmation();
-    closeEditor();
+        bookedQuantities: increment(Number(reqQuantities) || 1),
+      });
+      setIsLoading(false);
+      handleSpecificDateTime(null);
+      openConfirmation();
+      closeEditor();
+    }
   };
 
   return (
@@ -118,7 +132,9 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
             <MapWrapper>
               <LocationMap />
             </MapWrapper>
-            <SubmitBtn onClick={() => handleConfirmation()}>確認領取</SubmitBtn>
+            <SubmitBtn onClick={() => handleConfirmation(share)}>
+              確認領取
+            </SubmitBtn>
           </PopContent>
         </DialogContent>
       </DialogOverlay>

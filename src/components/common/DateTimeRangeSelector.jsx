@@ -15,6 +15,7 @@ const DateTimeRangeSelector = () => {
             dispatch({ type: 'fromToDateTime/selected', payload: results })
           }
           value={fromToDateTime}
+          minDate={new Date()}
         />
       </Container>
     </>

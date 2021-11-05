@@ -59,9 +59,9 @@ const SearchPage = () => {
 
   useEffect(() => {
     if (searchedShares) {
-      const otherShares = searchedShares.filter(
-        (share) => share.postUser.id !== currentUser?.uid
-      );
+      const otherShares = searchedShares
+        .filter((share) => share.postUser.id !== currentUser?.uid)
+        .filter((share) => share.quantities > 0);
       setShares(otherShares);
     }
   }, [currentUser?.uid, searchedShares]);

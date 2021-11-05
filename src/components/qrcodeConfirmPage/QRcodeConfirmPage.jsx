@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { useParams, useHistory, Redirect } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import {
   getListenedSingleContent,
   updateAfterExchanged,
   handleDeleteExchange,
+  handleAddBadge,
+  handleDeleteBadge,
 } from '../../utils/firebase';
 import { useSelector } from 'react-redux';
 
@@ -68,21 +70,24 @@ const QRcodeComfirmPage = () => {
     return share.toReceiveUserId.includes(requesterId) ? false : true;
   };
 
-  const handleConfirm = (shareId, requesterId, share) => {
+  const handleConfirm = (shareId, requesterId, share, currentUser) => {
     updateAfterExchanged(
       shareId,
       requesterId,
       share?.toReceiveInfo[`${requesterId}`].quantities,
-      new Date()
+      new Date(),
+      currentUser
     );
+    handleAddBadge(currentUser);
   };
 
-  const handleCancel = (shareId, requesterId, share) => {
+  const handleCancel = (shareId, requesterId, share, currentUser) => {
     handleDeleteExchange(
       shareId,
       requesterId,
       share?.toReceiveInfo[`${requesterId}`].quantities
     );
+    handleDeleteBadge(currentUser);
   };
 
   return (
@@ -133,14 +138,24 @@ const QRcodeComfirmPage = () => {
                       <ButtonContainer>
                         <ConfirmedBtn
                           onClick={() =>
-                            handleConfirm(shareId, requesterId, share)
+                            handleConfirm(
+                              shareId,
+                              requesterId,
+                              share,
+                              currentUser
+                            )
                           }
                         >
                           確認領取
                         </ConfirmedBtn>
                         <CancleBtn
                           onClick={() =>
-                            handleCancel(shareId, requesterId, share)
+                            handleCancel(
+                              shareId,
+                              requesterId,
+                              share,
+                              currentUser
+                            )
                           }
                         >
                           取消

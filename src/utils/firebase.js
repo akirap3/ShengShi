@@ -138,11 +138,22 @@ export const handleDeleteMember = () => {
   deleteUser(auth.currentUser);
 };
 
-export const handleDeleteShare = async (setIsLoading, content, closeDelete) => {
+export const handleDeleteShare = async (
+  setIsLoading,
+  content,
+  closeDelete,
+  currentUser
+) => {
   setIsLoading(true);
   const deleteImgFileRef = ref(getStorage(), `images/shares/${content?.id}`);
   await deleteObject(deleteImgFileRef);
   await deleteDoc(doc(getFirestore(), 'shares', content?.id));
+
+  await updateDoc(doc(db, 'users', currentUser.uid), {
+    myPoints: increment(-10),
+  });
+
+  handleDeleteBadge(currentUser);
   setIsLoading(false);
   closeDelete();
 };
@@ -343,7 +354,10 @@ export const getAllOtherShares = (collectionName, setContents, currentUser) => {
       const contents = querySnapshot.docs.map((doc) => {
         return { ...doc.data(), id: doc.id };
       });
-      setContents(contents);
+      const NonzeroContents = contents.filter(
+        (content) => content.quantities > 0
+      );
+      setContents(NonzeroContents);
     });
 
     return unsubscribe;
@@ -354,7 +368,8 @@ export const updateAfterExchanged = async (
   shareId,
   requesterId,
   qty,
-  dateTime
+  dateTime,
+  currentUser
 ) => {
   await updateDoc(doc(db, 'shares', shareId), {
     bookedQuantities: increment(-qty),
@@ -367,4 +382,96 @@ export const updateAfterExchanged = async (
     [`toReceiveInfo.${requesterId}`]: deleteField(),
     toReceiveUserId: arrayRemove(requesterId),
   });
+
+  await updateDoc(doc(db, 'users', currentUser.uid), {
+    myPoints: increment(10),
+  });
+
+  await updateDoc(doc(db, 'users', requesterId), {
+    myPoints: increment(10),
+  });
+};
+
+export const handleAddBadge = async (currentUser) => {
+  const currentUserDocRef = doc(db, 'users', currentUser.uid);
+  const badge1DocRef = doc(db, 'badges', '87LS0XYXT8nBbACyzZ5i');
+  const badge2DocRef = doc(db, 'badges', 'loR5fESvH23BdVeaVse6');
+  const badge3DocRef = doc(db, 'badges', 'SYgzpa1pCp8tCCjMTYNJ');
+  const badge4DocRef = doc(db, 'badges', 'WffkQj2cNQr4fA2B0i7L');
+  const badge5DocRef = doc(db, 'badges', '2bjwxx2RiLOBNVMdeF1S');
+  const badge6DocRef = doc(db, 'badges', 'uMtENEnLpNfM9USZGzZR');
+  const badge7DocRef = doc(db, 'badges', 'P14Kiv3vsBPXwKi7jP4F');
+  const badge8DocRef = doc(db, 'badges', 'rkAbb7ljdCgOopdV9sCZ');
+  const badge9DocRef = doc(db, 'badges', 'lYpT2XjS9yeqYwUD6riZ');
+
+  const userSnap = await getDoc(currentUserDocRef);
+  const points = userSnap.data().myPoints;
+
+  const addBadgeOwner = (docRef) => {
+    updateDoc(docRef, {
+      ownedBy: arrayUnion(currentUser.uid),
+    });
+  };
+
+  if (points >= 10 && points < 30) {
+    addBadgeOwner(badge1DocRef);
+  } else if (points >= 30 && points < 50) {
+    addBadgeOwner(badge2DocRef);
+  } else if (points >= 50 && points < 100) {
+    addBadgeOwner(badge3DocRef);
+  } else if (points >= 100 && points < 150) {
+    addBadgeOwner(badge4DocRef);
+  } else if (points >= 150 && points < 180) {
+    addBadgeOwner(badge5DocRef);
+  } else if (points >= 180 && points < 200) {
+    addBadgeOwner(badge6DocRef);
+  } else if (points >= 200 && points < 300) {
+    addBadgeOwner(badge7DocRef);
+  } else if (points >= 300 && points < 500) {
+    addBadgeOwner(badge8DocRef);
+  } else if (points >= 500) {
+    addBadgeOwner(badge9DocRef);
+  }
+};
+
+export const handleDeleteBadge = async (currentUser) => {
+  const currentUserDocRef = doc(db, 'users', currentUser.uid);
+  const badge1DocRef = doc(db, 'badges', '87LS0XYXT8nBbACyzZ5i');
+  const badge2DocRef = doc(db, 'badges', 'loR5fESvH23BdVeaVse6');
+  const badge3DocRef = doc(db, 'badges', 'SYgzpa1pCp8tCCjMTYNJ');
+  const badge4DocRef = doc(db, 'badges', 'WffkQj2cNQr4fA2B0i7L');
+  const badge5DocRef = doc(db, 'badges', '2bjwxx2RiLOBNVMdeF1S');
+  const badge6DocRef = doc(db, 'badges', 'uMtENEnLpNfM9USZGzZR');
+  const badge7DocRef = doc(db, 'badges', 'P14Kiv3vsBPXwKi7jP4F');
+  const badge8DocRef = doc(db, 'badges', 'rkAbb7ljdCgOopdV9sCZ');
+  const badge9DocRef = doc(db, 'badges', 'lYpT2XjS9yeqYwUD6riZ');
+
+  const userSnap = await getDoc(currentUserDocRef);
+  const points = userSnap.data().myPoints;
+
+  const deleteBadgeOwner = (docRef) => {
+    updateDoc(docRef, {
+      ownedBy: arrayRemove(currentUser.uid),
+    });
+  };
+
+  if (points < 10) {
+    deleteBadgeOwner(badge1DocRef);
+  } else if (points >= 10 && points < 30) {
+    deleteBadgeOwner(badge2DocRef);
+  } else if (points >= 30 && points < 50) {
+    deleteBadgeOwner(badge3DocRef);
+  } else if (points >= 50 && points < 100) {
+    deleteBadgeOwner(badge4DocRef);
+  } else if (points >= 100 && points < 150) {
+    deleteBadgeOwner(badge5DocRef);
+  } else if (points >= 150 && points < 180) {
+    deleteBadgeOwner(badge6DocRef);
+  } else if (points >= 180 && points < 200) {
+    deleteBadgeOwner(badge7DocRef);
+  } else if (points >= 200 && points < 300) {
+    deleteBadgeOwner(badge8DocRef);
+  } else if (points >= 300 && points < 500) {
+    deleteBadgeOwner(badge9DocRef);
+  }
 };
