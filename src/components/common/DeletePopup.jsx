@@ -7,6 +7,7 @@ import {
   handleDeleteCollected,
 } from '../../utils/firebase';
 import Loading from './Loading';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 import '@reach/dialog/styles.css';
@@ -22,6 +23,7 @@ const DeletePopup = ({
   isCollected,
   toDeleteMember,
 }) => {
+  const currentUser = useCurrentUser();
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -50,7 +52,13 @@ const DeletePopup = ({
                 ? () => handleDeleteCollected(setIsLoading, share, closeDelete)
                 : toDeleteMember
                 ? () => handleDeleteMember()
-                : () => handleDeleteShare(setIsLoading, share, closeDelete)
+                : () =>
+                    handleDeleteShare(
+                      setIsLoading,
+                      share,
+                      closeDelete,
+                      currentUser
+                    )
             }
             disabled={isLoading}
           >

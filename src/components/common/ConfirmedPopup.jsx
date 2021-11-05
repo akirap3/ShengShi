@@ -4,6 +4,7 @@ import { DialogOverlay, DialogContent } from '@reach/dialog';
 import LocationMap from './LocationMap';
 import MyQRcode from './MyQRcode';
 import UpdatePopup from '../personalPage/myToReceiveList/UpdatePopup';
+import { useDispatch } from 'react-redux';
 
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
@@ -17,13 +18,19 @@ const ConfirmedPopup = ({
   UpdateBtn,
   share,
 }) => {
+  const dispatch = useDispatch();
   const [showUpdate, setShowUpdate] = useState(false);
   const currentUser = useCurrentUser();
 
   const openUpdate = () => setShowUpdate(true);
   const closeUpdate = () => setShowUpdate(false);
 
-  const handleShowUpdate = () => {
+  const handleShowUpdate = (share) => {
+    dispatch({
+      type: 'specificDateTime/selected',
+      payload:
+        share?.toReceiveInfo[currentUser?.uid]?.upcomingTimestamp?.toDate(),
+    });
     openUpdate();
     closeConfirmation();
   };
@@ -73,7 +80,9 @@ const ConfirmedPopup = ({
               <StyledQRcode info={`${share?.id}/${currentUser?.uid}`} />
             </QRcodeWrapper>
             {UpdateBtn && (
-              <UpdateBtn onClick={() => handleShowUpdate()}>我要更新</UpdateBtn>
+              <UpdateBtn onClick={() => handleShowUpdate(share)}>
+                我要更新
+              </UpdateBtn>
             )}
           </PopContent>
         </DialogContent>

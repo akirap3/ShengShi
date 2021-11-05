@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -29,23 +29,38 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
   const openDateTime = () => setShowDateTime(true);
   const closeDateTime = () => setShowDateTime(false);
 
-  const handleSpecificDateTime = () => {
-    dispatch({ type: 'specificDateTime/selected', payload: null });
+  const handleSpecificDateTime = (payload) => {
+    dispatch({ type: 'specificDateTime/selected', payload: payload });
+  };
+
+  const isFieldsChecked = (share) => {
+    const newQty = Number(newQuantities);
+    if (isNaN(newQty)) {
+      alert('數量請輸入數字');
+      return false;
+    } else if (newQty < 0 || newQty > share.quantities) {
+      alert(`請輸入介於 1 ~ ${share.quantities} 的數字`);
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async () => {
-    setIsLoading(true);
-    const docRef = doc(getFirestore(), 'shares', share.id);
-    const updateQuantities = `toReceiveInfo.${currentUser.uid}.quantities`;
-    const updateUpcomingTimestamp = `toReceiveInfo.${currentUser.uid}.upcomingTimestamp`;
-    await updateDoc(docRef, {
-      [updateQuantities]: newQuantities,
-      [updateUpcomingTimestamp]: Timestamp.fromDate(specificDateTime),
-    });
-    setIsLoading(false);
-    handleSpecificDateTime();
-    closeUpdate();
+    if (isFieldsChecked(share)) {
+      setIsLoading(true);
+      const docRef = doc(getFirestore(), 'shares', share.id);
+      const updateQuantities = `toReceiveInfo.${currentUser.uid}.quantities`;
+      const updateUpcomingTimestamp = `toReceiveInfo.${currentUser.uid}.upcomingTimestamp`;
+      await updateDoc(docRef, {
+        [updateQuantities]: newQuantities,
+        [updateUpcomingTimestamp]: Timestamp.fromDate(specificDateTime),
+      });
+      setIsLoading(false);
+      handleSpecificDateTime(null);
+      closeUpdate();
+    }
   };
+
   return (
     <>
       <DialogOverlay isOpen={showUpdate} onDismiss={closeUpdate}>

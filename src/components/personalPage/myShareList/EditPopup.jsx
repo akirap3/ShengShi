@@ -21,6 +21,7 @@ import { DialogOverlay, DialogContent } from '@reach/dialog';
 
 import ClendarPopup from './CalendarPopup';
 import MapPopup from './MapPopup';
+import { isFieldsChecked } from '../../../utils/validation';
 
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
@@ -53,29 +54,31 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
   };
 
   const handleSubmit = async () => {
-    setIsLoaging(true);
-    const docRef = doc(getFirestore(), 'shares', share.id);
-    const fileRef = ref(getStorage(), `images/shares/${share.id}`);
-    const metadata = {
-      contentType: file.type,
-    };
-    const uplaodTask = await uploadBytes(fileRef, file, metadata);
-    const imageUrl = await getDownloadURL(uplaodTask.ref);
-    await updateDoc(docRef, {
-      exchangePlace: address,
-      fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
-      toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
-      imageUrl,
-      quantities: Number(quantities),
-      name: foodName,
-      timestamp: Timestamp.fromDate(new Date()),
-      exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
-    });
-    setIsLoaging(false);
-    closeEditor();
-    handleLatLng([]);
-    handleAddress('');
-    setFile(null);
+    if (isFieldsChecked(quantities, address, file)) {
+      setIsLoaging(true);
+      const docRef = doc(getFirestore(), 'shares', share.id);
+      const fileRef = ref(getStorage(), `images/shares/${share.id}`);
+      const metadata = {
+        contentType: file.type,
+      };
+      const uplaodTask = await uploadBytes(fileRef, file, metadata);
+      const imageUrl = await getDownloadURL(uplaodTask.ref);
+      await updateDoc(docRef, {
+        exchangePlace: address,
+        fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
+        toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
+        imageUrl,
+        quantities: Number(quantities),
+        name: foodName,
+        timestamp: Timestamp.fromDate(new Date()),
+        exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
+      });
+      setIsLoaging(false);
+      closeEditor();
+      handleLatLng([]);
+      handleAddress('');
+      setFile(null);
+    }
   };
 
   const previewImgUrl = file
@@ -101,7 +104,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
           }}
           aria-label="popup"
         >
-          <PopClose onClick={closeEditor} />
+          <PopClose onClick={closeEditor} disabled={isLoading} />
           <PopTitleContainer>
             <CrownIcon />
             <PopTitle>{share.name}</PopTitle>
@@ -143,7 +146,9 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
               />
             </PopRow>
             <PreviewImg src={previewImgUrl} />
-            <SubmitBtn onClick={handleSubmit}>確認更新</SubmitBtn>
+            <SubmitBtn onClick={handleSubmit} disabled={isLoading}>
+              確認更新
+            </SubmitBtn>
           </PopContent>
         </DialogContent>
       </DialogOverlay>

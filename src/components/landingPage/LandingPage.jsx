@@ -9,7 +9,7 @@ import useCurrentUser from '../../hooks/useCurrentUser';
 
 const LandingPage = () => {
   const [restaurants, setRestaurants] = useState();
-  const [shares, setShares] = useState();
+  const [shares, setShares] = useState('');
   const currentUser = useCurrentUser();
 
   const getRestaurants = useCallback(() => {
