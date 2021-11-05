@@ -34,7 +34,7 @@ const MemberUpdate = () => {
   );
 
   useEffect(() => {
-    getUserData();
+    return getUserData();
   }, [getUserData]);
 
   const initialUserData = {

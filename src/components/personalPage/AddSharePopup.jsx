@@ -85,7 +85,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
           name: foodName,
           postUser: {
             id: currentUser.uid,
-            displayName: currentUser.displayName,
+            displayName: userData.displayName,
           },
           rating: 5,
           timestamp: Timestamp.fromDate(new Date()),
