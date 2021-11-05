@@ -29,6 +29,8 @@ import {
   orderBy,
   Timestamp,
   increment,
+  limit,
+  startAfter,
 } from 'firebase/firestore';
 import { getStorage, ref, deleteObject } from 'firebase/storage';
 
@@ -295,6 +297,45 @@ export const getSearchedContents = (
   });
 };
 
+export const getSearchedOrderedContents = (
+  collectionName,
+  field,
+  operator,
+  keywords,
+  setContents,
+  lastPostSnapshotRef,
+  isNext,
+  articles
+) => {
+  const q = !isNext
+    ? query(
+        collection(db, collectionName),
+        where(field, operator, keywords),
+        orderBy('createdAt', 'desc'),
+        limit(2)
+      )
+    : query(
+        collection(db, collectionName),
+        where(field, operator, keywords),
+        orderBy('createdAt', 'desc'),
+        limit(2),
+        startAfter(lastPostSnapshotRef.current)
+      );
+
+  onSnapshot(q, (querySnapshot) => {
+    const specificContents = querySnapshot.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+    });
+    lastPostSnapshotRef.current =
+      querySnapshot.docs[querySnapshot.docs.length - 1];
+    if (!isNext) {
+      setContents(specificContents);
+    } else {
+      setContents([...articles, ...specificContents]);
+    }
+  });
+};
+
 export const getContentCounts = (
   collectionName,
   field,
@@ -338,6 +379,43 @@ export const getAllContents = (collectionName, setContents) => {
       return { ...doc.data(), id: doc.id };
     });
     setContents(contents);
+  });
+
+  return unsubscribe;
+};
+
+export const getAllOrderedContents = (
+  collectionName,
+  setContents,
+  lastPostSnapshotRef,
+  isNext,
+  articles
+) => {
+  const q = !isNext
+    ? query(
+        collection(db, collectionName),
+        orderBy('createdAt', 'desc'),
+        limit(2)
+      )
+    : query(
+        collection(db, collectionName),
+        orderBy('createdAt', 'desc'),
+        limit(2),
+        startAfter(lastPostSnapshotRef.current)
+      );
+
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const contents = querySnapshot.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+    });
+
+    lastPostSnapshotRef.current =
+      querySnapshot.docs[querySnapshot.docs.length - 1];
+    if (!isNext) {
+      setContents(contents);
+    } else {
+      setContents([...articles, ...contents]);
+    }
   });
 
   return unsubscribe;

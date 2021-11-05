@@ -1,18 +1,28 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-
+import { Waypoint } from 'react-waypoint';
 import { themeColor } from '../../utils/commonVariables';
 import Main from '../common/Main';
-import { getAllContents, getSearchedContents } from '../../utils/firebase';
+import {
+  getAllOrderedContents,
+  getSearchedOrderedContents,
+} from '../../utils/firebase';
 
 const ArticlePage = () => {
+  const lastPostSnapshotRef = useRef();
   const [inputValue, setInputValue] = useState('');
   const [articles, setArticles] = useState();
   const [isSearch, setIsSearch] = useState(false);
 
   const getArticles = useCallback(() => {
-    getAllContents('articles', setArticles);
+    getAllOrderedContents(
+      'articles',
+      setArticles,
+      lastPostSnapshotRef,
+      false,
+      articles
+    );
   }, []);
 
   useEffect(() => {
@@ -21,12 +31,15 @@ const ArticlePage = () => {
 
   const handleSearch = () => {
     setIsSearch(true);
-    getSearchedContents(
+    getSearchedOrderedContents(
       'articles',
       'tags',
       'array-contains',
       inputValue,
-      setArticles
+      setArticles,
+      lastPostSnapshotRef,
+      false,
+      articles
     );
   };
 
@@ -38,6 +51,31 @@ const ArticlePage = () => {
   const handleClearSearch = () => {
     setIsSearch(false);
     setInputValue('');
+  };
+
+  const handleInfiniteScroll = () => {
+    if (lastPostSnapshotRef.current) {
+      if (!isSearch) {
+        getAllOrderedContents(
+          'articles',
+          setArticles,
+          lastPostSnapshotRef,
+          true,
+          articles
+        );
+      } else {
+        getSearchedOrderedContents(
+          'articles',
+          'tags',
+          'array-contains',
+          inputValue,
+          setArticles,
+          lastPostSnapshotRef,
+          true,
+          articles
+        );
+      }
+    }
   };
 
   return (
@@ -86,15 +124,7 @@ const ArticlePage = () => {
             </ArticleCard>
           ))}
       </ArticleContainer>
-      <PageContainer>
-        <PageContent>
-          <Page>1</Page>
-          <Page>2</Page>
-          <Page>3</Page>
-          <Page>4</Page>
-          <Page>5</Page>
-        </PageContent>
-      </PageContainer>
+      {articles && <Waypoint onEnter={handleInfiniteScroll} />}
     </Main>
   );
 };
@@ -151,12 +181,29 @@ const ArticleContainer = styled.div`
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: auto;
   gap: 2rem;
-  margin: 0 4rem;
+  margin: 0 5vw 10vw 5vw;
+  @media screen and (max-width: 1020px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media screen and (max-width: 860px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (max-width: 650px) {
+    padding: 0 15vw;
+    grid-template-columns: repeat(1, 1fr);
+  }
+  @media screen and (max-width: 450px) {
+    padding: 0 5vw;
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 const ArticleCard = styled.div`
   border: 1px solid ${themeColor.outLineColor};
   border-radius: 8px;
+  @media screen and (max-width: 650px) {
+    min-width: 250px;
+  }
 `;
 
 const CardImg = styled.img`
@@ -192,24 +239,5 @@ const CardTitle = styled.div`
 const CardSubtitle = styled.div`
   line-height: 20px;
 `;
-
-const PageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* margin: 3rem auto 6rem auto; */
-  padding: 4rem;
-`;
-
-const PageContent = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  min-width: 30vw;
-  border: 1px solid blueviolet;
-  padding: 0.5rem 0.8rem;
-  border-radius: 5px;
-`;
-
-const Page = styled.div``;
 
 export default ArticlePage;
