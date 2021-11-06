@@ -8,6 +8,7 @@ import latLng from './latLng';
 import address from './address';
 import specificDateTime from './specificDateTime';
 import searchedShares from './searchedShares';
+import isShareSearch from './isShareSearch';
 
 const reducers = combineReducers({
   articles,
@@ -18,6 +19,7 @@ const reducers = combineReducers({
   address,
   specificDateTime,
   searchedShares,
+  isShareSearch,
 });
 
 export default reducers;
