@@ -96,8 +96,8 @@ const QRcodeComfirmPage = () => {
         !isOthers(share, currentUser) ? (
           !isReceived(share) ? (
             !isCancled(share) ? (
-              <GiverContainer>
-                <GiverContext>
+              <Container>
+                <Context>
                   <ShareImg src={share?.imageUrl || defaultImgUrl} />
                   <InfoContainer>
                     <RequesterName>
@@ -163,8 +163,8 @@ const QRcodeComfirmPage = () => {
                       </ButtonContainer>
                     )}
                   </InfoContainer>
-                </GiverContext>
-              </GiverContainer>
+                </Context>
+              </Container>
             ) : (
               <div>該領取已經取消</div>
             )
@@ -181,13 +181,13 @@ const QRcodeComfirmPage = () => {
   );
 };
 
-const GiverContainer = styled.div`
+const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const GiverContext = styled.div`
+const Context = styled.div`
   display: flex;
   border: 1px solid black;
   max-width: 70vw;
