@@ -8,12 +8,12 @@ import {
   handleAddBadge,
   handleDeleteBadge,
 } from '../../utils/firebase';
-import { useSelector } from 'react-redux';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 const QRcodeComfirmPage = () => {
   const history = useHistory();
   const { shareId, requesterId } = useParams();
-  const currentUser = useSelector((state) => state.currentUser);
+  const currentUser = useCurrentUser();
   const [share, setShare] = useState(null);
   const [giver, setGiver] = useState(null);
   const [requester, setRequester] = useState(null);
@@ -53,7 +53,11 @@ const QRcodeComfirmPage = () => {
   };
 
   const isOthers = (share, currentUser) => {
-    if (isGiver(share, currentUser) || isRequester(share, currentUser)) {
+    if (
+      isGiver(share, currentUser) ||
+      isRequester(share, currentUser) ||
+      isReceived(share)
+    ) {
       return false;
     } else {
       alert('您非此剩食的擁有者或是領用者');
@@ -166,10 +170,14 @@ const QRcodeComfirmPage = () => {
                 </Context>
               </Container>
             ) : (
-              <div>該領取已經取消</div>
+              <NoResultContainer>
+                <NoResult>該領取已經取消</NoResult>
+              </NoResultContainer>
             )
           ) : (
-            <div>已領取完畢</div>
+            <NoResultContainer>
+              <NoResult>已領取完畢</NoResult>
+            </NoResultContainer>
           )
         ) : (
           <></>
@@ -234,6 +242,17 @@ const CancleBtn = styled.button`
   border-radius: 10px;
   background-color: orangered;
   color: white;
+`;
+
+const NoResultContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10vw;
+`;
+
+const NoResult = styled.div`
+  font-size: 16px;
 `;
 
 export default QRcodeComfirmPage;

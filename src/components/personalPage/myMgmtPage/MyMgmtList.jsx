@@ -23,8 +23,6 @@ const MyMgmtList = () => {
     return sum ? true : false;
   };
 
-  console.log(shares);
-  console.log(currentUser);
   return (
     <>
       {shares !== '' && shares.length !== 0 ? (
@@ -37,10 +35,14 @@ const MyMgmtList = () => {
             )}
           </MgmtContainer>
         ) : (
-          <div>目前沒有任何預約</div>
+          <NoResultContainer>
+            <NoResult>目前沒有任何預約</NoResult>
+          </NoResultContainer>
         )
       ) : (
-        <div>你沒有任何的清單可預約</div>
+        <NoResultContainer>
+          <NoResult>你沒有任何的清單可預約</NoResult>
+        </NoResultContainer>
       )}
     </>
   );
@@ -53,5 +55,14 @@ const MgmtContainer = styled.div`
   align-items: center;
   margin: 2vw auto;
 `;
+
+const NoResultContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10vw;
+`;
+
+const NoResult = styled.div``;
 
 export default MyMgmtList;
