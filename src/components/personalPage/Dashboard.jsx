@@ -216,7 +216,11 @@ const Dashbaord = () => {
           <ShareButton onClick={openEditor}>我要分享勝食</ShareButton>
         </DashboardContext>
       </DashboardContainer>
-      <AddSharePopup showEdit={showEdit} closeEditor={closeEditor} />
+      <AddSharePopup
+        showEdit={showEdit}
+        closeEditor={closeEditor}
+        currentUser={currentUser}
+      />
     </>
   );
 };

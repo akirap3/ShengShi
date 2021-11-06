@@ -259,7 +259,7 @@ export const getSpecificContents = (
   field,
   operator,
   currentUser,
-  setShares
+  setContents
 ) => {
   if (currentUser) {
     const q = query(
@@ -271,7 +271,7 @@ export const getSpecificContents = (
       const specificShares = querySnapshot.docs.map((doc) => {
         return { ...doc.data(), id: doc.id };
       });
-      setShares(specificShares);
+      setContents(specificShares);
     });
 
     return unsubscribe;
@@ -364,9 +364,9 @@ export const getSingleShare = async (docId) => {
   return { ...docSnap.data(), id: docId };
 };
 
-export const getListenedSingleContent = (collectionName, docId, setShare) => {
+export const getListenedSingleContent = (collectionName, docId, setContent) => {
   const unsubscribe = onSnapshot(doc(db, collectionName, docId), (doc) => {
-    setShare({ ...doc.data(), id: docId });
+    setContent({ ...doc.data(), id: docId });
   });
   return unsubscribe;
 };

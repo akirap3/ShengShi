@@ -57,12 +57,12 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
   };
 
   const getListenedUserData = useCallback(() => {
-    return getListenedSingleContent('users', currentUser.uid, setUserData);
-  }, [currentUser.uid]);
+    return getListenedSingleContent('users', currentUser?.uid, setUserData);
+  }, [currentUser?.uid]);
 
   useEffect(() => {
-    return getListenedUserData();
-  }, [getListenedUserData]);
+    if (currentUser) return getListenedUserData();
+  }, [currentUser, getListenedUserData]);
 
   const handleSubmit = async () => {
     if (isFieldsChecked(foodName, quantities, address, file)) {
