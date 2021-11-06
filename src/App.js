@@ -20,6 +20,7 @@ import MyCollectedList from './components/personalPage/myCollectedList/MyCollect
 import CollectedRestaurants from './components/personalPage/CollectedRestaurants';
 import MemberUpdate from './components/personalPage/memberUpdatePage/MemberUpdate';
 import QRcodeComfirmPage from './components/qrcodeConfirmPage/QRcodeConfirmPage';
+import MyMgmtList from './components/personalPage/myMgmtPage/MyMgmtList';
 
 import './App.css';
 import '@reach/dialog/styles.css';
@@ -68,6 +69,10 @@ const App = () => {
                   <Route exact path="/personal/memberUpdate">
                     <Title title="個人資料更新"></Title>
                     <MemberUpdate />
+                  </Route>
+                  <Route exact path="/personal/mgmt">
+                    <Title title="領取列表管理"></Title>
+                    <MyMgmtList />
                   </Route>
                   <Route path="/personal/:shareId/:requesterId">
                     <Title title="剩食領取管理"></Title>

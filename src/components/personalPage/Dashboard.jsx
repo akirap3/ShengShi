@@ -11,6 +11,7 @@ import { AiTwotoneStar } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
 import { IoMdPerson } from 'react-icons/io';
 import { BsGear } from 'react-icons/bs';
+import { BsPeopleFill } from 'react-icons/bs';
 
 const Dashbaord = () => {
   const [userData, setUserDate] = useState(null);
@@ -184,6 +185,17 @@ const Dashbaord = () => {
               <PlaceIcon />
               <Place> 我的地點： {userData?.myPlace || '尚未設定'}</Place>
             </Row>
+            <Row>
+              <MgmtIcon />
+              <Mgmt> 領取管理：</Mgmt>
+              <MgmtButton
+                as={Link}
+                to="/personal/mgmt"
+                active={location.pathname === '/personal/mgmt'}
+              >
+                查看預約
+              </MgmtButton>
+            </Row>
           </Details>
           <Grid>
             {menus.map((menu) => (
@@ -204,7 +216,11 @@ const Dashbaord = () => {
           <ShareButton onClick={openEditor}>我要分享勝食</ShareButton>
         </DashboardContext>
       </DashboardContainer>
-      <AddSharePopup showEdit={showEdit} closeEditor={closeEditor} />
+      <AddSharePopup
+        showEdit={showEdit}
+        closeEditor={closeEditor}
+        currentUser={currentUser}
+      />
     </>
   );
 };
@@ -302,6 +318,7 @@ const Details = styled.div`
 const Row = styled.div`
   display: flex;
   flex-grow: 1;
+  align-items: center;
 `;
 
 const PersoanlUsernameIcon = styled(IoMdPerson)`
@@ -371,6 +388,38 @@ const PlaceIcon = styled(GrLocation)`
 `;
 
 const Place = styled.span``;
+
+const MgmtIcon = styled(BsPeopleFill)`
+  margin-right: 1.5vw;
+  width: 1.8vw;
+  height: 1.8vw;
+  @media screen and (max-width: 700px) {
+    margin-right: 2vw;
+    width: 2.5vw;
+    height: 2.5vw;
+  }
+  @media screen and (max-width: 600px) {
+    width: 3vw;
+    height: 3vw;
+  }
+`;
+
+const Mgmt = styled.span``;
+
+const MgmtButton = styled.button`
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 0.5vw 2vw;
+  font-size: 1.5vw;
+  text-align: center;
+  background-color: ${({ active }) => (active ? '#2a9d8f' : 'white')};
+  @media screen and (max-width: 700px) {
+    font-size: 2.5vw;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 3vw;
+  }
+`;
 
 const Grid = styled.div`
   display: grid;

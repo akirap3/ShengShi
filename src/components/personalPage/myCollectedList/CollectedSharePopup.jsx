@@ -59,11 +59,9 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
       const docRef = doc(getFirestore(), 'shares', share.id);
       await updateDoc(docRef, {
         toReceiveUserId: arrayUnion(currentUser.uid),
-        toReceiveInfo: {
-          [`${currentUser.uid}`]: {
-            quantities: Number(reqQuantities) || 1,
-            upcomingTimestamp: Timestamp.fromDate(specificDateTime),
-          },
+        [`toReceiveInfo.${currentUser.uid}`]: {
+          quantities: Number(reqQuantities) || 1,
+          upcomingTimestamp: Timestamp.fromDate(specificDateTime),
         },
         bookedQuantities: increment(Number(reqQuantities) || 1),
       });
