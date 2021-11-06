@@ -1,12 +1,16 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import SearchPageCard from './SearchPageCard';
 import SharesContainer from '../common/SharesContainer';
 import { getSingleShare } from '../../utils/firebase';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { getAllContents, getAllOtherShares } from '../../utils/firebase';
+import { Waypoint } from 'react-waypoint';
+import {
+  getAllOrderedContents,
+  getAllOrderedOtherShares,
+} from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import { themeColor } from '../../utils/commonVariables';
 import Main from '../common/Main';
@@ -19,12 +23,17 @@ import algolia from '../../utils/algolia';
 const SearchPage = () => {
   const dispatch = useDispatch();
   const currentUser = useCurrentUser();
+  const lastPostSnapshotRef = useRef();
   const [inputValue, setInputValue] = useState('');
   const [shares, setShares] = useState();
+  const isShareSearch = useSelector((state) => state.isShareSearch);
   const searchedShares = useSelector((state) => state.searchedShares);
+
   const handleSearch = () => {
-    algolia.search(inputValue).then((result) => {
-      console.log(result.hits);
+    dispatch({ type: 'isShareSearch/search', payload: true });
+    if (inputValue === '') setInputValue('請輸入關鍵字');
+    algolia.search(inputValue || '請輸入關鍵字').then((result) => {
+      console.log(inputValue);
       const searchResults = result.hits.map((hit) => {
         return {
           docId: hit.objectID,
@@ -33,7 +42,6 @@ const SearchPage = () => {
       const contents = searchResults.map((result) =>
         getSingleShare(result.docId)
       );
-      console.log(contents);
       Promise.all(contents).then((values) => {
         console.log(values);
         dispatch({ type: 'searchedShares/get', payload: values });
@@ -42,20 +50,36 @@ const SearchPage = () => {
   };
 
   const getShares = useCallback(() => {
-    getAllContents('shares', setShares);
+    getAllOrderedContents(
+      'shares',
+      'timestamp',
+      setShares,
+      lastPostSnapshotRef,
+      false,
+      shares
+    );
   }, []);
 
   const getOtherShares = useCallback(() => {
-    getAllOtherShares('shares', setShares, currentUser);
-  }, [currentUser]);
+    getAllOrderedOtherShares(
+      'shares',
+      setShares,
+      currentUser,
+      lastPostSnapshotRef,
+      false,
+      shares
+    );
+  }, []);
 
   useEffect(() => {
-    if (currentUser) {
-      return getOtherShares();
-    } else {
-      return getShares();
+    if (!isShareSearch) {
+      if (currentUser) {
+        return getOtherShares();
+      } else {
+        return getShares();
+      }
     }
-  }, [getOtherShares, getShares, currentUser]);
+  }, [getOtherShares, getShares, currentUser, isShareSearch]);
 
   useEffect(() => {
     if (searchedShares) {
@@ -65,6 +89,37 @@ const SearchPage = () => {
       setShares(otherShares);
     }
   }, [currentUser?.uid, searchedShares]);
+
+  const handleInfiniteScroll = () => {
+    if (!isShareSearch) {
+      if (lastPostSnapshotRef.current) {
+        if (currentUser) {
+          getAllOrderedOtherShares(
+            'shares',
+            setShares,
+            currentUser,
+            lastPostSnapshotRef,
+            true,
+            shares
+          );
+        } else {
+          getAllOrderedContents(
+            'shares',
+            'timestamp',
+            setShares,
+            lastPostSnapshotRef,
+            true,
+            shares
+          );
+        }
+      }
+    }
+  };
+
+  const handleResetSearch = () => {
+    setInputValue('');
+    dispatch({ type: 'isShareSearch/search', payload: false });
+  };
 
   return (
     <Main>
@@ -92,8 +147,8 @@ const SearchPage = () => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-
         <SearchButton onClick={() => handleSearch()}>搜尋</SearchButton>
+        <ResetButton onClick={handleResetSearch}>清除搜尋</ResetButton>
       </SearchContent>
       <SharesTitleContainer>
         <TitleIcon src={Hotpot} />
@@ -105,7 +160,7 @@ const SearchPage = () => {
             {shares.length !== 0 ? (
               shares.map((share) => (
                 <>
-                  <SearchPageCard share={share} />
+                  <SearchPageCard key={uuidv4()} share={share} />
                 </>
               ))
             ) : (
@@ -116,6 +171,7 @@ const SearchPage = () => {
           <div>搜尋不到</div>
         )}
       </SharesContainer>
+      <Waypoint onEnter={handleInfiniteScroll} />
     </Main>
   );
 };
@@ -214,6 +270,8 @@ const SearchButton = styled.button`
   border-radius: 8px;
   background-color: ${themeColor.blue};
 `;
+
+const ResetButton = styled(SearchButton)``;
 
 const SharesTitleContainer = styled.div`
   display: flex;

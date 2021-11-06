@@ -13,7 +13,9 @@ const SearchBar = () => {
   const [inputValue, setInputValue] = useState('');
 
   const handleSearch = () => {
-    algolia.search(inputValue).then((result) => {
+    dispatch({ type: 'isShareSearch/search', payload: true });
+    if (inputValue === '') setInputValue('請輸入關鍵字');
+    algolia.search(inputValue || '請輸入關鍵字').then((result) => {
       console.log(result.hits);
       const searchResults = result.hits.map((hit) => {
         return {

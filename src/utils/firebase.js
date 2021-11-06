@@ -386,20 +386,17 @@ export const getAllContents = (collectionName, setContents) => {
 
 export const getAllOrderedContents = (
   collectionName,
+  field,
   setContents,
   lastPostSnapshotRef,
   isNext,
-  articles
+  OriContents
 ) => {
   const q = !isNext
-    ? query(
-        collection(db, collectionName),
-        orderBy('createdAt', 'desc'),
-        limit(2)
-      )
+    ? query(collection(db, collectionName), orderBy(field, 'desc'), limit(2))
     : query(
         collection(db, collectionName),
-        orderBy('createdAt', 'desc'),
+        orderBy(field, 'desc'),
         limit(2),
         startAfter(lastPostSnapshotRef.current)
       );
@@ -414,7 +411,7 @@ export const getAllOrderedContents = (
     if (!isNext) {
       setContents(contents);
     } else {
-      setContents([...articles, ...contents]);
+      setContents([...OriContents, ...contents]);
     }
   });
 
@@ -436,6 +433,50 @@ export const getAllOtherShares = (collectionName, setContents, currentUser) => {
         (content) => content.quantities > 0
       );
       setContents(NonzeroContents);
+    });
+
+    return unsubscribe;
+  }
+};
+
+export const getAllOrderedOtherShares = (
+  collectionName,
+  setContents,
+  currentUser,
+  lastPostSnapshotRef,
+  isNext,
+  oriContents
+) => {
+  if (currentUser) {
+    const q = !isNext
+      ? query(
+          collection(db, collectionName),
+          where('postUser.id', '!=', currentUser.uid),
+          limit(2)
+        )
+      : query(
+          collection(db, collectionName),
+          where('postUser.id', '!=', currentUser.uid),
+          limit(2),
+          startAfter(lastPostSnapshotRef.current)
+        );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const contents = querySnapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+
+      lastPostSnapshotRef.current =
+        querySnapshot.docs[querySnapshot.docs.length - 1];
+
+      const NonzeroContents = contents.filter(
+        (content) => content.quantities > 0
+      );
+      if (!isNext) {
+        setContents(NonzeroContents);
+      } else {
+        setContents([...oriContents, ...NonzeroContents]);
+      }
     });
 
     return unsubscribe;

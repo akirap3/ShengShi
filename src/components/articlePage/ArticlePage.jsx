@@ -18,6 +18,7 @@ const ArticlePage = () => {
   const getArticles = useCallback(() => {
     getAllOrderedContents(
       'articles',
+      'createdAt',
       setArticles,
       lastPostSnapshotRef,
       false,
@@ -58,6 +59,7 @@ const ArticlePage = () => {
       if (!isSearch) {
         getAllOrderedContents(
           'articles',
+          'createdAt',
           setArticles,
           lastPostSnapshotRef,
           true,

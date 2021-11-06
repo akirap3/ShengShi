@@ -90,22 +90,22 @@ const ShareCard = ({
               onClick={
                 currentUser
                   ? isCollected || isSearch
-                    ? share.postUser.id === currentUser.uid
+                    ? share.postUser.id === currentUser?.uid
                       ? () => {
                           alert('無法領取自己的勝食，可以到 "我的清單" 編輯');
                         }
-                      : share.receivedUserId.includes(currentUser.uid)
+                      : share.receivedUserId.includes(currentUser?.uid)
                       ? () => alert('您已經領取過了')
-                      : share.toReceiveUserId.includes(currentUser.uid)
+                      : share.toReceiveUserId.includes(currentUser?.uid)
                       ? () => alert('您已經預定領取了')
                       : () => handleClick(share)
                     : () => handleClick()
                   : () => handleNeedLogin()
               }
             >
-              {share.receivedUserId.includes(currentUser.uid)
+              {share.receivedUserId.includes(currentUser?.uid)
                 ? '已領取'
-                : share.toReceiveUserId.includes(currentUser.uid)
+                : share.toReceiveUserId.includes(currentUser?.uid)
                 ? '已預訂'
                 : btnName || '查看'}
             </GetButton>
