@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import ReactLoading from 'react-loading';
+import { getAllContents } from '../../utils/firebase';
 
 import * as validation from '../../utils/validation';
 import * as firebase from '../../utils/firebase';
@@ -15,6 +16,16 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [usersData, setUsersDate] = useState(null);
+
+  const getUsersData = useCallback(
+    () => getAllContents('users', setUsersDate),
+    []
+  );
+
+  useEffect(() => {
+    return getUsersData();
+  }, [getUsersData]);
 
   const checkAndLogin = () => {
     if (validation.checkEmail(email)) {
@@ -26,38 +37,59 @@ const LoginPage = () => {
           history.push('/personal/list');
         })
         .catch((error) => {
-          console.log(error.message);
+          setIsLoading(false);
+          if (error.code === 'auth/user-not-found') {
+            alert('您輸入的帳號不存在，請先註冊');
+            setEmail('');
+            setPassword('');
+          } else if (error.code === 'auth/wrong-password') {
+            alert('您輸入的密碼錯誤，請重新輸入密碼');
+            setPassword('');
+          }
         });
     }
   };
 
-  const loginFB = () => {
-    setIsLoading(true);
-    firebase
-      .loginWithFB()
-      .then((reslut) => {
-        setIsLoading(false);
-        history.push('/personal/list');
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+  const hasSignedUP = (usersData, uid) => {
+    const userIds = usersData.map((user) => user.id);
+    if (userIds.includes(uid)) return true;
+    return false;
   };
 
-  const loginGoogle = () => {
+  const handleClickProvider = (
+    loginWithProvider,
+    imageSize,
+    setIsLoading,
+    history
+  ) => {
     setIsLoading(true);
-    firebase
-      .loginWithGoogle()
+    loginWithProvider()
       .then((result) => {
-        setIsLoading(false);
-        history.push('/personal/list');
+        const { displayName, photoURL, email, uid } = result.user;
+        if (!hasSignedUP(usersData, uid)) {
+          firebase.handleSignUpWithProvider(
+            displayName,
+            email,
+            uid,
+            photoURL,
+            imageSize,
+            setIsLoading,
+            history
+          );
+        } else {
+          setIsLoading(false);
+          history.push('/personal/list');
+        }
       })
       .catch((error) => {
-        console.log(error.message);
+        console.log(error.code);
+        alert(error.message);
+        setIsLoading(false);
       });
   };
 
-  return (
+  console.log(usersData);
+  return usersData ? (
     <StyledMain>
       {isLoading && (
         <StyledLoading
@@ -71,29 +103,62 @@ const LoginPage = () => {
         <Title>登入</Title>
         <Field
           placeholder="請輸入電子郵件"
+          value={email}
           onChange={(e) => {
             setEmail(e.target.value);
           }}
+          disabled={isLoading}
         />
         <Field
           type="password"
           placeholder="請輸入密碼"
+          value={password}
           onChange={(e) => {
             setPassword(e.target.value);
           }}
+          disabled={isLoading}
         />
         <ButtonContainer>
-          <NativeButton onClick={() => checkAndLogin()}>確認</NativeButton>
-          <FBButton onClick={() => loginFB()}>
+          <NativeButton onClick={() => checkAndLogin()} disabled={isLoading}>
+            確認
+          </NativeButton>
+          <FBButton
+            onClick={() =>
+              handleClickProvider(
+                firebase.loginWithFB,
+                '?type=large',
+                setIsLoading,
+                history
+              )
+            }
+            disabled={isLoading}
+          >
             <FbIcon />
             <span>FB 登入</span>
           </FBButton>
-          <GoogleButton onClick={() => loginGoogle()}>
+          <GoogleButton
+            onClick={() =>
+              handleClickProvider(
+                firebase.loginWithGoogle,
+                '',
+                setIsLoading,
+                history
+              )
+            }
+            disabled={isLoading}
+          >
             <GoogleIcon /> <span>Google 登入</span>
           </GoogleButton>
         </ButtonContainer>
       </SignupContainer>
     </StyledMain>
+  ) : (
+    <StyledLoading
+      type={'spin'}
+      color={'#2a9d8f'}
+      height={'10vw'}
+      width={'10vw'}
+    />
   );
 };
 

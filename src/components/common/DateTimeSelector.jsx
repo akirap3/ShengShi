@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 const DateTimeSelector = () => {
   const dispatch = useDispatch();
   const specificDateTime = useSelector((state) => state.specificDateTime);
+  const fromToDateTime = useSelector((state) => state.fromToDateTime);
 
   return (
     <>
@@ -27,6 +28,8 @@ const DateTimeSelector = () => {
           secondAriaLabel="Second"
           value={specificDateTime}
           yearAriaLabel="Year"
+          minDate={fromToDateTime[0]}
+          maxDate={fromToDateTime[1]}
         />
       </Container>
     </>

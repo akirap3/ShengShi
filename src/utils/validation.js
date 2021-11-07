@@ -13,9 +13,9 @@ export const isFieldsChecked = (foodName, quantities, address, file) => {
     alert('請輸入食物名稱');
     return false;
   } else if (isNaN(newQty) || !newQty) {
-    alert('數量請輸入數字');
+    alert('數量請輸入數字 1 ~ 999 的數字');
     return false;
-  } else if (newQty < 0 || newQty >= 999) {
+  } else if (newQty <= 0 || newQty > 999) {
     alert('請輸入介於 1 ~ 999 的數字');
     return false;
   } else if (address === '台北市' || !address) {

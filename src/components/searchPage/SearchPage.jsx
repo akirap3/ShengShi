@@ -52,7 +52,7 @@ const SearchPage = () => {
   const getShares = useCallback(() => {
     getAllOrderedContents(
       'shares',
-      'timestamp',
+      'createdAt',
       setShares,
       lastPostSnapshotRef,
       false,
@@ -105,7 +105,7 @@ const SearchPage = () => {
         } else {
           getAllOrderedContents(
             'shares',
-            'timestamp',
+            'createdAt',
             setShares,
             lastPostSnapshotRef,
             true,

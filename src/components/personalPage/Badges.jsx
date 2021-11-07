@@ -13,6 +13,7 @@ const Badges = () => {
         'badges',
         'ownedBy',
         'array-contains',
+        'asc',
         currentUser,
         setBadges
       ),

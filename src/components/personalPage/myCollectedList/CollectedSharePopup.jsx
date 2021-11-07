@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -8,6 +8,7 @@ import LocationMap from '../../common/LocationMap';
 import Loading from '../../common/Loading';
 import ConfirmedPopup from '../../common/ConfirmedPopup';
 import useCurrentUser from '../../../hooks/useCurrentUser';
+import { getCurrentUserData, getAllContents } from '../../../utils/firebase';
 
 import {
   getFirestore,
@@ -16,8 +17,11 @@ import {
   updateDoc,
   arrayUnion,
   increment,
+  addDoc,
+  collection,
 } from '@firebase/firestore';
 
+import Comment from './Comment';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
 import { BiCrown } from 'react-icons/bi';
@@ -29,19 +33,57 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   const [showDateTime, setShowDateTime] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [reqQuantities, setReqQuantities] = useState();
+  const [userData, setUserData] = useState('');
   const specificDateTime = useSelector((state) => state.specificDateTime);
+  const fromToDateTime = useSelector((state) => state.fromToDateTime);
   const [isLoading, setIsLoading] = useState(false);
+  const [replyComment, setReplayComment] = useState('');
+  const [comments, setComments] = useState('');
 
   const openDateTime = () => setShowDateTime(true);
   const closeDateTime = () => setShowDateTime(false);
   const openConfirmation = () => setShowConfirmation(true);
   const closeConfirmation = () => setShowConfirmation(false);
 
+  const getUserData = useCallback(
+    () => getCurrentUserData(currentUser, setUserData),
+    [currentUser]
+  );
+
+  const getComments = useCallback(
+    () => getAllContents(`shares/${share.id}/comments`, setComments),
+    [share.id]
+  );
+
+  useEffect(() => {
+    return getUserData();
+  }, [getUserData]);
+
+  useEffect(() => {
+    return getComments();
+  }, [getComments]);
+
+  const onCommentSubmit = async (share, userData) => {
+    const docRef = doc(getFirestore(), 'shares', share.id);
+    await updateDoc(docRef, {
+      commentsCount: increment(1),
+    });
+    await addDoc(collection(getFirestore(), `shares/${share.id}/comments`), {
+      createdAt: Timestamp.now(),
+      commentContent: replyComment,
+      author: {
+        id: currentUser.uid,
+        displayName: userData.displayName,
+        imageUrl: userData.imageUrl,
+      },
+    });
+  };
+
   const handleSpecificDateTime = (payload) => {
     dispatch({ type: 'specificDateTime/selected', payload: payload });
   };
 
-  const isFieldsChecked = (share) => {
+  const isFieldsChecked = (share, fromToDateTime, specificDateTime) => {
     const newQty = Number(reqQuantities);
     if (isNaN(newQty)) {
       alert('數量請輸入數字');
@@ -49,12 +91,25 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
     } else if (newQty < 0 || newQty > share.quantities) {
       alert(`請輸入介於 1 ~ ${share.quantities} 的數字`);
       return false;
+    } else if (specificDateTime < new Date()) {
+      alert(`您選定時間小於現在時間`);
+      return false;
+    } else if (specificDateTime < fromToDateTime[0]) {
+      alert(`您選定時間小於可領取時間`);
+      return false;
+    } else if (specificDateTime > fromToDateTime[1]) {
+      alert(`您選定時間大於可領取時間`);
+      return false;
     }
     return true;
   };
 
-  const handleConfirmation = async (share) => {
-    if (isFieldsChecked(share)) {
+  const handleConfirmation = async (
+    share,
+    fromToDateTime,
+    specificDateTime
+  ) => {
+    if (isFieldsChecked(share, fromToDateTime, specificDateTime)) {
       setIsLoading(true);
       const docRef = doc(getFirestore(), 'shares', share.id);
       await updateDoc(docRef, {
@@ -73,79 +128,105 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   };
 
   return (
-    <>
-      <DialogOverlay isOpen={showEdit} onDismiss={closeEditor}>
-        {isLoading && (
-          <Loading
-            type={'spin'}
-            color={'#2a9d8f'}
-            height={'10vw'}
-            width={'10vw'}
-          />
-        )}
-        <DialogContent
-          style={{
-            position: 'relative',
-            border: 'solid 1px lightBlue',
-            borderRadius: '10px',
-          }}
-          aria-label="collected-share-popup"
-        >
-          <PopClose onClick={closeEditor} />
-          <PopTitleContainer>
-            <CrownIcon />
-            <PopTitle>{share?.name || ''}</PopTitle>
-          </PopTitleContainer>
-          <PopContent>
-            <PreviewImg src={share?.imageUrl || ''} />
-            <PopRow>
-              <CurrentNumberLabel>目前數量</CurrentNumberLabel>
-              <CurrentNumber>{share?.quantities || ''}</CurrentNumber>
-            </PopRow>
-            <PopRow>
-              <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
-              <Quantity
-                placeholder="請輸入數量"
-                onChange={(e) => setReqQuantities(e.target.value)}
-              />
-            </PopRow>
-            <PopRow>
-              <DateTimeLabel>可領取時段</DateTimeLabel>
-              <DateTime>
-                {share?.fromTimeStamp.toDate().toLocaleString()}
-                {`~`}
-                {share?.toTimeStamp.toDate().toLocaleString()}
-              </DateTime>
-            </PopRow>
-            <PopRow>
-              <DateTimeLabel>領取日期及時間</DateTimeLabel>
-              <DateTime>{specificDateTime?.toLocaleString() || ''}</DateTime>
-              <Calendar onClick={openDateTime} />
-            </PopRow>
-            <PopRow>
-              <PopPlaceLabel>地點</PopPlaceLabel>
-              <PopPlace>{share?.exchangePlace || ''}</PopPlace>
-              <PopPlaceIcon />
-            </PopRow>
-            <MapWrapper>
-              <LocationMap />
-            </MapWrapper>
-            <SubmitBtn onClick={() => handleConfirmation(share)}>
-              確認領取
-            </SubmitBtn>
-          </PopContent>
-        </DialogContent>
-      </DialogOverlay>
-      <SelectDateTimePopup
-        showDateTime={showDateTime}
-        closeDateTime={closeDateTime}
-      />
-      <ConfirmedPopup
-        showConfirmation={showConfirmation}
-        closeConfirmation={closeConfirmation}
-        share={share}
-      />
-    </>
+    userData && (
+      <>
+        <DialogOverlay isOpen={showEdit} onDismiss={closeEditor}>
+          {isLoading && (
+            <Loading
+              type={'spin'}
+              color={'#2a9d8f'}
+              height={'10vw'}
+              width={'10vw'}
+            />
+          )}
+          <DialogContent
+            style={{
+              position: 'relative',
+              border: 'solid 1px lightBlue',
+              borderRadius: '10px',
+            }}
+            aria-label="collected-share-popup"
+          >
+            <PopClose onClick={closeEditor} />
+            <PopTitleContainer>
+              <CrownIcon />
+              <PopTitle>{share?.name || ''}</PopTitle>
+            </PopTitleContainer>
+            <PopContent>
+              <PreviewImg src={share?.imageUrl || ''} />
+              <PopRow>
+                <CurrentNumberLabel>目前數量</CurrentNumberLabel>
+                <CurrentNumber>{share?.quantities || ''}</CurrentNumber>
+              </PopRow>
+              <PopRow>
+                <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
+                <Quantity
+                  placeholder="請輸入數量"
+                  onChange={(e) => setReqQuantities(e.target.value)}
+                />
+              </PopRow>
+              <PopRow>
+                <DateTimeLabel>可領取時段</DateTimeLabel>
+                <DateTime>
+                  {share?.fromTimeStamp.toDate().toLocaleString()}
+                  {`~`}
+                  {share?.toTimeStamp.toDate().toLocaleString()}
+                </DateTime>
+              </PopRow>
+              <PopRow>
+                <DateTimeLabel>領取日期及時間</DateTimeLabel>
+                <DateTime>{specificDateTime?.toLocaleString() || ''}</DateTime>
+                <Calendar onClick={openDateTime} />
+              </PopRow>
+              <PopRow>
+                <PopPlaceLabel>地點</PopPlaceLabel>
+                <PopPlace>{share?.exchangePlace || ''}</PopPlace>
+                <PopPlaceIcon />
+              </PopRow>
+              <MapWrapper>
+                <LocationMap />
+              </MapWrapper>
+              <CommentSection>
+                <ReplyArea
+                  value={replyComment}
+                  onChange={(e) => setReplayComment(e.target.value)}
+                />
+                <RepalyButton onClick={() => onCommentSubmit(share, userData)}>
+                  留言
+                </RepalyButton>
+                <CommentSummary>
+                  {`目前共${share.commentsCount}則留言`}
+                </CommentSummary>
+                {comments &&
+                  comments.map((comment) => (
+                    <Comment
+                      currentUser={currentUser}
+                      share={share}
+                      comment={comment}
+                    />
+                  ))}
+              </CommentSection>
+              <SubmitBtn
+                onClick={() =>
+                  handleConfirmation(share, fromToDateTime, specificDateTime)
+                }
+              >
+                確認領取
+              </SubmitBtn>
+            </PopContent>
+          </DialogContent>
+        </DialogOverlay>
+        <SelectDateTimePopup
+          showDateTime={showDateTime}
+          closeDateTime={closeDateTime}
+        />
+        <ConfirmedPopup
+          showConfirmation={showConfirmation}
+          closeConfirmation={closeConfirmation}
+          share={share}
+        />
+      </>
+    )
   );
 };
 
@@ -246,6 +327,37 @@ const PreviewImg = styled.img`
   margin-bottom: 2vw;
 `;
 
+const MapWrapper = styled.div`
+  margin-bottom: 2vw;
+`;
+
+const CommentSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2vw;
+`;
+
+const ReplyArea = styled.textarea`
+  width: 100%;
+  min-height: 10vh;
+  max-height: 20vh;
+  padding: 1vw;
+  line-height: 16px;
+  font-size: 12px;
+  border-radius: 5px;
+`;
+
+const RepalyButton = styled.button`
+  border: 1px solid black;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin: 1vw auto 2vw auto;
+`;
+
+const CommentSummary = styled.div`
+  margin-bottom: 2vw;
+`;
+
 const SubmitBtn = styled.button`
   flex-grow: 1;
   border: none;
@@ -255,10 +367,6 @@ const SubmitBtn = styled.button`
   cursor: pointer;
   padding: 1vw;
   letter-spacing: 0.5vw;
-`;
-
-const MapWrapper = styled.div`
-  margin-bottom: 2vw;
 `;
 
 export default CollectedSharePopup;

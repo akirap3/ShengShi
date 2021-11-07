@@ -17,7 +17,7 @@ const Header = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
-  const [userData, setUserDate] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   const checkUser = useSelector((state) => state.checkUser);
   const currentUser = useCurrentUser();
@@ -30,7 +30,7 @@ const Header = () => {
   };
 
   const getUserData = useCallback(
-    () => getCurrentUserData(currentUser, setUserDate),
+    () => getCurrentUserData(currentUser, setUserData),
     [currentUser]
   );
 
