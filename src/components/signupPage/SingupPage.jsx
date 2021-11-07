@@ -10,6 +10,7 @@ import { getAllContents } from '../../utils/firebase';
 
 import { IoLogoFacebook } from 'react-icons/io';
 import { FcGoogle } from 'react-icons/fc';
+import { Timestamp } from '@firebase/firestore';
 
 const SignupPage = () => {
   const history = useHistory();
@@ -38,6 +39,7 @@ const SignupPage = () => {
     alias: alias,
     myPoints: 0,
     myPlace: place,
+    createdAt: Timestamp.now(),
   };
 
   const checkNames = () => {

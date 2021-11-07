@@ -6,7 +6,6 @@ import {
   signInWithPopup,
   FacebookAuthProvider,
   GoogleAuthProvider,
-  fetchSignInMethodsForEmail,
   signOut,
   onAuthStateChanged,
   deleteUser,
@@ -90,6 +89,7 @@ export const handleSignUpWithProvider = async (
     displayName,
     email,
     alias: displayName,
+    createdAt: Timestamp.now(),
     imageUrl:
       `${photoURL}${imageSize}` ||
       'https://firebasestorage.googleapis.com/v0/b/shengshi-8bc48.appspot.com/o/images%2Fusers%2FdefaultAvatar.png?alt=media&token=475cb8f7-dc3b-456e-b36e-fb66a8a06012',
@@ -107,34 +107,6 @@ export const getCurrentUserData = (currentUser, setUserData) => {
     });
   }
 };
-// const handleDiffCredential = (error) => {
-//   if (error.code === 'auth/account-exists-with-different-credential') {
-//     const pendingCred = error.credential;
-//     const email = error.email;
-//     fetchSignInMethodsForEmail(auth, email).then((methods) => {
-//       if (methods[0] === 'password') {
-//         // need to promptUserForPassword() asynchronously
-//         const password = promptUserForPassword();
-//         signInWithEmailAndPassword(auth, email, password)
-//           .then((result) => {
-//             return result.user.linkWithCredential(pendingCred);
-//           })
-//           .then(() =>
-//             console.log('successfully linked to the existing Firebase user.')
-//           );
-//         return;
-//       }
-//       const provider = getProviderForProviderId(methods[0]);
-//       signInWithPopup(auth, provider).then((result) => {
-//         result.user
-//           .linkAndRetrieveDataWithCredential(pendingCred)
-//           .then((usercred) => {
-//             console.log('go to my website');
-//           });
-//       });
-//     });
-//   }
-// };
 
 export const logOut = () => {
   return signOut(auth);
@@ -353,7 +325,7 @@ export const getListenedSingleContent = (collectionName, docId, setContent) => {
 };
 
 export const getAllContents = (collectionName, setContents) => {
-  const q = query(collection(db, collectionName));
+  const q = query(collection(db, collectionName), orderBy('createdAt', 'desc'));
 
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const contents = querySnapshot.docs.map((doc) => {
