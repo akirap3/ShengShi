@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 
 import * as validation from '../../utils/validation';
 import * as firebase from '../../utils/firebase';
@@ -9,6 +10,7 @@ import { IoLogoFacebook } from 'react-icons/io';
 import { FcGoogle } from 'react-icons/fc';
 
 const SignupPage = () => {
+  const history = useHistory();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [alias, setAlias] = useState('');
@@ -83,6 +85,9 @@ const SignupPage = () => {
             alert('密碼長度需要至少六個字元');
             setPassword('');
             setSecPassword('');
+          } else if (error.code === 'auth/email-already-in-use') {
+            alert('此信箱已經註冊過，請您使用信箱或是 FB 及 Google 登入');
+            history.push('/login');
           }
         });
     }
