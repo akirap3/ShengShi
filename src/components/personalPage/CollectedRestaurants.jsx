@@ -16,6 +16,7 @@ const CollectedRestaurants = () => {
         'restaurants',
         'savedUserId',
         'array-contains',
+        'desc',
         currentUser,
         setSavedRestaurants
       ),

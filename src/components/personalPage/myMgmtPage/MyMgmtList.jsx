@@ -9,7 +9,14 @@ const MyMgmtList = () => {
   const currentUser = useCurrentUser();
 
   const getMyShares = useCallback(() => {
-    getSpecificContents('shares', 'postUser.id', '==', currentUser, setShares);
+    getSpecificContents(
+      'shares',
+      'postUser.id',
+      '==',
+      'desc',
+      currentUser,
+      setShares
+    );
   }, [currentUser]);
 
   useEffect(() => {

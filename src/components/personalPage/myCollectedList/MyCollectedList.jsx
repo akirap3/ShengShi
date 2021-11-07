@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { getSpecificShares } from '../../../utils/firebase';
+import { getSpecificContents } from '../../../utils/firebase';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import SharesContainer from '../../common/SharesContainer';
 import MyCollectedCard from './MyCollectedCard';
@@ -11,10 +11,11 @@ const MyCollectedList = () => {
 
   const getSavedShares = useCallback(
     () =>
-      getSpecificShares(
+      getSpecificContents(
         'shares',
         'savedUserId',
         'array-contains',
+        'desc',
         currentUser,
         setSavedShares
       ),

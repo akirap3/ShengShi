@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getSpecificShares } from '../../../utils/firebase';
+import { getSpecificContents } from '../../../utils/firebase';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import SharesContainer from '../../common/SharesContainer';
 import MyShareCard from './MyShareCard';
@@ -10,7 +10,14 @@ const MyShareList = () => {
 
   const getMyShareList = useCallback(
     () =>
-      getSpecificShares('shares', 'postUser.id', '==', currentUser, setShares),
+      getSpecificContents(
+        'shares',
+        'postUser.id',
+        '==',
+        'desc',
+        currentUser,
+        setShares
+      ),
     [currentUser]
   );
 

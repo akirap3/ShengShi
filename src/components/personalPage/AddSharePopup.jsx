@@ -88,7 +88,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
             displayName: userData.displayName,
           },
           rating: 5,
-          timestamp: Timestamp.fromDate(new Date()),
+          createdAt: Timestamp.fromDate(new Date()),
           userLocation: userData.myPlace || '未提供',
           exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
           receivedInfo: {},

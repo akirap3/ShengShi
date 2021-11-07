@@ -229,49 +229,26 @@ export const handleCollection = async (
   }
 };
 
-export const getSpecificShares = (
-  collectionName,
-  field,
-  operator,
-  currentUser,
-  setShares
-) => {
-  if (currentUser) {
-    const q = query(
-      collection(db, collectionName),
-      where(field, operator, currentUser.uid),
-      orderBy('timestamp', 'desc')
-    );
-
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const specificShares = querySnapshot.docs.map((doc) => {
-        return { ...doc.data(), id: doc.id };
-      });
-      setShares(specificShares);
-    });
-
-    return unsubscribe;
-  }
-};
-
 export const getSpecificContents = (
   collectionName,
   field,
   operator,
+  orederSeq,
   currentUser,
   setContents
 ) => {
   if (currentUser) {
     const q = query(
       collection(db, collectionName),
-      where(field, operator, currentUser.uid)
+      where(field, operator, currentUser.uid),
+      orderBy('createdAt', orederSeq)
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const specificShares = querySnapshot.docs.map((doc) => {
+      const specificContents = querySnapshot.docs.map((doc) => {
         return { ...doc.data(), id: doc.id };
       });
-      setContents(specificShares);
+      setContents(specificContents);
     });
 
     return unsubscribe;

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { getSpecificShares } from '../../../utils/firebase';
+import { getSpecificContents } from '../../../utils/firebase';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import MyToReceiveCard from './MyToReceiveCard';
 import SharesContainer from '../../common/SharesContainer';
@@ -10,10 +10,11 @@ const MyToReceiveList = () => {
 
   const getToReceiveShares = useCallback(
     () =>
-      getSpecificShares(
+      getSpecificContents(
         'shares',
         'toReceiveUserId',
         'array-contains',
+        'desc',
         currentUser,
         setToReceiveShares
       ),
