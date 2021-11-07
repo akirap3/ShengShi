@@ -79,7 +79,11 @@ const SignupPage = () => {
           alert(`You have signed up with ${email}`);
         })
         .catch((error) => {
-          alert(error.message);
+          if (error.code === 'auth/weak-password') {
+            alert('密碼長度需要至少六個字元');
+            setPassword('');
+            setSecPassword('');
+          }
         });
     }
   };
@@ -104,12 +108,14 @@ const SignupPage = () => {
         <NameContainer>
           <NameFiled
             placeholder="請輸入您的名"
+            value={firstName}
             onChange={(e) => {
               setFirstName(e.target.value);
             }}
           />
           <LastNameField
             placeholder="請輸入您的姓"
+            value={lastName}
             onChange={(e) => {
               setLastName(e.target.value);
             }}
@@ -117,18 +123,21 @@ const SignupPage = () => {
         </NameContainer>
         <Field
           placeholder="請輸入你的暱稱"
+          value={alias}
           onChange={(e) => {
             setAlias(e.target.value);
           }}
         />
         <Field
           placeholder="請輸入你的居住地"
+          value={place}
           onChange={(e) => {
             setPlace(e.target.value);
           }}
         />
         <Field
           placeholder="請輸入電子郵件"
+          value={email}
           onChange={(e) => {
             setEmail(e.target.value);
           }}
@@ -136,6 +145,7 @@ const SignupPage = () => {
         <Field
           type="password"
           placeholder="請輸入密碼"
+          value={password}
           onChange={(e) => {
             setPassword(e.target.value);
           }}
@@ -143,6 +153,7 @@ const SignupPage = () => {
         <Field
           type="password"
           placeholder="請再次輸入密碼"
+          value={secPassword}
           onChange={(e) => {
             setSecPassword(e.target.value);
           }}

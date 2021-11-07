@@ -26,6 +26,16 @@ const LoginPage = () => {
           history.push('/personal/list');
         })
         .catch((error) => {
+          setIsLoading(false);
+          if (error.code === 'auth/user-not-found') {
+            alert('您輸入的帳號不存在，請先註冊');
+            setEmail('');
+            setPassword('');
+          } else if (error.code === 'auth/wrong-password') {
+            alert('您輸入的密碼錯誤，請重新輸入密碼');
+            setPassword('');
+          }
+          console.log(error.code);
           console.log(error.message);
         });
     }
@@ -71,6 +81,7 @@ const LoginPage = () => {
         <Title>登入</Title>
         <Field
           placeholder="請輸入電子郵件"
+          value={email}
           onChange={(e) => {
             setEmail(e.target.value);
           }}
@@ -78,6 +89,7 @@ const LoginPage = () => {
         <Field
           type="password"
           placeholder="請輸入密碼"
+          value={password}
           onChange={(e) => {
             setPassword(e.target.value);
           }}
