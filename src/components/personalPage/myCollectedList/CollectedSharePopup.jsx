@@ -30,6 +30,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [reqQuantities, setReqQuantities] = useState();
   const specificDateTime = useSelector((state) => state.specificDateTime);
+  const fromToDateTime = useSelector((state) => state.fromToDateTime);
   const [isLoading, setIsLoading] = useState(false);
 
   const openDateTime = () => setShowDateTime(true);
@@ -41,7 +42,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
     dispatch({ type: 'specificDateTime/selected', payload: payload });
   };
 
-  const isFieldsChecked = (share) => {
+  const isFieldsChecked = (share, fromToDateTime, specificDateTime) => {
     const newQty = Number(reqQuantities);
     if (isNaN(newQty)) {
       alert('數量請輸入數字');
@@ -49,12 +50,25 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
     } else if (newQty < 0 || newQty > share.quantities) {
       alert(`請輸入介於 1 ~ ${share.quantities} 的數字`);
       return false;
+    } else if (specificDateTime < new Date()) {
+      alert(`您選定時間小於現在時間`);
+      return false;
+    } else if (specificDateTime < fromToDateTime[0]) {
+      alert(`您選定時間小於可領取時間`);
+      return false;
+    } else if (specificDateTime > fromToDateTime[1]) {
+      alert(`您選定時間大於可領取時間`);
+      return false;
     }
     return true;
   };
 
-  const handleConfirmation = async (share) => {
-    if (isFieldsChecked(share)) {
+  const handleConfirmation = async (
+    share,
+    fromToDateTime,
+    specificDateTime
+  ) => {
+    if (isFieldsChecked(share, fromToDateTime, specificDateTime)) {
       setIsLoading(true);
       const docRef = doc(getFirestore(), 'shares', share.id);
       await updateDoc(docRef, {
@@ -130,7 +144,11 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
             <MapWrapper>
               <LocationMap />
             </MapWrapper>
-            <SubmitBtn onClick={() => handleConfirmation(share)}>
+            <SubmitBtn
+              onClick={() =>
+                handleConfirmation(share, fromToDateTime, specificDateTime)
+              }
+            >
               確認領取
             </SubmitBtn>
           </PopContent>

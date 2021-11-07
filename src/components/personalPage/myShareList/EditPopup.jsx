@@ -54,7 +54,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
   };
 
   const handleSubmit = async () => {
-    if (isFieldsChecked(quantities, address, file)) {
+    if (isFieldsChecked(foodName, quantities, address, file)) {
       setIsLoaging(true);
       const docRef = doc(getFirestore(), 'shares', share.id);
       const fileRef = ref(getStorage(), `images/shares/${share.id}`);
@@ -70,7 +70,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
         imageUrl,
         quantities: Number(quantities),
         name: foodName,
-        timestamp: Timestamp.fromDate(new Date()),
+        createdAt: Timestamp.fromDate(new Date()),
         exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
       });
       setIsLoaging(false);
