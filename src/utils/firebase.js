@@ -82,7 +82,9 @@ export const handleSignUpWithProvider = async (
   email,
   uid,
   photoURL,
-  imageSize
+  imageSize,
+  setIsLoading,
+  history
 ) => {
   await setDoc(doc(db, 'users', uid), {
     displayName,
@@ -94,6 +96,8 @@ export const handleSignUpWithProvider = async (
     myPoints: 0,
     myPlace: '',
   });
+  setIsLoading(false);
+  history.push('/personal/list');
 };
 
 export const getCurrentUserData = (currentUser, setUserData) => {
