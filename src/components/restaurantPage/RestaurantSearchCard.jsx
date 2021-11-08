@@ -10,7 +10,6 @@ const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
 
   return restaurant?.length !== 0 ? (
     <CarouselContainer>
-      {console.log(restaurant)}
       <CarouselContext>
         {restaurant?.map((content) => {
           return (
@@ -21,33 +20,27 @@ const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
                 {Array.from(Array(content.rating).keys()).map(() => (
                   <Star key={uuidv4()} />
                 ))}
-                {console.log(content)}
-                {content.postUser?.id !== currentUser?.uid ? (
-                  <Heart
-                    onClick={
-                      currentUser
-                        ? isRestaurants
-                          ? () =>
-                              handleCollection(
-                                content,
-                                'restaurants',
-                                currentUser
-                              )
-                          : () =>
-                              handleCollection(content, 'shares', currentUser)
-                        : () => {}
-                    }
-                    like={
-                      currentUser
-                        ? content?.savedUserId?.includes(currentUser.uid)
-                          ? 'red'
-                          : 'black'
+                <Heart
+                  onClick={
+                    currentUser
+                      ? isRestaurants
+                        ? () =>
+                            handleCollection(
+                              content,
+                              'restaurants',
+                              currentUser
+                            )
+                        : () => handleCollection(content, 'shares', currentUser)
+                      : () => {}
+                  }
+                  like={
+                    currentUser
+                      ? content?.savedUserId?.includes(currentUser.uid)
+                        ? 'red'
                         : 'black'
-                    }
-                  />
-                ) : (
-                  <></>
-                )}
+                      : 'black'
+                  }
+                />
               </Row>
             </Card>
           );

@@ -16,6 +16,8 @@ const fromToDateTime = (state = [todayBegin, todayEnd], action) => {
   switch (action.type) {
     case 'fromToDateTime/selected':
       return action.payload;
+    case 'fromToDateTime/default':
+      return [todayBegin, todayEnd];
     default:
       return state;
   }

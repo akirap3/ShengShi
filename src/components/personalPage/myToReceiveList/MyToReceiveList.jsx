@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import styled from 'styled-components';
 import { getSpecificContents } from '../../../utils/firebase';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import MyToReceiveCard from './MyToReceiveCard';
@@ -25,15 +26,26 @@ const MyToReceiveList = () => {
     return getToReceiveShares();
   }, [getToReceiveShares]);
 
-  return (
-    toReceiveShares && (
-      <SharesContainer>
-        {toReceiveShares.map((share) => (
-          <MyToReceiveCard share={share} />
-        ))}
-      </SharesContainer>
-    )
+  return toReceiveShares && toReceiveShares.length !== 0 ? (
+    <SharesContainer>
+      {toReceiveShares.map((share) => (
+        <MyToReceiveCard share={share} />
+      ))}
+    </SharesContainer>
+  ) : (
+    <NoResultContainer>
+      <NoResult>你沒有任何的尚未領取清單</NoResult>
+    </NoResultContainer>
   );
 };
+
+const NoResultContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10vw;
+`;
+
+const NoResult = styled.div``;
 
 export default MyToReceiveList;

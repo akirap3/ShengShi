@@ -48,7 +48,7 @@ const MyMgmtList = () => {
         )
       ) : (
         <NoResultContainer>
-          <NoResult>你沒有任何的清單可預約</NoResult>
+          <NoResult>你沒有任何被預約的清單</NoResult>
         </NoResultContainer>
       )}
     </>

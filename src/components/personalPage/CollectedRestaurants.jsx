@@ -27,27 +27,29 @@ const CollectedRestaurants = () => {
     return getCollectedRestaurants();
   }, [getCollectedRestaurants]);
 
-  return (
-    savedRestaurants && (
-      <Container>
-        {savedRestaurants.map((restaurant) => (
-          <Card key={restaurant.id}>
-            <CardImg src={restaurant.imageUrl} />
-            <CardTitle>{restaurant.name}</CardTitle>
-            <Row>
-              {Array.from(Array(restaurant.rating).keys()).map(() => (
-                <Star key={uuidv4()} />
-              ))}
-              <Heart
-                onClick={() =>
-                  handleCollection(restaurant, 'restaurants', currentUser)
-                }
-              />
-            </Row>
-          </Card>
-        ))}
-      </Container>
-    )
+  return savedRestaurants && savedRestaurants.length !== 0 ? (
+    <Container>
+      {savedRestaurants.map((restaurant) => (
+        <Card key={restaurant.id}>
+          <CardImg src={restaurant.imageUrl} />
+          <CardTitle>{restaurant.name}</CardTitle>
+          <Row>
+            {Array.from(Array(restaurant.rating).keys()).map(() => (
+              <Star key={uuidv4()} />
+            ))}
+            <Heart
+              onClick={() =>
+                handleCollection(restaurant, 'restaurants', currentUser)
+              }
+            />
+          </Row>
+        </Card>
+      ))}
+    </Container>
+  ) : (
+    <NoResultContainer>
+      <NoResult>你沒有任何的收藏店家</NoResult>
+    </NoResultContainer>
   );
 };
 
@@ -112,5 +114,14 @@ const Heart = styled(AiTwotoneHeart)`
   margin-left: 1vw;
   cursor: pointer;
 `;
+
+const NoResultContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10vw;
+`;
+
+const NoResult = styled.div``;
 
 export default CollectedRestaurants;

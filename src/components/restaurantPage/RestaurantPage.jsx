@@ -43,7 +43,6 @@ const RestaurantPage = () => {
     setInputValue('');
   };
 
-  console.log(restaurants);
   return (
     <Main>
       <Banner>

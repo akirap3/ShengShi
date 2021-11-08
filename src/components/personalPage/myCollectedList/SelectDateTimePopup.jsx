@@ -7,7 +7,7 @@ import DateTimeSelector from '../../common/DateTimeSelector';
 
 import { AiFillCloseCircle } from 'react-icons/ai';
 
-const ClendarPopup = ({ showDateTime, closeDateTime }) => {
+const ClendarPopup = ({ showDateTime, closeDateTime, share }) => {
   return (
     <DialogOverlay isOpen={showDateTime} onDismiss={closeDateTime}>
       <DialogContent
@@ -19,7 +19,7 @@ const ClendarPopup = ({ showDateTime, closeDateTime }) => {
         aria-label="popup"
       >
         <PopClose onClick={closeDateTime} />
-        <DateTimeSelector />
+        <DateTimeSelector share={share} />
       </DialogContent>
     </DialogOverlay>
   );
