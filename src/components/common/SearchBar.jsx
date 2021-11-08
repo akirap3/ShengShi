@@ -34,6 +34,10 @@ const SearchBar = () => {
     });
   };
 
+  const handleOnEnter = (e) => {
+    if (e.charCode === 13) handleSearch();
+  };
+
   return (
     <SearchWrapper>
       <SearchContainer>
@@ -41,6 +45,7 @@ const SearchBar = () => {
           placeholder="勝食搜尋"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={(e) => handleOnEnter(e)}
         />
         <SearchButton onClick={() => handleSearch()}>
           <SearchIcon />

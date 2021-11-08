@@ -49,6 +49,10 @@ const SearchPage = () => {
     });
   };
 
+  const handleOnEnter = (e) => {
+    if (e.charCode === 13) handleSearch();
+  };
+
   const getShares = useCallback(() => {
     getAllOrderedContents(
       'shares',
@@ -146,6 +150,7 @@ const SearchPage = () => {
           placeholder="勝食搜尋"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={(e) => handleOnEnter(e)}
         />
         <SearchButton onClick={() => handleSearch()}>搜尋</SearchButton>
         <ResetButton onClick={handleResetSearch}>清除搜尋</ResetButton>
@@ -154,23 +159,23 @@ const SearchPage = () => {
         <TitleIcon src={Hotpot} />
         <SharesTitle>目前其他人分享的勝食</SharesTitle>
       </SharesTitleContainer>
-      <SharesContainer>
-        {shares ? (
-          <>
-            {shares.length !== 0 ? (
-              shares.map((share) => (
-                <>
-                  <SearchPageCard key={uuidv4()} share={share} />
-                </>
-              ))
-            ) : (
-              <div>搜尋不到</div>
-            )}
-          </>
+      {shares ? (
+        shares.length !== 0 ? (
+          <SharesContainer>
+            {shares.map((share) => (
+              <SearchPageCard key={uuidv4()} share={share} />
+            ))}
+          </SharesContainer>
         ) : (
-          <div>搜尋不到</div>
-        )}
-      </SharesContainer>
+          <NoResultContainer>
+            <NoResult>搜尋不到</NoResult>
+          </NoResultContainer>
+        )
+      ) : (
+        <NoResultContainer>
+          <NoResult>搜尋不到</NoResult>
+        </NoResultContainer>
+      )}
       <Waypoint onEnter={handleInfiniteScroll} />
     </Main>
   );
@@ -292,6 +297,17 @@ const SharesTitle = styled.h2`
   @media screen and (max-width: 460px) {
     font-size: 4vw;
   }
+`;
+
+const NoResultContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10vw;
+`;
+
+const NoResult = styled.div`
+  font-size: 16px;
 `;
 
 export default SearchPage;

@@ -3,36 +3,37 @@ import styled from 'styled-components';
 import DateTimePicker from 'react-datetime-picker';
 import { useDispatch, useSelector } from 'react-redux';
 
-const DateTimeSelector = () => {
+const DateTimeSelector = ({ share }) => {
   const dispatch = useDispatch();
   const specificDateTime = useSelector((state) => state.specificDateTime);
-  const fromToDateTime = useSelector((state) => state.fromToDateTime);
 
   return (
-    <>
-      <Title>請選擇日期及時間</Title>
-      <Container>
-        <DateTimePicker
-          amPmAriaLabel="Select AM/PM"
-          calendarAriaLabel="Toggle calendar"
-          clearAriaLabel="Clear value"
-          dayAriaLabel="Day"
-          hourAriaLabel="Hour"
-          maxDetail="second"
-          minuteAriaLabel="Minute"
-          monthAriaLabel="Month"
-          nativeInputAriaLabel="Date and time"
-          onChange={(result) => {
-            dispatch({ type: 'specificDateTime/selected', payload: result });
-          }}
-          secondAriaLabel="Second"
-          value={specificDateTime}
-          yearAriaLabel="Year"
-          minDate={fromToDateTime[0]}
-          maxDate={fromToDateTime[1]}
-        />
-      </Container>
-    </>
+    share && (
+      <>
+        <Title>請選擇日期及時間</Title>
+        <Container>
+          <DateTimePicker
+            amPmAriaLabel="Select AM/PM"
+            calendarAriaLabel="Toggle calendar"
+            clearAriaLabel="Clear value"
+            dayAriaLabel="Day"
+            hourAriaLabel="Hour"
+            maxDetail="second"
+            minuteAriaLabel="Minute"
+            monthAriaLabel="Month"
+            nativeInputAriaLabel="Date and time"
+            onChange={(result) => {
+              dispatch({ type: 'specificDateTime/selected', payload: result });
+            }}
+            secondAriaLabel="Second"
+            value={specificDateTime}
+            yearAriaLabel="Year"
+            minDate={share.fromTimeStamp.toDate()}
+            maxDate={share.toTimeStamp.toDate()}
+          />
+        </Container>
+      </>
+    )
   );
 };
 

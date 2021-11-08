@@ -64,7 +64,7 @@ const ShareCard = ({
             <Heart
               isliked={
                 currentUser
-                  ? share?.postUser.id === currentUser.uid
+                  ? share?.postUser?.id === currentUser.uid
                     ? 'blue'
                     : share?.savedUserId?.includes(currentUser.uid)
                     ? 'red'
@@ -73,7 +73,7 @@ const ShareCard = ({
               }
               onClick={
                 currentUser
-                  ? share?.postUser.id === currentUser.uid
+                  ? share?.postUser?.id === currentUser.uid
                     ? () => {}
                     : () => handleCollection(share, 'shares', currentUser)
                   : () => {}

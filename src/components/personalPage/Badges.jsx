@@ -38,9 +38,9 @@ const Badges = () => {
           </BadgeContainer>
         )
       ) : (
-        <NoBagdeContainer>
-          <NoBagde>你沒有任何的勳章</NoBagde>
-        </NoBagdeContainer>
+        <NoResultContainer>
+          <NoResult>目前沒有任何的勳章</NoResult>
+        </NoResultContainer>
       )}
     </>
   );
@@ -91,15 +91,13 @@ const BadgeName = styled.div`
   text-align: center;
 `;
 
-const NoBagdeContainer = styled.div`
+const NoResultContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 10vw;
+  padding: 10vw;
 `;
 
-const NoBagde = styled.div`
-  font-size: 3vw;
-`;
+const NoResult = styled.div``;
 
 export default Badges;

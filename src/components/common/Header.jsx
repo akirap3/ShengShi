@@ -51,9 +51,9 @@ const Header = () => {
         <ContactNav to="/contact">聯絡我們</ContactNav>
         <SearchBar />
 
-        {checkUser.isLoggedIn ? (
+        {checkUser.isLoggedIn && userData ? (
           <>
-            <MemberLoggedIcon src={userData?.imageUrl} />
+            <MemberLoggedIcon src={userData.imageUrl} />
             <MyDashboard to="/personal/list">我的看板</MyDashboard>
             <LogoutButton as={Link} to="/" onClick={() => logout()}>
               登出

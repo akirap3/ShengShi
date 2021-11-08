@@ -56,6 +56,10 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
     dispatch({ type: 'latLng/get', payload: payload });
   };
 
+  const handleFromToDateTime = () => {
+    dispatch({ type: 'fromToDateTime/default' });
+  };
+
   const getListenedUserData = useCallback(() => {
     return getListenedSingleContent('users', currentUser?.uid, setUserData);
   }, [currentUser?.uid]);
@@ -112,6 +116,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
       closeEditor();
       handleLatLng([]);
       handleAddress('');
+      handleFromToDateTime();
       setFile(null);
     }
   };
