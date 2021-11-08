@@ -90,6 +90,7 @@ const SearchPage = () => {
       const otherShares = searchedShares
         .filter((share) => share.postUser.id !== currentUser?.uid)
         .filter((share) => share.quantities > 0);
+
       setShares(otherShares);
     }
   }, [currentUser?.uid, searchedShares]);
@@ -162,9 +163,11 @@ const SearchPage = () => {
       {shares ? (
         shares.length !== 0 ? (
           <SharesContainer>
-            {shares.map((share) => (
-              <SearchPageCard key={uuidv4()} share={share} />
-            ))}
+            {shares
+              .filter((share) => share.isArchived === false)
+              .map((share) => (
+                <SearchPageCard key={uuidv4()} share={share} />
+              ))}
           </SharesContainer>
         ) : (
           <NoResultContainer>

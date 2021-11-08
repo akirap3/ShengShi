@@ -102,6 +102,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
           savedUserId: [],
           bookedQuantities: 0,
           commentsCount: 0,
+          isArchived: false,
         },
         { merge: true }
       );

@@ -27,8 +27,17 @@ const LoginPage = () => {
     return getUsersData();
   }, [getUsersData]);
 
+  const hasPassword = () => {
+    if (password) {
+      return true;
+    } else {
+      alert('請輸入密碼');
+      return false;
+    }
+  };
+
   const checkAndLogin = () => {
-    if (validation.checkEmail(email)) {
+    if (validation.checkEmail(email) && hasPassword()) {
       setIsLoading(true);
       firebase
         .login(email, password)
@@ -88,7 +97,6 @@ const LoginPage = () => {
       });
   };
 
-  console.log(usersData);
   return usersData ? (
     <StyledMain>
       {isLoading && (

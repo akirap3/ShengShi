@@ -16,6 +16,7 @@ import {
   getDocs,
   getDoc,
   setDoc,
+  addDoc,
   doc,
   arrayUnion,
   arrayRemove,
@@ -103,7 +104,7 @@ export const handleSignUpWithProvider = async (
 export const getCurrentUserData = (currentUser, setUserData) => {
   if (currentUser) {
     return onSnapshot(doc(db, 'users', currentUser.uid), (doc) => {
-      setUserData(doc.data());
+      setUserData({ ...doc.data(), id: doc.id });
     });
   }
 };
@@ -132,6 +133,37 @@ export const handleDeleteShare = async (
   });
 
   handleDeleteBadge(currentUser);
+  setIsLoading(false);
+  closeDelete();
+};
+
+export const handleArchiveShare = async (
+  setIsLoading,
+  share,
+  closeDelete,
+  currentUser,
+  userData
+) => {
+  share.toReceiveUserId.forEach(async (userId) => {
+    await addDoc(collection(db, `users/${userId}/messages`), {
+      createdAt: Timestamp.now(),
+      messageContent: `${userData.displayName}已經將"${
+        share.name
+      }"封存，故您原預定${share.toReceiveInfo[userId].upcomingTimestamp
+        .toDate()
+        .toLocaleString()}將自動取消`,
+    });
+  });
+
+  const docRef = doc(db, 'shares', share.id);
+  await updateDoc(docRef, {
+    isArchived: true,
+    toReceiveInfo: {},
+    toReceiveUserId: [],
+  });
+
+  if (share.receivedUserId.length === 0) handleDeleteBadge(currentUser);
+
   setIsLoading(false);
   closeDelete();
 };
@@ -309,6 +341,17 @@ export const getContentCounts = (
 
     return unsubscribe;
   }
+};
+
+export const getCollectionCounts = (collectionName, setCount) => {
+  const q = query(collection(db, collectionName));
+
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const count = querySnapshot.docs.length;
+    setCount(count);
+  });
+
+  return unsubscribe;
 };
 
 export const getSingleShare = async (docId) => {

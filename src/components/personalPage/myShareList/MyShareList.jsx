@@ -26,12 +26,13 @@ const MyShareList = () => {
     return getMyShareList();
   }, [getMyShareList]);
 
-  console.log(shares);
   return shares && shares.length !== 0 ? (
     <SharesContainer>
-      {shares.map((share) => (
-        <MyShareCard key={share.id} share={share} />
-      ))}
+      {shares
+        .filter((share) => share.isArchived === false)
+        .map((share) => (
+          <MyShareCard key={share.id} share={share} />
+        ))}
     </SharesContainer>
   ) : (
     <NoResultContainer>
