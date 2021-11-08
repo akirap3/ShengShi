@@ -44,6 +44,10 @@ const ArticlePage = () => {
     );
   };
 
+  const handleOnEnter = (e) => {
+    if (e.charCode === 13) handleSearch();
+  };
+
   const handleTagSearch = (tag) => {
     setInputValue(tag);
     handleSearch();
@@ -98,6 +102,7 @@ const ArticlePage = () => {
             value={inputValue}
             placeholder="文章搜尋"
             onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={(e) => handleOnEnter(e)}
           />
           <SearchButton onClick={() => handleSearch()}>搜尋</SearchButton>
           <ResetButton onClick={() => handleClearSearch()}>
@@ -105,27 +110,40 @@ const ArticlePage = () => {
           </ResetButton>
         </SearchContainer>
       </Banner>
-      <ArticleContainer>
-        {articles &&
-          articles.map((article) => (
-            <ArticleCard key={article.id}>
-              <a href={article.url} target="_blank" rel="noreferrer">
-                <CardImg src={article.imageUrl} />
-              </a>
-              <CardContent>
-                <TagContainer>
-                  {article.tags.map((tag) => (
-                    <Tag key={uuidv4()} onClick={() => handleTagSearch(tag)}>
-                      {tag}
-                    </Tag>
-                  ))}
-                </TagContainer>
-                <CardTitle>{article.title}</CardTitle>
-                <CardSubtitle>{article.subtitle}</CardSubtitle>
-              </CardContent>
-            </ArticleCard>
-          ))}
-      </ArticleContainer>
+
+      {articles ? (
+        articles.length !== 0 ? (
+          <ArticleContainer>
+            {articles.map((article) => (
+              <ArticleCard key={article.id}>
+                <a href={article.url} target="_blank" rel="noreferrer">
+                  <CardImg src={article.imageUrl} />
+                </a>
+                <CardContent>
+                  <TagContainer>
+                    {article.tags.map((tag) => (
+                      <Tag key={uuidv4()} onClick={() => handleTagSearch(tag)}>
+                        {tag}
+                      </Tag>
+                    ))}
+                  </TagContainer>
+                  <CardTitle>{article.title}</CardTitle>
+                  <CardSubtitle>{article.subtitle}</CardSubtitle>
+                </CardContent>
+              </ArticleCard>
+            ))}
+          </ArticleContainer>
+        ) : (
+          <NoResultContainer>
+            <NoResult>搜尋不到</NoResult>
+          </NoResultContainer>
+        )
+      ) : (
+        <NoResultContainer>
+          <NoResult>搜尋不到</NoResult>
+        </NoResultContainer>
+      )}
+
       {articles && <Waypoint onEnter={handleInfiniteScroll} />}
     </Main>
   );
@@ -240,6 +258,17 @@ const CardTitle = styled.div`
 
 const CardSubtitle = styled.div`
   line-height: 20px;
+`;
+
+const NoResultContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10vw;
+`;
+
+const NoResult = styled.div`
+  font-size: 16px;
 `;
 
 export default ArticlePage;

@@ -55,7 +55,9 @@ const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
       </CarouselContext>
     </CarouselContainer>
   ) : (
-    <div>搜尋不到餐廳</div>
+    <NoResultContainer>
+      <NoResult>搜尋不到餐廳</NoResult>
+    </NoResultContainer>
   );
 };
 
@@ -107,6 +109,17 @@ const Heart = styled(AiTwotoneHeart)`
   margin-left: auto;
   fill: ${(props) => props.like};
   cursor: pointer;
+`;
+
+const NoResultContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2vw 10vw 10vw 10vw;
+`;
+
+const NoResult = styled.div`
+  font-size: 16px;
 `;
 
 export default RestaurantSearchCard;

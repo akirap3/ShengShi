@@ -34,6 +34,10 @@ const RestaurantPage = () => {
     );
   };
 
+  const handleOnEnter = (e) => {
+    if (e.charCode === 13) handleSearch();
+  };
+
   const handleClearSearch = () => {
     setIsSearch(false);
     setInputValue('');
@@ -65,6 +69,7 @@ const RestaurantPage = () => {
           placeholder="餐廳搜尋"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={(e) => handleOnEnter(e)}
         />
         <SearchButton onClick={() => handleSearch()}>搜尋</SearchButton>
         <ResetButton onClick={() => handleClearSearch()}>清除搜尋</ResetButton>
