@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
 import MyMgmtCard from './MyMgmtCard';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import { getSpecificContents } from '../../../utils/firebase';
@@ -37,7 +38,13 @@ const MyMgmtList = () => {
           <MgmtContainer>
             {shares.map((share) =>
               share.toReceiveUserId.map((requesterId) => {
-                return <MyMgmtCard share={share} requesterId={requesterId} />;
+                return (
+                  <MyMgmtCard
+                    key={uuidv4()}
+                    share={share}
+                    requesterId={requesterId}
+                  />
+                );
               })
             )}
           </MgmtContainer>

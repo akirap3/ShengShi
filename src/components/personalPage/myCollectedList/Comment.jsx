@@ -8,9 +8,11 @@ import {
   updateDoc,
   increment,
   Timestamp,
+  addDoc,
+  collection,
 } from '@firebase/firestore';
 
-const Comment = ({ currentUser, share, comment }) => {
+const Comment = ({ currentUser, share, comment, userData }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [editedComment, setEditedComment] = useState('');
 
@@ -29,13 +31,18 @@ const Comment = ({ currentUser, share, comment }) => {
   };
 
   const handleDeleteComment = async () => {
-    console.log(comment.id);
     await deleteDoc(
       doc(getFirestore(), `shares/${share.id}/comments`, `${comment.id}`)
     );
-    await updateDoc(doc(getFirestore(), `shares`, `${share.id}`), {
-      commentsCount: increment(-1),
-    });
+
+    await addDoc(
+      collection(getFirestore(), `users/${share.postUser.id}/messages`),
+      {
+        createdAt: Timestamp.now(),
+        messageContent: `${userData.displayName}在您的${share.name}勝食頁面上刪除留言`,
+        kind: 'comment',
+      }
+    );
   };
 
   return (

@@ -5,7 +5,11 @@ import SearchBar from './SearchBar';
 
 import { useHistory } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
-import { logOut, getCurrentUserData } from '../../utils/firebase';
+import {
+  logOut,
+  getCurrentUserData,
+  getCollectionCounts,
+} from '../../utils/firebase';
 
 import LogoImg from '../../images/common/logo-1.png';
 import { BsPersonCircle } from 'react-icons/bs';
@@ -18,6 +22,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [messagesCount, setMessagesCount] = useState('');
 
   const checkUser = useSelector((state) => state.checkUser);
   const currentUser = useCurrentUser();
@@ -29,6 +34,15 @@ const Header = () => {
     });
   };
 
+  const getMessageCounts = useCallback(
+    () =>
+      getCollectionCounts(
+        `users/${currentUser?.uid}/messages`,
+        setMessagesCount
+      ),
+    [currentUser]
+  );
+
   const getUserData = useCallback(
     () => getCurrentUserData(currentUser, setUserData),
     [currentUser]
@@ -37,6 +51,10 @@ const Header = () => {
   useEffect(() => {
     return getUserData();
   }, [getUserData]);
+
+  useEffect(() => {
+    return getMessageCounts();
+  }, [getMessageCounts]);
 
   return (
     <>
@@ -53,7 +71,11 @@ const Header = () => {
 
         {checkUser.isLoggedIn && userData ? (
           <>
-            <MemberLoggedIcon src={userData.imageUrl} />
+            <MemberIconContainer as={Link} to="/personal/notification">
+              <MemberLoggedIcon src={userData.imageUrl} />
+              <MessageCount>{messagesCount}</MessageCount>
+            </MemberIconContainer>
+
             <MyDashboard to="/personal/list">我的看板</MyDashboard>
             <LogoutButton as={Link} to="/" onClick={() => logout()}>
               登出
@@ -161,12 +183,27 @@ const ContactNav = styled(StyledLink)`
   }
 `;
 
+const MemberIconContainer = styled.div`
+  position: relative;
+`;
+
 const MemberLoggedIcon = styled.img`
   margin-right: 1rem;
   border-radius: 50%;
   border: 1px solid skyblue;
   height: 30px;
   width: 30px;
+`;
+
+const MessageCount = styled.div`
+  position: absolute;
+  bottom: 0px;
+  right: 10px;
+  background-color: brown;
+  padding: 1px 5px;
+  border-radius: 50%;
+  opacity: 0.8;
+  color: white;
 `;
 
 const MemberIcon = styled(BsPersonCircle)`

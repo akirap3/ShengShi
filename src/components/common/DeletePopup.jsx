@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import {
   handleDeleteMember,
-  handleDeleteShare,
+  handleArchiveShare,
   handleDeleteToReceive,
   handleDeleteCollected,
+  getCurrentUserData,
 } from '../../utils/firebase';
 import Loading from './Loading';
 import useCurrentUser from '../../hooks/useCurrentUser';
@@ -25,51 +26,66 @@ const DeletePopup = ({
 }) => {
   const currentUser = useCurrentUser();
   const [isLoading, setIsLoading] = useState(false);
+  const [userData, setUserData] = useState(null);
+
+  const getUserData = useCallback(
+    () => getCurrentUserData(currentUser, setUserData),
+    [currentUser]
+  );
+
+  useEffect(() => {
+    return getUserData();
+  }, [getUserData]);
 
   return (
-    <DialogOverlay
-      isOpen={showDelete}
-      onDismiss={closeDelete}
-      disabled={isLoading}
-    >
-      <DialogContent
-        style={{
-          position: 'relative',
-          border: 'solid 1px lightBlue',
-          borderRadius: '10px',
-        }}
-        aria-label="delete-popup"
+    userData && (
+      <DialogOverlay
+        isOpen={showDelete}
+        onDismiss={closeDelete}
+        disabled={isLoading}
       >
-        {isLoading && <Loading />}
-        <PopClose onClick={closeDelete} disabled={isLoading} />
-        <Title>{`確認刪除此${category}`}</Title>
-        <Row>
-          <ConfirmBtn
-            onClick={
-              isToReceive
-                ? () => handleDeleteToReceive(setIsLoading, share, closeDelete)
-                : isCollected
-                ? () => handleDeleteCollected(setIsLoading, share, closeDelete)
-                : toDeleteMember
-                ? () => handleDeleteMember()
-                : () =>
-                    handleDeleteShare(
-                      setIsLoading,
-                      share,
-                      closeDelete,
-                      currentUser
-                    )
-            }
-            disabled={isLoading}
-          >
-            確認
-          </ConfirmBtn>
-          <CancleBtn onClick={closeDelete} disabled={isLoading}>
-            取消
-          </CancleBtn>
-        </Row>
-      </DialogContent>
-    </DialogOverlay>
+        <DialogContent
+          style={{
+            position: 'relative',
+            border: 'solid 1px lightBlue',
+            borderRadius: '10px',
+          }}
+          aria-label="delete-popup"
+        >
+          {isLoading && <Loading />}
+          <PopClose onClick={closeDelete} disabled={isLoading} />
+          <Title>{`確認刪除此${category}`}</Title>
+          <Row>
+            <ConfirmBtn
+              onClick={
+                isToReceive
+                  ? () =>
+                      handleDeleteToReceive(setIsLoading, share, closeDelete)
+                  : isCollected
+                  ? () =>
+                      handleDeleteCollected(setIsLoading, share, closeDelete)
+                  : toDeleteMember
+                  ? () => handleDeleteMember()
+                  : () =>
+                      handleArchiveShare(
+                        setIsLoading,
+                        share,
+                        closeDelete,
+                        currentUser,
+                        userData
+                      )
+              }
+              disabled={isLoading}
+            >
+              確認
+            </ConfirmBtn>
+            <CancleBtn onClick={closeDelete} disabled={isLoading}>
+              取消
+            </CancleBtn>
+          </Row>
+        </DialogContent>
+      </DialogOverlay>
+    )
   );
 };
 

@@ -8,7 +8,11 @@ import LocationMap from '../../common/LocationMap';
 import Loading from '../../common/Loading';
 import ConfirmedPopup from '../../common/ConfirmedPopup';
 import useCurrentUser from '../../../hooks/useCurrentUser';
-import { getCurrentUserData, getAllContents } from '../../../utils/firebase';
+import {
+  getCurrentUserData,
+  getAllContents,
+  getCollectionCounts,
+} from '../../../utils/firebase';
 
 import {
   getFirestore,
@@ -38,6 +42,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [replyComment, setReplayComment] = useState('');
   const [comments, setComments] = useState('');
+  const [commentCounts, setCommentCounts] = useState('');
 
   const openDateTime = () => setShowDateTime(true);
   const closeDateTime = () => setShowDateTime(false);
@@ -54,6 +59,11 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
     [share.id]
   );
 
+  const getCommentCounts = useCallback(
+    () => getCollectionCounts(`shares/${share.id}/comments`, setCommentCounts),
+    [share.id]
+  );
+
   useEffect(() => {
     return getUserData();
   }, [getUserData]);
@@ -62,11 +72,11 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
     return getComments();
   }, [getComments]);
 
+  useEffect(() => {
+    return getCommentCounts();
+  }, [getCommentCounts]);
+
   const onCommentSubmit = async (share, userData) => {
-    const docRef = doc(getFirestore(), 'shares', share.id);
-    await updateDoc(docRef, {
-      commentsCount: increment(1),
-    });
     await addDoc(collection(getFirestore(), `shares/${share.id}/comments`), {
       createdAt: Timestamp.now(),
       commentContent: replyComment,
@@ -76,6 +86,17 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
         imageUrl: userData.imageUrl,
       },
     });
+
+    await addDoc(
+      collection(getFirestore(), `users/${share.postUser.id}/messages`),
+      {
+        createdAt: Timestamp.now(),
+        messageContent: `${userData.displayName}在您的${share.name}勝食頁面上留言`,
+        kind: 'comment',
+      }
+    );
+
+    setReplayComment('');
   };
 
   const handleSpecificDateTime = (payload) => {
@@ -190,7 +211,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
                   留言
                 </RepalyButton>
                 <CommentSummary>
-                  {`目前共${share.commentsCount}則留言`}
+                  {`目前共${commentCounts || 0}則留言`}
                 </CommentSummary>
                 {comments &&
                   comments.map((comment) => (
@@ -198,6 +219,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
                       currentUser={currentUser}
                       share={share}
                       comment={comment}
+                      userData={userData}
                     />
                   ))}
               </CommentSection>

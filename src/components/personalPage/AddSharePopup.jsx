@@ -101,7 +101,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
           toReceiveUserId: [],
           savedUserId: [],
           bookedQuantities: 0,
-          commentsCount: 0,
+          isArchived: false,
         },
         { merge: true }
       );
@@ -110,7 +110,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
         myPoints: increment(10),
       });
 
-      handleAddBadge(currentUser);
+      handleAddBadge(currentUser.uid);
 
       setIsLoaging(false);
       closeEditor();

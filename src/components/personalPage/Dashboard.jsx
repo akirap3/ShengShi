@@ -4,7 +4,11 @@ import { Link, useLocation } from 'react-router-dom';
 import AddSharePopup from './AddSharePopup';
 
 import useCurrentUser from '../../hooks/useCurrentUser';
-import { getCurrentUserData, getContentCounts } from '../../utils/firebase';
+import {
+  getCurrentUserData,
+  getContentCounts,
+  getCountsTwoFiltered,
+} from '../../utils/firebase';
 
 import { ImSpoonKnife } from 'react-icons/im';
 import { AiTwotoneStar } from 'react-icons/ai';
@@ -60,11 +64,14 @@ const Dashbaord = () => {
 
   const getMyListCounts = useCallback(
     () =>
-      getContentCounts(
+      getCountsTwoFiltered(
         'shares',
         'postUser.id',
+        'isArchived',
+        '==',
         '==',
         currentUser,
+        false,
         setMyListCounts
       ),
     [currentUser]
@@ -213,7 +220,7 @@ const Dashbaord = () => {
           <CheckButton as={Link} to="/search">
             查看他人的分享
           </CheckButton>
-          <ShareButton onClick={openEditor}>我要分享勝食</ShareButton>
+          <ShareButton onClick={openEditor}>我要分享勝食 +10</ShareButton>
         </DashboardContext>
       </DashboardContainer>
       <AddSharePopup
