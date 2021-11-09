@@ -73,7 +73,11 @@ const Header = () => {
           <>
             <MemberIconContainer as={Link} to="/personal/notification">
               <MemberLoggedIcon src={userData.imageUrl} />
-              <MessageCount>{messagesCount}</MessageCount>
+              {messagesCount !== 0 ? (
+                <MessageCount>{messagesCount}</MessageCount>
+              ) : (
+                <></>
+              )}
             </MemberIconContainer>
 
             <MyDashboard to="/personal/list">我的看板</MyDashboard>

@@ -213,7 +213,11 @@ const Dashbaord = () => {
                 active={menu.path === location.pathname}
               >
                 <ButtonName>{menu.name}</ButtonName>
-                <ItemNumber>{menu.count}</ItemNumber>
+                {menu.count !== 0 ? (
+                  <ItemNumber>{menu.count}</ItemNumber>
+                ) : (
+                  <></>
+                )}
               </Button>
             ))}
           </Grid>

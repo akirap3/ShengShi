@@ -2,7 +2,6 @@ import React, { useEffect, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { getAllContents } from '../../../utils/firebase';
-import { AiFillMessage, AiFillCloseCircle } from 'react-icons/ai';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import NotificationCard from './NotificationCard';
 
@@ -18,23 +17,26 @@ const Notification = () => {
     return getMessages();
   }, [getMessages]);
 
-  console.log(messages);
-  return currentUser ? (
-    <NotificationContainer>
-      {messages ? (
-        messages.map((message) => (
+  return currentUser && messages ? (
+    messages.length !== 0 ? (
+      <NotificationContainer>
+        {messages.map((message) => (
           <NotificationCard
             key={uuidv4()}
             message={message}
             currentUser={currentUser}
           />
-        ))
-      ) : (
-        <></>
-      )}
-    </NotificationContainer>
+        ))}
+      </NotificationContainer>
+    ) : (
+      <NoResultContainer>
+        <NoResult>你目前沒有任何的訊息</NoResult>
+      </NoResultContainer>
+    )
   ) : (
-    <></>
+    <NoResultContainer>
+      <NoResult>你目前沒有任何的訊息</NoResult>
+    </NoResultContainer>
   );
 };
 
