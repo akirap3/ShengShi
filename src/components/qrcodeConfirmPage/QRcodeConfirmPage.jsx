@@ -81,8 +81,10 @@ const QRcodeComfirmPage = () => {
       share?.toReceiveInfo[`${requesterId}`].quantities,
       new Date(),
       currentUser
-    );
-    handleAddBadge(currentUser);
+    ).then(() => {
+      handleAddBadge(currentUser.uid);
+      handleAddBadge(requesterId);
+    });
   };
 
   const handleCancel = (shareId, requesterId, share, currentUser) => {
@@ -90,8 +92,10 @@ const QRcodeComfirmPage = () => {
       shareId,
       requesterId,
       share?.toReceiveInfo[`${requesterId}`].quantities
-    );
-    handleDeleteBadge(currentUser);
+    ).then(() => {
+      handleDeleteBadge(currentUser.uid);
+      handleDeleteBadge(requesterId);
+    });
   };
 
   return (

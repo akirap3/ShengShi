@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux';
 import {
   getListenedSingleContent,
   updateAfterExchanged,
-  handleAddBadge,
   handleDeleteExchange,
   handleDeleteBadge,
+  handleAddBadge,
 } from '../../../utils/firebase';
 
 const QRCode = require('qrcode.react');
@@ -29,8 +29,10 @@ const MyMgmtCard = ({ share, requesterId }) => {
       share?.toReceiveInfo[`${requesterId}`].quantities,
       new Date(),
       currentUser
-    );
-    handleAddBadge(currentUser);
+    ).then(() => {
+      handleAddBadge(currentUser.uid);
+      handleAddBadge(requesterId);
+    });
   };
 
   const handleCancel = (shareId, requesterId, share, currentUser) => {
@@ -38,8 +40,10 @@ const MyMgmtCard = ({ share, requesterId }) => {
       shareId,
       requesterId,
       share?.toReceiveInfo[`${requesterId}`].quantities
-    );
-    handleDeleteBadge(currentUser);
+    ).then(() => {
+      handleDeleteBadge(currentUser.uid);
+      handleDeleteBadge(requesterId);
+    });
   };
 
   return (

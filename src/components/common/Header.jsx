@@ -37,7 +37,7 @@ const Header = () => {
   const getMessageCounts = useCallback(
     () =>
       getCollectionCounts(
-        `users/${currentUser.uid}/messages`,
+        `users/${currentUser?.uid}/messages`,
         setMessagesCount
       ),
     [currentUser]
@@ -71,9 +71,9 @@ const Header = () => {
 
         {checkUser.isLoggedIn && userData ? (
           <>
-            <MemberIconContainer>
+            <MemberIconContainer as={Link} to="/personal/notification">
               <MemberLoggedIcon src={userData.imageUrl} />
-              {messagesCount && <MessageCount>{messagesCount}</MessageCount>}
+              <MessageCount>{messagesCount}</MessageCount>
             </MemberIconContainer>
 
             <MyDashboard to="/personal/list">我的看板</MyDashboard>
