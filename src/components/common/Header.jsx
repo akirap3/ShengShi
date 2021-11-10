@@ -65,9 +65,9 @@ const Header = () => {
         <Tag>
           <HomeNav to="/">首頁</HomeNav>
         </Tag>
-        <Tag>
+        <RestaurantTag>
           <RestaurantNav to="/restaurants">合作餐廳</RestaurantNav>
-        </Tag>
+        </RestaurantTag>
         <ArticleTag>
           <ArticleNav to="/articles">文章</ArticleNav>
         </ArticleTag>
@@ -153,16 +153,11 @@ const HeaderContainer = styled.div`
   background-color: white;
   box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 
-  @media screen and (min-width: 1500px) {
+  @media screen and (min-width: 1510px) {
     padding: 0 15vw;
-    font-size: 24px;
   }
 
-  @media screen and (min-width: 1000px) {
-    font-size: 20px;
-  }
-
-  @media screen and (max-width: 650px) {
+  @media screen and (max-width: 700px) {
     display: none;
   }
 `;
@@ -177,6 +172,16 @@ const Logo = styled.img`
 `;
 
 const StyledLink = styled(Link)`
+  font-family: 'cwTeXYen', sans-serif;
+
+  @media screen and (min-width: 1500px) {
+    font-size: 32px;
+  }
+
+  @media screen and (min-width: 650px) {
+    font-size: 24px;
+  }
+
   &::after {
     position: absolute;
     content: '';
@@ -211,21 +216,29 @@ const Tag = styled.div`
 const HomeNav = styled(StyledLink)`
   width: 35px;
 `;
+
+const RestaurantTag = styled(Tag)`
+  @media screen and (max-width: 800px) {
+    margin-right: auto;
+  }
+`;
+
 const RestaurantNav = styled(StyledLink)`
+  font-family: 'cwTeXYen', sans-serif;
   width: 70px;
 `;
 
 const ArticleTag = styled(Tag)`
   margin-right: auto;
+  @media screen and (max-width: 800px) {
+    display: none;
+  }
 `;
 
 const ArticleNav = styled(StyledLink)`
+  font-family: 'cwTeXYen', sans-serif;
   width: 35px;
   margin-right: auto;
-
-  @media screen and (max-width: 760px) {
-    margin-right: auto;
-  }
 `;
 
 const MemberIconContainer = styled.div`
@@ -265,18 +278,22 @@ const MemberIcon = styled(BsPersonCircle)`
 
 const LoginButton = styled(StyledLink)`
   width: 35px;
+  font-family: 'cwTeXYen', sans-serif;
 `;
 const SignupButton = styled(StyledLink)`
   width: 35px;
+  font-family: 'cwTeXYen', sans-serif;
 `;
 
 const MyDashboard = styled(StyledLink)`
   width: 70px;
+  font-family: 'cwTeXYen', sans-serif;
   cursor: pointer;
 `;
 
 const LogoutButton = styled(StyledLink)`
   width: 35px;
+  font-family: 'cwTeXYen', sans-serif;
   cursor: pointer;
 `;
 
@@ -293,7 +310,7 @@ const MobileHeader = styled.div`
   padding: 0.5rem 2vw;
   box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 
-  @media screen and (max-width: 650px) {
+  @media screen and (max-width: 700px) {
     display: flex;
   }
 `;

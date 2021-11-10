@@ -11,9 +11,7 @@ const Banner = () => {
       <BannerContent>
         <BannerTitle>分享</BannerTitle>
         <Description>
-          Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-          fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-          sequi nesciunt. Neque porro quisquam est, qui dolorem.
+          透過分享剩食來幫助別人，也幫助我們的環境，這裡就是你需要的交換平台，讓我們一起把「剩食」變成「勝食」吧
         </Description>
         <ButtonRow>
           <StartButton to="/login">開始使用</StartButton>
@@ -29,12 +27,13 @@ const BannerContainer = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: no-wrap;
   position: relative;
   padding: 2rem;
+  background-color: lightgray;
 
-  @media screen and (min-width: 1920px) {
-    padding: 0 20vw;
+  @media screen and (min-width: 1520px) {
+    padding: 5vw 15vw;
   }
 
   @media screen and (max-width: 600px) {
@@ -54,15 +53,28 @@ const BannerContent = styled.div`
   }
 `;
 const BannerTitle = styled.h2`
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  font-family: 'cwTeXYen', sans-serif;
   font-size: 60px;
   color: white;
 `;
+
 const Description = styled.p`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
   margin-bottom: 1rem;
-  line-height: 1.4rem;
-  color: white;
+  line-height: 2rem;
+  color: black;
+
+  @media screen and (min-width: 375px) {
+    max-width: 60vw;
+  }
+
+  @media screen and (min-width: 1520px) {
+    max-width: 30vw;
+  }
 `;
+
 const ButtonRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -76,6 +88,7 @@ const StartButton = styled(Link)`
   border-radius: 5px;
   background-color: #52b788;
 `;
+
 const LearnMoreButton = styled(Link)`
   border: 1px solid #d8f3dc;
   color: white;
@@ -84,18 +97,22 @@ const LearnMoreButton = styled(Link)`
   padding: 0.5rem;
   border-radius: 5px;
 `;
+
 const BannerImg = styled.img`
-  max-width: 40vw;
+  /* max-width: 40vw; */
   align-self: center;
   border-radius: 5px;
 
-  @media screen and (min-width: 1920px) {
-    max-width: 20vw;
-    margin: 3vw auto;
-  }
-
   @media screen and (max-width: 600px) {
     max-width: 80vw;
+  }
+
+  @media screen and (min-width: 600px) {
+    max-width: 40vw;
+  }
+
+  @media screen and (min-width: 1520px) {
+    max-width: 30vw;
   }
 `;
 
