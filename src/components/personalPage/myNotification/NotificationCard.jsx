@@ -10,6 +10,10 @@ const NotificationCard = ({ message, currentUser }) => {
   return (
     <Context>
       <MessageIcon />
+      <MessageTag>
+        {`# `}
+        {message.kind}
+      </MessageTag>
       <MessageContent>{message.messageContent}</MessageContent>
       <StyledColse onClick={handleDeleteMessage} />
     </Context>
@@ -31,6 +35,14 @@ const MessageIcon = styled(AiFillMessage)`
   width: 5vw;
   height: 5vw;
   margin-right: 2vw;
+`;
+
+const MessageTag = styled.div`
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  margin-right: 2vw;
+  background-color: lightsteelblue;
 `;
 
 const MessageContent = styled.div``;

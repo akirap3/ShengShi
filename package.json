@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@nivo/core": "^0.74.0",
+    "@nivo/pie": "^0.74.0",
     "@reach/dialog": "^0.16.2",
     "@react-google-maps/api": "^2.5.0",
     "@testing-library/jest-dom": "^5.14.1",

@@ -127,7 +127,9 @@ const ShareCard = ({
 
 const ShareContext = styled.div`
   display: flex;
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  border: 0;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   border-radius: 10px;
 `;
 
