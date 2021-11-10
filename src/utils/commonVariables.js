@@ -1,5 +1,5 @@
 const layoutConfig = {
-  navHeight: '7vh',
+  navHeight: '8vh',
 };
 
 const themeColor = {

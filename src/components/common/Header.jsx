@@ -62,13 +62,16 @@ const Header = () => {
         <Link to="/">
           <Logo src={LogoImg} />
         </Link>
-        <HomeNav to="/">首頁</HomeNav>
-        <RestaurantNav to="/restaurants">合作餐廳</RestaurantNav>
-        <ArticleNav to="/articles">文章</ArticleNav>
-        <AboutNav to="/about">關於我們</AboutNav>
-        <ContactNav to="/contact">聯絡我們</ContactNav>
+        <Tag>
+          <HomeNav to="/">首頁</HomeNav>
+        </Tag>
+        <Tag>
+          <RestaurantNav to="/restaurants">合作餐廳</RestaurantNav>
+        </Tag>
+        <ArticleTag>
+          <ArticleNav to="/articles">文章</ArticleNav>
+        </ArticleTag>
         <SearchBar />
-
         {checkUser.isLoggedIn && userData ? (
           <>
             <MemberIconContainer as={Link} to="/personal/notification">
@@ -79,20 +82,28 @@ const Header = () => {
                 <></>
               )}
             </MemberIconContainer>
-
-            <MyDashboard to="/personal/list">我的看板</MyDashboard>
-            <LogoutButton as={Link} to="/" onClick={() => logout()}>
-              登出
-            </LogoutButton>
+            <Tag>
+              <MyDashboard to="/personal/list">我的看板</MyDashboard>
+            </Tag>
+            <Tag>
+              <LogoutButton as={Link} to="/" onClick={() => logout()}>
+                登出
+              </LogoutButton>
+            </Tag>
           </>
         ) : (
           <>
             <MemberIcon />
-            <LoginButton to="/login">登入</LoginButton>
-            <SignupButton to="/signup">註冊</SignupButton>
+            <Tag>
+              <LoginButton to="/login">登入</LoginButton>
+            </Tag>
+            <Tag>
+              <SignupButton to="/signup">註冊</SignupButton>
+            </Tag>
           </>
         )}
       </HeaderContainer>
+
       <MobileHeader>
         <MobileHeaderLogo src={LogoImg} />
         <MobileSearchBar />
@@ -136,23 +147,66 @@ const HeaderContainer = styled.div`
   position: fixed;
   z-index: 10;
   width: 100%;
-  height: 7vh;
-  background-color: white;
-  border-bottom: 1px solid #cccc;
+  height: 8vh;
   padding: 0.5rem 2vw;
+  color: #2d6a4f;
+  background-color: white;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 
-  @media screen and (max-width: 610px) {
+  @media screen and (min-width: 1500px) {
+    padding: 0 15vw;
+    font-size: 24px;
+  }
+
+  @media screen and (min-width: 1000px) {
+    font-size: 20px;
+  }
+
+  @media screen and (max-width: 650px) {
     display: none;
   }
 `;
 
 const Logo = styled.img`
   height: 45px;
-  margin-right: 2rem;
+  margin-right: 1rem;
+  @media screen and (min-width: 1500px) {
+    height: 60px;
+    margin-right: 2rem;
+  }
 `;
 
 const StyledLink = styled(Link)`
+  &::after {
+    position: absolute;
+    content: '';
+    top: 130%;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: #95d5b2;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 1s;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+`;
+
+const Tag = styled.div`
+  position: relative;
   margin-right: 1rem;
+
+  @media screen and (min-width: 1700px) {
+    margin-right: 3rem;
+  }
+
+  @media screen and (min-width: 1500px) {
+    margin-right: 2rem;
+  }
 `;
 const HomeNav = styled(StyledLink)`
   width: 35px;
@@ -160,30 +214,17 @@ const HomeNav = styled(StyledLink)`
 const RestaurantNav = styled(StyledLink)`
   width: 70px;
 `;
+
+const ArticleTag = styled(Tag)`
+  margin-right: auto;
+`;
+
 const ArticleNav = styled(StyledLink)`
   width: 35px;
-
-  @media screen and (max-width: 760px) {
-    margin-right: auto;
-  }
-`;
-const AboutNav = styled(StyledLink)`
-  width: 70px;
-
-  @media screen and (max-width: 760px) {
-    display: none;
-  }
-
-  @media screen and (max-width: 870px) {
-    margin-right: auto;
-  }
-`;
-const ContactNav = styled(StyledLink)`
-  width: 70px;
   margin-right: auto;
 
-  @media screen and (max-width: 870px) {
-    display: none;
+  @media screen and (max-width: 760px) {
+    margin-right: auto;
   }
 `;
 
@@ -211,9 +252,15 @@ const MessageCount = styled.div`
 `;
 
 const MemberIcon = styled(BsPersonCircle)`
+  fill: #b7b7a4;
   margin-right: 1rem;
   height: 30px;
   width: 30px;
+  @media screen and (min-width: 1500) {
+    width: 50px;
+    height: 50px;
+    margin-right: 3rem;
+  }
 `;
 
 const LoginButton = styled(StyledLink)`
@@ -228,7 +275,7 @@ const MyDashboard = styled(StyledLink)`
   cursor: pointer;
 `;
 
-const LogoutButton = styled.div`
+const LogoutButton = styled(StyledLink)`
   width: 35px;
   cursor: pointer;
 `;
@@ -240,12 +287,13 @@ const MobileHeader = styled.div`
   position: fixed;
   z-index: 10;
   width: 100%;
-  height: 7vh;
+  height: 8vh;
   background-color: white;
   border-bottom: 1px solid #cccc;
   padding: 0.5rem 2vw;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 
-  @media screen and (max-width: 610px) {
+  @media screen and (max-width: 650px) {
     display: flex;
   }
 `;

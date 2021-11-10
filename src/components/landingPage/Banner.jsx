@@ -2,12 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import BannerImage from '../../images/homepage/sharefood-1.jpg';
+import TableImg from '../../images/homepage/table.jpg';
+import TableImg2 from '../../images/homepage/table2.jpg';
 
 const Banner = () => {
   return (
     <BannerContainer>
       <BannerContent>
-        <BannerTitle>勝食分享的好處</BannerTitle>
+        <BannerTitle>分享</BannerTitle>
         <Description>
           Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
           fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
@@ -15,7 +17,7 @@ const Banner = () => {
         </Description>
         <ButtonRow>
           <StartButton to="/login">開始使用</StartButton>
-          <LearnMoreButton to="/about">了解更多</LearnMoreButton>
+          <LearnMoreButton to="/">了解更多</LearnMoreButton>
         </ButtonRow>
       </BannerContent>
       <BannerImg src={BannerImage} />
@@ -29,8 +31,11 @@ const BannerContainer = styled.div`
   align-items: center;
   flex-wrap: wrap;
   position: relative;
-  background-color: #0a9396;
   padding: 2rem;
+
+  @media screen and (min-width: 1920px) {
+    padding: 0 20vw;
+  }
 
   @media screen and (max-width: 600px) {
     flex-direction: column;
@@ -50,34 +55,44 @@ const BannerContent = styled.div`
 `;
 const BannerTitle = styled.h2`
   margin-bottom: 1rem;
+  font-size: 60px;
+  color: white;
 `;
 const Description = styled.p`
   margin-bottom: 1rem;
   line-height: 1.4rem;
+  color: white;
 `;
 const ButtonRow = styled.div`
   display: flex;
   flex-direction: row;
 `;
 
-const StyledLink = styled(Link)`
+const StartButton = styled(Link)`
   padding: 3px;
   margin-right: 0.5rem;
-  border: 1px solid black;
+  color: white;
   padding: 0.5rem;
   border-radius: 5px;
+  background-color: #52b788;
 `;
-
-const StartButton = styled(StyledLink)`
-  background-color: #3c64b1;
-`;
-const LearnMoreButton = styled(StyledLink)`
-  background-color: white;
+const LearnMoreButton = styled(Link)`
+  border: 1px solid #d8f3dc;
+  color: white;
+  padding: 3px;
+  margin-right: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 5px;
 `;
 const BannerImg = styled.img`
   max-width: 40vw;
   align-self: center;
   border-radius: 5px;
+
+  @media screen and (min-width: 1920px) {
+    max-width: 20vw;
+    margin: 3vw auto;
+  }
 
   @media screen and (max-width: 600px) {
     max-width: 80vw;
