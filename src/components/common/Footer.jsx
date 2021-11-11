@@ -16,8 +16,8 @@ const Footer = () => {
           <LogoImg src={Logo} />
         </Link>
         <TextRow>
-          <AboutText to="/about">關 於</AboutText>
-          <ContactText to="contact">聯 絡</ContactText>
+          <AboutText to="/articles">文章</AboutText>
+          <ContactText to="/search">搜尋</ContactText>
         </TextRow>
       </FooterContent>
       <LogoRow>
@@ -32,13 +32,16 @@ const Footer = () => {
 
 const FooterContainer = styled.div`
   margin: 50px;
+  @media screen and (min-width: 1500px) {
+    margin: 5vw 15vw;
+  }
 `;
 
 const FooterContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #a0a0968a;
 
   @media screen and (max-width: 650px) {
     flex-direction: column;
@@ -47,6 +50,7 @@ const FooterContent = styled.div`
 
 const TextRow = styled.div`
   display: flex;
+
   @media screen and (max-width: 650px) {
     order: 1;
     margin-bottom: 3vw;
@@ -55,9 +59,20 @@ const TextRow = styled.div`
 
 const Text = styled(Link)`
   margin: auto 2rem;
-  letter-spacing: 0.5vw;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
+  color: #40916c;
+
   @media screen and (max-width: 650px) {
     letter-spacing: 2vw;
+  }
+
+  @media screen and (min-width: 800px) {
+    letter-spacing: 1vw;
+  }
+
+  @media screen and (min-width: 1500px) {
+    font-size: 32px;
   }
 `;
 
@@ -84,13 +99,13 @@ const LogoRow = styled.div`
 const FbLogo = styled(IoLogoFacebook)`
   width: 40px;
   height: 40px;
-  fill: blue;
+  fill: rgb(34, 138, 240);
 `;
 
 const TwitterLogo = styled(IoLogoTwitter)`
   width: 40px;
   height: 40px;
-  fill: cyan;
+  fill: rgb(85, 173, 237);
   margin: auto 1rem;
 `;
 
@@ -102,10 +117,8 @@ const InstagramLogo = styled(IoLogoInstagram)`
 
 const CompanyText = styled.div`
   text-align: center;
-
-  @media screen and (max-width: 650px) {
-    font-size: 3vw;
-  }
+  color: #757575;
+  font-size: 12px;
 `;
 
 export default Footer;

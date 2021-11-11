@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ShareFoodOne from '../../images/homepage/sharefood-2.jpg';
 import ShareFoodTwo from '../../images/homepage/sharefood-3.jpg';
 import ShareFoodThree from '../../images/homepage/sharefood-4.jpg';
+import HomepageBackground from '../common/HomepageBackground';
 
 const Advantages = () => {
   return (
@@ -17,6 +18,7 @@ const Advantages = () => {
         </AvtColumnOne>
       </AvtContentOne>
       <AvtContentTwo>
+        <HomepageBackground />
         <AvtColumnTwo>
           <Title>節約</Title>
           <Description>
@@ -46,6 +48,7 @@ const AdvantagesContainer = styled.div`
 const AvtContent = styled.div`
   display: flex;
   flex-wrap: wrap;
+  position: relative;
   background-color: #94d2bd;
   padding: 5rem 2rem;
   justify-content: space-around;
@@ -60,16 +63,22 @@ const AvtContent = styled.div`
   }
 `;
 
-const AvtContentOne = styled(AvtContent)``;
-
-const AvtContentTwo = styled(AvtContent)`
+const AvtContentOne = styled(AvtContent)`
   background-color: white;
 `;
-const AvtContentThree = styled(AvtContent)``;
+
+const AvtContentTwo = styled(AvtContent)`
+  /* background-color: #2d6a4f; */
+  background-image: linear-gradient(60deg, #96deda 0%, #50c9c3 100%);
+`;
+const AvtContentThree = styled(AvtContent)`
+  background-color: white;
+`;
 
 const AvtImg = styled.img`
   max-width: 80vw;
   border-radius: 5px;
+  box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
 
   @media screen and (min-width: 600px) {
     max-width: 40vw;
@@ -111,6 +120,7 @@ const AvtColumnOne = styled(AvtColumn)`
 `;
 
 const AvtColumnTwo = styled(AvtColumn)`
+  color: black;
   @media screen and (max-width: 600px) {
     margin-bottom: 3rem;
   }

@@ -4,8 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { handleCollection } from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
 
-import { AiTwotoneStar, AiTwotoneHeart } from 'react-icons/ai';
-import { FiStar } from 'react-icons/fi';
+import { AiTwotoneHeart } from 'react-icons/ai';
 import { IoIosArrowDropleft, IoIosArrowDropright } from 'react-icons/io';
 import StarImg from '../../images/common/star.png';
 

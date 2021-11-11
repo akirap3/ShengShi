@@ -13,8 +13,8 @@ import {
 
 import LogoImg from '../../images/common/logo-1.png';
 import { BsPersonCircle } from 'react-icons/bs';
-import { AiFillCloseCircle } from 'react-icons/ai';
 import { FcMenu } from 'react-icons/fc';
+import { FaWindowClose } from 'react-icons/fa';
 import useCurrentUser from '../../hooks/useCurrentUser';
 
 const Header = () => {
@@ -115,26 +115,29 @@ const Header = () => {
           <ImgContainer>
             <MobileLogo src={LogoImg} />
           </ImgContainer>
-          <MobileHomeNav to="/">首頁</MobileHomeNav>
-          <MobileRestaurantNav to="/restaurants">合作餐廳</MobileRestaurantNav>
-          <MobileArticleNav to="/articles">文章</MobileArticleNav>
-          <MobileAboutNav to="/about">關於我們</MobileAboutNav>
-          <MobileContactNav to="/contact">聯絡我們</MobileContactNav>
-          {checkUser.isLoggedIn ? (
-            <>
-              <MyMobileDashboard to="/personal/list">
-                我的看板
-              </MyMobileDashboard>
-              <MobileLogoutButton onClick={() => logout()}>
-                登出
-              </MobileLogoutButton>
-            </>
-          ) : (
-            <>
-              <MobileLoginButton to="/login">登入</MobileLoginButton>
-              <MobileSignupButton to="/signup">註冊</MobileSignupButton>
-            </>
-          )}
+          <MobileMenuContent>
+            <MobileHomeNav to="/">首頁</MobileHomeNav>
+            <MobileRestaurantNav to="/restaurants">
+              合作餐廳
+            </MobileRestaurantNav>
+            <MobileArticleNav to="/articles">文章</MobileArticleNav>
+            <MobileShareNav to="/search">他人分享</MobileShareNav>
+            {checkUser.isLoggedIn ? (
+              <>
+                <MyMobileDashboard to="/personal/list">
+                  我的看板
+                </MyMobileDashboard>
+                <MobileLogoutButton onClick={() => logout()}>
+                  登出
+                </MobileLogoutButton>
+              </>
+            ) : (
+              <>
+                <MobileLoginButton to="/login">登入</MobileLoginButton>
+                <MobileSignupButton to="/signup">註冊</MobileSignupButton>
+              </>
+            )}
+          </MobileMenuContent>
         </MobileMenu>
       )}
     </>
@@ -174,12 +177,11 @@ const Logo = styled.img`
 const StyledLink = styled(Link)`
   font-family: 'cwTeXYen', sans-serif;
 
-  @media screen and (min-width: 1500px) {
-    font-size: 32px;
-  }
-
   @media screen and (min-width: 650px) {
     font-size: 24px;
+  }
+  @media screen and (min-width: 1540px) {
+    font-size: 32px;
   }
 
   &::after {
@@ -336,67 +338,73 @@ const MobileMenu = styled.div`
   z-index: 99;
   display: flex;
   flex-direction: column;
-  background-color: lightgray;
+  background: hsla(0, 0%, 0%, 0.7);
+  box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
   border-radius: 0px 0px 10px 0px;
   padding: 2vh 3.5vw;
-  width: 40vw;
+  width: 50vw;
   height: 60vh;
+  color: white;
 `;
 
-const MenuClose = styled(AiFillCloseCircle)`
+const MenuClose = styled(FaWindowClose)`
   position: absolute;
   top: 2vw;
   right: 2vw;
-  fill: blue;
-  border: 1px solid blue;
-  border-radius: 50%;
-  opacity: 0.7;
+  width: 22px;
+  height: 22px;
+  fill: white;
   cursor: pointer;
 `;
 
 const ImgContainer = styled.div`
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid black;
-  margin-bottom: 2vw;
+  border-bottom: 1px solid white;
+  margin-bottom: 3vw;
+  margin-top: 3vw;
+  margin-right: 3vw;
+  border-radius: 5px;
+  background-color: #b7e4c7;
 `;
 
 const MobileLogo = styled.img`
   width: 80px;
 `;
 
-const MobileHomeNav = styled(Link)`
-  margin-bottom: 2vw;
+const MobileMenuContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-left: 4vw;
 `;
 
-const MobileRestaurantNav = styled(Link)`
-  margin-bottom: 2vw;
+const StyledMobileLink = styled(Link)`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
+  margin-bottom: 3vw;
 `;
 
-const MobileArticleNav = styled(Link)`
-  margin-bottom: 2vw;
-`;
+const MobileHomeNav = styled(StyledMobileLink)``;
 
-const MobileAboutNav = styled(Link)`
-  margin-bottom: 2vw;
-`;
+const MobileRestaurantNav = styled(StyledMobileLink)``;
 
-const MobileContactNav = styled(Link)`
-  margin-bottom: 2vw;
+const MobileArticleNav = styled(StyledMobileLink)``;
+
+const MobileShareNav = styled(StyledMobileLink)`
   margin-bottom: auto;
 `;
 
-const MobileLoginButton = styled(Link)`
-  margin-bottom: 2vw;
-`;
-const MobileSignupButton = styled(Link)``;
+const MobileLoginButton = styled(StyledMobileLink)``;
+const MobileSignupButton = styled(StyledMobileLink)``;
 
-const MyMobileDashboard = styled(Link)`
-  margin-bottom: 2vw;
-`;
+const MyMobileDashboard = styled(StyledMobileLink)``;
 
 const MobileLogoutButton = styled.div`
-  margin-bottom: 2vw;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
+  margin-bottom: 3vw;
+  color: #ccc;
   cursor: pointer;
 `;
 
