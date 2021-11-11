@@ -59,7 +59,7 @@ const SearchWrapper = styled.div`
   width: 30%;
   margin-right: 1vw;
 
-  @media screen and (max-width: 650px) {
+  @media screen and (max-width: 700px) {
     flex-grow: 1;
   }
 `;
@@ -78,7 +78,8 @@ const SearchBox = styled.input`
   border-radius: 5px 0 0 5px;
   outline: none;
   color: #9dbfaf;
-
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 22px;
   &:focus {
     color: #00b4cc;
   }

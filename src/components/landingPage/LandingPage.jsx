@@ -53,5 +53,4 @@ const LandingPage = () => {
     </Main>
   );
 };
-
 export default LandingPage;
