@@ -150,10 +150,10 @@ const HeaderContainer = styled.div`
   height: 8vh;
   padding: 0.5rem 2vw;
   color: #2d6a4f;
-  background-color: white;
+  background: rgba(255, 255, 255, 0.6);
   box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 
-  @media screen and (min-width: 1510px) {
+  @media screen and (min-width: 1500px) {
     padding: 0 15vw;
   }
 

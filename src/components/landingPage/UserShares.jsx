@@ -8,20 +8,16 @@ const UserShares = () => {
     <UserSharesContainer>
       <UserSharesContent>
         <UserAvatar src={UserImgOne} />
-        <UserName>使用者名稱</UserName>
+        <UserName>Anna Chen</UserName>
         <Description>
-          Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-          fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-          sequi nesciunt. Neque porro quisquam est, qui dolorem.
+          可以挑選一天當作「剩食消滅日」、使用APP或是勝食網站、冷凍未使用之食材、製備小份餐點（現今一份餐點明顯大於50年前的份量），當然最好的方法還是「完食」
         </Description>
       </UserSharesContent>
       <UserSharesContent>
         <UserAvatarTwo src={UserImgTwo} />
-        <UserName>使用者名稱</UserName>
+        <UserName>John Wang</UserName>
         <Description>
-          Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-          fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-          sequi nesciunt. Neque porro quisquam est, qui dolorem.
+          在餐廳用餐，建議打包未食用完之食物，或在一開始就請服務生不提供不想食用的食物，另外也可多去有捐剩食、或低碳製程考量的餐廳，以表支持。
         </Description>
       </UserSharesContent>
     </UserSharesContainer>
@@ -31,12 +27,17 @@ const UserShares = () => {
 const UserSharesContainer = styled.div`
   display: flex;
   justify-content: space-around;
-  align-items: center;
-  padding: 2rem 6rem;
+  align-items: flex-start;
+  padding: 4rem 6rem 2rem 6rem;
 
   @media screen and (max-width: 600px) {
     flex-direction: column;
-    padding: 1rem 3rem;
+    padding: 3rem 3rem 1rem 3rem;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 1500px) {
+    padding: 5vw 15vw;
   }
 `;
 
@@ -61,18 +62,19 @@ const UserAvatarTwo = styled(UserAvatar)`
 `;
 
 const UserName = styled.h3`
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 32px;
 `;
 
 const Description = styled.p`
-  max-width: 35vw;
-  line-height: 1.4rem;
+  max-width: 70vw;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
+  line-height: 2rem;
 
-  @media screen and (max-width: 750px) {
-    max-width: 30vw;
-  }
-  @media screen and (max-width: 600px) {
-    max-width: 70vw;
+  @media screen and (min-width: 600px) {
+    max-width: 25vw;
   }
 `;
 

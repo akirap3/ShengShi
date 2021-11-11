@@ -9,36 +9,30 @@ const Advantages = () => {
     <AdvantagesContainer>
       <AvtContentOne>
         <AvtImgOne src={ShareFoodOne} />
-        <AvtColumn>
-          <Title>優點一</Title>
+        <AvtColumnOne>
+          <Title>糧食</Title>
           <Description>
-            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-            fugit, sed quia consequuntur magni dolores eos qui ratione
-            voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem.
+            全球有8億2千萬人仍處於飢餓狀態，相當於每9個人即有一人無法取得足夠糧食
           </Description>
-        </AvtColumn>
+        </AvtColumnOne>
       </AvtContentOne>
       <AvtContentTwo>
-        <AvtColumn>
-          <Title>優點二</Title>
+        <AvtColumnTwo>
+          <Title>節約</Title>
           <Description>
-            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-            fugit, sed quia consequuntur magni dolores eos qui ratione
-            voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem.
+            台灣一年約有 340 萬噸的廚餘量，相當於每人每天的剩食量約一盒炒飯
           </Description>
-        </AvtColumn>
+        </AvtColumnTwo>
         <AvtImgTwo src={ShareFoodTwo} />
       </AvtContentTwo>
       <AvtContentThree>
         <AvtImgThree src={ShareFoodThree} />
-        <AvtColumn>
-          <Title>優點三</Title>
+        <AvtColumnThree>
+          <Title>價值</Title>
           <Description>
-            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-            fugit, sed quia consequuntur magni dolores eos qui ratione
-            voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem.
+            如果全世界食物浪費的排碳量位居世界第三，透過惜食減碳，共創美好環境
           </Description>
-        </AvtColumn>
+        </AvtColumnThree>
       </AvtContentThree>
     </AdvantagesContainer>
   );
@@ -53,9 +47,14 @@ const AvtContent = styled.div`
   display: flex;
   flex-wrap: wrap;
   background-color: #94d2bd;
-  padding: 2rem;
+  padding: 5rem 2rem;
   justify-content: space-around;
   align-items: center;
+
+  @media screen and (min-width: 1500px) {
+    padding: 5vw 15vw;
+  }
+
   @media screen and (max-width: 600px) {
     flex-direction: column;
   }
@@ -69,11 +68,15 @@ const AvtContentTwo = styled(AvtContent)`
 const AvtContentThree = styled(AvtContent)``;
 
 const AvtImg = styled.img`
-  max-width: 40vw;
+  max-width: 80vw;
   border-radius: 5px;
 
-  @media screen and (max-width: 600px) {
-    max-width: 80vw;
+  @media screen and (min-width: 600px) {
+    max-width: 40vw;
+  }
+
+  @media screen and (min-width: 1500px) {
+    max-width: 30vw;
   }
 `;
 
@@ -101,12 +104,42 @@ const AvtColumn = styled.div`
   }
 `;
 
+const AvtColumnOne = styled(AvtColumn)`
+  @media screen and (max-width: 600px) {
+    margin-top: 3rem;
+  }
+`;
+
+const AvtColumnTwo = styled(AvtColumn)`
+  @media screen and (max-width: 600px) {
+    margin-bottom: 3rem;
+  }
+`;
+
+const AvtColumnThree = styled(AvtColumn)`
+  @media screen and (max-width: 600px) {
+    margin-top: 3rem;
+  }
+`;
+
 const Title = styled.h2`
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 56px;
 `;
 
 export const Description = styled.p`
-  line-height: 1.4rem;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
+  line-height: 2rem;
+
+  @media screen and (min-width: 375px) {
+    max-width: 60vw;
+  }
+
+  @media screen and (min-width: 1500px) {
+    max-width: 20vw;
+  }
 `;
 
 export default Advantages;

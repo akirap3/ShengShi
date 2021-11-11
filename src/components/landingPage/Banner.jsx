@@ -11,7 +11,7 @@ const Banner = () => {
       <BannerContent>
         <BannerTitle>分享</BannerTitle>
         <Description>
-          透過分享剩食來幫助別人，也幫助我們的環境，這裡就是你需要的交換平台，讓我們一起把「剩食」變成「勝食」吧
+          透過交換平台分享剩食幫助別人與環境，一起把「剩食」變成「勝食」吧
         </Description>
         <ButtonRow>
           <StartButton to="/login">開始使用</StartButton>
@@ -29,10 +29,10 @@ const BannerContainer = styled.div`
   align-items: center;
   flex-wrap: no-wrap;
   position: relative;
-  padding: 2rem;
+  padding: 5rem 2rem;
   background-color: lightgray;
 
-  @media screen and (min-width: 1520px) {
+  @media screen and (min-width: 1500px) {
     padding: 5vw 15vw;
   }
 
@@ -49,20 +49,20 @@ const BannerContent = styled.div`
   max-width: 35vw;
   @media screen and (max-width: 600px) {
     max-width: 80vw;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
   }
 `;
 const BannerTitle = styled.h2`
   margin-bottom: 2rem;
   font-family: 'cwTeXYen', sans-serif;
-  font-size: 60px;
+  font-size: 56px;
   color: white;
 `;
 
 const Description = styled.p`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   line-height: 2rem;
   color: black;
 
@@ -70,8 +70,8 @@ const Description = styled.p`
     max-width: 60vw;
   }
 
-  @media screen and (min-width: 1520px) {
-    max-width: 30vw;
+  @media screen and (min-width: 1500px) {
+    max-width: 20vw;
   }
 `;
 
@@ -99,19 +99,15 @@ const LearnMoreButton = styled(Link)`
 `;
 
 const BannerImg = styled.img`
-  /* max-width: 40vw; */
+  max-width: 80vw;
   align-self: center;
   border-radius: 5px;
-
-  @media screen and (max-width: 600px) {
-    max-width: 80vw;
-  }
 
   @media screen and (min-width: 600px) {
     max-width: 40vw;
   }
 
-  @media screen and (min-width: 1520px) {
+  @media screen and (min-width: 1500px) {
     max-width: 30vw;
   }
 `;
