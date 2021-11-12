@@ -57,6 +57,7 @@ const BannerTitle = styled.h2`
   margin-bottom: 2rem;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 56px;
+  font-weight: 600;
   color: black;
 `;
 
@@ -66,7 +67,7 @@ const Description = styled.p`
   font-weight: 100;
   margin-bottom: 2rem;
   line-height: 2rem;
-  color: black;
+  color: #0000009e;
 
   @media screen and (min-width: 375px) {
     max-width: 60vw;

@@ -157,6 +157,7 @@ const BannerContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
   max-width: 35vw;
 
   @media screen and (max-width: 700px) {
@@ -179,7 +180,7 @@ const SubTitle = styled.h3`
   font-weight: 100;
   margin-bottom: 2rem;
   line-height: 2rem;
-  color: black;
+  color: #0000009e;
 
   @media screen and (min-width: 375px) {
     max-width: 60vw;
