@@ -14,7 +14,7 @@ import {
 import LogoImg from '../../images/common/logo-1.png';
 import { BsPersonCircle } from 'react-icons/bs';
 import { FcMenu } from 'react-icons/fc';
-import { FaWindowClose } from 'react-icons/fa';
+import { GrFormClose } from 'react-icons/gr';
 import useCurrentUser from '../../hooks/useCurrentUser';
 
 const Header = () => {
@@ -334,40 +334,39 @@ const MobileMenuIcon = styled(FcMenu)`
 
 const MobileMenu = styled.div`
   position: fixed;
-  top: 0;
+  top: 8vh;
   left: 0;
-  z-index: 99;
+  z-index: 9;
   display: flex;
   flex-direction: column;
-  background: hsla(0, 0%, 0%, 0.7);
+  background: rgb(217, 237, 225, 0.6);
   box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(6px);
   border-radius: 0px 0px 10px 0px;
-  padding: 2vh 3.5vw;
-  width: 50vw;
-  height: 60vh;
-  color: white;
+  padding: 30px 20px;
+  width: 260px;
+  height: 600px;
+  color: black;
 `;
 
-const MenuClose = styled(FaWindowClose)`
+const MenuClose = styled(GrFormClose)`
   position: absolute;
-  top: 2vw;
-  right: 2vw;
+  top: 10px;
+  right: 10px;
   width: 22px;
   height: 22px;
-  fill: white;
+  /* fill: rgb(4, 169, 109, 0.6); */
   cursor: pointer;
 `;
 
 const ImgContainer = styled.div`
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid white;
-  margin-bottom: 3vw;
-  margin-top: 3vw;
-  margin-right: 3vw;
+  margin-bottom: 20px;
+  /* margin-top: 20px; */
+  margin-right: 20px;
   border-radius: 5px;
-  background-color: #b7e4c7;
+  background-color: rgb(4, 169, 109, 0.6);
 `;
 
 const MobileLogo = styled.img`
@@ -378,13 +377,13 @@ const MobileMenuContent = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  margin-left: 4vw;
+  margin-left: 15px;
 `;
 
 const StyledMobileLink = styled(Link)`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
-  margin-bottom: 3vw;
+  margin-bottom: 20px;
 `;
 
 const MobileHomeNav = styled(StyledMobileLink)``;
@@ -405,7 +404,7 @@ const MyMobileDashboard = styled(StyledMobileLink)``;
 const MobileLogoutButton = styled.div`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
-  margin-bottom: 3vw;
+  margin-bottom: 20px;
   color: #ccc;
   cursor: pointer;
 `;

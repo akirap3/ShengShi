@@ -13,7 +13,8 @@ const Advantages = () => {
         <AvtColumnOne>
           <Title>糧食</Title>
           <Description>
-            全球有8億2千萬人仍處於飢餓狀態，相當於每9個人即有一人無法取得足夠糧食
+            全球有 8 億 2 千萬人仍處於飢餓狀態，相當於每 9
+            個人即有一人無法取得足夠糧食
           </Description>
         </AvtColumnOne>
       </AvtContentOne>
@@ -141,8 +142,9 @@ const Title = styled.h2`
 export const Description = styled.p`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
+  font-weight: 100;
   line-height: 2rem;
-
+  color: #0000009e;
   @media screen and (min-width: 375px) {
     max-width: 60vw;
   }

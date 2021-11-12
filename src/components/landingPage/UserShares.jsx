@@ -13,7 +13,9 @@ const UserShares = () => {
           <UserTag>勝食專家</UserTag>
         </UserImage>
         <Description>
-          可以挑選一天當作「剩食消滅日」、使用APP或是勝食網站、冷凍未使用之食材、製備小份餐點（現今一份餐點明顯大於50年前的份量），當然最好的方法還是「完食」
+          可以挑選一天當作「剩食消滅日」、使用 APP
+          或是勝食網站、冷凍未使用之食材、製備小份餐點（現今一份餐點明顯大於 50
+          年前的份量），當然最好的方法還是「完食」
         </Description>
       </UserSharesContentOne>
       <UserSharesContentTwo>
@@ -23,7 +25,7 @@ const UserShares = () => {
           <UserTag>勝食達人</UserTag>
         </UserImage>
         <Description>
-          在餐廳用餐，建議打包未食用完之食物，或在一開始就請服務生不提供不想食用的食物，另外也可多去有捐剩食、或低碳製程考量的餐廳，以表支持。
+          在餐廳用餐，建議打包未食用完之食物，或在一開始就請服務生不提供不想食用的食物，另外也可多去有捐剩食、或低碳製程考量的餐廳，以表支持
         </Description>
       </UserSharesContentTwo>
     </UserSharesContainer>
