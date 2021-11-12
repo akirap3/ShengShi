@@ -150,13 +150,13 @@ const SlideWrapper = styled.div`
     }
   }
 
-  .slick-active {
-    margin-right: 15px;
+  .slick-slide {
+    margin-right: 8px;
+    margin-left: 5px;
   }
 
   .slick-track {
     display: flex;
-    /* width: 80vw; */
   }
 
   .slick-arrow {

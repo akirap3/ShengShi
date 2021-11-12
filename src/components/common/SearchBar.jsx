@@ -16,7 +16,6 @@ const SearchBar = () => {
     dispatch({ type: 'isShareSearch/search', payload: true });
     if (inputValue === '') setInputValue('請輸入關鍵字');
     algolia.search(inputValue || '請輸入關鍵字').then((result) => {
-      console.log(result.hits);
       const searchResults = result.hits.map((hit) => {
         return {
           docId: hit.objectID,
@@ -25,9 +24,7 @@ const SearchBar = () => {
       const contents = searchResults.map((result) =>
         getSingleShare(result.docId)
       );
-      console.log(contents);
       Promise.all(contents).then((values) => {
-        console.log(values);
         dispatch({ type: 'searchedShares/get', payload: values || [] });
       });
       history.push('/search');
