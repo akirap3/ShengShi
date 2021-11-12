@@ -155,6 +155,7 @@ const HeaderContainer = styled.div`
   color: #2d6a4f;
   background: rgba(255, 255, 255, 0.6);
   box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+  backdrop-filter: blur(5px);
 
   @media screen and (min-width: 1500px) {
     padding: 0 15vw;
@@ -340,6 +341,7 @@ const MobileMenu = styled.div`
   flex-direction: column;
   background: hsla(0, 0%, 0%, 0.7);
   box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(5px);
   border-radius: 0px 0px 10px 0px;
   padding: 2vh 3.5vw;
   width: 50vw;

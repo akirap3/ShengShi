@@ -82,22 +82,22 @@ const ButtonRow = styled.div`
   flex-direction: row;
 `;
 
-const StartButton = styled(Link)`
-  padding: 3px;
+const StyledLink = styled(Link)`
   margin-right: 0.5rem;
-  color: white;
   padding: 0.5rem;
   border-radius: 5px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
+`;
+
+const StartButton = styled(StyledLink)`
+  color: white;
   background-color: #1e88e5;
 `;
 
-const LearnMoreButton = styled(Link)`
+const LearnMoreButton = styled(StyledLink)`
   background-color: white;
   color: #52b788;
-  padding: 3px;
-  margin-right: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 5px;
   opacity: 0.8;
 `;
 

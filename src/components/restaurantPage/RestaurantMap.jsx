@@ -72,7 +72,7 @@ const RestaurantMap = ({ restaurants }) => {
   };
 
   return (
-    <div style={{ height: '100vh', width: '100%' }}>
+    <div style={{ height: '80vh', width: '100%' }}>
       {isLoading ? (
         <StyledLoading
           type={'spin'}
