@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import AddSharePopup from './AddSharePopup';
+import LoginBg2 from '../loginPage/LoginBg2';
 
 import useCurrentUser from '../../hooks/useCurrentUser';
 import {
@@ -11,11 +12,18 @@ import {
 } from '../../utils/firebase';
 
 import { ImSpoonKnife } from 'react-icons/im';
-import { AiTwotoneStar } from 'react-icons/ai';
-import { GrLocation } from 'react-icons/gr';
 import { IoMdPerson } from 'react-icons/io';
-import { BsGear } from 'react-icons/bs';
-import { BsPeopleFill } from 'react-icons/bs';
+import { IoRibbonSharp } from 'react-icons/io5';
+import {
+  BsGear,
+  BsListNested,
+  BsPeopleFill,
+  BsFillHeartFill,
+  BsShop,
+} from 'react-icons/bs';
+import { FaCoins, FaArchive } from 'react-icons/fa';
+import { HiLocationMarker } from 'react-icons/hi';
+import { MdFastfood } from 'react-icons/md';
 
 const Dashbaord = () => {
   const [userData, setUserDate] = useState(null);
@@ -33,25 +41,39 @@ const Dashbaord = () => {
 
   const location = useLocation();
   const menus = [
-    { name: '我的清單', count: myListCounts || 0, path: '/personal/list' },
-    { name: '我的勳章', count: myBadgeCounts || 0, path: '/personal/badges' },
     {
-      name: '領取紀錄',
+      icon: [<ListIcon />],
+      name: '清單',
+      count: myListCounts || 0,
+      path: '/personal/list',
+    },
+    {
+      icon: [<BadgeIcon />],
+      name: '勳章',
+      count: myBadgeCounts || 0,
+      path: '/personal/badges',
+    },
+    {
+      icon: [<RecordIcon />],
+      name: '紀錄',
       count: myReceivedCounts || 0,
       path: '/personal/received',
     },
     {
-      name: '尚未領取',
+      icon: [<BookedIcon />],
+      name: '預訂',
       count: myToReceiveCounts || 0,
       path: '/personal/toReceive',
     },
     {
-      name: '收藏清單',
+      icon: [<HeartIcon />],
+      name: '收藏',
       count: myCollectedShareCounts || 0,
       path: '/personal/collectedShares',
     },
     {
-      name: '收藏店家',
+      icon: [<ShopIcon />],
+      name: '店家',
       count: myCollectedStoreCounts || 0,
       path: '/personal/collectedRestaurants',
     },
@@ -168,9 +190,15 @@ const Dashbaord = () => {
   return (
     <>
       <DashboardContainer>
+        <LoginBg2 />
         <DashboardContext>
           <LeftColumn>
-            <Avatar src={userData?.imageUrl} />
+            <AvatarContainer>
+              <Avatar src={userData?.imageUrl} />
+              <SettingContainer as={Link} to="/personal/memberUpdate/">
+                <Setting />
+              </SettingContainer>
+            </AvatarContainer>
             <NameContext>
               <AliasIcon />
               <Alias>{userData?.alias}</Alias>
@@ -180,21 +208,17 @@ const Dashbaord = () => {
             <Row>
               <PersoanlUsernameIcon />
               <UserName>{userData?.displayName}</UserName>
-              <Link to="/personal/memberUpdate/">
-                <Setting />
-              </Link>
             </Row>
             <Row>
-              <Star />
-              <Rating>{`我的積點： ${userData?.myPoints}`}</Rating>
+              <PointIcon />
+              <Rating>{`${userData?.myPoints}`}</Rating>
             </Row>
             <Row>
-              <PlaceIcon />
-              <Place> 我的地點： {userData?.myPlace || '尚未設定'}</Place>
+              <LocationIcon />
+              <Place>{userData?.myPlace || '尚未設定'}</Place>
             </Row>
             <Row>
               <MgmtIcon />
-              <Mgmt> 領取管理：</Mgmt>
               <MgmtButton
                 as={Link}
                 to="/personal/mgmt"
@@ -212,19 +236,23 @@ const Dashbaord = () => {
                 to={`${menu.path}`}
                 active={menu.path === location.pathname}
               >
+                <IconContainer>
+                  {menu.icon.map((icon) => icon)}
+                  {menu.count !== 0 ? (
+                    <ItemNumber>{menu.count}</ItemNumber>
+                  ) : (
+                    <></>
+                  )}
+                </IconContainer>
+
                 <ButtonName>{menu.name}</ButtonName>
-                {menu.count !== 0 ? (
-                  <ItemNumber>{menu.count}</ItemNumber>
-                ) : (
-                  <></>
-                )}
               </Button>
             ))}
           </Grid>
           <CheckButton as={Link} to="/search">
-            查看他人的分享
+            勝食搜尋
           </CheckButton>
-          <ShareButton onClick={openEditor}>我要分享勝食 +10</ShareButton>
+          <ShareButton onClick={openEditor}>分享勝食 +10</ShareButton>
         </DashboardContext>
       </DashboardContainer>
       <AddSharePopup
@@ -238,7 +266,15 @@ const Dashbaord = () => {
 
 const DashboardContainer = styled.div`
   display: flex;
-  padding: 2rem 4rem;
+  justify-content: center;
+  align-items: center;
+  padding: 5rem 2rem;
+  position: relative;
+  background-color: rgba(219, 245, 255, 0.3);
+  backdrop-filter: blur(5px);
+  @media screen and (min-width: 1500px) {
+    padding: 5vw 18vw;
+  }
 `;
 
 const DashboardContext = styled.div`
@@ -246,11 +282,15 @@ const DashboardContext = styled.div`
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: auto;
   grid-template-areas: 'leftColumn personDetals personDetals  Grid Grid Grid ' 'leftColumn   personDetals personDetals  Grid Grid Grid  ' 'leftColumn  CheckButton CheckButton   ShareButton ShareButton ShareButton ';
-  gap: 1vw;
-  border: 1px solid black;
+  gap: 10px;
   border-radius: 10px;
   flex-grow: 1;
-  padding: 3vw;
+  padding: 25px;
+  width: fit-content;
+  max-width: 950px;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
 
   @media screen and (max-width: 700px) {
     grid-template-columns: repeat(2, 1fr);
@@ -264,251 +304,324 @@ const LeftColumn = styled.div`
   justify-content: center;
   align-items: center;
   grid-area: leftColumn;
+  background-color: #e3f2fd01;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+`;
+
+const AvatarContainer = styled.div`
+  position: relative;
 `;
 
 const Avatar = styled.img`
-  width: 15vw;
-  height: 15vw;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  @media screen and (max-width: 600px) {
-    max-width: 25vw;
-  }
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+`;
+
+const SettingContainer = styled.div`
+  background-color: rgb(183, 228, 199, 0.3);
+  border-radius: 50%;
+`;
+
+const Setting = styled(BsGear)`
+  position: absolute;
+  bottom: -5px;
+  right: 5px;
+  fill: white;
+  width: 25px;
+  height: 25px;
+  padding: 5px;
+  cursor: pointer;
+  background-color: rgb(129, 129, 129);
+  border-radius: 50%;
 `;
 
 const NameContext = styled.div`
   display: flex;
-  margin-top: 1vw;
-  @media screen and (max-width: 700px) {
-    margin-top: 2vw;
-  }
+  align-items: center;
+  margin-top: 15px;
 `;
 
 const AliasIcon = styled(ImSpoonKnife)`
-  margin-right: 1.5vw;
-  width: 1.8vw;
-  height: 1.8vw;
+  fill: white;
+  width: 25px;
+  height: 25px;
+  padding: 5px;
+  background-color: rgb(129, 129, 129);
+  border-radius: 50%;
+  margin-right: 5px;
 
-  @media screen and (max-width: 700px) {
-    margin-right: 2vw;
-    width: 2.5vw;
-    height: 2.5vw;
-  }
-  @media screen and (max-width: 600px) {
-    width: 3vw;
-    height: 3vw;
+  @media screen and (min-width: 500px) {
+    margin-right: 20px;
   }
 `;
 
 const Alias = styled.span`
-  font-size: 1.8vw;
-  @media screen and (max-width: 700px) {
-    font-size: 2.5vw;
-  }
-  @media screen and (max-width: 600px) {
-    font-size: 3vw;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  color: rgb(129, 129, 129);
+
+  @media screen and (min-width: 800px) {
+    font-size: 22px;
   }
 `;
 
 const Details = styled.div`
   display: flex;
   flex-direction: column;
-  font-size: 1.8vw;
   grid-area: personDetals;
   flex-grow: 1;
-  margin-top: 1vw;
-
-  @media screen and (max-width: 700px) {
-    font-size: 2.5vw;
-  }
-
-  @media screen and (max-width: 600px) {
-    font-size: 3vw;
-  }
+  background-color: #e3f2fd01;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  border-radius: 8px;
+  padding: 15px;
 `;
 
 const Row = styled.div`
   display: flex;
   flex-grow: 1;
   align-items: center;
+  &:not(:last-of-type) {
+    margin-bottom: 15px;
+  }
 `;
 
 const PersoanlUsernameIcon = styled(IoMdPerson)`
-  margin-right: 1.5vw;
-  width: 1.8vw;
-  height: 1.8vw;
-  @media screen and (max-width: 700px) {
-    margin-right: 2vw;
-    width: 2.5vw;
-    height: 2.5vw;
-  }
-  @media screen and (max-width: 600px) {
-    width: 3vw;
-    height: 3vw;
+  fill: white;
+  width: 25px;
+  height: 25px;
+  padding: 5px;
+  background-color: rgb(129, 129, 129);
+  border-radius: 50%;
+  margin-right: 5px;
+
+  @media screen and (min-width: 500px) {
+    margin-right: 20px;
   }
 `;
 
 const UserName = styled.span`
-  margin-right: 1.5vw;
-`;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  color: rgb(129, 129, 129);
 
-const Setting = styled(BsGear)`
-  width: 1.8vw;
-  height: 1.8vw;
-  cursor: pointer;
-  @media screen and (max-width: 700px) {
-    margin-left: 2vw;
-    width: 2.5vw;
-    height: 2.5vw;
-  }
-  @media screen and (max-width: 600px) {
-    width: 3vw;
-    height: 3vw;
+  @media screen and (min-width: 800px) {
+    font-size: 22px;
   }
 `;
 
-const Star = styled(AiTwotoneStar)`
-  margin-right: 1.5vw;
-  width: 1.8vw;
-  height: 1.8vw;
-  @media screen and (max-width: 700px) {
-    margin-right: 2vw;
-    width: 2.5vw;
-    height: 2.5vw;
-  }
-  @media screen and (max-width: 600px) {
-    width: 3vw;
-    height: 3vw;
+const PointIcon = styled(FaCoins)`
+  fill: white;
+  width: 25px;
+  height: 25px;
+  padding: 5px;
+  background-color: rgb(129, 129, 129);
+  border-radius: 50%;
+  margin-right: 5px;
+
+  @media screen and (min-width: 500px) {
+    margin-right: 20px;
   }
 `;
 
-const Rating = styled.span``;
+const Rating = styled.span`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  color: rgb(129, 129, 129);
 
-const PlaceIcon = styled(GrLocation)`
-  margin-right: 1.5vw;
-  width: 1.8vw;
-  height: 1.8vw;
-  @media screen and (max-width: 700px) {
-    margin-right: 2vw;
-    width: 2.5vw;
-    height: 2.5vw;
-  }
-  @media screen and (max-width: 600px) {
-    width: 3vw;
-    height: 3vw;
+  @media screen and (min-width: 800px) {
+    font-size: 22px;
   }
 `;
 
-const Place = styled.span``;
+const LocationIcon = styled(HiLocationMarker)`
+  fill: white;
+  width: 25px;
+  height: 25px;
+  padding: 5px;
+  background-color: rgb(129, 129, 129);
+  border-radius: 50%;
+  margin-right: 5px;
+
+  @media screen and (min-width: 500px) {
+    margin-right: 20px;
+  }
+`;
+
+const Place = styled.span`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  color: rgb(129, 129, 129);
+
+  @media screen and (min-width: 800px) {
+    font-size: 22px;
+  }
+`;
 
 const MgmtIcon = styled(BsPeopleFill)`
-  margin-right: 1.5vw;
-  width: 1.8vw;
-  height: 1.8vw;
-  @media screen and (max-width: 700px) {
-    margin-right: 2vw;
-    width: 2.5vw;
-    height: 2.5vw;
-  }
-  @media screen and (max-width: 600px) {
-    width: 3vw;
-    height: 3vw;
+  fill: white;
+  width: 25px;
+  height: 25px;
+  padding: 5px;
+  background-color: rgb(129, 129, 129);
+  border-radius: 50%;
+  margin-right: 5px;
+
+  @media screen and (min-width: 500px) {
+    margin-right: 20px;
   }
 `;
 
-const Mgmt = styled.span``;
-
 const MgmtButton = styled.button`
-  border: 1px solid black;
   border-radius: 8px;
-  padding: 0.5vw 2vw;
+  padding: 5px 10px;
   font-size: 1.5vw;
   text-align: center;
-  background-color: ${({ active }) => (active ? '#2a9d8f' : 'white')};
-  @media screen and (max-width: 700px) {
-    font-size: 2.5vw;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  color: rgb(129, 129, 129);
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  background-color: ${({ active }) => (active ? '#bbdefbaa' : '#e3f2fd01')};
+
+  &:hover {
+    transform: translateY(-5px);
   }
-  @media screen and (max-width: 600px) {
-    font-size: 3vw;
+
+  @media screen and (min-width: 800px) {
+    font-size: 22px;
   }
 `;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto;
   grid-area: Grid;
-  gap: 1vw;
+  gap: 10px;
+  margin-top: 25px;
   flex-grow: 3;
-  font-size: 1.5vw;
-  @media screen and (max-width: 700px) {
-    grid-template-columns: repeat(2, 1fr);
-    margin-top: 2vw;
-    font-size: 2.5vw;
-  }
 
-  @media screen and (max-width: 600px) {
-    font-size: 3vw;
+  @media screen and (min-width: 700px) {
+    margin-top: 0;
   }
 `;
 
 const Button = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
   border-radius: 8px;
-  padding: 1vw;
+  padding: 10px;
+  color: #2d6a4f;
+  background-color: #e3f2fd01;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  background-color: ${({ active }) => (active ? '#bbdefbaa' : '#e3f2fd01')};
 
-  background-color: ${({ active }) => (active ? '#2a9d8f' : 'white')};
-
-  @media screen and (max-width: 700px) {
-    flex-direction: row;
-    padding: 2vw;
+  &:hover {
+    transform: translateY(-5px);
   }
 `;
 
-const ButtonName = styled.div`
-  @media screen and (max-width: 700px) {
-    margin-right: 1vw;
-  }
+const ListIcon = styled(BsListNested)`
+  fill: rgb(129, 129, 129);
+  width: 22px;
+  height: 22px;
+`;
+
+const BadgeIcon = styled(IoRibbonSharp)`
+  fill: rgb(129, 129, 129);
+  width: 22px;
+  height: 22px;
+`;
+
+const RecordIcon = styled(FaArchive)`
+  fill: rgb(129, 129, 129);
+  width: 22px;
+  height: 22px;
+`;
+
+const BookedIcon = styled(MdFastfood)`
+  fill: rgb(129, 129, 129);
+  width: 22px;
+  height: 22px;
+`;
+
+const HeartIcon = styled(BsFillHeartFill)`
+  fill: rgb(129, 129, 129);
+  width: 22px;
+  height: 22px;
+`;
+
+const ShopIcon = styled(BsShop)`
+  fill: rgb(129, 129, 129);
+  width: 22px;
+  height: 22px;
+`;
+
+const IconContainer = styled.div`
+  position: relative;
+  margin-right: 40px;
 `;
 
 const ItemNumber = styled.div`
   margin-top: 0.8vw;
+  position: absolute;
+  bottom: -5px;
+  right: -15px;
   background-color: lightblue;
   padding: 5px 8px;
   border-radius: 50%;
-  border: 0.5px solid lightseagreen;
-  font-weight: 500;
-  opacity: 0.8;
+  font-size: 8px;
+  color: white;
+  background: #1e88e582;
+  backdrop-filter: blur(5px);
+
   @media screen and (max-width: 700px) {
     margin-top: 0;
   }
 `;
 
-const BigButton = styled.button`
-  border: 1px solid black;
-  border-radius: 8px;
-  padding: 1vw 2vw;
-  font-size: 1.5vw;
-  text-align: center;
-  @media screen and (max-width: 700px) {
-    padding: 2vw;
-    font-size: 2.5vw;
+const ButtonName = styled.div`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 18px;
+  @media screen and (min-width: 800px) {
+    font-size: 22px;
   }
-  @media screen and (max-width: 600px) {
-    font-size: 3vw;
+`;
+
+const BigButton = styled.button`
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 10px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 18px;
+  text-align: center;
+  color: #2d6a4f;
+  background-color: #e3f2fd01;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+
+  @media screen and (min-width: 800px) {
+    font-size: 22px;
   }
 `;
 
 const CheckButton = styled(BigButton)`
   grid-area: CheckButton;
+  &:hover {
+    transform: translateY(-5px);
+  }
 `;
 
 const ShareButton = styled(BigButton)`
   grid-area: ShareButton;
   cursor: pointer;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 `;
 
 export default Dashbaord;
