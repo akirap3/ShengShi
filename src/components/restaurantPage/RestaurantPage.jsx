@@ -242,6 +242,8 @@ const SearchOutline = styled.div`
   padding: 10px;
   color: white;
   margin-right: 1rem;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+  backdrop-filter: blur(5px);
 
   &:hover > input {
     color: #40916c;
@@ -295,6 +297,8 @@ const ResetButton = styled.button`
   font-size: 24px;
   border: 1px solid #a0a0968a;
   color: white;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+  backdrop-filter: blur(5px);
 
   @media screen and (max-width: 520px) {
     margin-top: 1rem;
