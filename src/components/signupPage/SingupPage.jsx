@@ -6,10 +6,18 @@ import ReactLoading from 'react-loading';
 import * as validation from '../../utils/validation';
 import * as firebase from '../../utils/firebase';
 import Main from '../common/Main';
+import LoginBackground from '../loginPage/LoginBackground';
+import LoginBg2 from '../loginPage/LoginBg2';
 import { getAllContents } from '../../utils/firebase';
 
 import { IoLogoFacebook } from 'react-icons/io';
 import { FcGoogle } from 'react-icons/fc';
+import { BsFillPersonFill } from 'react-icons/bs';
+import { RiLock2Fill } from 'react-icons/ri';
+import { MdEmail } from 'react-icons/md';
+import { HiLocationMarker } from 'react-icons/hi';
+import { BsFillEmojiLaughingFill } from 'react-icons/bs';
+
 import { Timestamp } from '@firebase/firestore';
 
 const SignupPage = () => {
@@ -151,19 +159,22 @@ const SignupPage = () => {
 
   return usersData ? (
     <StyledMain>
+      {isLoading && (
+        <StyledLoading
+          type={'spin'}
+          color={'#2a9d8f'}
+          height={'10vw'}
+          width={'10vw'}
+        />
+      )}
+      <LoginBackground />
+      <LoginBg2 />
       <SignupContainer>
-        {isLoading && (
-          <StyledLoading
-            type={'spin'}
-            color={'#2a9d8f'}
-            height={'10vw'}
-            width={'10vw'}
-          />
-        )}
-        <Title>註冊</Title>
-        <NameContainer>
+        <Title>Sign Up</Title>
+        <FiledContainer>
+          <NameIcon />
           <NameFiled
-            placeholder="請輸入您的名"
+            placeholder="First Name"
             value={firstName}
             onChange={(e) => {
               setFirstName(e.target.value);
@@ -171,62 +182,77 @@ const SignupPage = () => {
             disabled={isLoading}
           />
           <LastNameField
-            placeholder="請輸入您的姓"
+            placeholder="Last Name"
             value={lastName}
             onChange={(e) => {
               setLastName(e.target.value);
             }}
             disabled={isLoading}
           />
-        </NameContainer>
-        <Field
-          placeholder="請輸入你的暱稱"
-          value={alias}
-          onChange={(e) => {
-            setAlias(e.target.value);
-          }}
-          disabled={isLoading}
-        />
-        <Field
-          placeholder="請輸入你的居住地"
-          value={place}
-          onChange={(e) => {
-            setPlace(e.target.value);
-          }}
-          disabled={isLoading}
-        />
-        <Field
-          placeholder="請輸入電子郵件"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          disabled={isLoading}
-        />
-        <Field
-          type="password"
-          placeholder="請輸入密碼"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          disabled={isLoading}
-        />
-        <Field
-          type="password"
-          placeholder="請再次輸入密碼"
-          value={secPassword}
-          onChange={(e) => {
-            setSecPassword(e.target.value);
-          }}
-          disabled={isLoading}
-        />
+        </FiledContainer>
+        <FiledContainer>
+          <AliasIcon />
+          <Field
+            placeholder="Alias"
+            value={alias}
+            onChange={(e) => {
+              setAlias(e.target.value);
+            }}
+            disabled={isLoading}
+          />
+        </FiledContainer>
+        <FiledContainer>
+          <LocationIcon />
+          <Field
+            placeholder="Location"
+            value={place}
+            onChange={(e) => {
+              setPlace(e.target.value);
+            }}
+            disabled={isLoading}
+          />
+        </FiledContainer>
+        <FiledContainer>
+          <EmailIcon />
+          <Field
+            placeholder="Email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            disabled={isLoading}
+          />
+        </FiledContainer>
+        <FiledContainer>
+          <PasswordIcon />
+          <Field
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            disabled={isLoading}
+          />
+        </FiledContainer>
+        <FiledContainer>
+          <PasswordIcon />
+          <Field
+            type="password"
+            placeholder="Re-enter Password"
+            value={secPassword}
+            onChange={(e) => {
+              setSecPassword(e.target.value);
+            }}
+            disabled={isLoading}
+          />
+        </FiledContainer>
         <ButtonContainer>
           <NativeButton
             onClick={() => checkSignup(initialUserData)}
             disabled={isLoading}
           >
-            確認
+            確 認
           </NativeButton>
           <FBButton
             onClick={() =>
@@ -239,7 +265,7 @@ const SignupPage = () => {
             }
             disabled={isLoading}
           >
-            <FbIcon /> <span>FB 登入</span>
+            <FbIcon /> <span>FB </span>
           </FBButton>
           <GoogleButton
             onClick={() =>
@@ -252,7 +278,7 @@ const SignupPage = () => {
             }
             disabled={isLoading}
           >
-            <GoogleIcon /> <span>Google 登入</span>
+            <GoogleIcon /> <span>Google</span>
           </GoogleButton>
         </ButtonContainer>
       </SignupContainer>
@@ -283,12 +309,15 @@ const StyledLoading = styled(ReactLoading)`
 
 const SignupContainer = styled.div`
   display: flex;
-  position: relative;
   flex-direction: column;
-  margin: 8rem auto;
-  padding: 4rem;
-  border: 1px solid black;
+  margin: 5vh auto;
+  padding: 30px;
   border-radius: 10px;
+  height: fit-content;
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  background-color: rgba(219, 245, 255, 0.3);
+  backdrop-filter: blur(5px);
   @media screen and (max-width: 560px) {
     margin-right: 2rem;
     margin-left: 2rem;
@@ -297,27 +326,84 @@ const SignupContainer = styled.div`
 `;
 
 const Title = styled.h1`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  color: #2b2b2b;
 `;
 
-const NameContainer = styled.div`
+const FiledContainer = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
+  margin-bottom: 35px;
+`;
+
+const NameIcon = styled(BsFillPersonFill)`
+  fill: rgb(129, 129, 129);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  @media screen and (max-width: 540px) {
+    align-self: flex-start;
+    margin-top: 10px;
+  }
 `;
 
 const Field = styled.input`
-  margin-bottom: 2rem;
-  border-radius: 10px;
+  flex-grow: 1;
+  border: none;
+  background: none;
+  outline: none;
+  border-bottom: 2px solid #d9d7d7;
+  padding: 5px 8px;
 `;
 
 const NameFiled = styled(Field)`
   flex-grow: 1;
   margin-right: 0.5rem;
+  @media screen and (max-width: 540px) {
+    margin-right: 0;
+    margin-bottom: 35px;
+  }
 `;
 
 const LastNameField = styled(Field)`
   flex-grow: 1;
+  @media screen and (max-width: 540px) {
+    margin-left: 30px;
+  }
+`;
+
+const AliasIcon = styled(BsFillEmojiLaughingFill)`
+  fill: rgb(129, 129, 129);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+`;
+
+const LocationIcon = styled(HiLocationMarker)`
+  fill: rgb(129, 129, 129);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+`;
+
+const EmailIcon = styled(MdEmail)`
+  fill: rgb(129, 129, 129);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+`;
+
+const PasswordIcon = styled(RiLock2Fill)`
+  fill: rgb(129, 129, 129);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 `;
 
 const ButtonContainer = styled.div`
@@ -338,9 +424,15 @@ const Button = styled.div`
 `;
 
 const NativeButton = styled(Button)`
-  text-align: center;
-  width: 30%;
-  background-color: lightblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  margin-right: 5px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  color: white;
+  background-color: #1e88e5;
   @media screen and (max-width: 470px) {
     width: 100%;
     margin-bottom: 0.5rem;
@@ -349,39 +441,46 @@ const NativeButton = styled(Button)`
 
 const FBButton = styled(Button)`
   display: flex;
-  justify-content: center;
   align-items: center;
-  text-align: center;
-  width: 30%;
+  justify-content: center;
+  flex-grow: 1;
+  margin-right: 5px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  border: 1px solid #d9d7d7;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
   @media screen and (max-width: 470px) {
     width: 48%;
     font-size: 14px;
-  }
-  @media screen and (max-width: 370px) {
-    flex-direction: column;
-    width: 48%;
-    font-size: 12px;
   }
 `;
 
 const GoogleButton = styled(Button)`
   display: flex;
-  justify-content: center;
   align-items: center;
-  text-align: center;
+  justify-content: center;
+  flex-grow: 1;
+  border: 2px solid #d9d7d7;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
   @media screen and (max-width: 470px) {
     width: 48%;
     font-size: 14px;
   }
-  @media screen and (max-width: 370px) {
-    flex-direction: column;
-    width: 48%;
-    font-size: 12px;
-  }
 `;
 
-const FbIcon = styled(IoLogoFacebook)``;
+const FbIcon = styled(IoLogoFacebook)`
+  fill: rgb(35, 140, 241);
+  height: 20px;
+  width: 20px;
+  margin-right: 5px;
+`;
 
-const GoogleIcon = styled(FcGoogle)``;
+const GoogleIcon = styled(FcGoogle)`
+  height: 20px;
+  width: 20px;
+  margin-right: 5px;
+`;
 
 export default SignupPage;

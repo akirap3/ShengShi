@@ -7,8 +7,12 @@ import { getAllContents } from '../../utils/firebase';
 import * as validation from '../../utils/validation';
 import * as firebase from '../../utils/firebase';
 import Main from '../common/Main';
+import LoginBackground from './LoginBackground';
+import LoginBg2 from './LoginBg2';
 
 import { IoLogoFacebook } from 'react-icons/io';
+import { BsFillPersonFill } from 'react-icons/bs';
+import { RiLock2Fill } from 'react-icons/ri';
 import { FcGoogle } from 'react-icons/fc';
 
 const LoginPage = () => {
@@ -103,32 +107,40 @@ const LoginPage = () => {
         <StyledLoading
           type={'spin'}
           color={'#2a9d8f'}
-          height={'10vw'}
-          width={'10vw'}
+          height={'100px'}
+          width={'100px'}
         />
       )}
+      <LoginBackground />
+      <LoginBg2 />
       <SignupContainer>
-        <Title>登入</Title>
-        <Field
-          placeholder="請輸入電子郵件"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          disabled={isLoading}
-        />
-        <Field
-          type="password"
-          placeholder="請輸入密碼"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          disabled={isLoading}
-        />
+        <Title>Ｗelcome back</Title>
+        <FiledContainer>
+          <EmailIcon />
+          <Field
+            placeholder="Email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            disabled={isLoading}
+          />
+        </FiledContainer>
+        <FiledContainer>
+          <PasswordIcon />
+          <Field
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            disabled={isLoading}
+          />
+        </FiledContainer>
         <ButtonContainer>
           <NativeButton onClick={() => checkAndLogin()} disabled={isLoading}>
-            確認
+            <span>確 認</span>
           </NativeButton>
           <FBButton
             onClick={() =>
@@ -142,7 +154,7 @@ const LoginPage = () => {
             disabled={isLoading}
           >
             <FbIcon />
-            <span>FB 登入</span>
+            <span>FB</span>
           </FBButton>
           <GoogleButton
             onClick={() =>
@@ -155,7 +167,7 @@ const LoginPage = () => {
             }
             disabled={isLoading}
           >
-            <GoogleIcon /> <span>Google 登入</span>
+            <GoogleIcon /> <span>Google</span>
           </GoogleButton>
         </ButtonContainer>
       </SignupContainer>
@@ -179,15 +191,17 @@ const StyledMain = styled(Main)`
 const SignupContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 8rem auto;
-  padding: 4rem;
-  border: 1px solid black;
+  margin: 20vh auto;
+  padding: 30px;
   border-radius: 10px;
-  @media screen and (max-width: 560px) {
-    margin-right: 2rem;
-    margin-left: 2rem;
-    padding: 2rem;
-  } ;
+  height: fit-content;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  background-color: rgba(219, 245, 255, 0.3);
+  backdrop-filter: blur(5px);
+
+  @media screen and (max-width: 700px) {
+    margin: 8vh auto;
+  }
 `;
 
 const StyledLoading = styled(ReactLoading)`
@@ -199,13 +213,43 @@ const StyledLoading = styled(ReactLoading)`
 `;
 
 const Title = styled.h1`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  color: #2b2b2b;
+`;
+
+const FiledContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 35px;
+`;
+
+const EmailIcon = styled(BsFillPersonFill)`
+  fill: rgb(129, 129, 129);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+`;
+
+const PasswordIcon = styled(RiLock2Fill)`
+  fill: rgb(129, 129, 129);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 `;
 
 const Field = styled.input`
-  margin-bottom: 2rem;
-  border-radius: 10px;
+  width: 60%;
+  border: none;
+  background: none;
+  outline: none;
+  flex-grow: 1;
+  border-bottom: 2px solid #d9d7d7;
+  padding: 5px 8px;
 `;
 
 const ButtonContainer = styled.div`
@@ -219,25 +263,38 @@ const ButtonContainer = styled.div`
 `;
 
 const Button = styled.div`
-  border: 1px solid darkcyan;
   border-radius: 5px;
-  padding: 0.5rem;
+  padding: 5px 15px;
+  box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 `;
 
 const NativeButton = styled(Button)`
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-right: 5px;
-  background-color: lightblue;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  color: white;
+  background-color: #1e88e5;
+
   @media screen and (max-width: 470px) {
     width: 100%;
-    margin-bottom: 0.5rem;
+    margin-bottom: 10px;
   }
 `;
 
 const FBButton = styled(Button)`
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-right: 5px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  border: 1px solid #d9d7d7;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
   @media screen and (max-width: 470px) {
     width: 48%;
     font-size: 14px;
@@ -245,15 +302,29 @@ const FBButton = styled(Button)`
 `;
 
 const GoogleButton = styled(Button)`
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #d9d7d7;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
   @media screen and (max-width: 470px) {
     width: 48%;
     font-size: 14px;
   }
 `;
 
-const FbIcon = styled(IoLogoFacebook)``;
+const FbIcon = styled(IoLogoFacebook)`
+  fill: rgb(35, 140, 241);
+  height: 20px;
+  width: 20px;
+  margin-right: 5px;
+`;
 
-const GoogleIcon = styled(FcGoogle)``;
+const GoogleIcon = styled(FcGoogle)`
+  height: 20px;
+  width: 20px;
+  margin-right: 5px;
+`;
 
 export default LoginPage;
