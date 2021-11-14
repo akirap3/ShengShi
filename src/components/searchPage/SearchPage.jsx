@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import SearchPageCard from './SearchPageCard';
 import SharesContainer from '../common/SharesContainer';
+import Title from '../personalPage/Title';
 import { getSingleShare } from '../../utils/firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { Waypoint } from 'react-waypoint';
@@ -131,10 +132,10 @@ const SearchPage = () => {
     <Main>
       <Banner>
         <BannerContent>
-          <Title>
+          <BannerTitle>
             Ad eos saepe lucilius, noster postulant philosophia ea usu, qui
             dicta sadipscing te.
-          </Title>
+          </BannerTitle>
           <SubTitle>
             Et has minim elitr intellegat. Mea aeterno eleifend antiopam ad, nam
             no suscipit quaerendum. At nam minimum ponderum. Est audiam animal
@@ -157,19 +158,18 @@ const SearchPage = () => {
         <SearchButton onClick={() => handleSearch()}>搜尋</SearchButton>
         <ResetButton onClick={handleResetSearch}>清除搜尋</ResetButton>
       </SearchContent>
-      <SharesTitleContainer>
-        <TitleIcon src={Hotpot} />
-        <SharesTitle>目前其他人分享的勝食</SharesTitle>
-      </SharesTitleContainer>
+      <Title title="目前其他人分享的勝食" />
       {shares ? (
         shares.length !== 0 ? (
-          <SharesContainer>
-            {shares
-              .filter((share) => share.isArchived === false)
-              .map((share) => (
-                <SearchPageCard key={uuidv4()} share={share} />
-              ))}
-          </SharesContainer>
+          <Outer>
+            <SharesContainer>
+              {shares
+                .filter((share) => share.isArchived === false)
+                .map((share) => (
+                  <SearchPageCard key={uuidv4()} share={share} />
+                ))}
+            </SharesContainer>
+          </Outer>
         ) : (
           <NoResult text="搜尋不到" />
         )
@@ -220,7 +220,7 @@ const BannerContent = styled.div`
   }
 `;
 
-const Title = styled.h1`
+const BannerTitle = styled.h1`
   margin-bottom: 1rem;
 `;
 
@@ -278,25 +278,10 @@ const SearchButton = styled.button`
 
 const ResetButton = styled(SearchButton)``;
 
-const SharesTitleContainer = styled.div`
+const Outer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid black;
-  margin: auto 4rem;
-`;
-
-const TitleIcon = styled.img`
-  width: 50px;
-  padding-bottom: 0.5rem;
-  margin-right: 1rem;
-`;
-
-const SharesTitle = styled.h2`
-  font-size: 24px;
-  @media screen and (max-width: 460px) {
-    font-size: 4vw;
-  }
 `;
 
 export default SearchPage;
