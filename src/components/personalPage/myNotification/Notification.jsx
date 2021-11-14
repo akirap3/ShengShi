@@ -20,15 +20,17 @@ const Notification = () => {
 
   return currentUser && messages ? (
     messages.length !== 0 ? (
-      <NotificationContainer>
-        {messages.map((message) => (
-          <NotificationCard
-            key={uuidv4()}
-            message={message}
-            currentUser={currentUser}
-          />
-        ))}
-      </NotificationContainer>
+      <Outer>
+        <NotificationContainer>
+          {messages.map((message) => (
+            <NotificationCard
+              key={uuidv4()}
+              message={message}
+              currentUser={currentUser}
+            />
+          ))}
+        </NotificationContainer>
+      </Outer>
     ) : (
       <NoResult text="你目前沒有任何的訊息" />
     )
@@ -37,11 +39,25 @@ const Notification = () => {
   );
 };
 
-const NotificationContainer = styled.div`
+const Outer = styled.div`
   display: flex;
-  flex-direction: column;
-  width: 70vw;
-  margin: 2vw auto;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
+  padding-bottom: 150px;
+`;
+
+const NotificationContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 300px);
+
+  @media screen and (min-width: 650px) {
+    grid-template-columns: repeat(1, 400px);
+  }
+
+  @media screen and (min-width: 800px) {
+    grid-template-columns: repeat(1, 600px);
+  }
 `;
 
 export default Notification;
