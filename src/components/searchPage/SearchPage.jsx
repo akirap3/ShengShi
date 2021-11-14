@@ -18,7 +18,8 @@ import Main from '../common/Main';
 import NoResult from '../personalPage/NoResult';
 
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
-import Hotpot from '../../images/searchPage/hotpot.svg';
+import Wave from 'react-wavify';
+import LoginBg2 from '../loginPage/LoginBg2';
 
 import algolia from '../../utils/algolia';
 
@@ -131,6 +132,8 @@ const SearchPage = () => {
   return (
     <Main>
       <Banner>
+        <LoginBg2 />
+        <WaveBackground />
         <BannerContent>
           <BannerTitle>
             Ad eos saepe lucilius, noster postulant philosophia ea usu, qui
@@ -148,6 +151,7 @@ const SearchPage = () => {
         </BannerContent>
         <BannerImg src={Img} />
       </Banner>
+
       <SearchContent>
         <SearchBar
           placeholder="勝食搜尋"
@@ -181,12 +185,40 @@ const SearchPage = () => {
   );
 };
 
+const WaveBackground = () => {
+  return (
+    <Wave
+      mask="url(#mask)"
+      fill="#52b788"
+      style={{
+        position: 'absolute',
+        bottom: '0',
+        height: '100px',
+        zIndex: '-3',
+      }}
+      options={{
+        height: 20,
+      }}
+    >
+      <defs>
+        <linearGradient id="gradient" gradientTransform="rotate(90)">
+          <stop offset="0" stopColor="white" />
+          <stop offset="0.5" stopColor="black" />
+        </linearGradient>
+        <mask id="mask">
+          <rect x="0" y="0" width="2000" height="150" fill="url(#gradient)" />
+        </mask>
+      </defs>
+    </Wave>
+  );
+};
+
 const Banner = styled.div`
   display: flex;
+  position: relative;
   justify-content: space-around;
   align-items: center;
   padding: 4rem;
-  background-color: ${themeColor.blue};
 
   @media screen and (max-width: 600px) {
     flex-direction: column;

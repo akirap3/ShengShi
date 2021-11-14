@@ -29,6 +29,7 @@ const Footer = () => {
 };
 
 const FooterContainer = styled.div`
+  position: relative;
   margin: 50px;
   @media screen and (min-width: 1500px) {
     margin: 5vw 15vw;
