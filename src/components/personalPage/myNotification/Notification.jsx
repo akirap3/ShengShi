@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getAllContents } from '../../../utils/firebase';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import NotificationCard from './NotificationCard';
+import NoResult from '../NoResult';
 
 const Notification = () => {
   const currentUser = useCurrentUser();
@@ -29,14 +30,10 @@ const Notification = () => {
         ))}
       </NotificationContainer>
     ) : (
-      <NoResultContainer>
-        <NoResult>你目前沒有任何的訊息</NoResult>
-      </NoResultContainer>
+      <NoResult text="你目前沒有任何的訊息" />
     )
   ) : (
-    <NoResultContainer>
-      <NoResult>你目前沒有任何的訊息</NoResult>
-    </NoResultContainer>
+    <NoResult text="你目前沒有任何的訊息" />
   );
 };
 
@@ -46,14 +43,5 @@ const NotificationContainer = styled.div`
   width: 70vw;
   margin: 2vw auto;
 `;
-
-const NoResultContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10vw;
-`;
-
-const NoResult = styled.div``;
 
 export default Notification;

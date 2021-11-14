@@ -14,6 +14,7 @@ import {
 import useCurrentUser from '../../hooks/useCurrentUser';
 import { themeColor } from '../../utils/commonVariables';
 import Main from '../common/Main';
+import NoResult from '../personalPage/NoResult';
 
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
 import Hotpot from '../../images/searchPage/hotpot.svg';
@@ -170,14 +171,10 @@ const SearchPage = () => {
               ))}
           </SharesContainer>
         ) : (
-          <NoResultContainer>
-            <NoResult>搜尋不到</NoResult>
-          </NoResultContainer>
+          <NoResult text="搜尋不到" />
         )
       ) : (
-        <NoResultContainer>
-          <NoResult>搜尋不到</NoResult>
-        </NoResultContainer>
+        <NoResult text="搜尋不到" />
       )}
       <Waypoint onEnter={handleInfiniteScroll} />
     </Main>
@@ -300,17 +297,6 @@ const SharesTitle = styled.h2`
   @media screen and (max-width: 460px) {
     font-size: 4vw;
   }
-`;
-
-const NoResultContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10vw;
-`;
-
-const NoResult = styled.div`
-  font-size: 16px;
 `;
 
 export default SearchPage;

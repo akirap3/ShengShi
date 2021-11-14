@@ -4,6 +4,7 @@ import { getSpecificContents } from '../../../utils/firebase';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import MyReceivedCard from './MyRecievedCard';
 import SharesContainer from '../../common/SharesContainer';
+import NoResult from '../NoResult';
 
 const MyReceivedList = () => {
   const currentUser = useCurrentUser();
@@ -35,9 +36,7 @@ const MyReceivedList = () => {
       </SharesContainer>
     </Outer>
   ) : (
-    <NoResultContainer>
-      <NoResult>你沒有任何的領取紀錄</NoResult>
-    </NoResultContainer>
+    <NoResult text="你沒有任何的領取紀錄" />
   );
 };
 
@@ -45,19 +44,6 @@ const Outer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const NoResultContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10vw;
-  height: 40vh;
-`;
-
-const NoResult = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 36px;
 `;
 
 export default MyReceivedList;

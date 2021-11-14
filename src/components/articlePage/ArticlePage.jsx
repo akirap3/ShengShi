@@ -2,8 +2,8 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { Waypoint } from 'react-waypoint';
-import { themeColor } from '../../utils/commonVariables';
 import Main from '../common/Main';
+import NoResult from '../personalPage/NoResult';
 import HomepageBackground from '../common/HomepageBackground';
 import ArticleBannerImg from '../../images/articlePage/articleImage1.jpg';
 import { IoIosSearch } from 'react-icons/io';
@@ -141,14 +141,10 @@ const ArticlePage = () => {
             ))}
           </ArticleContainer>
         ) : (
-          <NoResultContainer>
-            <NoResult>搜尋不到</NoResult>
-          </NoResultContainer>
+          <NoResult text="搜尋不到" />
         )
       ) : (
-        <NoResultContainer>
-          <NoResult>搜尋不到</NoResult>
-        </NoResultContainer>
+        <NoResult text="搜尋不到" />
       )}
 
       {articles && <Waypoint onEnter={handleInfiniteScroll} />}
@@ -442,19 +438,6 @@ const CardSubtitle = styled.div`
   color: hsl(0, 0%, 51%);
   font-weight: 300;
   line-height: 20px;
-`;
-
-const NoResultContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10vw;
-  height: 40vh;
-`;
-
-const NoResult = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 36px;
 `;
 
 export default ArticlePage;

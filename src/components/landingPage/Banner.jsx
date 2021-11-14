@@ -107,7 +107,6 @@ const BannerImg = styled.img`
   align-self: center;
   border-radius: 5px;
   box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
-
   @media screen and (min-width: 600px) {
     max-width: 40vw;
   }

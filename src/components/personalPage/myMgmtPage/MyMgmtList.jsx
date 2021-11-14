@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import MyMgmtCard from './MyMgmtCard';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import { getSpecificContents } from '../../../utils/firebase';
+import NoResult from '../NoResult';
 
 const MyMgmtList = () => {
   const [shares, setShares] = useState('');
@@ -49,14 +50,10 @@ const MyMgmtList = () => {
             )}
           </MgmtContainer>
         ) : (
-          <NoResultContainer>
-            <NoResult>目前沒有任何預約</NoResult>
-          </NoResultContainer>
+          <NoResult text="目前沒有任何預約" />
         )
       ) : (
-        <NoResultContainer>
-          <NoResult>你沒有任何被預約的清單</NoResult>
-        </NoResultContainer>
+        <NoResult text="目前沒有任何預約" />
       )}
     </>
   );
@@ -70,14 +67,5 @@ const MgmtContainer = styled.div`
   margin-top: 20px;
   margin-bottom: 150px;
 `;
-
-const NoResultContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10vw;
-`;
-
-const NoResult = styled.div``;
 
 export default MyMgmtList;
