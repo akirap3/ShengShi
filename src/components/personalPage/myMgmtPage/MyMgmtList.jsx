@@ -67,7 +67,8 @@ const MgmtContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 2vw auto;
+  margin-top: 20px;
+  margin-bottom: 150px;
 `;
 
 const NoResultContainer = styled.div`

@@ -27,13 +27,15 @@ const MyShareList = () => {
   }, [getMyShareList]);
 
   return shares && shares.length !== 0 ? (
-    <SharesContainer>
-      {shares
-        .filter((share) => share.isArchived === false)
-        .map((share) => (
-          <MyShareCard key={share.id} share={share} />
-        ))}
-    </SharesContainer>
+    <Outer>
+      <SharesContainer>
+        {shares
+          .filter((share) => share.isArchived === false)
+          .map((share) => (
+            <MyShareCard key={share.id} share={share} />
+          ))}
+      </SharesContainer>
+    </Outer>
   ) : (
     <NoResultContainer>
       <NoResult>目前沒有任何分享清單</NoResult>
@@ -41,13 +43,23 @@ const MyShareList = () => {
   );
 };
 
+const Outer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const NoResultContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10vw;
+  height: 40vh;
 `;
 
-const NoResult = styled.div``;
+const NoResult = styled.div`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 36px;
+`;
 
 export default MyShareList;

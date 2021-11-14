@@ -27,11 +27,13 @@ const MyReceivedList = () => {
   }, [getReceivedShares]);
 
   return receivedShares && receivedShares.length !== 0 ? (
-    <SharesContainer>
-      {receivedShares.map((share) => (
-        <MyReceivedCard key={share.id} share={share} />
-      ))}
-    </SharesContainer>
+    <Outer>
+      <SharesContainer>
+        {receivedShares.map((share) => (
+          <MyReceivedCard key={share.id} share={share} />
+        ))}
+      </SharesContainer>
+    </Outer>
   ) : (
     <NoResultContainer>
       <NoResult>你沒有任何的領取紀錄</NoResult>
@@ -39,13 +41,23 @@ const MyReceivedList = () => {
   );
 };
 
+const Outer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const NoResultContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10vw;
+  height: 40vh;
 `;
 
-const NoResult = styled.div``;
+const NoResult = styled.div`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 36px;
+`;
 
 export default MyReceivedList;

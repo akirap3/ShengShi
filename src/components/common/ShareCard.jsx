@@ -9,13 +9,10 @@ import DeletePopup from './DeletePopup';
 import { handleCollection } from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
 
+import StarImg from '../../images/common/star.png';
 import { ImSpoonKnife } from 'react-icons/im';
-import {
-  AiTwotoneStar,
-  AiTwotoneHeart,
-  AiFillCloseCircle,
-} from 'react-icons/ai';
-import { GrLocation } from 'react-icons/gr';
+import { AiTwotoneHeart, AiFillCloseCircle } from 'react-icons/ai';
+import { HiLocationMarker } from 'react-icons/hi';
 
 const ShareCard = ({
   btnName,
@@ -52,24 +49,24 @@ const ShareCard = ({
           ) : (
             <DeleteButton onClick={openDelete} />
           )}
-          <CardRow>
+          <CardRowOne>
             <CardItem>
               <ShareNameIcon />
               <ShareUseName>{share?.postUser?.displayName}</ShareUseName>
             </CardItem>
             <CardItem>
-              <Star />
+              <Star src={StarImg} />
               <Rating>{share?.rating}</Rating>
             </CardItem>
             <Heart
               isliked={
                 currentUser
                   ? share?.postUser?.id === currentUser.uid
-                    ? 'blue'
+                    ? '#2196f3aa'
                     : share?.savedUserId?.includes(currentUser.uid)
-                    ? 'red'
-                    : 'black'
-                  : 'black'
+                    ? '#FF3131'
+                    : 'white'
+                  : 'white'
               }
               onClick={
                 currentUser
@@ -79,7 +76,7 @@ const ShareCard = ({
                   : () => {}
               }
             />
-          </CardRow>
+          </CardRowOne>
           <CardRow>
             <CardItem>
               <PlaceIcon />
@@ -129,17 +126,20 @@ const ShareContext = styled.div`
   display: flex;
   border: 0;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
-  border-radius: 10px;
+  border-radius: 0 10px 10px 0;
+  border-left: 10px solid #52b788;
+  max-width: 550px;
 `;
 
 const ShareImg = styled.img`
-  max-width: 15vw;
-  border-radius: 10px 0 0 10px;
-  @media screen and (max-width: 700px) {
-    max-width: 30vw;
+  max-width: 30vw;
+
+  @media screen and (min-width: 850px) {
+    max-width: 15vw;
   }
-  @media screen and (max-width: 460px) {
-    max-width: 25vw;
+
+  @media screen and (min-width: 1500px) {
+    max-width: 225px;
   }
 `;
 
@@ -148,28 +148,16 @@ const CardRow = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-wrap: nowrap;
-  font-size: 1.5vw;
-  &:nth-child(2) {
-    margin-bottom: 1vw;
-  }
+`;
 
-  @media screen and (max-width: 800px) {
-    &:nth-child(3) {
-      flex-wrap: wrap;
-    }
-  }
-
-  @media screen and (max-width: 700px) {
-    font-size: 2.6vw;
-    &:nth-child(2) {
-      margin-bottom: 1vw;
-    }
-  }
+const CardRowOne = styled(CardRow)`
+  margin-bottom: 10px;
 `;
 
 const CardItem = styled.div`
   display: flex;
   flex-wrap: nowrap;
+  align-items: center;
 `;
 
 const CardContent = styled.div`
@@ -177,42 +165,46 @@ const CardContent = styled.div`
   position: relative;
   flex-direction: column;
   justify-content: space-between;
-  padding: 2vw 1.5vw;
+  padding: 15px;
   flex-grow: 1;
-  @media screen and (max-width: 700px) {
-    padding: 3.5vw 3vw;
+  background-color: #b7e4c7;
+  border-radius: 0 10px 10px 0;
+
+  @media screen and (min-width: 900px) {
+    padding: 20px;
   }
 `;
 
-const ShareTitle = styled.h2`
-  font-size: 2vw;
-  margin-bottom: 2vw;
-  @media screen and (max-width: 700px) {
-    font-size: 3vw;
-    margin-bottom: 2vw;
-  }
-  @media screen and (max-width: 460px) {
-    font-size: 3.5vw;
-    margin-bottom: 3vw;
-  }
+const ShareTitle = styled.div`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 25px;
 `;
 
 const ShareNameIcon = styled(ImSpoonKnife)`
-  fill: ${themeColor.iconColor};
-  margin-right: 1vw;
-  width: 1.8vw;
-  height: 1.8vw;
-  @media screen and (max-width: 700px) {
-    width: 2.6vw;
-    height: 2.6vw;
+  fill: white;
+  width: 25px;
+  height: 25px;
+  padding: 5px;
+  background-color: rgb(129, 129, 129);
+  border-radius: 50%;
+  margin-right: 5px;
+`;
+
+const ShareUseName = styled.span`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  color: rgb(129, 129, 129);
+  margin-right: 10px;
+
+  @media screen and (min-width: 400px) {
+    margin-right: 20px;
   }
 `;
 
-const ShareUseName = styled.span``;
-
 const StyledColse = styled(AiFillCloseCircle)`
-  fill: lightblue;
-  background-color: blue;
+  fill: #1e88e582;
   border-radius: 50%;
   opacity: 0.8;
   cursor: pointer;
@@ -220,66 +212,69 @@ const StyledColse = styled(AiFillCloseCircle)`
 
 const DeleteButton = styled(StyledColse)`
   position: absolute;
-  top: -1.2vw;
-  right: -1.2vw;
-  width: 3vw;
-  height: 3vw;
-
-  @media screen and (max-width: 700px) {
-    width: 4vw;
-    height: 4vw;
-    top: -2vw;
-    right: -2vw;
-  }
+  top: -10px;
+  right: -10px;
+  width: 22px;
+  height: 22px;
 `;
 
-const Star = styled(AiTwotoneStar)`
-  fill: orchid;
-  margin-right: 1vw;
-  width: 1.8vw;
-  height: 1.8vw;
-  @media screen and (max-width: 700px) {
-    width: 2.6vw;
-    height: 2.6vw;
-  }
+const Star = styled.img`
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
 `;
 
-const Rating = styled.span``;
+const Rating = styled.span`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  color: rgb(129, 129, 129);
+  margin-right: 10px;
+
+  @media screen and (min-width: 400px) {
+    margin-right: 20px;
+  }
+`;
 
 const Heart = styled(AiTwotoneHeart)`
   fill: ${(props) => props.isliked};
-  width: 1.8vw;
-  height: 1.8vw;
+  width: 25px;
+  height: 25px;
   cursor: pointer;
-  @media screen and (max-width: 700px) {
-    width: 2.6vw;
-    height: 2.6vw;
+`;
+
+const PlaceIcon = styled(HiLocationMarker)`
+  fill: white;
+  width: 25px;
+  height: 25px;
+  padding: 5px;
+  background-color: rgb(129, 129, 129);
+  border-radius: 50%;
+  margin-right: 5px;
+`;
+
+const Location = styled.span`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  color: rgb(129, 129, 129);
+  margin-right: 10px;
+
+  @media screen and (min-width: 400px) {
+    margin-right: 20px;
   }
 `;
-
-const PlaceIcon = styled(GrLocation)`
-  margin-right: 1vw;
-  width: 1.8vw;
-  height: 1.8vw;
-`;
-
-const Location = styled.span``;
 
 const GetButton = styled.div`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  color: rgb(129, 129, 129);
   border: 1px solid ${themeColor.outLineColor};
-  padding: 0.5rem 1rem;
+  padding: 5px 10px;
+  margin-left: 5px;
   border-radius: 8px;
   background-color: #2a9d8f;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   color: white;
   cursor: pointer;
-
-  @media screen and (max-width: 860px) {
-    padding: 0.3rem 0.5rem;
-  }
-
-  @media screen and (max-width: 800px) {
-    margin-top: 0.5rem;
-  }
 `;
 
 export default ShareCard;

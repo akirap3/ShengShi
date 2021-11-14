@@ -15,7 +15,7 @@ const MyToReceiveCard = ({ share }) => {
       <ShareCard
         handleClick={openConfirmation}
         Tag={ShareCardTag}
-        tagName="#未領取"
+        tagName="#未領"
         category="領取"
         share={share}
         isToReceive={true}

@@ -287,7 +287,7 @@ const DashboardContext = styled.div`
   flex-grow: 1;
   padding: 25px;
   width: fit-content;
-  max-width: 950px;
+  max-width: 1000px;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -308,6 +308,10 @@ const LeftColumn = styled.div`
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   border-radius: 8px;
   padding: 10px;
+
+  @media screen and (min-width: 700px) {
+    padding: 25px;
+  }
 `;
 
 const AvatarContainer = styled.div`
@@ -319,6 +323,11 @@ const Avatar = styled.img`
   height: 100px;
   border-radius: 50%;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+
+  @media screen and (min-width: 700px) {
+    width: 125px;
+    height: 125px;
+  }
 `;
 
 const SettingContainer = styled.div`
@@ -337,6 +346,11 @@ const Setting = styled(BsGear)`
   cursor: pointer;
   background-color: rgb(129, 129, 129);
   border-radius: 50%;
+
+  @media screen and (min-width: 700px) {
+    bottom: 5px;
+    right: 5px;
+  }
 `;
 
 const NameContext = styled.div`
@@ -570,11 +584,10 @@ const ItemNumber = styled.div`
   margin-top: 0.8vw;
   position: absolute;
   bottom: -5px;
-  right: -15px;
-  background-color: lightblue;
+  right: -10px;
   padding: 5px 8px;
   border-radius: 50%;
-  font-size: 8px;
+  font-size: 12px;
   color: white;
   background: #1e88e582;
   backdrop-filter: blur(5px);

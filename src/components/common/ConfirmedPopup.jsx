@@ -38,14 +38,7 @@ const ConfirmedPopup = ({
   return (
     <>
       <DialogOverlay isOpen={showConfirmation} onDismiss={closeConfirmation}>
-        <DialogContent
-          style={{
-            position: 'relative',
-            border: 'solid 1px lightBlue',
-            borderRadius: '10px',
-          }}
-          aria-label="confirmed-popup"
-        >
+        <StyledDialogContent aria-label="confirmed-popup">
           <PopClose onClick={closeConfirmation} />
           <PopTitleContainer>
             <CrownIcon />
@@ -85,7 +78,7 @@ const ConfirmedPopup = ({
               </UpdateBtn>
             )}
           </PopContent>
-        </DialogContent>
+        </StyledDialogContent>
       </DialogOverlay>
       <UpdatePopup
         showUpdate={showUpdate}
@@ -95,6 +88,12 @@ const ConfirmedPopup = ({
     </>
   );
 };
+
+const StyledDialogContent = styled(DialogContent)`
+  position: relative;
+  width: 80vw;
+  border-radius: 10px;
+`;
 
 const StyledColse = styled(AiFillCloseCircle)`
   fill: lightblue;
