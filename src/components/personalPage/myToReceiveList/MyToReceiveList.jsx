@@ -27,11 +27,13 @@ const MyToReceiveList = () => {
   }, [getToReceiveShares]);
 
   return toReceiveShares && toReceiveShares.length !== 0 ? (
-    <SharesContainer>
-      {toReceiveShares.map((share) => (
-        <MyToReceiveCard share={share} />
-      ))}
-    </SharesContainer>
+    <Outer>
+      <SharesContainer>
+        {toReceiveShares.map((share) => (
+          <MyToReceiveCard share={share} />
+        ))}
+      </SharesContainer>
+    </Outer>
   ) : (
     <NoResultContainer>
       <NoResult>你沒有任何的尚未領取清單</NoResult>
@@ -39,13 +41,23 @@ const MyToReceiveList = () => {
   );
 };
 
+const Outer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const NoResultContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10vw;
+  height: 40vh;
 `;
 
-const NoResult = styled.div``;
+const NoResult = styled.div`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 36px;
+`;
 
 export default MyToReceiveList;

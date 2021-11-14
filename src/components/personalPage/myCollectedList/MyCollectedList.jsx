@@ -27,11 +27,13 @@ const MyCollectedList = () => {
   }, [getSavedShares]);
 
   return savedShares && savedShares.length !== 0 ? (
-    <SharesContainer>
-      {savedShares.map((share) => (
-        <MyCollectedCard key={share.id} share={share} />
-      ))}
-    </SharesContainer>
+    <Outer>
+      <SharesContainer>
+        {savedShares.map((share) => (
+          <MyCollectedCard key={share.id} share={share} />
+        ))}
+      </SharesContainer>
+    </Outer>
   ) : (
     <NoResultContainer>
       <NoResult>你沒有任何的收藏清單</NoResult>
@@ -39,13 +41,23 @@ const MyCollectedList = () => {
   );
 };
 
+const Outer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const NoResultContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10vw;
+  height: 40vh;
 `;
 
-const NoResult = styled.div``;
+const NoResult = styled.div`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 36px;
+`;
 
 export default MyCollectedList;

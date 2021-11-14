@@ -16,8 +16,8 @@ const Footer = () => {
           <LogoImg src={Logo} />
         </Link>
         <TextRow>
-          <AboutText to="/articles">文章</AboutText>
-          <ContactText to="/search">搜尋</ContactText>
+          <AboutText to="/articles">文 章</AboutText>
+          <ContactText to="/search">搜 尋</ContactText>
         </TextRow>
       </FooterContent>
       <LogoRow>
@@ -58,17 +58,28 @@ const TextRow = styled.div`
 `;
 
 const Text = styled(Link)`
-  margin: auto 2rem;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
   color: #40916c;
+  position: relative;
+  margin: auto 2rem;
+  text-align: center;
 
-  @media screen and (max-width: 650px) {
-    letter-spacing: 2vw;
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0;
+    height: 3px;
+    background-color: #3ea9e1;
+    transition: 0.6s width linear;
   }
 
-  @media screen and (min-width: 800px) {
-    letter-spacing: 1vw;
+  &:hover {
+    &:after {
+      width: 100%;
+    }
   }
 
   @media screen and (min-width: 1500px) {

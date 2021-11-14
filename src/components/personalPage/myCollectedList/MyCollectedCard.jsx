@@ -24,7 +24,7 @@ const MyCollectedCard = ({ share }) => {
       <ShareCard
         handleClick={handleCollectedOpen}
         Tag={ShareCardTag}
-        tagName="#已收藏"
+        tagName="#收藏"
         btnName="領取"
         category="收藏"
         isCollected={true}

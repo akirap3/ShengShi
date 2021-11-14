@@ -260,11 +260,12 @@ const MessageCount = styled.div`
   position: absolute;
   bottom: 0px;
   right: 10px;
-  background-color: brown;
-  padding: 1px 5px;
   border-radius: 50%;
   opacity: 0.8;
   color: white;
+  padding: 5px 8px;
+  font-size: 12px;
+  background: #2196f3;
 `;
 
 const MemberIcon = styled(BsPersonCircle)`

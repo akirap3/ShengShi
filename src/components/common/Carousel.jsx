@@ -89,7 +89,7 @@ const Carousel = ({ title, contentData, isRestaurants }) => {
                         like={
                           currentUser
                             ? content?.savedUserId?.includes(currentUser.uid)
-                              ? 'red'
+                              ? '#FF3131'
                               : 'white'
                             : 'white'
                         }

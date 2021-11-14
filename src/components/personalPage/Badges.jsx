@@ -182,14 +182,16 @@ const Badges = () => {
       </CharContainer>
       {badges?.length !== 0 ? (
         badges && (
-          <BadgeContainer>
-            {badges.map((badge) => (
-              <BadgeContext key={badge.id}>
-                <BadgeImg src={badge.imageUrl} />
-                <BadgeName>{badge.name}</BadgeName>
-              </BadgeContext>
-            ))}
-          </BadgeContainer>
+          <Outer>
+            <BadgeContainer>
+              {badges.map((badge) => (
+                <BadgeContext key={badge.id}>
+                  <BadgeImg src={badge.imageUrl} />
+                  <BadgeName>{badge.name}</BadgeName>
+                </BadgeContext>
+              ))}
+            </BadgeContainer>
+          </Outer>
         )
       ) : (
         <NoResultContainer>
@@ -207,8 +209,8 @@ const CharContainer = styled.div`
 `;
 
 const ChartContent = styled.div`
-  width: 70vw;
-  height: 50vw;
+  width: 600px;
+  height: 600px;
   @media screen and (max-width: 900px) {
     width: 80vw;
     height: 60vw;
@@ -221,47 +223,45 @@ const ChartContent = styled.div`
 
 const BadgeContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   grid-template-rows: row;
   gap: 2vw;
-  padding: 3vw 10vw;
+  padding-bottom: 100px;
 
-  @media screen and (max-width: 780px) {
+  @media screen and (min-width: 650px) {
     grid-template-columns: repeat(3, 1fr);
-    padding: 3vw 15vw;
   }
+`;
 
-  @media screen and (max-width: 600px) {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 3vw 18vw;
-  }
+const Outer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const BadgeContext = styled.div`
   justify-self: center;
-  padding: 1vw;
+  max-width: 800px;
 `;
 
 const BadgeImg = styled.img`
-  width: 15vw;
-  height: 15vw;
-  border: 1px solid black;
+  width: 25vw;
+  height: 25vw;
+  max-width: 180px;
+  max-height: 180px;
   border-radius: 50%;
   justify-items: center;
-
-  @media screen and (max-width: 780px) {
-    width: 18vw;
-    height: 18vw;
-  }
-  @media screen and (max-width: 600px) {
-    width: 25vw;
-    height: 25vw;
-  }
 `;
 
 const BadgeName = styled.div`
-  margin-top: 1vw;
+  margin-top: 15px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 18px;
   text-align: center;
+
+  @media screen and (min-width: 650px) {
+    font-size: 24px;
+  }
 `;
 
 const NoResultContainer = styled.div`
@@ -269,8 +269,12 @@ const NoResultContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 10vw;
+  height: 40vh;
 `;
 
-const NoResult = styled.div``;
+const NoResult = styled.div`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 36px;
+`;
 
 export default Badges;

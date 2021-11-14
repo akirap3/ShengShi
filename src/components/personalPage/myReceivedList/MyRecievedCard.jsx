@@ -15,7 +15,7 @@ const MyReceivedCard = ({ share }) => {
         handleClick={openEditor}
         Tag={ShareCardTag}
         isReceived="true"
-        tagName="＃已領取"
+        tagName="＃已領"
         share={share}
       />
       <CheckPopup showEdit={showEdit} closeEditor={closeEditor} share={share} />

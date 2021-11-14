@@ -120,8 +120,12 @@ const NoResultContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 10vw;
+  height: 40vh;
 `;
 
-const NoResult = styled.div``;
+const NoResult = styled.div`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 36px;
+`;
 
 export default CollectedRestaurants;

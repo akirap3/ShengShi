@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import { layoutConfig, themeColor } from '../../utils/commonVariables';
+import { layoutConfig } from '../../utils/commonVariables';
 import { getAllContents, getSearchedContents } from '../../utils/firebase';
 import Carousel from '../common/Carousel';
 import HomepageBackground from '../common/HomepageBackground';
@@ -10,7 +10,6 @@ import HomepageBackground from '../common/HomepageBackground';
 import RestaurantMap from './RestaurantMap';
 import RestaurantSearchCard from './RestaurantSearchCard';
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
-import TableImg from '../../images/homepage/table2.jpg';
 import { IoIosSearch } from 'react-icons/io';
 
 const RestaurantPage = () => {

@@ -71,7 +71,7 @@ const MyMgmtCard = ({ share, requesterId }) => {
             <QRcodeThree>
               <EmbedQrcode
                 info={`${share.id}/${requesterId}`}
-                size={28}
+                size={40}
                 width={5}
                 height={5}
               />
@@ -122,8 +122,18 @@ const MyMgmtCard = ({ share, requesterId }) => {
 
 const QRcodeBasic = styled.div`
   position: absolute;
-  top: 2vw;
-  right: 2vw;
+  top: 20px;
+  right: 10px;
+
+  @media screen and (min-width: 550px) {
+    top: 10px;
+    right: 10px;
+  }
+
+  @media screen and (min-width: 700px) {
+    top: 20px;
+    right: 20px;
+  }
 `;
 
 const QRcodeOne = styled(QRcodeBasic)`
@@ -145,13 +155,13 @@ const QRcodeThree = styled(QRcodeBasic)`
   @media screen and (min-width: 700px) {
     display: none;
   }
-  @media screen and (max-width: 660px) {
+  @media screen and (max-width: 400px) {
     display: none;
   }
 `;
 
 const QRcodeFour = styled(QRcodeBasic)`
-  @media screen and (min-width: 660px) {
+  @media screen and (min-width: 400px) {
     display: none;
   }
 `;
@@ -180,32 +190,55 @@ const EmbedQrcode = ({ info, size, height, width }) => {
 
 const Context = styled.div`
   display: flex;
-  border: 1px solid black;
-  width: 70vw;
-  margin: 1vw 2vw;
-  border-radius: 10px;
-  @media screen and (max-width: 700px) {
+  flex-direction: column;
+  width: 80vw;
+  margin: 15px;
+  border-radius: 0 0 10px 10px;
+  border-top: 10px solid #52b788;
+  max-width: 1000px;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+
+  @media screen and (min-width: 550px) {
+    flex-direction: row;
+    border-left: 10px solid #52b788;
+    border-top: 0;
+    border-radius: 0 10px 10px 0;
+  }
+
+  /* @media screen and (max-width: 700px) {
     max-width: 80vw;
     margin: 1.5vw;
-  }
+  } */
 `;
 const ShareImg = styled.img`
-  max-width: 30vw;
-  border-radius: 10px 0 0 10px;
-  @media screen and (max-width: 700px) {
+  width: 100%;
+
+  @media screen and (min-width: 550px) {
+    width: 40%;
+  }
+  /* @media screen and (max-width: 700px) {
     max-width: 30vw;
   }
   @media screen and (max-width: 460px) {
     max-width: 30vw;
-  }
+  } */
 `;
 const InfoContainer = styled.div`
   position: relative;
   width: 100%;
-  padding: 2vw;
-  font-size: 16px;
-  line-height: 24px;
-  @media screen and (max-width: 900px) {
+  padding: 10px 15px;
+  background-color: hsla(146, 40%, 40%, 0.4);
+  border-radius: 0 0 10px 10px;
+
+  @media screen and (min-width: 550px) {
+    border-radius: 0 10px 10px 0;
+  }
+
+  @media screen and (min-width: 850px) {
+    padding: 20px;
+  }
+
+  /* @media screen and (max-width: 900px) {
     font-size: 16px;
     line-height: 24px;
   }
@@ -216,34 +249,76 @@ const InfoContainer = styled.div`
   @media screen and (max-width: 460px) {
     font-size: 10px;
     line-height: 14px;
+  } */
+`;
+const Text = styled.div`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 18px;
+  color: #000000d1;
+  line-height: 28px;
+
+  @media screen and (min-width: 450px) {
+    font-size: 22px;
+  }
+
+  @media screen and (min-width: 550px) {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  @media screen and (min-width: 700px) {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  @media screen and (min-width: 900px) {
+    font-size: 22px;
+    line-height: 30px;
   }
 `;
-const RequesterName = styled.div``;
-const RequesterPhone = styled.div``;
-const RequesterEmail = styled.div``;
-const RequesterQty = styled.div``;
-const RequestedDateTime = styled.div``;
-const Address = styled.div``;
+
+const RequesterName = styled(Text)`
+  margin-top: 10px;
+  @media screen and (min-width: 550px) {
+    margin-top: 5px;
+  }
+`;
+const RequesterPhone = styled(Text)``;
+const RequesterEmail = styled(Text)``;
+const RequesterQty = styled(Text)``;
+const RequestedDateTime = styled(Text)``;
+const Address = styled(Text)`
+  margin-bottom: 25px;
+`;
 
 const ButtonContainer = styled.div`
   display: flex;
   margin-top: 1vw;
   justify-content: center;
+  margin-bottom: 15px;
+  @media screen and (min-width: 550px) {
+    margin-bottom: 5px;
+  }
 `;
 const ConfirmedBtn = styled.button`
-  border: 1px solid black;
-  padding: 1vw;
-  border-radius: 10px;
-  background-color: lightseagreen;
-  margin-right: 0.5vw;
+  margin-right: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 22px;
   color: white;
+  background-color: #1e88e5;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 `;
 const CancleBtn = styled.button`
-  border: 1px solid black;
-  padding: 1vw;
-  border-radius: 10px;
-  background-color: orangered;
-  color: white;
+  padding: 0.5rem;
+  border-radius: 5px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 22px;
+  background-color: white;
+  color: #52b788;
+  opacity: 0.8;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 `;
 
 export default MyMgmtCard;
