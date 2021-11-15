@@ -4,6 +4,7 @@ import { getSpecificContents } from '../../../utils/firebase';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import SharesContainer from '../../common/SharesContainer';
 import MyCollectedCard from './MyCollectedCard';
+import NoResult from '../NoResult';
 
 const MyCollectedList = () => {
   const currentUser = useCurrentUser();
@@ -35,9 +36,7 @@ const MyCollectedList = () => {
       </SharesContainer>
     </Outer>
   ) : (
-    <NoResultContainer>
-      <NoResult>你沒有任何的收藏清單</NoResult>
-    </NoResultContainer>
+    <NoResult text="你沒有任何的收藏清單"></NoResult>
   );
 };
 
@@ -45,19 +44,6 @@ const Outer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const NoResultContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10vw;
-  height: 40vh;
-`;
-
-const NoResult = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 36px;
 `;
 
 export default MyCollectedList;

@@ -200,7 +200,6 @@ const Card = styled.div`
 const CardImg = styled.img`
   width: 100%;
   height: 30vw;
-  border-radius: 0px 0px 0 0;
 
   @media screen and (min-width: 700px) {
     height: 25vw;

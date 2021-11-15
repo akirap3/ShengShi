@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { handleCollection } from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
+import NoResult from '../personalPage/NoResult';
 
 import { AiTwotoneHeart } from 'react-icons/ai';
 import StarImg from '../../images/common/star.png';
@@ -50,9 +51,7 @@ const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
       </CarouselContext>
     </CarouselContainer>
   ) : (
-    <NoResultContainer>
-      <NoResult>搜尋不到餐廳</NoResult>
-    </NoResultContainer>
+    <NoResult text="搜尋不到餐廳" />
   );
 };
 
@@ -87,14 +86,6 @@ const CardImg = styled.img`
   width: 100%;
   height: 30vw;
   border-radius: 0px 0px 0 0;
-
-  /* @media screen and (min-width: 700px) {
-    height: 25vw;
-  }
-
-  @media screen and (min-width: 1120px) {
-    height: 20vw;
-  } */
 `;
 
 const CardTitle = styled.h4`
@@ -163,19 +154,6 @@ const Heart = styled(AiTwotoneHeart)`
     width: 28px;
     height: 28px;
   }
-`;
-
-const NoResultContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10vw;
-  height: 40vh;
-`;
-
-const NoResult = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 36px;
 `;
 
 export default RestaurantSearchCard;

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import SearchPageCard from './SearchPageCard';
 import SharesContainer from '../common/SharesContainer';
+import Title from '../personalPage/Title';
 import { getSingleShare } from '../../utils/firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { Waypoint } from 'react-waypoint';
@@ -14,9 +15,12 @@ import {
 import useCurrentUser from '../../hooks/useCurrentUser';
 import { themeColor } from '../../utils/commonVariables';
 import Main from '../common/Main';
+import NoResult from '../personalPage/NoResult';
+import { IoIosSearch } from 'react-icons/io';
 
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
-import Hotpot from '../../images/searchPage/hotpot.svg';
+import Wave from 'react-wavify';
+import LoginBg2 from '../loginPage/LoginBg2';
 
 import algolia from '../../utils/algolia';
 
@@ -128,59 +132,90 @@ const SearchPage = () => {
 
   return (
     <Main>
-      <Banner>
-        <BannerContent>
-          <Title>
-            Ad eos saepe lucilius, noster postulant philosophia ea usu, qui
-            dicta sadipscing te.
-          </Title>
-          <SubTitle>
-            Et has minim elitr intellegat. Mea aeterno eleifend antiopam ad, nam
-            no suscipit quaerendum. At nam minimum ponderum. Est audiam animal
-            molestiae te. Ex duo eripuit mentitum.
-          </SubTitle>
-          <ButtonRow>
-            <StartButton to="/login">開始使用</StartButton>
-            <LookButton to="/restaurants">合作餐廳</LookButton>
-          </ButtonRow>
-        </BannerContent>
-        <BannerImg src={Img} />
-      </Banner>
-      <SearchContent>
-        <SearchBar
-          placeholder="勝食搜尋"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyPress={(e) => handleOnEnter(e)}
-        />
-        <SearchButton onClick={() => handleSearch()}>搜尋</SearchButton>
-        <ResetButton onClick={handleResetSearch}>清除搜尋</ResetButton>
-      </SearchContent>
-      <SharesTitleContainer>
-        <TitleIcon src={Hotpot} />
-        <SharesTitle>目前其他人分享的勝食</SharesTitle>
-      </SharesTitleContainer>
+      <UpperPart>
+        <LoginBg2 />
+        <WaveBackground />
+        <Banner>
+          <BannerContent>
+            <BannerTitle>勝食</BannerTitle>
+            <SubTitle>
+              善於分享的人時常受到眷顧，常與他人分享讓生活更多采多姿更有趣
+            </SubTitle>
+            <ButtonRow>
+              <StartButton to="/login">開始使用</StartButton>
+              <LookButton to="/restaurants">合作餐廳</LookButton>
+            </ButtonRow>
+          </BannerContent>
+          <BannerImg src={Img} />
+        </Banner>
+        <SearchContent>
+          <SearchOutline>
+            <SearchBar
+              placeholder="勝食搜尋"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={(e) => handleOnEnter(e)}
+            />
+            <SearchIconContainer onClick={() => handleSearch()}>
+              <SearchIcon />
+            </SearchIconContainer>
+          </SearchOutline>
+          <ResetButton onClick={handleResetSearch}>清除搜尋</ResetButton>
+        </SearchContent>
+      </UpperPart>
+      <Title title="目前其他人分享的勝食" />
       {shares ? (
         shares.length !== 0 ? (
-          <SharesContainer>
-            {shares
-              .filter((share) => share.isArchived === false)
-              .map((share) => (
-                <SearchPageCard key={uuidv4()} share={share} />
-              ))}
-          </SharesContainer>
+          <Outer>
+            <SharesContainer>
+              {shares
+                .filter((share) => share.isArchived === false)
+                .map((share) => (
+                  <SearchPageCard key={uuidv4()} share={share} />
+                ))}
+            </SharesContainer>
+          </Outer>
         ) : (
-          <NoResultContainer>
-            <NoResult>搜尋不到</NoResult>
-          </NoResultContainer>
+          <NoResult text="搜尋不到" />
         )
       ) : (
-        <NoResultContainer>
-          <NoResult>搜尋不到</NoResult>
-        </NoResultContainer>
+        <NoResult text="搜尋不到" />
       )}
       <Waypoint onEnter={handleInfiniteScroll} />
     </Main>
+  );
+};
+
+const UpperPart = styled.div`
+  position: relative;
+  padding-bottom: 2rem;
+`;
+
+const WaveBackground = () => {
+  return (
+    <Wave
+      mask="url(#mask)"
+      fill="#52b788"
+      style={{
+        position: 'absolute',
+        bottom: '0',
+        height: '100px',
+        zIndex: '-3',
+      }}
+      options={{
+        height: 20,
+      }}
+    >
+      <defs>
+        <linearGradient id="gradient" gradientTransform="rotate(90)">
+          <stop offset="0" stopColor="white" />
+          <stop offset="0.5" stopColor="black" />
+        </linearGradient>
+        <mask id="mask">
+          <rect x="0" y="0" width="3000" height="150" fill="url(#gradient)" />
+        </mask>
+      </defs>
+    </Wave>
   );
 };
 
@@ -188,129 +223,205 @@ const Banner = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 4rem;
-  background-color: ${themeColor.blue};
+  padding: 5rem 2rem;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (min-width: 1500px) {
+    padding: 5vw 15vw;
+  }
+
+  @media screen and (max-width: 700px) {
     flex-direction: column;
+  }
+
+  @media screen and (max-width: 450px) {
+    padding: 5rem 2rem 1rem;
   }
 `;
 
 const BannerImg = styled.img`
-  max-width: 40vw;
-  border-radius: 10px;
+  max-width: 80vw;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
 
-  @media screen and (max-width: 600px) {
-    order: 2;
-    max-width: 80vw;
+  @media screen and (min-width: 700px) {
+    max-width: 40vw;
   }
 
   @media screen and (max-width: 450px) {
     display: none;
+  }
+
+  @media screen and (max-width: 700px) {
+    margin-bottom: 60px;
+  }
+
+  @media screen and (min-width: 1500px) {
+    max-width: 30vw;
   }
 `;
 
 const BannerContent = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
   max-width: 35vw;
-  line-height: 1.4rem;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 700px) {
     order: 1;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
     max-width: 80vw;
   }
 `;
 
-const Title = styled.h1`
-  margin-bottom: 1rem;
+const BannerTitle = styled.h1`
+  margin-bottom: 2rem;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 56px;
+  font-weight: 600;
+  color: black;
 `;
 
 const SubTitle = styled.h3`
-  margin-bottom: 1rem;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
+  font-weight: 100;
+  margin-bottom: 2rem;
+  line-height: 2rem;
+  color: #0000009e;
+
+  @media screen and (min-width: 375px) {
+    max-width: 60vw;
+  }
+
+  @media screen and (min-width: 1500px) {
+    max-width: 20vw;
+  }
 `;
 
 const ButtonRow = styled.div`
-  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
 `;
 
 const StyledLink = styled(Link)`
-  padding: 0.5rem 0.8rem;
-  border: 1px solid black;
-  border-radius: 10px;
+  margin-right: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
 `;
 
 const StartButton = styled(StyledLink)`
-  margin-right: 0.5rem;
   color: white;
-  background-color: lightgray;
+  background-color: #1e88e5;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+  backdrop-filter: blur(5px);
 `;
 
-const LookButton = styled(StyledLink)``;
+const LookButton = styled(StyledLink)`
+  background-color: rgba(255, 255, 255, 0.8);
+  color: rgb(147, 188, 225);
+  border: 1px solid #a0a0968a;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+  backdrop-filter: blur(5px);
+`;
 
 const SearchContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 3rem auto;
-
-  @media screen and (max-width: 700px) {
-  }
+  margin: 0px auto;
+  padding: 0 0 3rem 0;
 
   @media screen and (max-width: 600px) {
-    margin: 2rem auto;
+    margin: 1rem auto;
+  }
+
+  @media screen and (max-width: 520px) {
+    flex-direction: column;
+  }
+
+  @media screen and (min-width: 1500px) {
+  }
+`;
+
+const SearchOutline = styled.div`
+  position: relative;
+  background: #b7e4c7;
+  height: 60px;
+  border-radius: 40px;
+  padding: 10px;
+  color: white;
+  margin-right: 1rem;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+  backdrop-filter: blur(5px);
+
+  &:hover > input {
+    color: #40916c;
+    width: 240px;
+    padding: 0 6px;
+  }
+
+  &:hover > span {
+    background: white;
   }
 `;
 
 const SearchBar = styled.input`
-  min-width: 70vw;
-  border-radius: 8px;
-  @media screen and (max-width: 460px) {
-    min-width: 50vw;
-  }
-`;
-
-const SearchButton = styled.button`
-  margin-left: 1vw;
-  padding: 0.5rem 0.8rem;
-  border: 1px solid black;
-  border-radius: 8px;
-  background-color: ${themeColor.blue};
-`;
-
-const ResetButton = styled(SearchButton)``;
-
-const SharesTitleContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 1px solid black;
-  margin: auto 4rem;
-`;
-
-const TitleIcon = styled.img`
-  width: 50px;
-  padding-bottom: 0.5rem;
-  margin-right: 1rem;
-`;
-
-const SharesTitle = styled.h2`
+  font-family: 'cwTeXYen', sans-serif;
+  border: none;
+  background: none;
+  outline: none;
+  float: left;
+  padding: 0;
   font-size: 24px;
-  @media screen and (max-width: 460px) {
-    font-size: 4vw;
-  }
+  transition: 0.4s;
+  line-height: 40px;
+  width: 0px;
 `;
 
-const NoResultContainer = styled.div`
+const SearchIconContainer = styled.span`
+  float: right;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #b7e4c7;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10vw;
+  text-decoration: none;
+  transition: 0.4;
 `;
 
-const NoResult = styled.div`
-  font-size: 16px;
+const SearchIcon = styled(IoIosSearch)`
+  fill: #1b4332;
+  width: 20px;
+  height: 20px;
+`;
+
+const ResetButton = styled.button`
+  position: relative;
+  padding: 0.5rem;
+  height: 60px;
+  border-radius: 20px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
+  border: 1px solid #a0a0968a;
+  color: #52b788;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+  backdrop-filter: blur(5px);
+
+  @media screen and (max-width: 520px) {
+    margin-top: 1rem;
+  }
+`;
+
+const Outer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default SearchPage;

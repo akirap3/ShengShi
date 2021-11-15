@@ -9,6 +9,7 @@ import {
   handleDeleteBadge,
 } from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
+import NoResult from '../personalPage/NoResult';
 
 const QRcodeComfirmPage = () => {
   const history = useHistory();
@@ -174,14 +175,10 @@ const QRcodeComfirmPage = () => {
                 </Context>
               </Container>
             ) : (
-              <NoResultContainer>
-                <NoResult>該領取已經取消</NoResult>
-              </NoResultContainer>
+              <NoResult text="該領取已經取消" />
             )
           ) : (
-            <NoResultContainer>
-              <NoResult>已領取完畢</NoResult>
-            </NoResultContainer>
+            <NoResult text="該領取已經取消" />
           )
         ) : (
           <></>
@@ -246,17 +243,6 @@ const CancleBtn = styled.button`
   border-radius: 10px;
   background-color: orangered;
   color: white;
-`;
-
-const NoResultContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10vw;
-`;
-
-const NoResult = styled.div`
-  font-size: 16px;
 `;
 
 export default QRcodeComfirmPage;

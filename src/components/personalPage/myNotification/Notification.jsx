@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getAllContents } from '../../../utils/firebase';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import NotificationCard from './NotificationCard';
+import NoResult from '../NoResult';
 
 const Notification = () => {
   const currentUser = useCurrentUser();
@@ -19,41 +20,44 @@ const Notification = () => {
 
   return currentUser && messages ? (
     messages.length !== 0 ? (
-      <NotificationContainer>
-        {messages.map((message) => (
-          <NotificationCard
-            key={uuidv4()}
-            message={message}
-            currentUser={currentUser}
-          />
-        ))}
-      </NotificationContainer>
+      <Outer>
+        <NotificationContainer>
+          {messages.map((message) => (
+            <NotificationCard
+              key={uuidv4()}
+              message={message}
+              currentUser={currentUser}
+            />
+          ))}
+        </NotificationContainer>
+      </Outer>
     ) : (
-      <NoResultContainer>
-        <NoResult>你目前沒有任何的訊息</NoResult>
-      </NoResultContainer>
+      <NoResult text="你目前沒有任何的訊息" />
     )
   ) : (
-    <NoResultContainer>
-      <NoResult>你目前沒有任何的訊息</NoResult>
-    </NoResultContainer>
+    <NoResult text="你目前沒有任何的訊息" />
   );
 };
 
-const NotificationContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 70vw;
-  margin: 2vw auto;
-`;
-
-const NoResultContainer = styled.div`
+const Outer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10vw;
+  padding-top: 50px;
+  padding-bottom: 150px;
 `;
 
-const NoResult = styled.div``;
+const NotificationContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 300px);
+
+  @media screen and (min-width: 650px) {
+    grid-template-columns: repeat(1, 400px);
+  }
+
+  @media screen and (min-width: 800px) {
+    grid-template-columns: repeat(1, 600px);
+  }
+`;
 
 export default Notification;

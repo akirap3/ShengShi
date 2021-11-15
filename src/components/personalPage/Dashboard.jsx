@@ -49,7 +49,7 @@ const Dashbaord = () => {
     },
     {
       icon: [<BadgeIcon />],
-      name: '勳章',
+      name: '統計',
       count: myBadgeCounts || 0,
       path: '/personal/badges',
     },

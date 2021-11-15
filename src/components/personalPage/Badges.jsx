@@ -7,6 +7,7 @@ import {
 } from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import MyResponsivePie from './MyChart';
+import NoResult from './NoResult';
 
 const Badges = () => {
   const [badges, setBadges] = useState();
@@ -194,9 +195,7 @@ const Badges = () => {
           </Outer>
         )
       ) : (
-        <NoResultContainer>
-          <NoResult>目前沒有任何的勳章</NoResult>
-        </NoResultContainer>
+        <NoResult text="目前沒有任何的勳章" />
       )}
     </>
   );
@@ -262,19 +261,6 @@ const BadgeName = styled.div`
   @media screen and (min-width: 650px) {
     font-size: 24px;
   }
-`;
-
-const NoResultContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10vw;
-  height: 40vh;
-`;
-
-const NoResult = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 36px;
 `;
 
 export default Badges;
