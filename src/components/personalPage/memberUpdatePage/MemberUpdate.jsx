@@ -8,6 +8,16 @@ import { getCurrentUserData } from '../../../utils/firebase';
 import { doc, getFirestore, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
+import { BsFillPersonFill } from 'react-icons/bs';
+import {
+  BsFillEmojiLaughingFill,
+  BsFillTelephoneFill,
+  BsFillChatQuoteFill,
+} from 'react-icons/bs';
+import { MdEmail } from 'react-icons/md';
+import { HiLocationMarker } from 'react-icons/hi';
+import { AiFillPicture } from 'react-icons/ai';
+
 const MemberUpdate = () => {
   const uploadRef = useRef();
   const [showDelete, setShowDelete] = useState(false);
@@ -95,7 +105,7 @@ const MemberUpdate = () => {
               />
             )}
             <Row>
-              <UserNameLabel>姓名</UserNameLabel>
+              <NameIcon />
               <UserName
                 placeholder={userData.displayName}
                 value={displayName}
@@ -104,7 +114,7 @@ const MemberUpdate = () => {
               />
             </Row>
             <Row>
-              <AliasLabel>暱稱</AliasLabel>
+              <AliasIcon />
               <Alias
                 placeholder={userData?.alias}
                 value={alias}
@@ -112,11 +122,11 @@ const MemberUpdate = () => {
               />
             </Row>
             <Row>
-              <EmailLabel>電子郵件</EmailLabel>
+              <EmailIcon />
               <Email placeholder={userData?.email} disabled />
             </Row>
             <Row>
-              <PhoneLabel>電話</PhoneLabel>
+              <PhoneIcon />
               <Phone
                 placeholder={userData?.phone || '請輸入電話'}
                 value={phone}
@@ -124,7 +134,7 @@ const MemberUpdate = () => {
               />
             </Row>
             <Row>
-              <PlaceLabel>我的地點</PlaceLabel>
+              <LocationIcon />
               <Place
                 placeholder={userData?.myPlace || '請輸入地點'}
                 value={myPlace}
@@ -132,29 +142,26 @@ const MemberUpdate = () => {
               />
             </Row>
             <Row>
-              <AboutLabel>關於你</AboutLabel>
+              <AboutIcon />
               <AboutText
                 placeholder={userData?.about || '請描述你自己'}
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}
               />
             </Row>
-            <Row>
-              <ImgLabel>我的頭像</ImgLabel>
+            <PreviewImg src={previewImgUrl} />
+            <ButtonContainer>
               <ImgUpload ref={uploadRef} htmlFor="image-upload">
-                上傳
+                上 傳
               </ImgUpload>
               <UploadBtn
                 type="file"
                 id="image-upload"
                 onChange={(e) => setFile(e.target.files[0])}
               />
-            </Row>
-            <PreviewImg src={previewImgUrl} />
-            <Row>
-              <UpdateBtn onClick={() => handleUpdateMember()}>更新</UpdateBtn>
+              <UpdateBtn onClick={() => handleUpdateMember()}>更 新</UpdateBtn>
               <DeleteBtn onClick={openDelete}>刪除會員</DeleteBtn>
-            </Row>
+            </ButtonContainer>
           </FormContext>
         )}
       </FormContainer>
@@ -172,102 +179,191 @@ const FormContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 50px;
 `;
 
 const FormContext = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid black;
+  margin: 5vh auto;
+  padding: 30px;
   border-radius: 10px;
-  margin: 2vw auto;
-  padding: 5vw 10vw;
+  height: fit-content;
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  background-color: rgba(219, 245, 255, 0.3);
+  backdrop-filter: blur(5px);
+  @media screen and (max-width: 560px) {
+    margin-right: 2rem;
+    margin-left: 2rem;
+    padding: 2rem;
+  } ;
 `;
 
 const Row = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 2vw;
-`;
-
-const StyledLabel = styled.label`
-  width: 8vw;
+  flex-wrap: wrap;
+  margin-bottom: 35px;
 `;
 
 const StyledInput = styled.input`
-  border-radius: 5px;
+  flex-grow: 1;
+  border: none;
+  background: none;
+  outline: none;
+  border-bottom: 2px solid #d9d7d7;
+  padding: 5px 8px;
 `;
-const UserNameLabel = styled(StyledLabel)``;
+
+const NameIcon = styled(BsFillPersonFill)`
+  fill: rgb(129, 129, 129);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  @media screen and (max-width: 540px) {
+    align-self: flex-start;
+    margin-top: 10px;
+  }
+`;
 
 const UserName = styled(StyledInput)``;
 
-const AliasLabel = styled(StyledLabel)``;
+const AliasIcon = styled(BsFillEmojiLaughingFill)`
+  fill: rgb(129, 129, 129);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+`;
 
 const Alias = styled(StyledInput)``;
 
-const EmailLabel = styled(StyledLabel)``;
+const EmailIcon = styled(MdEmail)`
+  fill: rgb(129, 129, 129);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+`;
 
 const Email = styled(StyledInput)``;
 
-const PhoneLabel = styled(StyledLabel)``;
+const PhoneIcon = styled(BsFillTelephoneFill)`
+  fill: rgb(129, 129, 129);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+`;
 
 const Phone = styled(StyledInput)``;
 
-const PlaceLabel = styled(StyledLabel)``;
+const LocationIcon = styled(HiLocationMarker)`
+  fill: rgb(129, 129, 129);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+`;
 
 const Place = styled(StyledInput)``;
 
-const AboutLabel = styled(StyledLabel)``;
-
-const AboutText = styled.textarea`
-  border-radius: 5px;
-  height: 20vh;
+const AboutIcon = styled(BsFillChatQuoteFill)`
+  fill: rgb(129, 129, 129);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 `;
 
-const ImgLabel = styled(StyledLabel)``;
+const AboutText = styled.textarea`
+  flex-grow: 1;
+  border: none;
+  background: none;
+  outline: none;
+  border-bottom: 2px solid #d9d7d7;
+  padding: 5px 8px;
+`;
+
+const PreviewImg = styled.img`
+  width: 250px;
+  border-radius: 10px;
+  margin-bottom: 2vw;
+
+  @media screen and (min-width: 600px) {
+    width: 350px;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  @media screen and (max-width: 470px) {
+    justify-content: space-between;
+  }
+`;
 
 const ImgUpload = styled.label`
-  width: 100%;
-  border: 1px solid lightslategrey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  margin-right: 5px;
   border-radius: 5px;
-  background-color: lightskyblue;
-  padding: 0.5vw;
+  padding: 0.5rem;
   cursor: pointer;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  color: white;
+  background-color: #1e88e5;
+  @media screen and (max-width: 470px) {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
 `;
 
 const UploadBtn = styled.input`
   display: none;
 `;
 
-const PreviewImg = styled.img`
-  width: 50%;
-  border-radius: 10px;
-  margin-bottom: 2vw;
-`;
-
-const UpdateBtn = styled.button`
-  padding: 1vw;
-  position: relative;
-  width: 20vw;
-  border: 1px solid black;
+const Button = styled.div`
+  border: 1px solid darkcyan;
   border-radius: 5px;
-  background-color: #00b4cc;
-  color: white;
-  flex-grow: 1;
-  margin-right: 1vw;
+  padding: 0.5rem;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
   cursor: pointer;
 `;
 
-const DeleteBtn = styled.button`
-  padding: 1vw;
-  width: 20vw;
-  border: 1px solid black;
-  border-radius: 5px;
-  background-color: orangered;
-  color: white;
+const UpdateBtn = styled(Button)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-grow: 1;
-  cursor: pointer;
+  margin-right: 5px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  border: 1px solid #d9d7d7;
+  background: #52b788;
+  color: white;
+  backdrop-filter: blur(5px);
+  @media screen and (max-width: 470px) {
+    width: 48%;
+    font-size: 14px;
+  }
+`;
+
+const DeleteBtn = styled(Button)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  border: 2px solid #d9d7d7;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
+  @media screen and (max-width: 470px) {
+    width: 48%;
+    font-size: 14px;
+  }
 `;
 
 export default MemberUpdate;

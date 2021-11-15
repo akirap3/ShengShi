@@ -48,7 +48,7 @@ const App = () => {
                     <MyShareList />
                   </Route>
                   <Route exact path="/personal/badges">
-                    <Title title="我的勳章"></Title>
+                    <Title title="我的統計與勳章"></Title>
                     <Badges />
                   </Route>
                   <Route exact path="/personal/received">
@@ -80,7 +80,7 @@ const App = () => {
                     <Notification />
                   </Route>
                   <Route path="/personal/:shareId/:requesterId">
-                    <Title title="剩食領取管理"></Title>
+                    <Title title="勝食領取管理"></Title>
                     <QRcodeComfirmPage />
                   </Route>
                 </Switch>
