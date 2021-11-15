@@ -3,12 +3,17 @@ import styled from 'styled-components';
 import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
 import { useDispatch, useSelector } from 'react-redux';
 
+import CalendarImg from '../../images/common/calendar.svg';
+
 const DateTimeRangeSelector = () => {
   const dispatch = useDispatch();
   const fromToDateTime = useSelector((state) => state.fromToDateTime);
   return (
     <>
-      <Title>請選擇日期及時間區間</Title>
+      <PopTitleContainer>
+        <CalendarIcon src={CalendarImg} />
+        <Title>選擇日期及時間</Title>
+      </PopTitleContainer>
       <Container>
         <DateTimeRangePicker
           onChange={(results) =>
@@ -22,28 +27,52 @@ const DateTimeRangeSelector = () => {
   );
 };
 
+const PopTitleContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #52b788;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+`;
+
+const CalendarIcon = styled.img`
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+`;
+
 const Title = styled.div`
-  font-size: 2.2vw;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
+  color: white;
 `;
 const Container = styled.div`
   .react-datetimerange-picker {
     display: flex;
-    flex-wrap: wrap;
   }
   .react-datetimerange-picker__wrapper {
     flex-direction: column;
     position: relative;
-    margin-top: 2vw;
+    margin-top: 15px;
     border-radius: 5px;
-    padding: 1vw;
-    background-color: lightgray;
-    opacity: 0.8;
+    padding: 10px;
+    background-color: #b7e4c7;
+    box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+
+    @media screen and (min-width: 800px) {
+      flex-direction: row;
+    }
   }
   .react-datetimerange-picker__inputGroup {
-    font-size: 2vw;
+    font-size: 14px;
+    min-width: 20px;
     text-align: center;
 
-    @media screen and (min-width: 840px) {
+    @media screen and (min-width: 800px) {
       font-size: inherit;
     }
   }
@@ -51,20 +80,29 @@ const Container = styled.div`
   .react-datetimerange-picker__button {
     border: 1px solid black;
     border-radius: 5px;
-    padding: 0.5vw 26%;
-    margin-top: 0.5vw;
+    margin-top: 5px;
+    padding: 5px 30px;
   }
   .react-datetimerange-picker__clear-button {
     background-color: lightskyblue;
+    box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+    @media screen and (min-width: 800px) {
+      margin-right: 5px;
+    }
   }
 
   .react-datetimerange-picker__calendar-button {
     background-color: lightseagreen;
+    box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
   }
 
-  .react-datetimerange-picker__button__icon {
-    width: 2vw;
-    height: 2vw;
+  .react-calendar {
+    font-size: 14px;
+    max-width: 67%;
+    border-radius: 5px;
+    @media screen and (min-width: 520px) {
+      max-width: 100%;
+    }
   }
 `;
 

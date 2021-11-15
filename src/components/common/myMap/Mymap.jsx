@@ -1,19 +1,25 @@
 import React from 'react';
 import Map from './LocationMap';
+import styled from 'styled-components';
 
 const Mymap = (props) => {
   return (
-    <div style={{ margin: '100px' }}>
+    <Container>
       <Map
         google={props.google}
         center={props.defaultCenter}
-        height="300px"
+        height="250px"
         zoom={15}
         handleAddress={props.handleAddress}
         handleLatLng={props.handleLatLng}
       />
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 export default Mymap;

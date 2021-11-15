@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import ReactLoading from 'react-loading';
+import Loading from '../../common/Loading';
 import { useDispatch } from 'react-redux';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
@@ -43,59 +43,41 @@ const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
 
   return (
     <DialogOverlay isOpen={showMap} onDismiss={closeMap}>
-      {isLoading && (
-        <StyledLoading
-          type={'spin'}
-          color={'#2a9d8f'}
-          height={'10vw'}
-          width={'10vw'}
-        />
-      )}
-      <DialogContent
-        style={{
-          position: 'relative',
-          border: 'solid 1px lightBlue',
-          borderRadius: '10px',
-          width: '80vw',
-          padding: '0%',
-        }}
-        aria-label="popup"
-      >
+      <StyledDialogContent aria-label="popup">
+        {isLoading && <Loading />}
         <PopClose onClick={closeMap} />
         <MyMap
           handleAddress={handleAddress}
           handleLatLng={handleLatLng}
           defaultCenter={defaultCenter}
         />
-      </DialogContent>
+      </StyledDialogContent>
     </DialogOverlay>
   );
 };
 
-const StyledColse = styled(AiFillCloseCircle)`
-  fill: lightblue;
-  background-color: blue;
+const StyledDialogContent = styled(DialogContent)`
+  position: relative;
+  width: 80vw;
+  max-width: 800px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 10px;
+
+  [data-reach-dialog-content] {
+    padding-bottom: 200px;
+  }
+`;
+
+const PopClose = styled(AiFillCloseCircle)`
+  fill: #1e88e582;
   border-radius: 50%;
   opacity: 0.8;
   cursor: pointer;
-`;
-
-const PopClose = styled(StyledColse)`
   position: absolute;
-  top: 2vw;
-  right: 2vw;
-  width: 3vw;
-  height: 3vw;
-  cursor: pointer;
-`;
-
-const StyledLoading = styled(ReactLoading)`
-  display: flex;
-  position: absolute;
-  z-index: 10;
-  top: 50vh;
-  left: 50vw;
-  transform: translate(-50%, -50%);
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
 `;
 
 export default MapPopup;

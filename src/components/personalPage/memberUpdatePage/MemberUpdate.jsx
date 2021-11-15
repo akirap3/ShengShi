@@ -16,7 +16,6 @@ import {
 } from 'react-icons/bs';
 import { MdEmail } from 'react-icons/md';
 import { HiLocationMarker } from 'react-icons/hi';
-import { AiFillPicture } from 'react-icons/ai';
 
 const MemberUpdate = () => {
   const uploadRef = useRef();
@@ -96,14 +95,7 @@ const MemberUpdate = () => {
       <FormContainer>
         {userData && (
           <FormContext>
-            {isLoading && (
-              <Loading
-                type={'spin'}
-                color={'#2a9d8f'}
-                height={'10vw'}
-                width={'10vw'}
-              />
-            )}
+            {isLoading && <Loading />}
             <Row>
               <NameIcon />
               <UserName
@@ -185,6 +177,7 @@ const FormContainer = styled.div`
 const FormContext = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
   margin: 5vh auto;
   padding: 30px;
   border-radius: 10px;
@@ -192,7 +185,7 @@ const FormContext = styled.div`
 
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   background-color: rgba(219, 245, 255, 0.3);
-  backdrop-filter: blur(5px);
+
   @media screen and (max-width: 560px) {
     margin-right: 2rem;
     margin-left: 2rem;
@@ -359,7 +352,7 @@ const DeleteBtn = styled(Button)`
   flex-grow: 1;
   border: 2px solid #d9d7d7;
   background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(5px);
+  color: rgb(129, 129, 129);
   @media screen and (max-width: 470px) {
     width: 48%;
     font-size: 14px;

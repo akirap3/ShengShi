@@ -23,6 +23,7 @@ const HomepageBackground = () => {
 };
 
 const BannerBG = styled.div`
+  z-index: -100;
   .circles {
     position: absolute;
     top: 0;

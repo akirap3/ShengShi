@@ -161,7 +161,9 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
             <PopRow>
               <DateTimeLabel>日期及時間</DateTimeLabel>
               <DateTime>
-                {`${fromToDateTime[0].toLocaleString()} - ${fromToDateTime[1].toLocaleString()}`}
+                {fromToDateTime
+                  ? `${fromToDateTime[0].toLocaleString()} - ${fromToDateTime[1].toLocaleString()}`
+                  : ''}
               </DateTime>
               <Calendar onClick={openCalendar} />
             </PopRow>

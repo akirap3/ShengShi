@@ -10,6 +10,9 @@ import {
 } from 'react-google-maps';
 import Geocode from 'react-geocode';
 import Autocomplete from 'react-google-autocomplete';
+
+import { HiLocationMarker } from 'react-icons/hi';
+
 require('dotenv').config();
 
 const GoogleMapsAPI = process.env.REACT_APP_GOOGLE_API_KEY;
@@ -164,13 +167,12 @@ class Map extends Component {
               width: '100%',
               height: '40px',
               paddingLeft: '16px',
-              marginTop: '1vw',
-              marginBottom: '500px',
-              border: '1px solid black',
+              marginTop: '10px',
+              border: '1px solid grey',
               borderRadius: '5px',
             }}
             onPlaceSelected={this.onPlaceSelected}
-            placeholder="查詢區域"
+            placeholder="地址搜尋"
             options={{
               types: ['geocode'],
               componentRestrictions: { country: 'TW' },
@@ -184,21 +186,22 @@ class Map extends Component {
       map = (
         <>
           <AddressRow>
+            <PopPlaceIcon />
             <AddressTitle>地址</AddressTitle>
-            <Address
-              type="text"
-              name="address"
-              className="form-control"
-              onChange={this.onChange}
-              readOnly="readOnly"
-              value={this.state.address}
-            />
           </AddressRow>
+          <Address
+            type="text"
+            name="address"
+            className="form-control"
+            onChange={this.onChange}
+            readOnly="readOnly"
+            value={this.state.address}
+          />
           <AsyncMap
             googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${GoogleMapsAPI}&libraries=places&language=zh-TW`}
             loadingElement={<div style={{ height: `100%` }} />}
             containerElement={<div style={{ height: this.props.height }} />}
-            mapElement={<div style={{ height: `100%` }} />}
+            mapElement={<div style={{ height: `85%`, borderRadius: '5px' }} />}
           />
         </>
       );
@@ -209,19 +212,44 @@ class Map extends Component {
   }
 }
 
-const AddressRow = styled.div``;
+const AddressRow = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #52b788;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+`;
+
+const PopPlaceIcon = styled(HiLocationMarker)`
+  fill: #95d5b2;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+`;
 
 const AddressTitle = styled.div`
-  margin-bottom: 2vw;
-  font-size: 2.5vw;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
+  color: white;
 `;
 
 const Address = styled.textarea`
   width: 100%;
   overflow: hidden;
-  margin-bottom: 2vw;
-  line-height: 30px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
+  font-size: 16px;
+  margin-bottom: 10px;
   border-radius: 5px;
+  text-align: center;
+  padding: 20px 5px 10px 5px;
+  line-height: 20px;
+  border: 1px solid rgb(229, 229, 229);
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 `;
 
 export default Map;

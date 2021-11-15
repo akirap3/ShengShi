@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import ReactLoading from 'react-loading';
 
 import {
   getFirestore,
@@ -21,11 +20,12 @@ import { DialogOverlay, DialogContent } from '@reach/dialog';
 
 import ClendarPopup from './CalendarPopup';
 import MapPopup from './MapPopup';
+import Loading from '../../common/Loading';
 import { isFieldsChecked } from '../../../utils/validation';
 
+import SaladImg from '../../../images/common/salad.svg';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { GrLocation } from 'react-icons/gr';
-import { BiCrown } from 'react-icons/bi';
+import { HiLocationMarker } from 'react-icons/hi';
 import { BsCalendarCheckFill } from 'react-icons/bs';
 
 const EditPopup = ({ showEdit, closeEditor, share }) => {
@@ -88,25 +88,11 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
   return (
     <>
       <DialogOverlay isOpen={showEdit} onDismiss={closeEditor}>
-        {isLoading && (
-          <StyledReactLoading
-            type={'spin'}
-            color={'#2a9d8f'}
-            height={'10vw'}
-            width={'10vw'}
-          />
-        )}
-        <DialogContent
-          style={{
-            position: 'relative',
-            border: 'solid 1px lightBlue',
-            borderRadius: '10px',
-          }}
-          aria-label="popup"
-        >
+        <StyledDialogContent aria-label="popup">
+          {isLoading && <Loading />}
           <PopClose onClick={closeEditor} disabled={isLoading} />
           <PopTitleContainer>
-            <CrownIcon />
+            <SaladIcon src={SaladImg} />
             <PopTitle>{share.name}</PopTitle>
           </PopTitleContainer>
           <PopContent>
@@ -125,17 +111,28 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
               />
             </PopRow>
             <PopRow>
-              <DateTimeLabel>日期及時間</DateTimeLabel>
-              <DateTime>{`${fromToDateTime[0].toLocaleString()} - ${fromToDateTime[1].toLocaleString()}`}</DateTime>
-              <Calendar onClick={openCalendar} />
+              <DateTimeContainer>
+                <DateTimeLabel>日期及時間</DateTimeLabel>
+                <Calendar onClick={openCalendar} />
+              </DateTimeContainer>
+              <DateTime>
+                {fromToDateTime
+                  ? `${fromToDateTime[0].toLocaleString()} - ${fromToDateTime[1].toLocaleString()}`
+                  : ''}
+              </DateTime>
             </PopRow>
             <PopRow>
-              <PopPlaceLabel>地點</PopPlaceLabel>
+              <PlaceContainer>
+                <PopPlaceLabel>地點</PopPlaceLabel>
+                <PopPlaceIcon onClick={openMap} />
+              </PlaceContainer>
               <PopPlace>{address}</PopPlace>
-              <PopPlaceIcon onClick={openMap} />
             </PopRow>
-            <PopRow>
-              <FoodImgLabel>食物照片</FoodImgLabel>
+            <PopRow></PopRow>
+            <PreviewOutline>
+              <PreviewImg src={previewImgUrl} />
+            </PreviewOutline>
+            <ButtonContainer>
               <ImgUpload ref={uploadRef} htmlFor="image-upload">
                 上傳
               </ImgUpload>
@@ -144,13 +141,12 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
                 id="image-upload"
                 onChange={(e) => setFile(e.target.files[0])}
               />
-            </PopRow>
-            <PreviewImg src={previewImgUrl} />
-            <SubmitBtn onClick={handleSubmit} disabled={isLoading}>
-              確認更新
-            </SubmitBtn>
+              <SubmitBtn onClick={handleSubmit} disabled={isLoading}>
+                確認更新
+              </SubmitBtn>
+            </ButtonContainer>
           </PopContent>
-        </DialogContent>
+        </StyledDialogContent>
       </DialogOverlay>
       <ClendarPopup showCalender={showCalender} closeCalendar={closeCalendar} />
       <MapPopup
@@ -163,137 +159,194 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
   );
 };
 
-const StyledReactLoading = styled(ReactLoading)`
-  display: flex;
+const StyledDialogContent = styled(DialogContent)`
   position: relative;
-  z-index: 10;
-  top: 50vh;
-  left: 50vw;
-  transform: translate(-50%, -50%);
+  width: 80vw;
+  max-width: 800px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 10px;
 `;
 
-const StyledColse = styled(AiFillCloseCircle)`
-  fill: lightblue;
-  background-color: blue;
+const PopClose = styled(AiFillCloseCircle)`
+  fill: #1e88e582;
   border-radius: 50%;
   opacity: 0.8;
   cursor: pointer;
-`;
-
-const PopClose = styled(StyledColse)`
   position: absolute;
-  top: 2vw;
-  right: 2vw;
-  width: 3vw;
-  height: 3vw;
-  cursor: pointer;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
 `;
 
 const PopTitleContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 1vw;
-  border-bottom: 1px solid lightskyblue;
+  padding: 10px;
+  background-color: #52b788;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 `;
 
-const CrownIcon = styled(BiCrown)`
-  fill: lightskyblue;
-  width: 3vw;
-  height: 3vw;
-  margin-right: 2vw;
+const SaladIcon = styled.img`
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
 `;
 
 const PopTitle = styled.div`
-  font-size: 2.5vw;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
+  color: white;
 `;
 
 const PopContent = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 2vw 1.5vw;
+  padding: 10px;
 `;
 
 const PopRow = styled.div`
   display: flex;
-  width: 100%;
-  align-items: center;
-  font-size: 1.5vw;
-  margin-bottom: 2vw;
+  flex-direction: column;
+  margin-bottom: 10px;
 `;
 
-const FoodLabel = styled.label`
-  width: 9vw;
+const StyledLabel = styled.label`
+  background-color: #52b788aa;
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 18px;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 `;
 
-const FoodName = styled.input`
+const FoodLabel = styled(StyledLabel)``;
+
+const StyledInput = styled.input`
+  flex-grow: 1;
+  border: none;
+  background: none;
+  outline: none;
+  border-bottom: 2px solid #d9d7d7;
+  padding: 5px 8px;
+  margin-left: 10px;
+  margin-top: 10px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 14px;
+`;
+
+const FoodName = styled(StyledInput)`
   flex-grow: 1;
 `;
 
-const QuantityLabel = styled.label`
-  width: 9vw;
+const QuantityLabel = styled(StyledLabel)``;
+
+const Quantity = styled(StyledInput)``;
+
+const DateTimeContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
-const Quantity = styled.input``;
-
-const DateTimeLabel = styled.label`
-  width: 9vw;
+const DateTimeLabel = styled(StyledLabel)`
+  margin-right: 10px;
 `;
 
-const DateTime = styled.span`
-  margin-right: 1vw;
+const StyledSpan = styled.span`
+  flex-grow: 1;
+  border: none;
+  background: none;
+  outline: none;
+  border-bottom: 2px solid #d9d7d7;
+  padding: 5px 8px;
+  margin-left: 10px;
+  margin-top: 10px;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 14px;
+  line-height: 24px;
 `;
+
+const DateTime = styled(StyledSpan)``;
 
 const Calendar = styled(BsCalendarCheckFill)`
-  width: 2vw;
-  height: 2vw;
+  width: 22px;
+  height: 22px;
   fill: lightseagreen;
   cursor: pointer;
 `;
 
-const PopPlaceLabel = styled.label`
-  width: 9vw;
+const PlaceContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
-const PopPlace = styled.span`
-  margin-right: 1vw;
+const PopPlaceLabel = styled(StyledLabel)`
+  margin-right: 10px;
 `;
 
-const PopPlaceIcon = styled(GrLocation)`
-  width: 2vw;
-  height: 2vw;
+const PopPlace = styled(StyledSpan)``;
+
+const PopPlaceIcon = styled(HiLocationMarker)`
+  width: 22px;
+  height: 22px;
+  fill: lightseagreen;
+  cursor: pointer;
 `;
 
-const FoodImgLabel = styled.label`
-  width: 9vw;
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
 `;
 
 const ImgUpload = styled.label`
-  border: 1px solid lightslategrey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 5px;
   border-radius: 5px;
-  background-color: lightskyblue;
-  padding: 0.5vw;
+  padding: 5px 10px;
   cursor: pointer;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 18px;
+  background-color: lightskyblue;
+  color: white;
 `;
 
 const UploadBtn = styled.input`
   display: none;
 `;
 
+const PreviewOutline = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const PreviewImg = styled.img`
   border-radius: 10px;
-  margin-bottom: 2vw;
+  width: 100%;
+  max-width: 400px;
 `;
 
 const SubmitBtn = styled.button`
-  flex-grow: 1;
-  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 5px;
   border-radius: 5px;
-  background-color: lightskyblue;
-  color: white;
+  padding: 5px 10px;
   cursor: pointer;
-  padding: 1vw;
-  letter-spacing: 0.5vw;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 18px;
+  background-color: #1e88e5;
+  color: white;
 `;
 
 export default EditPopup;
