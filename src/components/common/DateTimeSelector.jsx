@@ -2,68 +2,76 @@ import React from 'react';
 import styled from 'styled-components';
 import DateTimePicker from 'react-datetime-picker';
 import { useDispatch, useSelector } from 'react-redux';
+import { PopTitleContainer, PopTitle } from './popup/PopupUnits';
+
+import CalendarImg from '../../images/common/calendar.svg';
 
 const DateTimeSelector = ({ share }) => {
   const dispatch = useDispatch();
   const specificDateTime = useSelector((state) => state.specificDateTime);
 
-  return (
-    share && (
-      <>
-        <Title>請選擇日期及時間</Title>
-        <Container>
-          <DateTimePicker
-            amPmAriaLabel="Select AM/PM"
-            calendarAriaLabel="Toggle calendar"
-            clearAriaLabel="Clear value"
-            dayAriaLabel="Day"
-            hourAriaLabel="Hour"
-            maxDetail="second"
-            minuteAriaLabel="Minute"
-            monthAriaLabel="Month"
-            nativeInputAriaLabel="Date and time"
-            onChange={(result) => {
-              dispatch({ type: 'specificDateTime/selected', payload: result });
-            }}
-            secondAriaLabel="Second"
-            value={specificDateTime}
-            yearAriaLabel="Year"
-            minDate={share.fromTimeStamp.toDate()}
-            maxDate={share.toTimeStamp.toDate()}
-          />
-        </Container>
-      </>
-    )
+  return share ? (
+    <>
+      <PopTitleContainer>
+        <CalendarIcon src={CalendarImg} />
+        <PopTitle>選擇日期及時間</PopTitle>
+      </PopTitleContainer>
+      <Container>
+        <DateTimePicker
+          amPmAriaLabel="Select AM/PM"
+          calendarAriaLabel="Toggle calendar"
+          clearAriaLabel="Clear value"
+          dayAriaLabel="Day"
+          hourAriaLabel="Hour"
+          maxDetail="second"
+          minuteAriaLabel="Minute"
+          monthAriaLabel="Month"
+          nativeInputAriaLabel="Date and time"
+          onChange={(result) => {
+            dispatch({ type: 'specificDateTime/selected', payload: result });
+          }}
+          secondAriaLabel="Second"
+          value={specificDateTime}
+          yearAriaLabel="Year"
+          minDate={share.fromTimeStamp.toDate()}
+          maxDate={share.toTimeStamp.toDate()}
+        />
+      </Container>
+    </>
+  ) : (
+    <></>
   );
 };
 
-const Title = styled.div`
-  font-size: 2.2vw;
+const CalendarIcon = styled.img`
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
 `;
 
 const Container = styled.div`
   .react-datetime-picker {
     display: flex;
-    flex-wrap: wrap;
   }
   .react-datetime-picker__wrapper {
-    /* flex-direction: column; */
-    /* position: relative; */
-    margin-top: 2vw;
+    flex-direction: column;
+    position: relative;
+    margin-top: 15px;
     border-radius: 5px;
-    padding: 1vw;
-    background-color: lightgray;
-    opacity: 0.8;
+    padding: 10px;
+    background-color: #b7e4c7;
+    box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 
-    @media screen and (max-width: 700px) {
-      flex-direction: column;
+    @media screen and (min-width: 800px) {
+      flex-direction: row;
     }
   }
   .react-datetime-picker__inputGroup {
-    font-size: 2vw;
+    font-size: 14px;
+    min-width: 24px;
     text-align: center;
 
-    @media screen and (min-width: 840px) {
+    @media screen and (min-width: 800px) {
       font-size: inherit;
     }
   }
@@ -71,30 +79,33 @@ const Container = styled.div`
   .react-datetime-picker__button {
     border: 1px solid black;
     border-radius: 5px;
-    margin-right: 1vw;
-    @media screen and (max-width: 700px) {
-      margin-top: 1vw;
-    }
+    margin-top: 5px;
+    padding: 5px 30px;
   }
   .react-datetime-picker__clear-button {
     background-color: lightskyblue;
+    box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+    width: fit-content;
     align-self: center;
-    @media screen and (max-width: 700px) {
-      padding: 1vw 10vw;
+    @media screen and (min-width: 800px) {
+      margin-right: 5px;
     }
   }
 
   .react-datetime-picker__calendar-button {
     background-color: lightseagreen;
+    box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+    width: fit-content;
     align-self: center;
-    @media screen and (max-width: 700px) {
-      padding: 1vw 10vw;
-    }
   }
 
-  .react-datetime-picker__button__icon {
-    width: 2vw;
-    height: 2vw;
+  .react-calendar {
+    font-size: 14px;
+    max-width: 67%;
+    border-radius: 5px;
+    @media screen and (min-width: 520px) {
+      max-width: 100%;
+    }
   }
 `;
 

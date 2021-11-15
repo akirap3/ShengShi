@@ -356,7 +356,6 @@ const MenuClose = styled(GrFormClose)`
   right: 10px;
   width: 22px;
   height: 22px;
-  /* fill: rgb(4, 169, 109, 0.6); */
   cursor: pointer;
 `;
 
@@ -364,7 +363,6 @@ const ImgContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
-  /* margin-top: 20px; */
   margin-right: 20px;
   border-radius: 5px;
   background-color: rgb(4, 169, 109, 0.6);
@@ -385,6 +383,11 @@ const StyledMobileLink = styled(Link)`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
   margin-bottom: 20px;
+  &:hover {
+    background-color: #95d5b2;
+    padding: 10px;
+    border-radius: 5px;
+  }
 `;
 
 const MobileHomeNav = styled(StyledMobileLink)``;
@@ -406,8 +409,14 @@ const MobileLogoutButton = styled.div`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
   margin-bottom: 20px;
-  color: #ccc;
+  color: rgb(129, 129, 129);
   cursor: pointer;
+
+  &:hover {
+    background-color: #b7e4c7;
+    padding: 10px;
+    border-radius: 5px;
+  }
 `;
 
 export default Header;

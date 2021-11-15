@@ -18,6 +18,7 @@ const NoResultContainer = styled.div`
   align-items: center;
   padding: 10vw;
   height: 40vh;
+  background-color: white;
 
   @media screen and (min-width: 650px) {
     flex-direction: row;

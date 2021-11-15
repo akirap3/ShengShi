@@ -289,8 +289,7 @@ const DashboardContext = styled.div`
   width: fit-content;
   max-width: 1000px;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.5);
 
   @media screen and (max-width: 700px) {
     grid-template-columns: repeat(2, 1fr);

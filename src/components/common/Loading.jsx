@@ -6,19 +6,24 @@ const Loading = () => {
     <StyledLoading
       type={'spin'}
       color={'#2a9d8f'}
-      height={'10vw'}
-      width={'10vw'}
+      height={'100px'}
+      width={'100px'}
     />
   );
 };
 
 const StyledLoading = styled(ReactLoading)`
-  display: flex;
-  position: relative;
+  position: absolute;
   z-index: 10;
-  top: 50vh;
-  left: 50vw;
-  transform: translate(-50%, -50%);
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+`;
+
+export const PaddingLoading = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: relative;
 `;
 
 export default Loading;

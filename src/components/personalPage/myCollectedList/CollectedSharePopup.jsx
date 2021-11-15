@@ -2,7 +2,25 @@ import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { DialogOverlay, DialogContent } from '@reach/dialog';
+import { DialogOverlay } from '@reach/dialog';
+import {
+  StyledDialogContent,
+  PopClose,
+  PopTitleContainer,
+  TitleIcon,
+  PopTitle,
+  PopContent,
+  PopRow,
+  StyledLabel,
+  StyledInput,
+  StyledSpan,
+  LabelIconContainer,
+  Calendar,
+  PopPlaceIcon,
+  Preview,
+  ButtonContainer,
+  SubmitBtn,
+} from '../../common/popup/PopupUnits';
 import SelectDateTimePopup from './SelectDateTimePopup';
 import LocationMap from '../../common/LocationMap';
 import Loading from '../../common/Loading';
@@ -26,10 +44,6 @@ import {
 } from '@firebase/firestore';
 
 import Comment from './Comment';
-import { AiFillCloseCircle } from 'react-icons/ai';
-import { GrLocation } from 'react-icons/gr';
-import { BiCrown } from 'react-icons/bi';
-import { BsCalendarCheckFill } from 'react-icons/bs';
 
 const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   const dispatch = useDispatch();
@@ -147,33 +161,20 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
     userData && (
       <>
         <DialogOverlay isOpen={showEdit} onDismiss={closeEditor}>
-          {isLoading && (
-            <Loading
-              type={'spin'}
-              color={'#2a9d8f'}
-              height={'10vw'}
-              width={'10vw'}
-            />
-          )}
-          <DialogContent
-            style={{
-              position: 'relative',
-              border: 'solid 1px lightBlue',
-              borderRadius: '10px',
-            }}
-            aria-label="collected-share-popup"
-          >
+          <StyledDialogContent aria-label="collected-share-popup">
+            {isLoading && <Loading />}
             <PopClose onClick={closeEditor} />
             <PopTitleContainer>
-              <CrownIcon />
+              <TitleIcon />
               <PopTitle>{share?.name || ''}</PopTitle>
             </PopTitleContainer>
             <PopContent>
-              <PreviewImg src={share?.imageUrl || ''} />
-              <PopRow>
+              <Preview src={share?.imageUrl || ''} />
+
+              <StyledPopRow>
                 <CurrentNumberLabel>目前數量</CurrentNumberLabel>
                 <CurrentNumber>{share?.quantities || ''}</CurrentNumber>
-              </PopRow>
+              </StyledPopRow>
               <PopRow>
                 <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
                 <Quantity
@@ -190,14 +191,18 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
                 </DateTime>
               </PopRow>
               <PopRow>
-                <DateTimeLabel>領取日期及時間</DateTimeLabel>
+                <LabelIconContainer>
+                  <DateTimeLabel>領取日期及時間</DateTimeLabel>
+                  <Calendar onClick={openDateTime} />
+                </LabelIconContainer>
                 <DateTime>{specificDateTime?.toLocaleString() || ''}</DateTime>
-                <Calendar onClick={openDateTime} />
               </PopRow>
               <PopRow>
-                <PopPlaceLabel>地點</PopPlaceLabel>
+                <LabelIconContainer>
+                  <PopPlaceLabel>地點</PopPlaceLabel>
+                  <PopPlaceIcon />
+                </LabelIconContainer>
                 <PopPlace>{share?.exchangePlace || ''}</PopPlace>
-                <PopPlaceIcon />
               </PopRow>
               <MapWrapper>
                 <LocationMap />
@@ -211,7 +216,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
                   留言
                 </RepalyButton>
                 <CommentSummary>
-                  {`目前共${commentCounts || 0}則留言`}
+                  {`目前共 ${commentCounts || 0} 則留言`}
                 </CommentSummary>
                 {comments &&
                   comments.map((comment) => (
@@ -223,13 +228,15 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
                     />
                   ))}
               </CommentSection>
-              <SubmitBtn
-                onClick={() => handleConfirmation(share, specificDateTime)}
-              >
-                確認領取
-              </SubmitBtn>
+              <ButtonContainer>
+                <SubmitBtn
+                  onClick={() => handleConfirmation(share, specificDateTime)}
+                >
+                  確認領取
+                </SubmitBtn>
+              </ButtonContainer>
             </PopContent>
-          </DialogContent>
+          </StyledDialogContent>
         </DialogOverlay>
         <SelectDateTimePopup
           showDateTime={showDateTime}
@@ -246,143 +253,73 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   );
 };
 
-const StyledColse = styled(AiFillCloseCircle)`
-  fill: lightblue;
-  background-color: blue;
-  border-radius: 50%;
-  opacity: 0.8;
-  cursor: pointer;
+const StyledPopRow = styled(PopRow)`
+  margin-top: 15px;
 `;
 
-const PopClose = styled(StyledColse)`
-  position: absolute;
-  top: 2vw;
-  right: 2vw;
-  width: 3vw;
-  height: 3vw;
-  cursor: pointer;
+const CurrentNumberLabel = styled(StyledLabel)``;
+
+const CurrentNumber = styled(StyledSpan)``;
+
+const RegisterQuantityLabel = styled(StyledLabel)``;
+
+const Quantity = styled(StyledInput)``;
+
+const DateTimeLabel = styled(StyledLabel)`
+  margin-right: 10px;
 `;
 
-const PopTitleContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 1vw;
-  border-bottom: 1px solid lightskyblue;
+const DateTime = styled(StyledSpan)``;
+
+const PopPlaceLabel = styled(StyledLabel)`
+  margin-right: 10px;
 `;
 
-const CrownIcon = styled(BiCrown)`
-  fill: lightskyblue;
-  width: 3vw;
-  height: 3vw;
-  margin-right: 2vw;
-`;
-
-const PopTitle = styled.div`
-  font-size: 2.5vw;
-`;
-
-const PopContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 2vw 1.5vw;
-`;
-
-const PopRow = styled.div`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  font-size: 1.5vw;
-  margin-bottom: 2vw;
-`;
-
-const CurrentNumberLabel = styled.label`
-  width: 9vw;
-`;
-
-const CurrentNumber = styled.span`
-  flex-grow: 1;
-`;
-
-const RegisterQuantityLabel = styled.label`
-  width: 9vw;
-`;
-
-const Quantity = styled.input``;
-
-const DateTimeLabel = styled.label`
-  width: 9vw;
-`;
-
-const DateTime = styled.span`
-  margin-right: 1vw;
-`;
-
-const Calendar = styled(BsCalendarCheckFill)`
-  width: 2vw;
-  height: 2vw;
-  fill: lightseagreen;
-  cursor: pointer;
-`;
-
-const PopPlaceLabel = styled.label`
-  width: 9vw;
-`;
-
-const PopPlace = styled.span`
-  margin-right: 1vw;
-`;
-
-const PopPlaceIcon = styled(GrLocation)`
-  width: 2vw;
-  height: 2vw;
-`;
-
-const PreviewImg = styled.img`
-  border-radius: 10px;
-  margin-bottom: 2vw;
-`;
+const PopPlace = styled(StyledSpan)``;
 
 const MapWrapper = styled.div`
-  margin-bottom: 2vw;
+  margin-bottom: 10px;
 `;
 
 const CommentSection = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 2vw;
+  margin-bottom: 10px;
 `;
 
 const ReplyArea = styled.textarea`
-  width: 100%;
-  min-height: 10vh;
-  max-height: 20vh;
-  padding: 1vw;
+  max-width: 100%;
+  min-height: 100px;
+  max-height: 200px;
+  padding: 10px;
   line-height: 16px;
-  font-size: 12px;
+  font-size: 14px;
   border-radius: 5px;
+  border-color: lightgray;
 `;
 
 const RepalyButton = styled.button`
-  border: 1px solid black;
+  cursor: pointer;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 18px;
+  background-color: white;
+  color: #1e88e5;
   padding: 5px 10px;
   border-radius: 5px;
-  margin: 1vw auto 2vw auto;
+  border: 1px solid #1e88e5;
+  margin: 10px auto 20px auto;
 `;
 
 const CommentSummary = styled.div`
-  margin-bottom: 2vw;
-`;
-
-const SubmitBtn = styled.button`
-  flex-grow: 1;
-  border: none;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 18px;
+  margin-bottom: 15px;
+  background-color: rgb(46, 180, 204);
+  width: fit-content;
+  padding: 5px 10px;
   border-radius: 5px;
-  background-color: lightskyblue;
   color: white;
-  cursor: pointer;
-  padding: 1vw;
-  letter-spacing: 0.5vw;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 `;
 
 export default CollectedSharePopup;

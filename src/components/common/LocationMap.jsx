@@ -19,12 +19,11 @@ const LocationMap = compose(
     containerElement: (
       <div
         style={{
-          height: `25vw`,
-          border: `1px solid lightblue`,
+          height: `200px`,
         }}
       />
     ),
-    mapElement: <div style={{ height: `100%` }} />,
+    mapElement: <div style={{ height: `100%`, borderRadius: `10px` }} />,
     isMarkerShown: true,
   }),
   withScriptjs,
