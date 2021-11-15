@@ -16,15 +16,27 @@ import {
   getDownloadURL,
 } from '@firebase/storage';
 
-import { DialogOverlay, DialogContent } from '@reach/dialog';
+import { DialogOverlay } from '@reach/dialog';
+
+import {
+  StyledDialogContent,
+  PopClose,
+  PopTitleContainer,
+  TitleIcon,
+  PopTitle,
+  PopContent,
+  PopRow,
+  StyledLabel,
+  StyledInput,
+  StyledSpan,
+  Preview,
+} from '../../common/popup/PopupUnits';
 
 import ClendarPopup from './CalendarPopup';
 import MapPopup from './MapPopup';
 import Loading from '../../common/Loading';
 import { isFieldsChecked } from '../../../utils/validation';
 
-import SaladImg from '../../../images/common/salad.svg';
-import { AiFillCloseCircle } from 'react-icons/ai';
 import { HiLocationMarker } from 'react-icons/hi';
 import { BsCalendarCheckFill } from 'react-icons/bs';
 
@@ -92,7 +104,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
           {isLoading && <Loading />}
           <PopClose onClick={closeEditor} disabled={isLoading} />
           <PopTitleContainer>
-            <SaladIcon src={SaladImg} />
+            <TitleIcon />
             <PopTitle>{share.name}</PopTitle>
           </PopTitleContainer>
           <PopContent>
@@ -129,9 +141,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
               <PopPlace>{address}</PopPlace>
             </PopRow>
             <PopRow></PopRow>
-            <PreviewOutline>
-              <PreviewImg src={previewImgUrl} />
-            </PreviewOutline>
+            <Preview src={previewImgUrl} />
             <ButtonContainer>
               <ImgUpload ref={uploadRef} htmlFor="image-upload">
                 上傳
@@ -159,87 +169,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
   );
 };
 
-const StyledDialogContent = styled(DialogContent)`
-  position: relative;
-  width: 80vw;
-  max-width: 800px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  border-radius: 10px;
-`;
-
-const PopClose = styled(AiFillCloseCircle)`
-  fill: #1e88e582;
-  border-radius: 50%;
-  opacity: 0.8;
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 22px;
-  height: 22px;
-`;
-
-const PopTitleContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  background-color: #52b788;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  margin-top: 10px;
-  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
-`;
-
-const SaladIcon = styled.img`
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
-`;
-
-const PopTitle = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 24px;
-  color: white;
-`;
-
-const PopContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-`;
-
-const PopRow = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
-`;
-
-const StyledLabel = styled.label`
-  background-color: #52b788aa;
-  width: fit-content;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: white;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 18px;
-  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
-`;
-
 const FoodLabel = styled(StyledLabel)``;
-
-const StyledInput = styled.input`
-  flex-grow: 1;
-  border: none;
-  background: none;
-  outline: none;
-  border-bottom: 2px solid #d9d7d7;
-  padding: 5px 8px;
-  margin-left: 10px;
-  margin-top: 10px;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 14px;
-`;
 
 const FoodName = styled(StyledInput)`
   flex-grow: 1;
@@ -256,20 +186,6 @@ const DateTimeContainer = styled.div`
 
 const DateTimeLabel = styled(StyledLabel)`
   margin-right: 10px;
-`;
-
-const StyledSpan = styled.span`
-  flex-grow: 1;
-  border: none;
-  background: none;
-  outline: none;
-  border-bottom: 2px solid #d9d7d7;
-  padding: 5px 8px;
-  margin-left: 10px;
-  margin-top: 10px;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 14px;
-  line-height: 24px;
 `;
 
 const DateTime = styled(StyledSpan)``;
@@ -321,18 +237,6 @@ const ImgUpload = styled.label`
 
 const UploadBtn = styled.input`
   display: none;
-`;
-
-const PreviewOutline = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const PreviewImg = styled.img`
-  border-radius: 10px;
-  width: 100%;
-  max-width: 400px;
 `;
 
 const SubmitBtn = styled.button`

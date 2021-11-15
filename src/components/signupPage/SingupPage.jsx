@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import ReactLoading from 'react-loading';
+import Loading, { PaddingLoading } from '../common/Loading';
 
 import * as validation from '../../utils/validation';
 import * as firebase from '../../utils/firebase';
@@ -159,14 +159,7 @@ const SignupPage = () => {
 
   return usersData ? (
     <StyledMain>
-      {isLoading && (
-        <StyledLoading
-          type={'spin'}
-          color={'#2a9d8f'}
-          height={'10vw'}
-          width={'10vw'}
-        />
-      )}
+      {isLoading && <Loading />}
       <LoginBackground />
       <LoginBg2 />
       <SignupContainer>
@@ -284,12 +277,9 @@ const SignupPage = () => {
       </SignupContainer>
     </StyledMain>
   ) : (
-    <StyledLoading
-      type={'spin'}
-      color={'#2a9d8f'}
-      height={'10vw'}
-      width={'10vw'}
-    />
+    <PaddingLoading>
+      <Loading />
+    </PaddingLoading>
   );
 };
 
@@ -297,14 +287,6 @@ const StyledMain = styled(Main)`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const StyledLoading = styled(ReactLoading)`
-  position: absolute;
-  z-index: 10;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 `;
 
 const SignupContainer = styled.div`

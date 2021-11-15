@@ -1,7 +1,7 @@
 import { Route, Switch, Redirect } from 'react-router-dom';
-import styled from 'styled-components';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
+import Loading, { PaddingLoading } from './components/common/Loading';
 import LandingPage from './components/landingPage/LandingPage';
 import RestaurantPage from './components/restaurantPage/RestaurantPage';
 import ArticlePage from './components/articlePage/ArticlePage';
@@ -115,25 +115,13 @@ const App = () => {
           </Route>
         </Switch>
       ) : (
-        <StyledLoading
-          type={'spin'}
-          color={'#2a9d8f'}
-          height={'10vw'}
-          width={'10vw'}
-        />
+        <PaddingLoading>
+          <Loading />
+        </PaddingLoading>
       )}
       <Footer />
     </>
   );
 };
-
-const StyledLoading = styled(ReactLoading)`
-  display: flex;
-  position: absolute;
-  z-index: 10;
-  top: 50vh;
-  left: 50vw;
-  transform: translate(-50%, -50%);
-`;
 
 export default App;

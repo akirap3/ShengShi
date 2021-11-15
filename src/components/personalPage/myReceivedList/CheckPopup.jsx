@@ -1,12 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { DialogOverlay, DialogContent } from '@reach/dialog';
-import useCurrentUser from '../../../hooks/useCurrentUser';
+import { DialogOverlay } from '@reach/dialog';
+import {
+  StyledDialogContent,
+  PopClose,
+  PopTitleContainer,
+  TitleIcon,
+  PopTitle,
+  PopContent,
+  PopRow,
+  StyledLabel,
+  StyledSpan,
+  Preview,
+  LabelIconContainer,
+  PopPlaceIcon,
+} from '../../common/popup/PopupUnits';
 
-import { AiFillCloseCircle } from 'react-icons/ai';
-import { GrLocation } from 'react-icons/gr';
-import { BiCrown } from 'react-icons/bi';
+import useCurrentUser from '../../../hooks/useCurrentUser';
 
 const CheckPopup = ({ showEdit, closeEditor, share }) => {
   const currentUser = useCurrentUser();
@@ -14,17 +25,10 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
   return (
     <>
       <DialogOverlay isOpen={showEdit} onDismiss={closeEditor}>
-        <DialogContent
-          style={{
-            position: 'relative',
-            border: 'solid 1px lightBlue',
-            borderRadius: '10px',
-          }}
-          aria-label="popup"
-        >
+        <StyledDialogContent aria-label="popup">
           <PopClose onClick={closeEditor} />
           <PopTitleContainer>
-            <CrownIcon />
+            <TitleIcon />
             <PopTitle>{share?.name || ''}</PopTitle>
           </PopTitleContainer>
           <PopContent>
@@ -47,113 +51,39 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
               </DateTime>
             </PopRow>
             <PopRow>
-              <PopPlaceLabel>地點</PopPlaceLabel>
+              <LabelIconContainer>
+                <PopPlaceLabel>地點</PopPlaceLabel>
+                <PopPlaceIcon />
+              </LabelIconContainer>
               <PopPlace>{share?.exchangePlace || ''}</PopPlace>
-              <PopPlaceIcon />
             </PopRow>
             <PopRow>
               <FoodImgLabel>食物照片</FoodImgLabel>
             </PopRow>
-            <PreviewImg src={share?.imageUrl || ''} />
+            <Preview src={share?.imageUrl || ''} />
           </PopContent>
-        </DialogContent>
+        </StyledDialogContent>
       </DialogOverlay>
     </>
   );
 };
 
-const StyledColse = styled(AiFillCloseCircle)`
-  fill: lightblue;
-  background-color: blue;
-  border-radius: 50%;
-  opacity: 0.8;
-  cursor: pointer;
-`;
+const FoodLabel = styled(StyledLabel)``;
 
-const PopClose = styled(StyledColse)`
-  position: absolute;
-  top: 2vw;
-  right: 2vw;
-  width: 3vw;
-  height: 3vw;
-  cursor: pointer;
-`;
+const FoodName = styled(StyledSpan)``;
 
-const PopTitleContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 1vw;
-  border-bottom: 1px solid lightskyblue;
-`;
+const QuantityLabel = styled(StyledLabel)``;
 
-const CrownIcon = styled(BiCrown)`
-  fill: lightskyblue;
-  width: 3vw;
-  height: 3vw;
-  margin-right: 2vw;
-`;
+const Quantity = styled(StyledSpan)``;
 
-const PopTitle = styled.div`
-  font-size: 2.5vw;
-`;
+const DateTimeLabel = styled(StyledLabel)``;
 
-const PopContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 2vw 1.5vw;
-`;
+const DateTime = styled(StyledSpan)``;
 
-const PopRow = styled.div`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  font-size: 1.5vw;
-  margin-bottom: 2vw;
-`;
+const PopPlaceLabel = styled(StyledLabel)``;
 
-const FoodLabel = styled.label`
-  width: 9vw;
-`;
+const PopPlace = styled(StyledSpan)``;
 
-const FoodName = styled.span`
-  flex-grow: 1;
-`;
-
-const QuantityLabel = styled.label`
-  width: 9vw;
-`;
-
-const Quantity = styled.span``;
-
-const DateTimeLabel = styled.label`
-  width: 9vw;
-`;
-
-const DateTime = styled.span`
-  margin-right: 1vw;
-`;
-
-const PopPlaceLabel = styled.label`
-  width: 9vw;
-`;
-
-const PopPlace = styled.span`
-  margin-right: 1vw;
-`;
-
-const PopPlaceIcon = styled(GrLocation)`
-  width: 2vw;
-  height: 2vw;
-`;
-
-const FoodImgLabel = styled.label`
-  width: 9vw;
-`;
-
-const PreviewImg = styled.img`
-  border-radius: 10px;
-  margin-bottom: 2vw;
-`;
+const FoodImgLabel = styled(StyledLabel)``;
 
 export default CheckPopup;

@@ -1,14 +1,28 @@
 import styled from 'styled-components';
 
-import { DialogOverlay, DialogContent } from '@reach/dialog';
+import { DialogOverlay } from '@reach/dialog';
+import {
+  StyledDialogContent,
+  PopClose,
+  PopTitleContainer,
+  TitleIcon,
+  PopTitle,
+  PopContent,
+  PopRow,
+  StyledLabel,
+  StyledSpan,
+  LabelIconContainer,
+  PopPlaceIcon,
+  Preview,
+  ButtonContainer,
+  SubmitBtn,
+} from './popup/PopupUnits';
+
 import LocationMap from './LocationMap';
 import MyQRcode from './MyQRcode';
 import UpdatePopup from '../personalPage/myToReceiveList/UpdatePopup';
 import { useDispatch } from 'react-redux';
 
-import { AiFillCloseCircle } from 'react-icons/ai';
-import { GrLocation } from 'react-icons/gr';
-import { BiCrown } from 'react-icons/bi';
 import { useState } from 'react';
 import useCurrentUser from '../../hooks/useCurrentUser';
 
@@ -41,17 +55,17 @@ const ConfirmedPopup = ({
         <StyledDialogContent aria-label="confirmed-popup">
           <PopClose onClick={closeConfirmation} />
           <PopTitleContainer>
-            <CrownIcon />
+            <TitleIcon />
             <PopTitle>{share?.name || ''}</PopTitle>
           </PopTitleContainer>
           <PopContent>
-            <PreviewImg src={share?.imageUrl || ''} />
-            <PopRow>
+            <Preview src={share?.imageUrl || ''} />
+            <StyledPopRow>
               <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
               <Quantity>
                 {share?.toReceiveInfo[currentUser?.uid]?.quantities || 0}
               </Quantity>
-            </PopRow>
+            </StyledPopRow>
             <PopRow>
               <DateTimeLabel>領取日期及時間</DateTimeLabel>
               <DateTime>
@@ -61,22 +75,28 @@ const ConfirmedPopup = ({
               </DateTime>
             </PopRow>
             <PopRow>
-              <PopPlaceLabel>地點</PopPlaceLabel>
-              <PopPlace>{share?.exchangePlace || ''}</PopPlace>
-              <PopPlaceIcon />
-            </PopRow>
+              <LabelIconContainer>
+                <PopPlaceLabel>地點</PopPlaceLabel>
+                <PopPlaceIcon />
+              </LabelIconContainer>
 
-            <MapWrapper>
-              <LocationMap exchangeLocation={share?.exchangeLocation} />
-            </MapWrapper>
-            <QRcodeWrapper>
-              <StyledQRcode info={`${share?.id}/${currentUser?.uid}`} />
-            </QRcodeWrapper>
-            {UpdateBtn && (
-              <UpdateBtn onClick={() => handleShowUpdate(share)}>
-                我要更新
-              </UpdateBtn>
-            )}
+              <PopPlace>{share?.exchangePlace || ''}</PopPlace>
+            </PopRow>
+            <MapQRContainer>
+              <MapWrapper>
+                <LocationMap exchangeLocation={share?.exchangeLocation} />
+              </MapWrapper>
+              <QRcodeWrapper>
+                <MyQRcode info={`${share?.id}/${currentUser?.uid}`} />
+              </QRcodeWrapper>
+            </MapQRContainer>
+            <ButtonContainer>
+              {UpdateBtn && (
+                <SubmitBtn onClick={() => handleShowUpdate(share)}>
+                  我要更新
+                </SubmitBtn>
+              )}
+            </ButtonContainer>
           </PopContent>
         </StyledDialogContent>
       </DialogOverlay>
@@ -89,96 +109,39 @@ const ConfirmedPopup = ({
   );
 };
 
-const StyledDialogContent = styled(DialogContent)`
-  position: relative;
-  width: 80vw;
-  border-radius: 10px;
+const StyledPopRow = styled(PopRow)`
+  margin-top: 20px;
 `;
 
-const StyledColse = styled(AiFillCloseCircle)`
-  fill: lightblue;
-  background-color: blue;
-  border-radius: 50%;
-  opacity: 0.8;
-  cursor: pointer;
-`;
+const RegisterQuantityLabel = styled(StyledLabel)``;
 
-const PopClose = styled(StyledColse)`
-  position: absolute;
-  top: 2vw;
-  right: 2vw;
-  width: 3vw;
-  height: 3vw;
-  cursor: pointer;
-`;
+const Quantity = styled(StyledSpan)``;
 
-const PopTitleContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 1vw;
-  border-bottom: 1px solid lightskyblue;
-`;
+const DateTimeLabel = styled(StyledLabel)``;
 
-const CrownIcon = styled(BiCrown)`
-  fill: lightskyblue;
-  width: 3vw;
-  height: 3vw;
-  margin-right: 2vw;
-`;
+const DateTime = styled(StyledSpan)``;
 
-const PopTitle = styled.div`
-  font-size: 2.5vw;
-`;
+const PopPlaceLabel = styled(StyledLabel)``;
 
-const PopContent = styled.div`
+const PopPlace = styled(StyledSpan)``;
+
+const MapQRContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 2vw 1.5vw;
-`;
 
-const PopRow = styled.div`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  font-size: 1.5vw;
-  margin-bottom: 2vw;
-`;
-
-const RegisterQuantityLabel = styled.label`
-  width: 9vw;
-`;
-
-const Quantity = styled.span``;
-
-const DateTimeLabel = styled.label`
-  width: 9vw;
-`;
-
-const DateTime = styled.span`
-  margin-right: 1vw;
-`;
-
-const PopPlaceLabel = styled.label`
-  width: 9vw;
-`;
-
-const PopPlace = styled.span`
-  margin-right: 1vw;
-`;
-
-const PopPlaceIcon = styled(GrLocation)`
-  width: 2vw;
-  height: 2vw;
-`;
-
-const PreviewImg = styled.img`
-  border-radius: 10px;
-  margin-bottom: 2vw;
+  @media screen and (min-width: 700px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 `;
 
 const MapWrapper = styled.div`
-  margin-bottom: 2vw;
+  margin-bottom: 15px;
+  @media screen and (min-width: 700px) {
+    width: calc(100% - 220px);
+    margin-bottom: 0;
+  }
 `;
 
 const QRcodeWrapper = styled.div`
@@ -186,7 +149,5 @@ const QRcodeWrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
-const StyledQRcode = styled(MyQRcode)``;
 
 export default ConfirmedPopup;

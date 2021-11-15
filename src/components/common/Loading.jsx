@@ -20,4 +20,10 @@ const StyledLoading = styled(ReactLoading)`
   transform: translate(50%, -50%);
 `;
 
+export const PaddingLoading = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+`;
+
 export default Loading;
