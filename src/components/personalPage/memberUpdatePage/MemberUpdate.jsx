@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import DeletePopup from '../../common/DeletePopup';
+import AlertPopup from '../../common/AlertPopup';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import Loading from '../../common/Loading';
 
@@ -8,8 +9,8 @@ import { getCurrentUserData } from '../../../utils/firebase';
 import { doc, getFirestore, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-import { BsFillPersonFill } from 'react-icons/bs';
 import {
+  BsFillPersonFill,
   BsFillEmojiLaughingFill,
   BsFillTelephoneFill,
   BsFillChatQuoteFill,
@@ -20,6 +21,8 @@ import { HiLocationMarker } from 'react-icons/hi';
 const MemberUpdate = () => {
   const uploadRef = useRef();
   const [showDelete, setShowDelete] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const [userData, setUserData] = useState(null);
   const [displayName, setDisplayName] = useState('');
   const [alias, setAlias] = useState('');
@@ -36,6 +39,8 @@ const MemberUpdate = () => {
 
   const openDelete = () => setShowDelete(true);
   const closeDelete = () => setShowDelete(false);
+  const openInfo = () => setShowInfo(true);
+  const closeInfo = () => setShowInfo(false);
 
   const getUserData = useCallback(
     () => getCurrentUserData(currentUser, setUserData),
@@ -55,14 +60,30 @@ const MemberUpdate = () => {
   };
 
   const checkFields = () => {
+    const phonNumberRegex = /^\d{10}$/;
     if (!displayName) {
-      alert('請輸入姓名');
+      setAlertMessage('請輸入姓名');
+      openInfo();
       return false;
     } else if (!alias) {
-      alert('請輸入暱稱');
+      setAlertMessage('請輸入暱稱');
+      openInfo();
+      return false;
+    } else if (!phonNumberRegex.test(phone)) {
+      setAlertMessage('請輸入10個數字的電話號碼');
+      openInfo();
+      return false;
+    } else if (!myPlace) {
+      setAlertMessage('請輸入你的地點');
+      openInfo();
+      return false;
+    } else if (!about) {
+      setAlertMessage('請描述關於你');
+      openInfo();
       return false;
     } else if (!file) {
-      alert('請上傳照片');
+      setAlertMessage('請上傳照片');
+      openInfo();
       return false;
     }
     return true;
@@ -163,6 +184,11 @@ const MemberUpdate = () => {
         category="會員"
         toDeleteMember={true}
       />
+      <AlertPopup
+        showInfo={showInfo}
+        closeInfo={closeInfo}
+        message={alertMessage}
+      />
     </>
   );
 };
@@ -210,6 +236,14 @@ const StyledInput = styled.input`
   padding: 5px 8px;
 `;
 
+const StyledReadOnly = styled.input`
+  flex-grow: 1;
+  border: none;
+  background: none;
+  outline: none;
+  padding: 5px 8px;
+`;
+
 const NameIcon = styled(BsFillPersonFill)`
   fill: rgb(129, 129, 129);
   width: 20px;
@@ -239,7 +273,7 @@ const EmailIcon = styled(MdEmail)`
   margin-right: 10px;
 `;
 
-const Email = styled(StyledInput)``;
+const Email = styled(StyledReadOnly)``;
 
 const PhoneIcon = styled(BsFillTelephoneFill)`
   fill: rgb(129, 129, 129);

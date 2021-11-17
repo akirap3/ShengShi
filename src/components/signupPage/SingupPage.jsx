@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import Loading, { PaddingLoading } from '../common/Loading';
+import AlertPopup from '../common/AlertPopup';
 
 import * as validation from '../../utils/validation';
 import * as firebase from '../../utils/firebase';
@@ -31,6 +32,11 @@ const SignupPage = () => {
   const [secPassword, setSecPassword] = useState('');
   const [usersData, setUsersDate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+
+  const openInfo = () => setShowInfo(true);
+  const closeInfo = () => setShowInfo(false);
 
   const getUsersData = useCallback(
     () => getAllContents('users', setUsersDate),
@@ -53,7 +59,8 @@ const SignupPage = () => {
   const checkNames = () => {
     const regex = /[a-zA-Z0-9]+/;
     if (!regex.test(firstName) || !regex.test(lastName)) {
-      alert('您的名字資料格式不符');
+      setAlertMessage('您的名字資料格式不符');
+      openInfo();
       return false;
     }
     return true;
@@ -61,10 +68,12 @@ const SignupPage = () => {
 
   const checkPassword = () => {
     if (!password && !secPassword) {
-      alert('請輸入密碼');
+      setAlertMessage('請輸入密碼');
+      openInfo();
       return false;
     } else if (password !== secPassword) {
-      alert('密碼不相符');
+      setAlertMessage('密碼不相符');
+      openInfo();
       return false;
     }
     return true;
@@ -72,7 +81,8 @@ const SignupPage = () => {
 
   const checkAlias = () => {
     if (alias === '') {
-      alert('請輸入暱稱');
+      setAlertMessage('請輸入暱稱');
+      openInfo();
       return false;
     }
     return true;
@@ -80,7 +90,8 @@ const SignupPage = () => {
 
   const checkPlace = () => {
     if (place === '') {
-      alert('請輸入暱稱');
+      setAlertMessage('請輸入地點');
+      openInfo();
       return false;
     }
     return true;
@@ -102,17 +113,22 @@ const SignupPage = () => {
             initialUserData,
             userCredential.user.uid
           );
-          alert(`You have signed up with ${email}`);
+          setAlertMessage(`您使用 ${email} 註冊`);
+          openInfo();
           setIsLoading(false);
         })
         .catch((error) => {
           setIsLoading(false);
           if (error.code === 'auth/weak-password') {
-            alert('密碼長度需要至少六個字元');
+            setAlertMessage('密碼長度需要至少六個字元');
+            openInfo();
             setPassword('');
             setSecPassword('');
           } else if (error.code === 'auth/email-already-in-use') {
-            alert('此信箱已經註冊過，請您使用信箱或是 FB 及 Google 登入');
+            setAlertMessage(
+              '此信箱已經註冊過，請您使用信箱或是 FB 及 Google 登入'
+            );
+            openInfo();
             history.push('/login');
           }
         });
@@ -151,135 +167,145 @@ const SignupPage = () => {
         }
       })
       .catch((error) => {
-        console.log(error.code);
-        alert(error.message);
+        setAlertMessage(error.message);
+        openInfo();
         setIsLoading(false);
       });
   };
 
-  return usersData ? (
-    <StyledMain>
-      {isLoading && <Loading />}
-      <LoginBackground />
-      <LoginBg2 />
-      <SignupContainer>
-        <Title>Sign Up</Title>
-        <FiledContainer>
-          <NameIcon />
-          <NameFiled
-            placeholder="First Name"
-            value={firstName}
-            onChange={(e) => {
-              setFirstName(e.target.value);
-            }}
-            disabled={isLoading}
-          />
-          <LastNameField
-            placeholder="Last Name"
-            value={lastName}
-            onChange={(e) => {
-              setLastName(e.target.value);
-            }}
-            disabled={isLoading}
-          />
-        </FiledContainer>
-        <FiledContainer>
-          <AliasIcon />
-          <Field
-            placeholder="Alias"
-            value={alias}
-            onChange={(e) => {
-              setAlias(e.target.value);
-            }}
-            disabled={isLoading}
-          />
-        </FiledContainer>
-        <FiledContainer>
-          <LocationIcon />
-          <Field
-            placeholder="Location"
-            value={place}
-            onChange={(e) => {
-              setPlace(e.target.value);
-            }}
-            disabled={isLoading}
-          />
-        </FiledContainer>
-        <FiledContainer>
-          <EmailIcon />
-          <Field
-            placeholder="Email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            disabled={isLoading}
-          />
-        </FiledContainer>
-        <FiledContainer>
-          <PasswordIcon />
-          <Field
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            disabled={isLoading}
-          />
-        </FiledContainer>
-        <FiledContainer>
-          <PasswordIcon />
-          <Field
-            type="password"
-            placeholder="Re-enter Password"
-            value={secPassword}
-            onChange={(e) => {
-              setSecPassword(e.target.value);
-            }}
-            disabled={isLoading}
-          />
-        </FiledContainer>
-        <ButtonContainer>
-          <NativeButton
-            onClick={() => checkSignup(initialUserData)}
-            disabled={isLoading}
-          >
-            確 認
-          </NativeButton>
-          <FBButton
-            onClick={() =>
-              handleClickProvider(
-                firebase.loginWithFB,
-                '?type=large',
-                setIsLoading,
-                history
-              )
-            }
-            disabled={isLoading}
-          >
-            <FbIcon /> <span>FB </span>
-          </FBButton>
-          <GoogleButton
-            onClick={() =>
-              handleClickProvider(
-                firebase.loginWithGoogle,
-                '',
-                setIsLoading,
-                history
-              )
-            }
-            disabled={isLoading}
-          >
-            <GoogleIcon /> <span>Google</span>
-          </GoogleButton>
-        </ButtonContainer>
-      </SignupContainer>
-    </StyledMain>
-  ) : (
-    <PaddingLoading>
-      <Loading />
-    </PaddingLoading>
+  return (
+    <>
+      {' '}
+      usersData ? (
+      <StyledMain>
+        {isLoading && <Loading />}
+        <LoginBackground />
+        <LoginBg2 />
+        <SignupContainer>
+          <Title>Sign Up</Title>
+          <FiledContainer>
+            <NameIcon />
+            <NameFiled
+              placeholder="First Name"
+              value={firstName}
+              onChange={(e) => {
+                setFirstName(e.target.value);
+              }}
+              disabled={isLoading}
+            />
+            <LastNameField
+              placeholder="Last Name"
+              value={lastName}
+              onChange={(e) => {
+                setLastName(e.target.value);
+              }}
+              disabled={isLoading}
+            />
+          </FiledContainer>
+          <FiledContainer>
+            <AliasIcon />
+            <Field
+              placeholder="Alias"
+              value={alias}
+              onChange={(e) => {
+                setAlias(e.target.value);
+              }}
+              disabled={isLoading}
+            />
+          </FiledContainer>
+          <FiledContainer>
+            <LocationIcon />
+            <Field
+              placeholder="Location"
+              value={place}
+              onChange={(e) => {
+                setPlace(e.target.value);
+              }}
+              disabled={isLoading}
+            />
+          </FiledContainer>
+          <FiledContainer>
+            <EmailIcon />
+            <Field
+              placeholder="Email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              disabled={isLoading}
+            />
+          </FiledContainer>
+          <FiledContainer>
+            <PasswordIcon />
+            <Field
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              disabled={isLoading}
+            />
+          </FiledContainer>
+          <FiledContainer>
+            <PasswordIcon />
+            <Field
+              type="password"
+              placeholder="Re-enter Password"
+              value={secPassword}
+              onChange={(e) => {
+                setSecPassword(e.target.value);
+              }}
+              disabled={isLoading}
+            />
+          </FiledContainer>
+          <ButtonContainer>
+            <NativeButton
+              onClick={() => checkSignup(initialUserData)}
+              disabled={isLoading}
+            >
+              確 認
+            </NativeButton>
+            <FBButton
+              onClick={() =>
+                handleClickProvider(
+                  firebase.loginWithFB,
+                  '?type=large',
+                  setIsLoading,
+                  history
+                )
+              }
+              disabled={isLoading}
+            >
+              <FbIcon /> <span>FB </span>
+            </FBButton>
+            <GoogleButton
+              onClick={() =>
+                handleClickProvider(
+                  firebase.loginWithGoogle,
+                  '',
+                  setIsLoading,
+                  history
+                )
+              }
+              disabled={isLoading}
+            >
+              <GoogleIcon /> <span>Google</span>
+            </GoogleButton>
+          </ButtonContainer>
+        </SignupContainer>
+      </StyledMain>
+      ) : (
+      <PaddingLoading>
+        <Loading />
+      </PaddingLoading>
+      )
+      <AlertPopup
+        showInfo={showInfo}
+        closeInfo={closeInfo}
+        message={alertMessage}
+      />
+    </>
   );
 };
 

@@ -35,25 +35,25 @@ const Badges = () => {
     {
       id: '領取紀錄',
       label: '領取紀錄',
-      value: myReceivedCounts || 8,
+      value: myReceivedCounts || 0,
       color: 'hsl(76, 70%, 50%)',
     },
     {
       id: '尚未領取',
       label: '尚未領取',
-      value: myToReceiveCounts || 6,
+      value: myToReceiveCounts || 0,
       color: 'hsl(279, 70%, 50%)',
     },
     {
       id: '收藏清單',
       label: '收藏清單',
-      value: myCollectedShareCounts || 6,
+      value: myCollectedShareCounts || 0,
       color: 'hsl(277, 70%, 50%)',
     },
     {
       id: '收藏店家',
       label: '收藏店家',
-      value: myCollectedStoreCounts || 3,
+      value: myCollectedStoreCounts || 0,
       color: 'hsl(267, 70%, 50%)',
     },
   ];
@@ -250,6 +250,7 @@ const BadgeImg = styled.img`
   max-height: 180px;
   border-radius: 50%;
   justify-items: center;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
 `;
 
 const BadgeName = styled.div`

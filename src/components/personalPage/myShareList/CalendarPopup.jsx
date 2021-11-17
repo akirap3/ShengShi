@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { DialogOverlay } from '@reach/dialog';
-import '@reach/dialog/styles.css';
 import { StyledDialogContent, PopClose } from '../../common/popup/PopupUnits';
 
 import DateTimeRangeSelector from '../../common/DateTimeRangeSelector';

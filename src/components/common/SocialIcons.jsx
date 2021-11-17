@@ -5,17 +5,17 @@ import { IoLogoFacebook, IoLogoTwitter, IoLogoInstagram } from 'react-icons/io';
 const SocialIcons = () => {
   return (
     <Icons>
-      <div class="social-button insta">
+      <div className="social-button insta">
         <InstagramIcon />
         <span>Instagram</span>
       </div>
 
-      <div class="social-button facebook">
+      <div className="social-button facebook">
         <FbIcon />
         <span>Facebook</span>
       </div>
 
-      <div class="social-button twitter">
+      <div className="social-button twitter">
         <TwitterIcon />
         <span>Twitter</span>
       </div>

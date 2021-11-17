@@ -42,6 +42,7 @@ import {
 
 import CalendarPopup from './myShareList/CalendarPopup';
 import MapPopup from './myShareList/MapPopup.jsx';
+import AlertPopup from '../common/AlertPopup.jsx';
 
 const AddSharePopup = ({ showEdit, closeEditor }) => {
   const dispatch = useDispatch();
@@ -52,6 +53,8 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
   const latLng = useSelector((state) => state.latLng);
   const [showCalender, setShowCalendar] = useState(false);
   const [showMap, setShowMap] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const [foodName, setFoodName] = useState('');
   const [quantities, setQuantities] = useState(1);
   const [file, setFile] = useState(null);
@@ -62,6 +65,8 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
   const closeCalendar = () => setShowCalendar(false);
   const openMap = () => setShowMap(true);
   const closeMap = () => setShowMap(false);
+  const openInfo = () => setShowInfo(true);
+  const closeInfo = () => setShowInfo(false);
 
   const handleAddress = (payload) => {
     dispatch({ type: 'address/get', payload: payload });
@@ -83,7 +88,16 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
   }, [currentUser, getListenedUserData]);
 
   const handleSubmit = async () => {
-    if (isFieldsChecked(foodName, quantities, address, file)) {
+    if (
+      isFieldsChecked(
+        foodName,
+        quantities,
+        address,
+        file,
+        setAlertMessage,
+        openInfo
+      )
+    ) {
       setIsLoaging(true);
       const docRef = doc(collection(getFirestore(), `shares`));
       const fileRef = ref(getStorage(), `images/shares/${docRef.id}`);
@@ -210,6 +224,11 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
         closeMap={closeMap}
         handleAddress={handleAddress}
         handleLatLng={handleLatLng}
+      />
+      <AlertPopup
+        showInfo={showInfo}
+        closeInfo={closeInfo}
+        message={alertMessage}
       />
     </>
   );

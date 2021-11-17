@@ -15,7 +15,7 @@ const Banner = () => {
         </Description>
         <ButtonRow>
           <StartButton to="/login">開始使用</StartButton>
-          <LearnMoreButton to="/">了解更多</LearnMoreButton>
+          <LearnMoreButton to="/search">了解更多</LearnMoreButton>
         </ButtonRow>
       </BannerContent>
       <BannerImg src={BannerImage} />

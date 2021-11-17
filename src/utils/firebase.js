@@ -732,3 +732,41 @@ export const handleDeleteBadge = async (currentUserUid) => {
     });
   }
 };
+
+export const onCommentSubmit = async (
+  share,
+  userData,
+  replyComment,
+  currentUser,
+  setReplayComment,
+  setErrorMessage,
+  setShowErrorMessage
+) => {
+  if (replyComment) {
+    await addDoc(collection(getFirestore(), `shares/${share.id}/comments`), {
+      createdAt: Timestamp.now(),
+      commentContent: replyComment,
+      author: {
+        id: currentUser.uid,
+        displayName: userData.displayName,
+        imageUrl: userData.imageUrl,
+      },
+    });
+
+    await addDoc(
+      collection(getFirestore(), `users/${share.postUser.id}/messages`),
+      {
+        createdAt: Timestamp.now(),
+        messageContent: `${userData.displayName}在您的${share.name}勝食頁面上留言`,
+        kind: 'comment',
+      }
+    );
+
+    setReplayComment('');
+    setErrorMessage('');
+    setShowErrorMessage(false);
+  } else {
+    setShowErrorMessage(true);
+    setErrorMessage('留言不能是空白');
+  }
+};

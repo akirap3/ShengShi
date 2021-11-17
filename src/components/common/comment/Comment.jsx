@@ -15,17 +15,21 @@ const Comment = ({ currentUser, share, comment, userData }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [editedComment, setEditedComment] = useState('');
 
-  const handleEnter = async (e) => {
+  const handleConfirmCommentEdit = async () => {
+    await updateDoc(
+      doc(getFirestore(), `shares/${share.id}/comments`, `${comment.id}`),
+      {
+        commentContent: editedComment,
+        createdAt: Timestamp.now(),
+      }
+    );
+    setEditedComment('');
+    setIsEdit(false);
+  };
+
+  const handleEnter = (e) => {
     if (e.charCode === 13) {
-      await updateDoc(
-        doc(getFirestore(), `shares/${share.id}/comments`, `${comment.id}`),
-        {
-          commentContent: editedComment,
-          createdAt: Timestamp.now(),
-        }
-      );
-      setEditedComment('');
-      setIsEdit(false);
+      handleConfirmCommentEdit();
     }
   };
 
@@ -62,13 +66,19 @@ const Comment = ({ currentUser, share, comment, userData }) => {
             }
             onKeyPress={(e) => handleEnter(e)}
             isEdit={isEdit}
+            disabled={!isEdit}
           />
         </CommentContent>
       </CommentContainer>
       <CommentButtonRow>
         {currentUser.uid === comment.author.id && (
           <>
-            <EditButton onClick={() => setIsEdit(true)}>編輯</EditButton>
+            <EditButton isEdit={isEdit} onClick={() => setIsEdit(true)}>
+              編輯
+            </EditButton>
+            <ConfirmButton isEdit={isEdit} onClick={handleConfirmCommentEdit}>
+              確定
+            </ConfirmButton>
             <DeleteButton onClick={handleDeleteComment}>刪除</DeleteButton>
           </>
         )}
@@ -121,6 +131,7 @@ const CommentText = styled.input`
   border: ${(props) => (props.isEdit ? '1px solid #52b78854' : 'none')};
   border-radius: 5px;
   width: 100%;
+  padding: 5px 5px;
 `;
 
 const CommentButtonRow = styled.div`
@@ -130,22 +141,31 @@ const CommentButtonRow = styled.div`
   font-size: 10px;
 `;
 
-const EditButton = styled.button`
-  color: white;
+const StyledButton = styled.button`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 16px;
   border-radius: 5px;
   padding: 3px 6px;
+  cursor: pointer;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+`;
+
+const EditButton = styled(StyledButton)`
+  display: ${(props) => (props.isEdit ? 'none' : 'block')};
+  color: white;
   background-color: #52b788;
   margin-right: 5px;
 `;
 
-const DeleteButton = styled.button`
+const ConfirmButton = styled(StyledButton)`
+  display: ${(props) => (props.isEdit ? 'block' : 'none')};
+  color: white;
+  background-color: #1e88e5;
+  margin-right: 5px;
+`;
+
+const DeleteButton = styled(StyledButton)`
   color: #52b788;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 16px;
-  border-radius: 5px;
-  padding: 3px 6px;
   border: 1px solid #52b788;
 `;
 

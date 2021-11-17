@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { DialogOverlay } from '@reach/dialog';
@@ -16,11 +16,62 @@ import {
   LabelIconContainer,
   PopPlaceIcon,
 } from '../../common/popup/PopupUnits';
+import {
+  getAllContents,
+  getCollectionCounts,
+  getCurrentUserData,
+  onCommentSubmit,
+} from '../../../utils/firebase';
+
+import {
+  CommentSection,
+  ReplyArea,
+  RepalyButton,
+  CommentSummary,
+  NoComment,
+} from '../../common/comment/CommentUnits';
+
+import Comment from '../../common/comment/Comment';
 
 import useCurrentUser from '../../../hooks/useCurrentUser';
 
+import { BsFillInfoCircleFill } from 'react-icons/bs';
+
 const CheckPopup = ({ showEdit, closeEditor, share }) => {
   const currentUser = useCurrentUser();
+  const [userData, setUserData] = useState('');
+  const [replyComment, setReplayComment] = useState('');
+  const [comments, setComments] = useState('');
+  const [commentCounts, setCommentCounts] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+
+  const getUserData = useCallback(
+    () => getCurrentUserData(currentUser, setUserData),
+    [currentUser]
+  );
+
+  const getComments = useCallback(
+    () => getAllContents(`shares/${share.id}/comments`, setComments),
+    [share.id]
+  );
+
+  const getCommentCounts = useCallback(
+    () => getCollectionCounts(`shares/${share.id}/comments`, setCommentCounts),
+    [share.id]
+  );
+
+  useEffect(() => {
+    return getUserData();
+  }, [getUserData]);
+
+  useEffect(() => {
+    return getComments();
+  }, [getComments]);
+
+  useEffect(() => {
+    return getCommentCounts();
+  }, [getCommentCounts]);
 
   return (
     <>
@@ -61,6 +112,49 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
               <FoodImgLabel>食物照片</FoodImgLabel>
             </PopRow>
             <Preview src={share?.imageUrl || ''} />
+            <PopRow>
+              <CommentLabel>評論</CommentLabel>
+            </PopRow>
+            <CommentSection>
+              <ReplyArea
+                value={replyComment}
+                onChange={(e) => setReplayComment(e.target.value)}
+              />
+              <ErrorMessage isShow={showErrorMessage}>
+                <Info />
+                <Message>{errorMessage}</Message>
+              </ErrorMessage>
+              <RepalyButton
+                onClick={() =>
+                  onCommentSubmit(
+                    share,
+                    userData,
+                    replyComment,
+                    currentUser,
+                    setReplayComment,
+                    setErrorMessage,
+                    setShowErrorMessage
+                  )
+                }
+              >
+                留言
+              </RepalyButton>
+              <CommentSummary>
+                {`目前共 ${commentCounts || 0} 則留言`}
+              </CommentSummary>
+              {comments.length !== 0 ? (
+                comments.map((comment) => (
+                  <Comment
+                    currentUser={currentUser}
+                    share={share}
+                    comment={comment}
+                    userData={userData}
+                  />
+                ))
+              ) : (
+                <NoComment />
+              )}
+            </CommentSection>
           </PopContent>
         </StyledDialogContent>
       </DialogOverlay>
@@ -85,5 +179,30 @@ const PopPlaceLabel = styled(StyledLabel)``;
 const PopPlace = styled(StyledSpan)``;
 
 const FoodImgLabel = styled(StyledLabel)``;
+
+const CommentLabel = styled(StyledLabel)`
+  margin-top: 15px;
+`;
+
+const ErrorMessage = styled.div`
+  display: ${(props) => (props.isShow ? 'flex' : 'none')};
+  align-items: center;
+  margin-top: 10px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: #d8f3dc;
+`;
+
+const Info = styled(BsFillInfoCircleFill)`
+  fill: #1e88e5;
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+`;
+
+const Message = styled.span`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+`;
 
 export default CheckPopup;
