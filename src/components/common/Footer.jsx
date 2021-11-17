@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Logo from '../../images/common/logo-2.png';
+import Logo from '../../images/common/shengshi-logo2.svg';
 import SocialIcons from './SocialIcons';
 
 const Footer = () => {

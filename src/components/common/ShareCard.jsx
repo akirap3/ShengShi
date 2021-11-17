@@ -4,8 +4,8 @@ import { useHistory } from 'react-router-dom';
 
 import { themeColor } from '../../utils/commonVariables';
 
-import '@reach/dialog/styles.css';
 import DeletePopup from './DeletePopup';
+import AlertPopup from './AlertPopup';
 import { handleCollection } from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
 
@@ -30,11 +30,16 @@ const ShareCard = ({
   const history = useHistory();
   const currentUser = useCurrentUser();
   const [showDelete, setShowDelete] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const openDelete = () => setShowDelete(true);
   const closeDelete = () => setShowDelete(false);
+  const openInfo = () => setShowInfo(true);
+  const closeInfo = () => setShowInfo(false);
 
   const handleNeedLogin = () => {
-    alert('請先登入');
+    setAlertMessage('請先登入');
+    openInfo();
     history.push('/login');
   };
 
@@ -89,12 +94,21 @@ const ShareCard = ({
                   ? isCollected || isSearch
                     ? share.postUser.id === currentUser?.uid
                       ? () => {
-                          alert('無法領取自己的勝食，可以到 "我的清單" 編輯');
+                          setAlertMessage(
+                            '無法領取自己的勝食，可以到 "清單" 編輯'
+                          );
+                          openInfo();
                         }
                       : share.receivedUserId.includes(currentUser?.uid)
-                      ? () => alert('您已經領取過了')
+                      ? () => {
+                          setAlertMessage('您已經領取過了');
+                          openInfo();
+                        }
                       : share.toReceiveUserId.includes(currentUser?.uid)
-                      ? () => alert('您已經預定領取了')
+                      ? () => {
+                          setAlertMessage('您已經預定領取了');
+                          openInfo();
+                        }
                       : () => handleClick(share)
                     : () => handleClick()
                   : () => handleNeedLogin()
@@ -117,6 +131,11 @@ const ShareCard = ({
         share={share}
         isToReceive={isToReceive}
         isCollected={isCollected}
+      />
+      <AlertPopup
+        showInfo={showInfo}
+        closeInfo={closeInfo}
+        message={alertMessage}
       />
     </>
   );
@@ -164,7 +183,7 @@ const CardContent = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   padding: 15px;
   flex-grow: 1;
   background-color: #b7e4c7;
@@ -239,7 +258,9 @@ const Heart = styled(AiTwotoneHeart)`
   fill: ${(props) => props.isliked};
   width: 25px;
   height: 25px;
-  cursor: pointer;
+  ${(props) => {
+    if (props.isliked !== '#2196f3aa') return `cursor: pointer;`;
+  }}
 `;
 
 const PlaceIcon = styled(HiLocationMarker)`

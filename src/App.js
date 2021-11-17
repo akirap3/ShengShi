@@ -24,11 +24,9 @@ import MyMgmtList from './components/personalPage/myMgmtPage/MyMgmtList';
 import Notification from './components/personalPage/myNotification/Notification';
 
 import './App.css';
-import '@reach/dialog/styles.css';
 
 import Main from './components/common/Main';
 import useCheckUser from './hooks/useCheckUser';
-import ReactLoading from 'react-loading';
 
 const App = () => {
   const { isLoaded, isLoggedIn } = useCheckUser();

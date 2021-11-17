@@ -3,7 +3,7 @@ import useSupercluster from 'use-supercluster';
 import GoogleMapReact from 'google-map-react';
 import styled from 'styled-components';
 import InfoView from './InfoView';
-import ReactLoading from 'react-loading';
+import Loading from '../common/Loading';
 
 require('dotenv').config();
 
@@ -65,8 +65,6 @@ const RestaurantMap = ({ restaurants }) => {
     },
   });
 
-  // console.log(clusters);
-
   const getLatLng = (e) => {
     console.log(e.lat);
   };
@@ -74,12 +72,7 @@ const RestaurantMap = ({ restaurants }) => {
   return (
     <div style={{ height: '80vh', width: '100%' }}>
       {isLoading ? (
-        <StyledLoading
-          type={'spin'}
-          color={'#2a9d8f'}
-          height={'10vw'}
-          width={'10vw'}
-        />
+        <Loading />
       ) : (
         <GoogleMapReact
           // bootstrapURLKeys={{ key: myAPIKey }}
@@ -156,22 +149,29 @@ const RestaurantMap = ({ restaurants }) => {
 };
 
 const StyledDiv = styled.div`
-  color: #fff;
-  background: #1978c8;
-  border-radius: 50%;
-  padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-`;
+  width: 30px;
+  height: 30px;
+  margin: auto;
+  padding: 10px;
+  color: #fff;
+  background: #52b788;
+  border-radius: 50%;
+  animation: scaling 2s infinite ease-out;
 
-const StyledLoading = styled(ReactLoading)`
-  display: flex;
-  position: relative;
-  z-index: 10;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  @keyframes scaling {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
 `;
 
 export default RestaurantMap;

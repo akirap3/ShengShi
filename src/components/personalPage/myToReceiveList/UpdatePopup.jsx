@@ -27,12 +27,16 @@ import Loading from '../../common/Loading';
 import { getFirestore, doc, updateDoc, Timestamp } from '@firebase/firestore';
 
 import SelectDateTimePopup from '../myCollectedList/SelectDateTimePopup';
+import AlertPopup from '../../common/AlertPopup';
+
 import useCurrentUser from '../../../hooks/useCurrentUser';
 
 const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
   const dispatch = useDispatch();
   const currentUser = useCurrentUser();
   const [showDateTime, setShowDateTime] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const [newQuantities, setNewQuantities] = useState(
     share?.toReceiveInfo[currentUser?.uid]?.quantities || 1
   );
@@ -41,6 +45,8 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
 
   const openDateTime = () => setShowDateTime(true);
   const closeDateTime = () => setShowDateTime(false);
+  const openInfo = () => setShowInfo(true);
+  const closeInfo = () => setShowInfo(false);
 
   const handleSpecificDateTime = (payload) => {
     dispatch({ type: 'specificDateTime/selected', payload: payload });
@@ -49,10 +55,12 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
   const isFieldsChecked = (share) => {
     const newQty = Number(newQuantities);
     if (isNaN(newQty)) {
-      alert('數量請輸入數字');
+      setAlertMessage('數量請輸入數字');
+      openInfo();
       return false;
     } else if (newQty < 0 || newQty > share.quantities) {
-      alert(`請輸入介於 1 ~ ${share.quantities} 的數字`);
+      setAlertMessage(`請輸入介於 1 ~ ${share.quantities} 的數字`);
+      openInfo();
       return false;
     }
     return true;
@@ -139,6 +147,11 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
         showDateTime={showDateTime}
         closeDateTime={closeDateTime}
         share={share}
+      />
+      <AlertPopup
+        showInfo={showInfo}
+        closeInfo={closeInfo}
+        message={alertMessage}
       />
     </>
   );

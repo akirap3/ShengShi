@@ -25,6 +25,7 @@ import SelectDateTimePopup from './SelectDateTimePopup';
 import LocationMap from '../../common/LocationMap';
 import Loading from '../../common/Loading';
 import ConfirmedPopup from '../../common/ConfirmedPopup';
+import AlertPopup from '../../common/AlertPopup';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import {
   getCurrentUserData,
@@ -39,22 +40,26 @@ import {
   updateDoc,
   arrayUnion,
   increment,
-  addDoc,
-  collection,
 } from '@firebase/firestore';
 
-import Comment from './Comment';
+import {
+  CommentSection,
+  CommentSummary,
+  NoComment,
+} from '../../common/comment/CommentUnits';
+import Comment from '../../common/comment/Comment';
 
 const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   const dispatch = useDispatch();
   const currentUser = useCurrentUser();
   const [showDateTime, setShowDateTime] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const [reqQuantities, setReqQuantities] = useState();
   const [userData, setUserData] = useState('');
   const specificDateTime = useSelector((state) => state.specificDateTime);
   const [isLoading, setIsLoading] = useState(false);
-  const [replyComment, setReplayComment] = useState('');
   const [comments, setComments] = useState('');
   const [commentCounts, setCommentCounts] = useState('');
 
@@ -62,6 +67,8 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   const closeDateTime = () => setShowDateTime(false);
   const openConfirmation = () => setShowConfirmation(true);
   const closeConfirmation = () => setShowConfirmation(false);
+  const openInfo = () => setShowInfo(true);
+  const closeInfo = () => setShowInfo(false);
 
   const getUserData = useCallback(
     () => getCurrentUserData(currentUser, setUserData),
@@ -90,29 +97,6 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
     return getCommentCounts();
   }, [getCommentCounts]);
 
-  const onCommentSubmit = async (share, userData) => {
-    await addDoc(collection(getFirestore(), `shares/${share.id}/comments`), {
-      createdAt: Timestamp.now(),
-      commentContent: replyComment,
-      author: {
-        id: currentUser.uid,
-        displayName: userData.displayName,
-        imageUrl: userData.imageUrl,
-      },
-    });
-
-    await addDoc(
-      collection(getFirestore(), `users/${share.postUser.id}/messages`),
-      {
-        createdAt: Timestamp.now(),
-        messageContent: `${userData.displayName}在您的${share.name}勝食頁面上留言`,
-        kind: 'comment',
-      }
-    );
-
-    setReplayComment('');
-  };
-
   const handleSpecificDateTime = (payload) => {
     dispatch({ type: 'specificDateTime/selected', payload: payload });
   };
@@ -120,19 +104,24 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   const isFieldsChecked = (share, specificDateTime) => {
     const newQty = Number(reqQuantities);
     if (isNaN(newQty)) {
-      alert('數量請輸入數字');
+      setAlertMessage('數量請輸入數字');
+      openInfo();
       return false;
     } else if (newQty < 0 || newQty > share.quantities) {
-      alert(`請輸入介於 1 ~ ${share.quantities} 的數字`);
+      setAlertMessage(`請輸入介於 1 ~ ${share.quantities} 的數字`);
+      openInfo();
       return false;
     } else if (specificDateTime < new Date()) {
-      alert(`您選定時間小於現在時間`);
+      setAlertMessage('您選定時間小於現在時間');
+      openInfo();
       return false;
     } else if (specificDateTime < share.fromTimeStamp.toDate()) {
-      alert(`您選定時間小於可領取時間`);
+      setAlertMessage('您選定時間小於可領取時間');
+      openInfo();
       return false;
     } else if (specificDateTime > share.toTimeStamp.toDate()) {
-      alert(`您選定時間大於可領取時間`);
+      setAlertMessage('您選定時間大於可領取時間');
+      openInfo();
       return false;
     }
     return true;
@@ -207,26 +196,26 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
               <MapWrapper>
                 <LocationMap />
               </MapWrapper>
+              <PopRow>
+                <CommentLabel>評論</CommentLabel>
+              </PopRow>
               <CommentSection>
-                <ReplyArea
-                  value={replyComment}
-                  onChange={(e) => setReplayComment(e.target.value)}
-                />
-                <RepalyButton onClick={() => onCommentSubmit(share, userData)}>
-                  留言
-                </RepalyButton>
                 <CommentSummary>
                   {`目前共 ${commentCounts || 0} 則留言`}
                 </CommentSummary>
-                {comments &&
+                {comments.length !== 0 ? (
                   comments.map((comment) => (
                     <Comment
+                      key={comment.id}
                       currentUser={currentUser}
                       share={share}
                       comment={comment}
                       userData={userData}
                     />
-                  ))}
+                  ))
+                ) : (
+                  <NoComment />
+                )}
               </CommentSection>
               <ButtonContainer>
                 <SubmitBtn
@@ -247,6 +236,11 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
           showConfirmation={showConfirmation}
           closeConfirmation={closeConfirmation}
           share={share}
+        />
+        <AlertPopup
+          showInfo={showInfo}
+          closeInfo={closeInfo}
+          message={alertMessage}
         />
       </>
     )
@@ -281,45 +275,8 @@ const MapWrapper = styled.div`
   margin-bottom: 10px;
 `;
 
-const CommentSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
-`;
-
-const ReplyArea = styled.textarea`
-  max-width: 100%;
-  min-height: 100px;
-  max-height: 200px;
-  padding: 10px;
-  line-height: 16px;
-  font-size: 14px;
-  border-radius: 5px;
-  border-color: lightgray;
-`;
-
-const RepalyButton = styled.button`
-  cursor: pointer;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 18px;
-  background-color: white;
-  color: #1e88e5;
-  padding: 5px 10px;
-  border-radius: 5px;
-  border: 1px solid #1e88e5;
-  margin: 10px auto 20px auto;
-`;
-
-const CommentSummary = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 18px;
-  margin-bottom: 15px;
-  background-color: rgb(46, 180, 204);
-  width: fit-content;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: white;
-  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+const CommentLabel = styled(StyledLabel)`
+  margin-top: 15px;
 `;
 
 export default CollectedSharePopup;

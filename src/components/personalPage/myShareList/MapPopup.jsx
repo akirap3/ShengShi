@@ -4,7 +4,6 @@ import Loading from '../../common/Loading';
 import { useDispatch } from 'react-redux';
 
 import { DialogOverlay, DialogContent } from '@reach/dialog';
-import '@reach/dialog/styles.css';
 
 import MyMap from '../../common/myMap/Mymap';
 

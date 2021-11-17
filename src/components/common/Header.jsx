@@ -11,7 +11,7 @@ import {
   getCollectionCounts,
 } from '../../utils/firebase';
 
-import LogoImg from '../../images/common/logo-1.png';
+import LogoImg from '../../images/common/shengshi-logo.svg';
 import { BsPersonCircle } from 'react-icons/bs';
 import { FcMenu } from 'react-icons/fc';
 import { GrFormClose } from 'react-icons/gr';

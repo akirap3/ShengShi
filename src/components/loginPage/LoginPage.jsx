@@ -9,6 +9,7 @@ import * as firebase from '../../utils/firebase';
 import Main from '../common/Main';
 import LoginBackground from './LoginBackground';
 import LoginBg2 from './LoginBg2';
+import AlertPopup from '../common/AlertPopup';
 
 import { IoLogoFacebook } from 'react-icons/io';
 import { BsFillPersonFill } from 'react-icons/bs';
@@ -21,6 +22,11 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [usersData, setUsersDate] = useState(null);
+  const [showInfo, setShowInfo] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+
+  const openInfo = () => setShowInfo(true);
+  const closeInfo = () => setShowInfo(false);
 
   const getUsersData = useCallback(
     () => getAllContents('users', setUsersDate),
@@ -35,13 +41,17 @@ const LoginPage = () => {
     if (password) {
       return true;
     } else {
-      alert('請輸入密碼');
+      setAlertMessage('請輸入密碼');
+      openInfo();
       return false;
     }
   };
 
   const checkAndLogin = () => {
-    if (validation.checkEmail(email) && hasPassword()) {
+    if (
+      validation.checkEmail(email, setAlertMessage, openInfo) &&
+      hasPassword()
+    ) {
       setIsLoading(true);
       firebase
         .login(email, password)
@@ -52,11 +62,13 @@ const LoginPage = () => {
         .catch((error) => {
           setIsLoading(false);
           if (error.code === 'auth/user-not-found') {
-            alert('您輸入的帳號不存在，請先註冊');
+            setAlertMessage('您輸入的帳號不存在，請先註冊');
+            openInfo();
             setEmail('');
             setPassword('');
           } else if (error.code === 'auth/wrong-password') {
-            alert('您輸入的密碼錯誤，請重新輸入密碼');
+            setAlertMessage('您輸入的密碼錯誤，請重新輸入密碼');
+            openInfo();
             setPassword('');
           }
         });
@@ -95,80 +107,89 @@ const LoginPage = () => {
         }
       })
       .catch((error) => {
-        console.log(error.code);
-        alert(error.message);
+        setAlertMessage(error.message);
+        openInfo();
         setIsLoading(false);
       });
   };
 
-  return usersData ? (
-    <StyledMain>
-      {isLoading && <Loading />}
-      <LoginBackground />
-      <LoginBg2 />
-      <SignupContainer>
-        <Title>Ｗelcome back</Title>
-        <FiledContainer>
-          <EmailIcon />
-          <Field
-            placeholder="Email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            disabled={isLoading}
-          />
-        </FiledContainer>
-        <FiledContainer>
-          <PasswordIcon />
-          <Field
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            disabled={isLoading}
-          />
-        </FiledContainer>
-        <ButtonContainer>
-          <NativeButton onClick={() => checkAndLogin()} disabled={isLoading}>
-            <span>確 認</span>
-          </NativeButton>
-          <FBButton
-            onClick={() =>
-              handleClickProvider(
-                firebase.loginWithFB,
-                '?type=large',
-                setIsLoading,
-                history
-              )
-            }
-            disabled={isLoading}
-          >
-            <FbIcon />
-            <span>FB</span>
-          </FBButton>
-          <GoogleButton
-            onClick={() =>
-              handleClickProvider(
-                firebase.loginWithGoogle,
-                '',
-                setIsLoading,
-                history
-              )
-            }
-            disabled={isLoading}
-          >
-            <GoogleIcon /> <span>Google</span>
-          </GoogleButton>
-        </ButtonContainer>
-      </SignupContainer>
-    </StyledMain>
-  ) : (
-    <PaddingLoading>
-      <Loading />
-    </PaddingLoading>
+  return (
+    <>
+      usersData ? (
+      <StyledMain>
+        {isLoading && <Loading />}
+        <LoginBackground />
+        <LoginBg2 />
+        <SignupContainer>
+          <Title>Ｗelcome back</Title>
+          <FiledContainer>
+            <EmailIcon />
+            <Field
+              placeholder="Email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              disabled={isLoading}
+            />
+          </FiledContainer>
+          <FiledContainer>
+            <PasswordIcon />
+            <Field
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              disabled={isLoading}
+            />
+          </FiledContainer>
+          <ButtonContainer>
+            <NativeButton onClick={() => checkAndLogin()} disabled={isLoading}>
+              <span>確 認</span>
+            </NativeButton>
+            <FBButton
+              onClick={() =>
+                handleClickProvider(
+                  firebase.loginWithFB,
+                  '?type=large',
+                  setIsLoading,
+                  history
+                )
+              }
+              disabled={isLoading}
+            >
+              <FbIcon />
+              <span>FB</span>
+            </FBButton>
+            <GoogleButton
+              onClick={() =>
+                handleClickProvider(
+                  firebase.loginWithGoogle,
+                  '',
+                  setIsLoading,
+                  history
+                )
+              }
+              disabled={isLoading}
+            >
+              <GoogleIcon /> <span>Google</span>
+            </GoogleButton>
+          </ButtonContainer>
+        </SignupContainer>
+      </StyledMain>
+      ) : (
+      <PaddingLoading>
+        <Loading />
+      </PaddingLoading>
+      )
+      <AlertPopup
+        showInfo={showInfo}
+        closeInfo={closeInfo}
+        message={alertMessage}
+      />
+    </>
   );
 };
 

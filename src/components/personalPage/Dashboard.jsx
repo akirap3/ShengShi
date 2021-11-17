@@ -61,7 +61,7 @@ const Dashbaord = () => {
     },
     {
       icon: [<BookedIcon />],
-      name: '預訂',
+      name: '已訂',
       count: myToReceiveCounts || 0,
       path: '/personal/toReceive',
     },
@@ -224,7 +224,7 @@ const Dashbaord = () => {
                 to="/personal/mgmt"
                 active={location.pathname === '/personal/mgmt'}
               >
-                查看預約
+                管理預訂
               </MgmtButton>
             </Row>
           </Details>
@@ -612,7 +612,7 @@ const BigButton = styled.button`
   font-size: 18px;
   text-align: center;
   color: #2d6a4f;
-  background-color: #e3f2fd01;
+  background-color: #00b4cc55;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
 
   @media screen and (min-width: 800px) {

@@ -8,6 +8,7 @@ import {
   handleAddBadge,
   handleDeleteBadge,
 } from '../../utils/firebase';
+import AlertPopup from '../common/AlertPopup';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import NoResult from '../personalPage/NoResult';
 
@@ -18,6 +19,12 @@ const QRcodeComfirmPage = () => {
   const [share, setShare] = useState(null);
   const [giver, setGiver] = useState(null);
   const [requester, setRequester] = useState(null);
+  const [showInfo, setShowInfo] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+
+  const openInfo = () => setShowInfo(true);
+  const closeInfo = () => setShowInfo(false);
+
   const defaultImgUrl =
     'https://react.semantic-ui.com/images/wireframe/image.png';
 
@@ -61,7 +68,8 @@ const QRcodeComfirmPage = () => {
     ) {
       return false;
     } else {
-      alert('您非此剩食的擁有者或是領用者');
+      setAlertMessage('您非此剩食的擁有者或是領用者');
+      openInfo();
       history.push('/');
       return true;
     }
@@ -186,6 +194,11 @@ const QRcodeComfirmPage = () => {
       ) : (
         <></>
       )}
+      <AlertPopup
+        showInfo={showInfo}
+        closeInfo={closeInfo}
+        message={alertMessage}
+      />
     </>
   );
 };

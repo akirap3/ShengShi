@@ -1,8 +1,8 @@
-import { DialogContent } from '@reach/dialog';
+import { DialogOverlay, DialogContent } from '@reach/dialog';
 import styled from 'styled-components';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { HiLocationMarker } from 'react-icons/hi';
-import { BsCalendarCheckFill } from 'react-icons/bs';
+import { BsCalendarCheckFill, BsFillInfoCircleFill } from 'react-icons/bs';
 import SaladImg from '../../../images/common/salad.svg';
 
 export const StyledDialogContent = styled(DialogContent)`
@@ -11,6 +11,10 @@ export const StyledDialogContent = styled(DialogContent)`
   max-width: 800px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   border-radius: 10px;
+`;
+
+export const AlertDialogContent = styled(StyledDialogContent)`
+  max-width: 500px;
 `;
 
 export const PopClose = styled(AiFillCloseCircle)`
@@ -51,6 +55,10 @@ export const PopTitle = styled.div`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
   color: white;
+
+  @media screen and (min-width: 600px) {
+    font-size: 28px;
+  }
 `;
 
 export const PopContent = styled.div`
@@ -74,6 +82,10 @@ export const StyledLabel = styled.label`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 18px;
   box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+
+  @media screen and (min-width: 600px) {
+    font-size: 22px;
+  }
 `;
 
 export const StyledInput = styled.input`
@@ -87,6 +99,10 @@ export const StyledInput = styled.input`
   margin-top: 10px;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 14px;
+
+  @media screen and (min-width: 600px) {
+    font-size: 18px;
+  }
 `;
 
 export const StyledSpan = styled.span`
@@ -94,13 +110,16 @@ export const StyledSpan = styled.span`
   border: none;
   background: none;
   outline: none;
-  border-bottom: 2px solid #d9d7d7;
   padding: 5px 8px;
   margin-left: 10px;
   margin-top: 10px;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 14px;
   line-height: 24px;
+
+  @media screen and (min-width: 600px) {
+    font-size: 18px;
+  }
 `;
 
 export const LabelIconContainer = styled.div`
@@ -161,9 +180,13 @@ export const ImgUpload = styled.label`
   background-color: lightskyblue;
   color: white;
   box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+
+  @media screen and (min-width: 600px) {
+    font-size: 22px;
+  }
 `;
 
-export const SubmitBtn = styled.button`
+const StyledBtn = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -173,7 +196,38 @@ export const SubmitBtn = styled.button`
   cursor: pointer;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 18px;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+
+  @media screen and (min-width: 600px) {
+    font-size: 22px;
+  }
+`;
+
+export const SubmitBtn = styled(StyledBtn)`
   background-color: #1e88e5;
   color: white;
-  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+`;
+
+export const CancelBtn = styled(StyledBtn)`
+  border: 1px solid #1e88e5;
+  color: #1e88e5;
+`;
+
+export const CenterDialogOverlay = styled(DialogOverlay)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const AlertBtnRow = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+`;
+
+export const InfoIcon = styled(BsFillInfoCircleFill)`
+  fill: #2d6a4fee;
+  width: 22px;
+  height: 22px;
+  margin-right: 10px;
 `;

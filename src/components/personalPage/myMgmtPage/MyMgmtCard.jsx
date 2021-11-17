@@ -168,7 +168,7 @@ const QRcodeFour = styled(QRcodeBasic)`
 
 const EmbedQrcode = ({ info, size, height, width }) => {
   const initialProps = {
-    value: `http://localhost:3000/personal/${info}`,
+    value: `https://shengshi-8bc48.web.app/personal/${info}`,
     size,
     bgColor: '#ffffff',
     fgColor: '#000000',
