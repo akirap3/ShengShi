@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import Loading, { PaddingLoading } from '../common/Loading';
 import { getAllContents } from '../../utils/firebase';
 
@@ -115,75 +115,82 @@ const LoginPage = () => {
 
   return (
     <>
-      usersData ? (
-      <StyledMain>
-        {isLoading && <Loading />}
-        <LoginBackground />
-        <LoginBg2 />
-        <SignupContainer>
-          <Title>Ｗelcome back</Title>
-          <FiledContainer>
-            <EmailIcon />
-            <Field
-              placeholder="Email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              disabled={isLoading}
-            />
-          </FiledContainer>
-          <FiledContainer>
-            <PasswordIcon />
-            <Field
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              disabled={isLoading}
-            />
-          </FiledContainer>
-          <ButtonContainer>
-            <NativeButton onClick={() => checkAndLogin()} disabled={isLoading}>
-              <span>確 認</span>
-            </NativeButton>
-            <FBButton
-              onClick={() =>
-                handleClickProvider(
-                  firebase.loginWithFB,
-                  '?type=large',
-                  setIsLoading,
-                  history
-                )
-              }
-              disabled={isLoading}
-            >
-              <FbIcon />
-              <span>FB</span>
-            </FBButton>
-            <GoogleButton
-              onClick={() =>
-                handleClickProvider(
-                  firebase.loginWithGoogle,
-                  '',
-                  setIsLoading,
-                  history
-                )
-              }
-              disabled={isLoading}
-            >
-              <GoogleIcon /> <span>Google</span>
-            </GoogleButton>
-          </ButtonContainer>
-        </SignupContainer>
-      </StyledMain>
+      {usersData ? (
+        <StyledMain>
+          {isLoading && <Loading />}
+          <LoginBackground />
+          <LoginBg2 />
+          <SignupContainer>
+            <Title>Ｗelcome back</Title>
+            <FiledContainer>
+              <EmailIcon />
+              <Field
+                placeholder="Email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                disabled={isLoading}
+              />
+            </FiledContainer>
+            <FiledContainer>
+              <PasswordIcon />
+              <Field
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                disabled={isLoading}
+              />
+            </FiledContainer>
+            <ButtonContainer>
+              <NativeButton
+                onClick={() => checkAndLogin()}
+                disabled={isLoading}
+              >
+                <span>確 認</span>
+              </NativeButton>
+              <FBButton
+                onClick={() =>
+                  handleClickProvider(
+                    firebase.loginWithFB,
+                    '?type=large',
+                    setIsLoading,
+                    history
+                  )
+                }
+                disabled={isLoading}
+              >
+                <FbIcon />
+                <span>FB</span>
+              </FBButton>
+              <GoogleButton
+                onClick={() =>
+                  handleClickProvider(
+                    firebase.loginWithGoogle,
+                    '',
+                    setIsLoading,
+                    history
+                  )
+                }
+                disabled={isLoading}
+              >
+                <GoogleIcon /> <span>Google</span>
+              </GoogleButton>
+            </ButtonContainer>
+            <Text>
+              還沒有建立帳號嗎？
+              <SignUpLink to="/signup">註冊</SignUpLink>
+            </Text>
+          </SignupContainer>
+        </StyledMain>
       ) : (
-      <PaddingLoading>
-        <Loading />
-      </PaddingLoading>
-      )
+        <PaddingLoading>
+          <Loading />
+        </PaddingLoading>
+      )}
       <AlertPopup
         showInfo={showInfo}
         closeInfo={closeInfo}
@@ -205,7 +212,6 @@ const SignupContainer = styled.div`
   margin: 20vh auto;
   padding: 30px;
   border-radius: 10px;
-  height: fit-content;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   background-color: rgba(219, 245, 255, 0.3);
   backdrop-filter: blur(5px);
@@ -258,11 +264,7 @@ const Field = styled.input`
 const ButtonContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-
-  @media screen and (max-width: 470px) {
-    justify-content: space-between;
-  }
+  justify-content: center;
 `;
 
 const Button = styled.div`
@@ -328,6 +330,19 @@ const GoogleIcon = styled(FcGoogle)`
   height: 20px;
   width: 20px;
   margin-right: 5px;
+`;
+
+const Text = styled.div`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 15px;
+`;
+
+const SignUpLink = styled(Link)`
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 16px;
+  color: #40916c;
 `;
 
 export default LoginPage;
