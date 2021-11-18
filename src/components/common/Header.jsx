@@ -12,6 +12,7 @@ import {
 } from '../../utils/firebase';
 
 import LogoImg from '../../images/common/shengshi-logo.svg';
+import LogoImg2 from '../../images/common/shengshi-logo2.svg';
 import { BsPersonCircle } from 'react-icons/bs';
 import { FcMenu } from 'react-icons/fc';
 import { GrFormClose } from 'react-icons/gr';
@@ -105,26 +106,34 @@ const Header = () => {
       </HeaderContainer>
 
       <MobileHeader>
-        <MobileHeaderLogo src={LogoImg} />
+        <MobileLogoLink to="/">
+          <MobileHeaderLogo src={LogoImg} />
+        </MobileLogoLink>
         <MobileSearchBar />
         <MobileMenuIcon onClick={() => setShowMenu(!showMenu)} />
       </MobileHeader>
       {showMenu && (
         <MobileMenu>
           <MenuClose onClick={() => setShowMenu(false)} />
-          <ImgContainer>
-            <MobileLogo src={LogoImg} />
+          <ImgContainer as={Link} to="/">
+            <MobileLogo src={LogoImg2} />
           </ImgContainer>
           <MobileMenuContent>
-            <MobileHomeNav to="/">首頁</MobileHomeNav>
-            <MobileRestaurantNav to="/restaurants">
+            <MobileHomeNav as={Link} to="/">
+              首頁
+            </MobileHomeNav>
+            <MobileRestaurantNav as={Link} to="/restaurants">
               合作餐廳
             </MobileRestaurantNav>
-            <MobileArticleNav to="/articles">文章</MobileArticleNav>
-            <MobileShareNav to="/search">他人分享</MobileShareNav>
+            <MobileArticleNav as={Link} to="/articles">
+              文章
+            </MobileArticleNav>
+            <MobileShareNav as={Link} to="/search">
+              他人分享
+            </MobileShareNav>
             {checkUser.isLoggedIn ? (
               <>
-                <MyMobileDashboard to="/personal/list">
+                <MyMobileDashboard as={Link} to="/personal/list">
                   我的看板
                 </MyMobileDashboard>
                 <MobileLogoutButton onClick={() => logout()}>
@@ -150,7 +159,7 @@ const HeaderContainer = styled.div`
   position: fixed;
   z-index: 10;
   width: 100%;
-  height: 8vh;
+  height: 70px;
   padding: 0.5rem 2vw;
   color: #2d6a4f;
   background: rgba(255, 255, 255, 0.6);
@@ -227,7 +236,6 @@ const RestaurantTag = styled(Tag)`
 `;
 
 const RestaurantNav = styled(StyledLink)`
-  font-family: 'cwTeXYen', sans-serif;
   width: 70px;
 `;
 
@@ -239,7 +247,6 @@ const ArticleTag = styled(Tag)`
 `;
 
 const ArticleNav = styled(StyledLink)`
-  font-family: 'cwTeXYen', sans-serif;
   width: 35px;
   margin-right: auto;
 `;
@@ -282,22 +289,18 @@ const MemberIcon = styled(BsPersonCircle)`
 
 const LoginButton = styled(StyledLink)`
   width: 35px;
-  font-family: 'cwTeXYen', sans-serif;
 `;
 const SignupButton = styled(StyledLink)`
   width: 35px;
-  font-family: 'cwTeXYen', sans-serif;
 `;
 
 const MyDashboard = styled(StyledLink)`
   width: 70px;
-  font-family: 'cwTeXYen', sans-serif;
   cursor: pointer;
 `;
 
 const LogoutButton = styled(StyledLink)`
   width: 35px;
-  font-family: 'cwTeXYen', sans-serif;
   cursor: pointer;
 `;
 
@@ -308,10 +311,9 @@ const MobileHeader = styled.div`
   position: fixed;
   z-index: 10;
   width: 100%;
-  height: 8vh;
+  height: 70px;
   background-color: white;
-  border-bottom: 1px solid #cccc;
-  padding: 0.5rem 2vw;
+  padding: 0.5rem 20px;
   box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 
   @media screen and (max-width: 700px) {
@@ -319,23 +321,26 @@ const MobileHeader = styled.div`
   }
 `;
 
+const MobileLogoLink = styled(Link)`
+  margin-right: auto;
+`;
+
 const MobileHeaderLogo = styled.img`
   height: 45px;
-  margin-right: 1vw;
 `;
 
 const MobileSearchBar = styled(SearchBar)``;
 
 const MobileMenuIcon = styled(FcMenu)`
   margin-left: 1vw;
-  height: 3vh;
-  width: 3vh;
+  height: 25px;
+  width: 25px;
   cursor: pointer;
 `;
 
 const MobileMenu = styled.div`
   position: fixed;
-  top: 8vh;
+  top: 70px;
   left: 0;
   z-index: 9;
   display: flex;
@@ -344,7 +349,7 @@ const MobileMenu = styled.div`
   box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(6px);
   border-radius: 0px 0px 10px 0px;
-  padding: 30px 20px;
+  padding: 35px 35px 35px 20px;
   width: 260px;
   height: 600px;
   color: black;
@@ -357,15 +362,24 @@ const MenuClose = styled(GrFormClose)`
   width: 22px;
   height: 22px;
   cursor: pointer;
+
+  &:hover {
+    background-color: #95d5b2;
+    border-radius: 3px;
+  }
 `;
 
 const ImgContainer = styled.div`
   display: flex;
   justify-content: center;
+  width: 100%;
+  height: 65px;
   margin-bottom: 20px;
-  margin-right: 20px;
   border-radius: 5px;
+  padding: 5px;
   background-color: rgb(4, 169, 109, 0.6);
+  cursor: pointer;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 `;
 
 const MobileLogo = styled.img`
@@ -379,14 +393,17 @@ const MobileMenuContent = styled.div`
   margin-left: 15px;
 `;
 
-const StyledMobileLink = styled(Link)`
+const StyledMobileLink = styled.div`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
   margin-bottom: 20px;
+  transition: 1s;
   &:hover {
     background-color: #95d5b2;
     padding: 10px;
     border-radius: 5px;
+    color: #2d6a4f;
+    box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
   }
 `;
 
@@ -405,17 +422,11 @@ const MobileSignupButton = styled(StyledMobileLink)``;
 
 const MyMobileDashboard = styled(StyledMobileLink)``;
 
-const MobileLogoutButton = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 24px;
-  margin-bottom: 20px;
+const MobileLogoutButton = styled(StyledMobileLink)`
   color: rgb(129, 129, 129);
-  cursor: pointer;
 
   &:hover {
-    background-color: #b7e4c7;
-    padding: 10px;
-    border-radius: 5px;
+    color: white;
   }
 `;
 

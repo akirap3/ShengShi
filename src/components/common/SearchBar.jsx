@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { IoIosSearch } from 'react-icons/io';
+
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-
+import {
+  SearchOutline,
+  SearchBar as SearchBarUnit,
+  SearchIconContainer,
+  SearchIcon,
+} from './search/SearchUnits';
 import algolia from '../../utils/algolia';
 import { getSingleShare } from '../../utils/firebase';
 
@@ -36,64 +41,67 @@ const SearchBar = () => {
   };
 
   return (
-    <SearchWrapper>
-      <SearchContainer>
-        <SearchBox
-          placeholder="勝食搜尋"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyPress={(e) => handleOnEnter(e)}
-        />
-        <SearchButton onClick={() => handleSearch()}>
-          <SearchIcon />
-        </SearchButton>
-      </SearchContainer>
-    </SearchWrapper>
+    <StyledSearchOutline>
+      <SearchBox
+        placeholder="勝食搜尋"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyPress={(e) => handleOnEnter(e)}
+      />
+      <StyledSearchIconContainer onClick={() => handleSearch()}>
+        <SearchIcon />
+      </StyledSearchIconContainer>
+    </StyledSearchOutline>
   );
 };
 
-const SearchWrapper = styled.div`
-  width: 30%;
-  margin-right: 1vw;
+const StyledSearchOutline = styled(SearchOutline)`
+  display: flex;
+  flex-wrap: nowrap;
+  height: 50px;
+  border-radius: 30px;
+  transition: 1s;
+  background-color: #b7e4c7;
+
+  &:hover {
+    flex: 1;
+    margin-left: 1rem;
+  }
+
+  &:hover > input {
+    color: #40916c;
+    flex: 1;
+    padding: 0 6px;
+    opacity: 1;
+  }
+
+  &:hover > span {
+    background: white;
+  }
 
   @media screen and (max-width: 700px) {
-    flex-grow: 1;
+    margin-left: auto;
   }
 `;
 
-const SearchContainer = styled.div`
-  width: 100%;
-  display: flex;
-`;
+const SearchBox = styled(SearchBarUnit)`
+  padding: 0;
+  transition: 1s;
+  line-height: 32px;
+  width: 0px;
+  margin-right: auto;
+  opacity: 0;
 
-const SearchBox = styled.input`
-  width: 100%;
-  border: 3px solid #00b4cc;
-  border-right: none;
-  padding: 0.5vh;
-  height: 3.8vh;
-  border-radius: 5px 0 0 5px;
-  outline: none;
-  color: #9dbfaf;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 22px;
-  &:focus {
-    color: #00b4cc;
+  @media screen and (max-width: 700px) {
+    font-size: 20px;
   }
 `;
 
-const SearchButton = styled.button`
-  width: 3.8vh;
-  height: 3.8vh;
-  border: 1px solid #00b4cc;
-  background: #00b4cc;
-  text-align: center;
-  color: #fff;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
-  font-size: 20px;
+const StyledSearchIconContainer = styled(SearchIconContainer)`
+  width: 30px;
+  height: 30px;
+  background: #b7e4c7;
+  transition: 1s;
 `;
-
-const SearchIcon = styled(IoIosSearch)``;
 
 export default SearchBar;
