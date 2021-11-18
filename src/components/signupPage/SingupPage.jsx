@@ -322,11 +322,9 @@ const StyledMain = styled(Main)`
 const SignupContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 5vh auto;
+  margin: 50px auto 50px auto;
   padding: 30px;
   border-radius: 10px;
-  height: fit-content;
-
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   background-color: rgba(219, 245, 255, 0.3);
   backdrop-filter: blur(5px);
