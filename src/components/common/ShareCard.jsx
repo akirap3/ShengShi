@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 
-import { themeColor } from '../../utils/commonVariables';
-
 import DeletePopup from './DeletePopup';
 import AlertPopup from './AlertPopup';
 import { handleCollection } from '../../utils/firebase';
@@ -288,7 +286,6 @@ const GetButton = styled.div`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 16px;
   color: rgb(129, 129, 129);
-  border: 1px solid ${themeColor.outLineColor};
   padding: 5px 10px;
   margin-left: 5px;
   border-radius: 8px;
