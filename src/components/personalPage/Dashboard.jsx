@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
 import { Link, useLocation } from 'react-router-dom';
 import AddSharePopup from './AddSharePopup';
 import LoginBg2 from '../loginPage/LoginBg2';
@@ -42,37 +43,37 @@ const Dashbaord = () => {
   const location = useLocation();
   const menus = [
     {
-      icon: [<ListIcon />],
+      icon: [<ListIcon key={uuidv4()} />],
       name: '清單',
       count: myListCounts || 0,
       path: '/personal/list',
     },
     {
-      icon: [<BadgeIcon />],
+      icon: [<BadgeIcon key={uuidv4()} />],
       name: '統計',
       count: myBadgeCounts || 0,
       path: '/personal/badges',
     },
     {
-      icon: [<RecordIcon />],
+      icon: [<RecordIcon key={uuidv4()} />],
       name: '紀錄',
       count: myReceivedCounts || 0,
       path: '/personal/received',
     },
     {
-      icon: [<BookedIcon />],
+      icon: [<BookedIcon key={uuidv4()} />],
       name: '已訂',
       count: myToReceiveCounts || 0,
       path: '/personal/toReceive',
     },
     {
-      icon: [<HeartIcon />],
+      icon: [<HeartIcon key={uuidv4()} />],
       name: '收藏',
       count: myCollectedShareCounts || 0,
       path: '/personal/collectedShares',
     },
     {
-      icon: [<ShopIcon />],
+      icon: [<ShopIcon key={uuidv4()} />],
       name: '店家',
       count: myCollectedStoreCounts || 0,
       path: '/personal/collectedRestaurants',

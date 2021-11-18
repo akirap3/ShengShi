@@ -136,7 +136,7 @@ table {
 * {
   box-sizing: border-box;
   font: inherit;
-  font-family: 'Noto Sans TC', sans-serif;
+  /* font-family: 'Noto Sans TC', sans-serif; */
 }
 a {
   color: inherit;

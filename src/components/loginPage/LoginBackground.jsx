@@ -5,9 +5,9 @@ import BoatImg from '../../images/loginPage/boat.png';
 const LoginBackground = () => {
   return (
     <Background>
-      <div id="mainMenu" class="mainMenuOverlay open floating2">
-        <div class="navire floating3 move1"></div>
-        <div class="navire navire2 floating3 move2"></div>
+      <div id="mainMenu" className="mainMenuOverlay open floating2">
+        <div className="navire floating3 move1"></div>
+        <div className="navire navire2 floating3 move2"></div>
       </div>
     </Background>
   );

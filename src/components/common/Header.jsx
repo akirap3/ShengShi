@@ -142,8 +142,12 @@ const Header = () => {
               </>
             ) : (
               <>
-                <MobileLoginButton to="/login">登入</MobileLoginButton>
-                <MobileSignupButton to="/signup">註冊</MobileSignupButton>
+                <MobileLoginButton as={Link} to="/login">
+                  登入
+                </MobileLoginButton>
+                <MobileSignupButton as={Link} to="/signup">
+                  註冊
+                </MobileSignupButton>
               </>
             )}
           </MobileMenuContent>

@@ -40,6 +40,7 @@ const FooterContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 10px;
   border-bottom: 1px solid #a0a0968a;
 
   @media screen and (max-width: 650px) {
