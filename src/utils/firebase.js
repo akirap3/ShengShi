@@ -713,7 +713,7 @@ export const handleDeleteBadge = async (currentUserUid) => {
       }
     });
   } else if (points >= 180 && points < 200) {
-    hasBadge(badgeDocRefs.badg7).then((result) => {
+    hasBadge(badgeDocRefs.badge7).then((result) => {
       if (result) {
         deleteBadgeOwner(badgeDocRefs.badge7);
         sendMessage(200, '勳章7');
@@ -814,4 +814,46 @@ export const handleDeleteComment = async (share, comment, userData) => {
       kind: 'comment',
     }
   );
+};
+
+export const handleConfirmShare = (
+  shareId,
+  requesterId,
+  share,
+  currentUser,
+  setAlertMessage,
+  openInfo
+) => {
+  updateAfterExchanged(
+    shareId,
+    requesterId,
+    share?.toReceiveInfo[`${requesterId}`].quantities,
+    new Date(),
+    currentUser
+  ).then(() => {
+    handleAddBadge(currentUser.uid);
+    handleAddBadge(requesterId);
+    setAlertMessage('您已確認對方領取完勝食');
+    openInfo();
+  });
+};
+
+export const handleCancelShare = (
+  shareId,
+  requesterId,
+  share,
+  currentUser,
+  setAlertMessage,
+  openInfo
+) => {
+  handleDeleteExchange(
+    shareId,
+    requesterId,
+    share?.toReceiveInfo[`${requesterId}`].quantities
+  ).then(() => {
+    handleDeleteBadge(currentUser.uid);
+    handleDeleteBadge(requesterId);
+    setAlertMessage('您已確認對方取消勝食');
+    openInfo();
+  });
 };

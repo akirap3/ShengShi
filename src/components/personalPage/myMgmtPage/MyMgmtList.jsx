@@ -1,14 +1,21 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+import { MgmtContainer } from '../../common/mgmtCard/MgmtCardUnits';
 import MyMgmtCard from './MyMgmtCard';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import { getSpecificContents } from '../../../utils/firebase';
 import NoResult from '../NoResult';
+import AlertPopup from '../../common/AlertPopup';
 
 const MyMgmtList = () => {
   const [shares, setShares] = useState('');
+  const [showInfo, setShowInfo] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const currentUser = useCurrentUser();
+
+  const openInfo = () => setShowInfo(true);
+  const closeInfo = () => setShowInfo(false);
 
   const getMyShares = useCallback(() => {
     getSpecificContents(
@@ -44,6 +51,8 @@ const MyMgmtList = () => {
                     key={uuidv4()}
                     share={share}
                     requesterId={requesterId}
+                    setAlertMessage={setAlertMessage}
+                    openInfo={openInfo}
                   />
                 );
               })
@@ -55,17 +64,13 @@ const MyMgmtList = () => {
       ) : (
         <NoResult text="目前沒有任何預約" />
       )}
+      <AlertPopup
+        showInfo={showInfo}
+        closeInfo={closeInfo}
+        message={alertMessage}
+      />
     </>
   );
 };
-
-const MgmtContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  margin-bottom: 150px;
-`;
 
 export default MyMgmtList;

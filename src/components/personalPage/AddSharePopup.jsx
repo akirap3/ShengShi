@@ -94,7 +94,6 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
       quality: 0.2,
       convertSize: 1000000,
       success: (res) => {
-        console.log(res.size);
         setFile(res);
       },
     });

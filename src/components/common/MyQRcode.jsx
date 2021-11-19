@@ -2,7 +2,7 @@ const QRCode = require('qrcode.react');
 
 const MyQRcode = ({ info }) => {
   const initialProps = {
-    value: `https://shengshi-8bc48.web.app/personal/${info}`,
+    value: `http://localhost:3000/personal/${info}`,
     size: 200,
     bgColor: '#ffffff',
     fgColor: '#000000',
@@ -10,7 +10,7 @@ const MyQRcode = ({ info }) => {
     includeMargin: false,
     renderAs: 'svg',
     imageSettings: {
-      src: 'https://firebasestorage.googleapis.com/v0/b/shengshi-8bc48.appspot.com/o/images%2Flogo%2F5A39D652-C0D9-4689-B443-F410ACC73F15_4_5005_c.jpeg?alt=media&token=f08780e2-f205-44b9-97ca-a30604ed690e',
+      src: 'https://firebasestorage.googleapis.com/v0/b/shengshi-8bc48.appspot.com/o/images%2Flogo%2Fshengshi-logo2.svg?alt=media&token=218bb2b8-ebaf-4f8d-809a-50912c6d2a6a',
       x: null,
       y: null,
       height: 24,
