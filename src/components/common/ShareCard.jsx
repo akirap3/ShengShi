@@ -149,14 +149,19 @@ const ShareContext = styled.div`
 `;
 
 const ShareImg = styled.img`
-  max-width: 30vw;
+  width: 100px;
+  object-fit: cover;
+
+  @media screen and (min-width: 500px) {
+    width: 125px;
+  }
 
   @media screen and (min-width: 850px) {
-    max-width: 15vw;
+    width: 150px;
   }
 
   @media screen and (min-width: 1500px) {
-    max-width: 225px;
+    width: 200px;
   }
 `;
 
@@ -182,10 +187,14 @@ const CardContent = styled.div`
   position: relative;
   flex-direction: column;
   justify-content: center;
-  padding: 15px;
+  padding: 10px;
   flex-grow: 1;
   background-color: #b7e4c7;
   border-radius: 0 10px 10px 0;
+
+  @media screen and (min-width: 500px) {
+    padding: 15px;
+  }
 
   @media screen and (min-width: 900px) {
     padding: 20px;
@@ -196,7 +205,7 @@ const ShareTitle = styled.div`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 20px;
   font-weight: 500;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 `;
 
 const ShareNameIcon = styled(ImSpoonKnife)`
