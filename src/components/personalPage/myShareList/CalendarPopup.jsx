@@ -1,7 +1,12 @@
 import React from 'react';
 
 import { DialogOverlay } from '@reach/dialog';
-import { StyledDialogContent, PopClose } from '../../common/popup/PopupUnits';
+import {
+  StyledDialogContent,
+  PopClose,
+  ButtonContainer,
+  SubmitBtn,
+} from '../../common/popup/PopupUnits';
 
 import DateTimeRangeSelector from '../../common/DateTimeRangeSelector';
 
@@ -11,6 +16,9 @@ const ClendarPopup = ({ showCalender, closeCalendar }) => {
       <StyledDialogContent aria-label="popup">
         <PopClose onClick={closeCalendar} />
         <DateTimeRangeSelector />
+        <ButtonContainer>
+          <SubmitBtn onClick={closeCalendar}>確定</SubmitBtn>
+        </ButtonContainer>
       </StyledDialogContent>
     </DialogOverlay>
   );
