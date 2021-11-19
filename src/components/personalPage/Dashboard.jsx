@@ -321,6 +321,7 @@ const AvatarContainer = styled.div`
 const Avatar = styled.img`
   width: 100px;
   height: 100px;
+  object-fit: cover;
   border-radius: 50%;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
 

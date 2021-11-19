@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -10,6 +11,7 @@ import {
   onAuthStateChanged,
   deleteUser,
 } from 'firebase/auth';
+
 import {
   getFirestore,
   collection,
@@ -32,6 +34,7 @@ import {
   limit,
   startAfter,
 } from 'firebase/firestore';
+
 import { getStorage, ref, deleteObject } from 'firebase/storage';
 
 require('dotenv').config();
@@ -710,7 +713,7 @@ export const handleDeleteBadge = async (currentUserUid) => {
       }
     });
   } else if (points >= 180 && points < 200) {
-    hasBadge(badgeDocRefs.badg7).then((result) => {
+    hasBadge(badgeDocRefs.badge7).then((result) => {
       if (result) {
         deleteBadgeOwner(badgeDocRefs.badge7);
         sendMessage(200, '勳章7');
@@ -769,4 +772,88 @@ export const onCommentSubmit = async (
     setShowErrorMessage(true);
     setErrorMessage('留言不能是空白');
   }
+};
+
+export const handleConfirmCommentEdit = async (
+  editedComment,
+  share,
+  comment,
+  setEditedComment,
+  setIsEdit,
+  setErrorMessage,
+  setShowErrorMessage
+) => {
+  if (editedComment) {
+    await updateDoc(
+      doc(getFirestore(), `shares/${share.id}/comments`, `${comment.id}`),
+      {
+        commentContent: editedComment,
+        createdAt: Timestamp.now(),
+      }
+    );
+    setEditedComment('');
+    setIsEdit(false);
+    setErrorMessage('');
+    setShowErrorMessage(false);
+  } else {
+    setShowErrorMessage(true);
+    setErrorMessage('留言不能是空白');
+  }
+};
+
+export const handleDeleteComment = async (share, comment, userData) => {
+  await deleteDoc(
+    doc(getFirestore(), `shares/${share.id}/comments`, `${comment.id}`)
+  );
+
+  await addDoc(
+    collection(getFirestore(), `users/${share.postUser.id}/messages`),
+    {
+      createdAt: Timestamp.now(),
+      messageContent: `${userData.displayName}在您的${share.name}勝食頁面上刪除留言`,
+      kind: 'comment',
+    }
+  );
+};
+
+export const handleConfirmShare = (
+  shareId,
+  requesterId,
+  share,
+  currentUser,
+  setAlertMessage,
+  openInfo
+) => {
+  updateAfterExchanged(
+    shareId,
+    requesterId,
+    share?.toReceiveInfo[`${requesterId}`].quantities,
+    new Date(),
+    currentUser
+  ).then(() => {
+    handleAddBadge(currentUser.uid);
+    handleAddBadge(requesterId);
+    setAlertMessage('您已確認對方領取完勝食');
+    openInfo();
+  });
+};
+
+export const handleCancelShare = (
+  shareId,
+  requesterId,
+  share,
+  currentUser,
+  setAlertMessage,
+  openInfo
+) => {
+  handleDeleteExchange(
+    shareId,
+    requesterId,
+    share?.toReceiveInfo[`${requesterId}`].quantities
+  ).then(() => {
+    handleDeleteBadge(currentUser.uid);
+    handleDeleteBadge(requesterId);
+    setAlertMessage('您已確認對方取消勝食');
+    openInfo();
+  });
 };

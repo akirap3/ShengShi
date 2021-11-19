@@ -9,6 +9,7 @@ export const StyledDialogContent = styled(DialogContent)`
   position: relative;
   width: 80vw;
   max-width: 800px;
+  margin-top: 100px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   border-radius: 10px;
 `;
@@ -131,7 +132,6 @@ export const PopPlaceIcon = styled(HiLocationMarker)`
   width: 22px;
   height: 22px;
   fill: lightseagreen;
-  cursor: pointer;
 `;
 
 export const Calendar = styled(BsCalendarCheckFill)`

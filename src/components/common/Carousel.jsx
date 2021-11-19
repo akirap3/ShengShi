@@ -199,14 +199,15 @@ const Card = styled.div`
 
 const CardImg = styled.img`
   width: 100%;
-  height: 30vw;
+  height: 325px;
+  object-fit: cover;
 
   @media screen and (min-width: 700px) {
-    height: 25vw;
+    height: 350px;
   }
 
-  @media screen and (min-width: 1120px) {
-    height: 20vw;
+  @media screen and (min-width: 900px) {
+    height: 400px;
   }
 `;
 

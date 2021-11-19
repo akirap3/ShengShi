@@ -1,13 +1,28 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import styled from 'styled-components';
 import { useParams, useHistory } from 'react-router-dom';
+
 import {
   getListenedSingleContent,
-  updateAfterExchanged,
-  handleDeleteExchange,
-  handleAddBadge,
-  handleDeleteBadge,
+  handleConfirmShare,
+  handleCancelShare,
 } from '../../utils/firebase';
+
+import {
+  MgmtContainer,
+  Context,
+  ShareImg,
+  InfoContainer,
+  RequesterName,
+  RequesterPhone,
+  RequesterEmail,
+  RequesterQty,
+  RequestedDateTime,
+  Address,
+  ButtonContainer,
+  ConfirmedBtn,
+  CancleBtn,
+} from '../common/mgmtCard/MgmtCardUnits';
+
 import AlertPopup from '../common/AlertPopup';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import NoResult from '../personalPage/NoResult';
@@ -83,37 +98,13 @@ const QRcodeComfirmPage = () => {
     return share.toReceiveUserId.includes(requesterId) ? false : true;
   };
 
-  const handleConfirm = (shareId, requesterId, share, currentUser) => {
-    updateAfterExchanged(
-      shareId,
-      requesterId,
-      share?.toReceiveInfo[`${requesterId}`].quantities,
-      new Date(),
-      currentUser
-    ).then(() => {
-      handleAddBadge(currentUser.uid);
-      handleAddBadge(requesterId);
-    });
-  };
-
-  const handleCancel = (shareId, requesterId, share, currentUser) => {
-    handleDeleteExchange(
-      shareId,
-      requesterId,
-      share?.toReceiveInfo[`${requesterId}`].quantities
-    ).then(() => {
-      handleDeleteBadge(currentUser.uid);
-      handleDeleteBadge(requesterId);
-    });
-  };
-
   return (
     <>
       {share && currentUser ? (
         !isOthers(share, currentUser) ? (
           !isReceived(share) ? (
             !isCancled(share) ? (
-              <Container>
+              <MgmtContainer>
                 <Context>
                   <ShareImg src={share?.imageUrl || defaultImgUrl} />
                   <InfoContainer>
@@ -155,11 +146,13 @@ const QRcodeComfirmPage = () => {
                       <ButtonContainer>
                         <ConfirmedBtn
                           onClick={() =>
-                            handleConfirm(
-                              shareId,
+                            handleConfirmShare(
+                              share.id,
                               requesterId,
                               share,
-                              currentUser
+                              currentUser,
+                              setAlertMessage,
+                              openInfo
                             )
                           }
                         >
@@ -167,11 +160,13 @@ const QRcodeComfirmPage = () => {
                         </ConfirmedBtn>
                         <CancleBtn
                           onClick={() =>
-                            handleCancel(
-                              shareId,
+                            handleCancelShare(
+                              share.id,
                               requesterId,
                               share,
-                              currentUser
+                              currentUser,
+                              setAlertMessage,
+                              openInfo
                             )
                           }
                         >
@@ -181,12 +176,12 @@ const QRcodeComfirmPage = () => {
                     )}
                   </InfoContainer>
                 </Context>
-              </Container>
+              </MgmtContainer>
             ) : (
               <NoResult text="該領取已經取消" />
             )
           ) : (
-            <NoResult text="該領取已經取消" />
+            <NoResult text="該領取已經完成" />
           )
         ) : (
           <></>
@@ -202,60 +197,5 @@ const QRcodeComfirmPage = () => {
     </>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Context = styled.div`
-  display: flex;
-  border: 1px solid black;
-  max-width: 70vw;
-  margin: 2vw;
-  border-radius: 10px;
-  @media screen and (max-width: 700px) {
-    max-width: 80vw;
-    margin: 4vw;
-  }
-`;
-const ShareImg = styled.img`
-  width: 30vw;
-
-  border-radius: 10px 0px 0px 10px;
-`;
-const InfoContainer = styled.div`
-  padding: 2vw;
-  font-size: 2vw;
-  line-height: 3vw;
-`;
-const RequesterName = styled.div``;
-const RequesterPhone = styled.div``;
-const RequesterEmail = styled.div``;
-const RequesterQty = styled.div``;
-const RequestedDateTime = styled.div``;
-const Address = styled.div``;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  margin-top: 1vw;
-  justify-content: center;
-`;
-const ConfirmedBtn = styled.button`
-  border: 1px solid black;
-  padding: 1vw;
-  border-radius: 10px;
-  background-color: lightseagreen;
-  margin-right: 0.5vw;
-  color: white;
-`;
-const CancleBtn = styled.button`
-  border: 1px solid black;
-  padding: 1vw;
-  border-radius: 10px;
-  background-color: orangered;
-  color: white;
-`;
 
 export default QRcodeComfirmPage;

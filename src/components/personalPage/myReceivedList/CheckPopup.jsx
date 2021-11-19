@@ -33,9 +33,9 @@ import {
 
 import Comment from '../../common/comment/Comment';
 
-import useCurrentUser from '../../../hooks/useCurrentUser';
+import { ErrorMessage, Info, Message } from '../../common/ErrorMessageUnits';
 
-import { BsFillInfoCircleFill } from 'react-icons/bs';
+import useCurrentUser from '../../../hooks/useCurrentUser';
 
 const CheckPopup = ({ showEdit, closeEditor, share }) => {
   const currentUser = useCurrentUser();
@@ -182,27 +182,6 @@ const FoodImgLabel = styled(StyledLabel)``;
 
 const CommentLabel = styled(StyledLabel)`
   margin-top: 15px;
-`;
-
-const ErrorMessage = styled.div`
-  display: ${(props) => (props.isShow ? 'flex' : 'none')};
-  align-items: center;
-  margin-top: 10px;
-  padding: 10px 15px;
-  border-radius: 5px;
-  background-color: #d8f3dc;
-`;
-
-const Info = styled(BsFillInfoCircleFill)`
-  fill: #1e88e5;
-  width: 16px;
-  height: 16px;
-  margin-right: 10px;
-`;
-
-const Message = styled.span`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 16px;
 `;
 
 export default CheckPopup;
