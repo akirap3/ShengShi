@@ -2,6 +2,7 @@ import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Loading from '../common/Loading.jsx';
+import Compressor from 'compressorjs';
 
 import {
   collection,
@@ -87,6 +88,18 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
     if (currentUser) return getListenedUserData();
   }, [currentUser, getListenedUserData]);
 
+  const handleCompressFile = (e) => {
+    const image = e.target.files[0];
+    new Compressor(image, {
+      quality: 0.2,
+      convertSize: 1000000,
+      success: (res) => {
+        console.log(res.size);
+        setFile(res);
+      },
+    });
+  };
+
   const handleSubmit = async () => {
     if (
       isFieldsChecked(
@@ -101,9 +114,11 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
       setIsLoaging(true);
       const docRef = doc(collection(getFirestore(), `shares`));
       const fileRef = ref(getStorage(), `images/shares/${docRef.id}`);
+
       const metadata = {
         contentType: file.type,
       };
+
       const uplaodTask = await uploadBytes(fileRef, file, metadata);
       const imageUrl = await getDownloadURL(uplaodTask.ref);
       await setDoc(
@@ -205,7 +220,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
               <UploadBtn
                 type="file"
                 id="image-upload"
-                onChange={(e) => setFile(e.target.files[0])}
+                onChange={(e) => handleCompressFile(e)}
                 disabled={isLoading}
               />
               <SubmitBtn onClick={handleSubmit} disabled={isLoading}>
