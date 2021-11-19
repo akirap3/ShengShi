@@ -97,6 +97,7 @@ const CommentContainer = styled.div`
 const CommentAvatar = styled.img`
   width: 30px;
   height: 30px;
+  object-fit: cover;
   border-radius: 50%;
   margin-right: 10px;
   margin-top: 5px;

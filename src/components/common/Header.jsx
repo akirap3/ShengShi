@@ -265,6 +265,7 @@ const MemberLoggedIcon = styled.img`
   border: 1px solid skyblue;
   height: 30px;
   width: 30px;
+  object-fit: cover;
 `;
 
 const MessageCount = styled.div`
