@@ -3,11 +3,16 @@ import styled from 'styled-components';
 import Loading from '../../common/Loading';
 import { useDispatch } from 'react-redux';
 
-import { DialogOverlay, DialogContent } from '@reach/dialog';
+import { DialogOverlay } from '@reach/dialog';
+
+import {
+  StyledDialogContent,
+  PopClose,
+  ButtonContainer,
+  SubmitBtn,
+} from '../../common/popup/PopupUnits';
 
 import MyMap from '../../common/myMap/Mymap';
-
-import { AiFillCloseCircle } from 'react-icons/ai';
 
 const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
   const dispatch = useDispatch();
@@ -42,7 +47,7 @@ const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
 
   return (
     <DialogOverlay isOpen={showMap} onDismiss={closeMap}>
-      <StyledDialogContent aria-label="popup">
+      <MapStyledDialogContent aria-label="popup">
         {isLoading && <Loading />}
         <PopClose onClick={closeMap} />
         <MyMap
@@ -50,33 +55,18 @@ const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
           handleLatLng={handleLatLng}
           defaultCenter={defaultCenter}
         />
-      </StyledDialogContent>
+        <ButtonContainer>
+          <SubmitBtn onClick={closeMap}>確認</SubmitBtn>
+        </ButtonContainer>
+      </MapStyledDialogContent>
     </DialogOverlay>
   );
 };
 
-const StyledDialogContent = styled(DialogContent)`
-  position: relative;
-  width: 80vw;
-  max-width: 800px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  border-radius: 10px;
-
+const MapStyledDialogContent = styled(StyledDialogContent)`
   [data-reach-dialog-content] {
     padding-bottom: 200px;
   }
-`;
-
-const PopClose = styled(AiFillCloseCircle)`
-  fill: #1e88e582;
-  border-radius: 50%;
-  opacity: 0.8;
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 22px;
-  height: 22px;
 `;
 
 export default MapPopup;

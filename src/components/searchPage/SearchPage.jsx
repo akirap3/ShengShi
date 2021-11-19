@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import SearchPageCard from './SearchPageCard';
 import SharesContainer from '../common/SharesContainer';
 import Title from '../personalPage/Title';
+import Loading from '../common/Loading';
 import { getSingleShare } from '../../utils/firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { Waypoint } from 'react-waypoint';
@@ -29,7 +30,6 @@ import NoResult from '../personalPage/NoResult';
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
 import Wave from 'react-wavify';
 import LoginBg2 from '../loginPage/LoginBg2';
-
 import algolia from '../../utils/algolia';
 
 const SearchPage = () => {
@@ -45,7 +45,6 @@ const SearchPage = () => {
     dispatch({ type: 'isShareSearch/search', payload: true });
     if (inputValue === '') setInputValue('請輸入關鍵字');
     algolia.search(inputValue || '請輸入關鍵字').then((result) => {
-      console.log(inputValue);
       const searchResults = result.hits.map((hit) => {
         return {
           docId: hit.objectID,
@@ -55,7 +54,6 @@ const SearchPage = () => {
         getSingleShare(result.docId)
       );
       Promise.all(contents).then((values) => {
-        console.log(values);
         dispatch({ type: 'searchedShares/get', payload: values });
       });
     });
@@ -101,8 +99,8 @@ const SearchPage = () => {
     if (searchedShares) {
       const otherShares = searchedShares
         .filter((share) => share.postUser.id !== currentUser?.uid)
-        .filter((share) => share.quantities > 0);
-
+        .filter((share) => share.quantities > 0)
+        .filter((share) => share.toTimeStamp.toDate() > new Date());
       setShares(otherShares);
     }
   }, [currentUser?.uid, searchedShares]);
@@ -172,23 +170,24 @@ const SearchPage = () => {
         </SearchContent>
       </UpperPart>
       <Title title="目前其他人分享的勝食" />
-      {shares ? (
-        shares.length !== 0 ? (
-          <Outer>
+      <Outer>
+        {shares ? (
+          shares.length !== 0 ? (
             <SharesContainer>
               {shares
                 .filter((share) => share.isArchived === false)
+                .filter((share) => share.toTimeStamp.toDate() > new Date())
                 .map((share) => (
                   <SearchPageCard key={uuidv4()} share={share} />
                 ))}
             </SharesContainer>
-          </Outer>
+          ) : (
+            <NoResult text="搜尋不到" />
+          )
         ) : (
-          <NoResult text="搜尋不到" />
-        )
-      ) : (
-        <NoResult text="搜尋不到" />
-      )}
+          <Loading />
+        )}
+      </Outer>
       <Waypoint onEnter={handleInfiniteScroll} />
     </Main>
   );
@@ -340,6 +339,7 @@ const Outer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 export default SearchPage;

@@ -30,15 +30,18 @@ import {
   StyledInput,
   StyledSpan,
   Preview,
+  LabelIconContainer,
+  Calendar,
+  PopPlaceIcon,
+  ButtonContainer,
+  ImgUpload,
+  SubmitBtn,
 } from '../../common/popup/PopupUnits';
 
 import ClendarPopup from './CalendarPopup';
 import MapPopup from './MapPopup';
 import Loading from '../../common/Loading';
 import { isFieldsChecked } from '../../../utils/validation';
-
-import { HiLocationMarker } from 'react-icons/hi';
-import { BsCalendarCheckFill } from 'react-icons/bs';
 
 const EditPopup = ({ showEdit, closeEditor, share }) => {
   const dispatch = useDispatch();
@@ -123,10 +126,17 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
               />
             </PopRow>
             <PopRow>
-              <DateTimeContainer>
-                <DateTimeLabel>日期及時間</DateTimeLabel>
+              <OriDateTimeLabel>原定時間及日期</OriDateTimeLabel>
+              <OriDateTime>
+                {`${share.fromTimeStamp.toDate().toLocaleString()} -
+                  ${share.toTimeStamp.toDate().toLocaleString()}`}
+              </OriDateTime>
+            </PopRow>
+            <PopRow>
+              <LabelIconContainer>
+                <DateTimeLabel>更改日期及時間</DateTimeLabel>
                 <Calendar onClick={openCalendar} />
-              </DateTimeContainer>
+              </LabelIconContainer>
               <DateTime>
                 {fromToDateTime
                   ? `${fromToDateTime[0].toLocaleString()} - ${fromToDateTime[1].toLocaleString()}`
@@ -134,10 +144,10 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
               </DateTime>
             </PopRow>
             <PopRow>
-              <PlaceContainer>
+              <LabelIconContainer>
                 <PopPlaceLabel>地點</PopPlaceLabel>
-                <PopPlaceIcon onClick={openMap} />
-              </PlaceContainer>
+                <StyledPopPlaceIcon onClick={openMap} />
+              </LabelIconContainer>
               <PopPlace>{address}</PopPlace>
             </PopRow>
             <PopRow></PopRow>
@@ -170,87 +180,28 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
 };
 
 const FoodLabel = styled(StyledLabel)``;
-
 const FoodName = styled(StyledInput)`
   flex-grow: 1;
 `;
-
 const QuantityLabel = styled(StyledLabel)``;
-
 const Quantity = styled(StyledInput)``;
-
-const DateTimeContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
+const OriDateTimeLabel = styled(StyledLabel)``;
+const OriDateTime = styled(StyledSpan)``;
 const DateTimeLabel = styled(StyledLabel)`
   margin-right: 10px;
 `;
-
 const DateTime = styled(StyledSpan)``;
-
-const Calendar = styled(BsCalendarCheckFill)`
-  width: 22px;
-  height: 22px;
-  fill: lightseagreen;
-  cursor: pointer;
-`;
-
-const PlaceContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const PopPlaceLabel = styled(StyledLabel)`
   margin-right: 10px;
 `;
-
 const PopPlace = styled(StyledSpan)``;
 
-const PopPlaceIcon = styled(HiLocationMarker)`
-  width: 22px;
-  height: 22px;
-  fill: lightseagreen;
+const StyledPopPlaceIcon = styled(PopPlaceIcon)`
   cursor: pointer;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-`;
-
-const ImgUpload = styled.label`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 5px;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 18px;
-  background-color: lightskyblue;
-  color: white;
 `;
 
 const UploadBtn = styled.input`
   display: none;
-`;
-
-const SubmitBtn = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 5px;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 18px;
-  background-color: #1e88e5;
-  color: white;
 `;
 
 export default EditPopup;

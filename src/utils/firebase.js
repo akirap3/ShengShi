@@ -306,13 +306,13 @@ export const getSearchedOrderedContents = (
         collection(db, collectionName),
         where(field, operator, keywords),
         orderBy('createdAt', 'desc'),
-        limit(2)
+        limit(4)
       )
     : query(
         collection(db, collectionName),
         where(field, operator, keywords),
         orderBy('createdAt', 'desc'),
-        limit(2),
+        limit(4),
         startAfter(lastPostSnapshotRef.current)
       );
 
@@ -424,11 +424,11 @@ export const getAllOrderedContents = (
   OriContents
 ) => {
   const q = !isNext
-    ? query(collection(db, collectionName), orderBy(field, 'desc'), limit(2))
+    ? query(collection(db, collectionName), orderBy(field, 'desc'), limit(4))
     : query(
         collection(db, collectionName),
         orderBy(field, 'desc'),
-        limit(2),
+        limit(4),
         startAfter(lastPostSnapshotRef.current)
       );
 
@@ -483,12 +483,12 @@ export const getAllOrderedOtherShares = (
       ? query(
           collection(db, collectionName),
           where('postUser.id', '!=', currentUser.uid),
-          limit(2)
+          limit(4)
         )
       : query(
           collection(db, collectionName),
           where('postUser.id', '!=', currentUser.uid),
-          limit(2),
+          limit(4),
           startAfter(lastPostSnapshotRef.current)
         );
 
