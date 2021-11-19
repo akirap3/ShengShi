@@ -2,50 +2,30 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import {
-  getFirestore,
-  doc,
-  deleteDoc,
-  updateDoc,
-  Timestamp,
-  addDoc,
-  collection,
-} from '@firebase/firestore';
+  handleConfirmCommentEdit,
+  handleDeleteComment,
+} from '../../../utils/firebase';
+
+import { ErrorMessage, Info, Message } from '../ErrorMessageUnits';
 
 const Comment = ({ currentUser, share, comment, userData }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [editedComment, setEditedComment] = useState('');
-
-  const handleConfirmCommentEdit = async () => {
-    await updateDoc(
-      doc(getFirestore(), `shares/${share.id}/comments`, `${comment.id}`),
-      {
-        commentContent: editedComment,
-        createdAt: Timestamp.now(),
-      }
-    );
-    setEditedComment('');
-    setIsEdit(false);
-  };
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
 
   const handleEnter = (e) => {
     if (e.charCode === 13) {
-      handleConfirmCommentEdit();
+      handleConfirmCommentEdit(
+        editedComment,
+        share,
+        comment,
+        setEditedComment,
+        setIsEdit,
+        setErrorMessage,
+        setShowErrorMessage
+      );
     }
-  };
-
-  const handleDeleteComment = async () => {
-    await deleteDoc(
-      doc(getFirestore(), `shares/${share.id}/comments`, `${comment.id}`)
-    );
-
-    await addDoc(
-      collection(getFirestore(), `users/${share.postUser.id}/messages`),
-      {
-        createdAt: Timestamp.now(),
-        messageContent: `${userData.displayName}在您的${share.name}勝食頁面上刪除留言`,
-        kind: 'comment',
-      }
-    );
   };
 
   return (
@@ -68,18 +48,40 @@ const Comment = ({ currentUser, share, comment, userData }) => {
             isEdit={isEdit}
             disabled={!isEdit}
           />
+          <ErrorMessage isShow={showErrorMessage}>
+            <Info />
+            <Message>{errorMessage}</Message>
+          </ErrorMessage>
         </CommentContent>
       </CommentContainer>
+
       <CommentButtonRow>
         {currentUser.uid === comment.author.id && (
           <>
             <EditButton isEdit={isEdit} onClick={() => setIsEdit(true)}>
               編輯
             </EditButton>
-            <ConfirmButton isEdit={isEdit} onClick={handleConfirmCommentEdit}>
+            <ConfirmButton
+              isEdit={isEdit}
+              onClick={() =>
+                handleConfirmCommentEdit(
+                  editedComment,
+                  share,
+                  comment,
+                  setEditedComment,
+                  setIsEdit,
+                  setErrorMessage,
+                  setShowErrorMessage
+                )
+              }
+            >
               確定
             </ConfirmButton>
-            <DeleteButton onClick={handleDeleteComment}>刪除</DeleteButton>
+            <DeleteButton
+              onClick={() => handleDeleteComment(share, comment, userData)}
+            >
+              刪除
+            </DeleteButton>
           </>
         )}
       </CommentButtonRow>

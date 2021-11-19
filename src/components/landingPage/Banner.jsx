@@ -32,6 +32,7 @@ const BannerContainer = styled.div`
   padding: 5rem 2rem;
   background: linear-gradient(to right, #4ac29a, #bdfff3);
   background: -webkit-linear-gradient(to left, #4ac29a, #bdfff3);
+  backdrop-filter: blur(5px);
 
   @media screen and (min-width: 1500px) {
     padding: 5vw 15vw;
@@ -88,7 +89,7 @@ const StyledLink = styled(Link)`
   padding: 0.5rem;
   border-radius: 5px;
   font-family: 'cwTeXYen', sans-serif;
-  font-size: 24px;
+  font-size: 22px;
 `;
 
 const StartButton = styled(StyledLink)`

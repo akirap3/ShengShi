@@ -186,7 +186,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
             <PopRow>
               <LabelIconContainer>
                 <PopPlaceLabel>地點</PopPlaceLabel>
-                <PopPlaceIcon onClick={openMap} />
+                <StyledPopPlaceIcon onClick={openMap} />
               </LabelIconContainer>
               <PopPlace>{address}</PopPlace>
             </PopRow>
@@ -250,6 +250,10 @@ const DateTime = styled(StyledSpan)``;
 
 const PopPlaceLabel = styled(StyledLabel)`
   margin-right: 10px;
+`;
+
+const StyledPopPlaceIcon = styled(PopPlaceIcon)`
+  cursor: pointer;
 `;
 
 const PopPlace = styled(StyledSpan)``;
