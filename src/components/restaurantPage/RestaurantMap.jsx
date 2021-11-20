@@ -27,12 +27,12 @@ const RestaurantMap = ({ restaurants }) => {
 
   useEffect(() => {
     setIsLoading(true);
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(setCurrentLocation);
-    } else {
-      setDefaultCenter({ lat: 25.04267234987771, lng: 121.56497334150076 });
-      setIsLoading(false);
-    }
+    navigator.geolocation.watchPosition(setCurrentLocation, (error) => {
+      if (error.code === error.PERMISSION_DENIED) {
+        setDefaultCenter({ lat: 25.04267234987771, lng: 121.56497334150076 });
+        setIsLoading(false);
+      }
+    });
   }, []);
 
   const points =
@@ -70,7 +70,7 @@ const RestaurantMap = ({ restaurants }) => {
   };
 
   return (
-    <div style={{ height: '80vh', width: '100%' }}>
+    <div style={{ height: '80vh', width: '100%', position: 'relative' }}>
       {isLoading ? (
         <Loading />
       ) : (

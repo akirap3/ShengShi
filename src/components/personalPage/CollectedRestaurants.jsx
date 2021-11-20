@@ -8,10 +8,11 @@ import StarImg from '../../images/common/star.png';
 
 import useCurrentUser from '../../hooks/useCurrentUser';
 import NoResult from './NoResult';
+import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
 
 const CollectedRestaurants = () => {
   const currentUser = useCurrentUser();
-  const [savedRestaurants, setSavedRestaurants] = useState('');
+  const [savedRestaurants, setSavedRestaurants] = useState(null);
 
   const getCollectedRestaurants = useCallback(
     () =>
@@ -30,29 +31,45 @@ const CollectedRestaurants = () => {
     return getCollectedRestaurants();
   }, [getCollectedRestaurants]);
 
-  return savedRestaurants && savedRestaurants.length !== 0 ? (
-    <Outer>
-      <Container>
-        {savedRestaurants.map((restaurant) => (
-          <Card key={restaurant.id}>
-            <CardImg src={restaurant.imageUrl} />
-            <CardTitle>{restaurant.name}</CardTitle>
-            <Row>
-              {Array.from(Array(restaurant.rating).keys()).map(() => (
-                <Star src={StarImg} key={uuidv4()} />
-              ))}
-              <Heart
-                onClick={() =>
-                  handleCollection(restaurant, 'restaurants', currentUser)
-                }
-              />
-            </Row>
-          </Card>
-        ))}
-      </Container>
-    </Outer>
-  ) : (
-    <NoResult text="你沒有任何的收藏店家" />
+  return (
+    <>
+      {savedRestaurants ? (
+        <>
+          {savedRestaurants.length !== 0 ? (
+            <Outer>
+              <Container>
+                {savedRestaurants.map((restaurant) => (
+                  <Card key={restaurant.id}>
+                    <CardImg src={restaurant.imageUrl} />
+                    <CardTitle>{restaurant.name}</CardTitle>
+                    <Row>
+                      {Array.from(Array(restaurant.rating).keys()).map(() => (
+                        <Star src={StarImg} key={uuidv4()} />
+                      ))}
+                      <Heart
+                        onClick={() =>
+                          handleCollection(
+                            restaurant,
+                            'restaurants',
+                            currentUser
+                          )
+                        }
+                      />
+                    </Row>
+                  </Card>
+                ))}
+              </Container>
+            </Outer>
+          ) : (
+            <NoResult text="你沒有任何的收藏店家" />
+          )}
+        </>
+      ) : (
+        <HalfHeightPaddingLoading>
+          <Loading />
+        </HalfHeightPaddingLoading>
+      )}
+    </>
   );
 };
 

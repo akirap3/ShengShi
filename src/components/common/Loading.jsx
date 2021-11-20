@@ -26,4 +26,8 @@ export const PaddingLoading = styled.div`
   position: relative;
 `;
 
+export const HalfHeightPaddingLoading = styled(PaddingLoading)`
+  height: 50vh;
+`;
+
 export default Loading;
