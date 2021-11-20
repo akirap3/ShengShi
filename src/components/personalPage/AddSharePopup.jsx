@@ -104,6 +104,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
       isFieldsChecked(
         foodName,
         quantities,
+        fromToDateTime,
         address,
         file,
         setAlertMessage,

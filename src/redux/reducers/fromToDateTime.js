@@ -1,10 +1,5 @@
 const now = new Date();
-const todayBegin = new Date(
-  now.getFullYear(),
-  now.getMonth(),
-  now.getDate(),
-  now.getHours()
-);
+const todayBegin = new Date();
 const todayEnd = new Date(
   now.getFullYear(),
   now.getMonth(),

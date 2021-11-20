@@ -11,6 +11,7 @@ export const checkEmail = (email, setAlertMessage, openInfo) => {
 export const isFieldsChecked = (
   foodName,
   quantities,
+  fromToDateTime,
   address,
   file,
   setAlertMessage,
@@ -27,6 +28,10 @@ export const isFieldsChecked = (
     return false;
   } else if (newQty <= 0 || newQty > 999) {
     setAlertMessage('請輸入介於 1 ~ 999 的數字');
+    openInfo();
+    return false;
+  } else if (fromToDateTime === null) {
+    setAlertMessage('請點選日期時間區間');
     openInfo();
     return false;
   } else if (address === '台北市' || !address) {
