@@ -6,6 +6,7 @@ import { layoutConfig } from '../../utils/commonVariables';
 import { getAllContents, getSearchedContents } from '../../utils/firebase';
 import Carousel from '../common/Carousel';
 import HomepageBackground from '../common/HomepageBackground';
+import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
 
 import {
   SearchContent,
@@ -21,7 +22,7 @@ import RestaurantSearchCard from './RestaurantSearchCard';
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
 
 const RestaurantPage = () => {
-  const [restaurants, setRestaurants] = useState();
+  const [restaurants, setRestaurants] = useState(null);
   const [inputValue, setInputValue] = useState('');
   const [isSearch, setIsSearch] = useState(false);
 
@@ -88,20 +89,31 @@ const RestaurantPage = () => {
           </StyledResetButton>
         </SearchContent>
       </UpperPart>
-      <CarouselContainer>
-        {!isSearch && restaurants ? (
-          <Carousel
-            title="合作餐廳"
-            contentData={restaurants}
-            isRestaurants={true}
-          />
-        ) : (
-          <RestaurantSearchCard restaurant={restaurants} isRestaurants={true} />
-        )}
-      </CarouselContainer>
-      <MapWrapper>
-        <RestaurantMap restaurants={restaurants} />
-      </MapWrapper>
+      {restaurants ? (
+        <>
+          <CarouselContainer>
+            {!isSearch ? (
+              <Carousel
+                title="合作餐廳"
+                contentData={restaurants}
+                isRestaurants={true}
+              />
+            ) : (
+              <RestaurantSearchCard
+                restaurant={restaurants}
+                isRestaurants={true}
+              />
+            )}
+          </CarouselContainer>
+          <MapWrapper>
+            <RestaurantMap restaurants={restaurants} />
+          </MapWrapper>
+        </>
+      ) : (
+        <HalfHeightPaddingLoading>
+          <Loading />
+        </HalfHeightPaddingLoading>
+      )}
     </Main>
   );
 };

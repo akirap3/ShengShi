@@ -8,9 +8,10 @@ import {
 import useCurrentUser from '../../hooks/useCurrentUser';
 import MyResponsivePie from './MyChart';
 import NoResult from './NoResult';
+import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
 
 const Badges = () => {
-  const [badges, setBadges] = useState();
+  const [badges, setBadges] = useState(null);
   const [myListCounts, setMyListCounts] = useState(0);
   const [myBadgeCounts, setMyBadgeCounts] = useState(0);
   const [myReceivedCounts, setMyReceivedCounts] = useState(0);
@@ -57,6 +58,10 @@ const Badges = () => {
       color: 'hsl(267, 70%, 50%)',
     },
   ];
+
+  const Total = data
+    .map((record) => record.value)
+    .reduce((acc, current) => acc + current);
 
   const getBadges = useCallback(
     () =>
@@ -176,27 +181,38 @@ const Badges = () => {
 
   return (
     <>
-      <CharContainer>
-        <ChartContent>
-          <MyResponsivePie data={data} />
-        </ChartContent>
-      </CharContainer>
-      {badges?.length !== 0 ? (
-        badges && (
-          <Outer>
-            <BadgeContainer>
-              {badges.map((badge) => (
-                <BadgeContext key={badge.id}>
-                  <BadgeImg src={badge.imageUrl} />
-                  <BadgeName>{badge.name}</BadgeName>
-                </BadgeContext>
-              ))}
-            </BadgeContainer>
-          </Outer>
-        )
-      ) : (
-        <NoResult text="目前沒有任何的勳章" />
+      {Total && (
+        <CharContainer>
+          <ChartContent>
+            <MyResponsivePie data={data} />
+          </ChartContent>
+        </CharContainer>
       )}
+
+      <>
+        {badges ? (
+          <>
+            {badges?.length !== 0 ? (
+              <Outer>
+                <BadgeContainer>
+                  {badges.map((badge) => (
+                    <BadgeContext key={badge.id}>
+                      <BadgeImg src={badge.imageUrl} />
+                      <BadgeName>{badge.name}</BadgeName>
+                    </BadgeContext>
+                  ))}
+                </BadgeContainer>
+              </Outer>
+            ) : (
+              <NoResult text="目前沒有任何的勳章" />
+            )}
+          </>
+        ) : (
+          <HalfHeightPaddingLoading>
+            <Loading />
+          </HalfHeightPaddingLoading>
+        )}
+      </>
     </>
   );
 };

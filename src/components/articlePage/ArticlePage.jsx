@@ -21,6 +21,8 @@ import {
   getSearchedOrderedContents,
 } from '../../utils/firebase';
 
+import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
+
 const ArticlePage = () => {
   const lastPostSnapshotRef = useRef();
   const [inputValue, setInputValue] = useState('');
@@ -150,10 +152,12 @@ const ArticlePage = () => {
             ))}
           </ArticleContainer>
         ) : (
-          <NoResult text="搜尋不到" />
+          <NoResult text="搜尋不到文章" />
         )
       ) : (
-        <NoResult text="搜尋不到" />
+        <HalfHeightPaddingLoading>
+          <Loading />
+        </HalfHeightPaddingLoading>
       )}
 
       {articles && <Waypoint onEnter={handleInfiniteScroll} />}

@@ -5,10 +5,11 @@ import MyMgmtCard from './MyMgmtCard';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import { getSpecificContents } from '../../../utils/firebase';
 import NoResult from '../NoResult';
+import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 import AlertPopup from '../../common/AlertPopup';
 
 const MyMgmtList = () => {
-  const [shares, setShares] = useState('');
+  const [shares, setShares] = useState(null);
   const [showInfo, setShowInfo] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const currentUser = useCurrentUser();
@@ -40,28 +41,36 @@ const MyMgmtList = () => {
 
   return (
     <>
-      {shares !== '' && shares.length !== 0 ? (
-        hasContents(shares) ? (
-          <MgmtContainer>
-            {shares.map((share) =>
-              share.toReceiveUserId.map((requesterId) => {
-                return (
-                  <MyMgmtCard
-                    key={uuidv4()}
-                    share={share}
-                    requesterId={requesterId}
-                    setAlertMessage={setAlertMessage}
-                    openInfo={openInfo}
-                  />
-                );
-              })
-            )}
-          </MgmtContainer>
-        ) : (
-          <NoResult text="目前沒有任何預約" />
-        )
+      {shares ? (
+        <>
+          {shares.length !== 0 ? (
+            hasContents(shares) ? (
+              <MgmtContainer>
+                {shares.map((share) =>
+                  share.toReceiveUserId.map((requesterId) => {
+                    return (
+                      <MyMgmtCard
+                        key={uuidv4()}
+                        share={share}
+                        requesterId={requesterId}
+                        setAlertMessage={setAlertMessage}
+                        openInfo={openInfo}
+                      />
+                    );
+                  })
+                )}
+              </MgmtContainer>
+            ) : (
+              <NoResult text="目前沒有任何預約" />
+            )
+          ) : (
+            <NoResult text="目前您沒有任何的分享清單，也沒有任何預約" />
+          )}
+        </>
       ) : (
-        <NoResult text="目前沒有任何預約" />
+        <HalfHeightPaddingLoading>
+          <Loading />
+        </HalfHeightPaddingLoading>
       )}
       <AlertPopup
         showInfo={showInfo}

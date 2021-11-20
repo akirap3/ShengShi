@@ -5,10 +5,11 @@ import useCurrentUser from '../../../hooks/useCurrentUser';
 import MyReceivedCard from './MyRecievedCard';
 import SharesContainer from '../../common/SharesContainer';
 import NoResult from '../NoResult';
+import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 
 const MyReceivedList = () => {
   const currentUser = useCurrentUser();
-  const [receivedShares, setReceivedShares] = useState('');
+  const [receivedShares, setReceivedShares] = useState(null);
 
   const getReceivedShares = useCallback(
     () =>
@@ -27,16 +28,28 @@ const MyReceivedList = () => {
     return getReceivedShares();
   }, [getReceivedShares]);
 
-  return receivedShares && receivedShares.length !== 0 ? (
-    <Outer>
-      <SharesContainer>
-        {receivedShares.map((share) => (
-          <MyReceivedCard key={share.id} share={share} />
-        ))}
-      </SharesContainer>
-    </Outer>
-  ) : (
-    <NoResult text="你沒有任何的領取紀錄" />
+  return (
+    <>
+      {receivedShares ? (
+        <>
+          {receivedShares.length !== 0 ? (
+            <Outer>
+              <SharesContainer>
+                {receivedShares.map((share) => (
+                  <MyReceivedCard key={share.id} share={share} />
+                ))}
+              </SharesContainer>
+            </Outer>
+          ) : (
+            <NoResult text="你沒有任何的領取紀錄" />
+          )}
+        </>
+      ) : (
+        <HalfHeightPaddingLoading>
+          <Loading />
+        </HalfHeightPaddingLoading>
+      )}
+    </>
   );
 };
 
