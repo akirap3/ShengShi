@@ -11,6 +11,7 @@ import StarImg from '../../images/common/star.png';
 import { ImSpoonKnife } from 'react-icons/im';
 import { AiTwotoneHeart, AiFillCloseCircle } from 'react-icons/ai';
 import { HiLocationMarker } from 'react-icons/hi';
+import { useSelector } from 'react-redux';
 
 const ShareCard = ({
   btnName,
@@ -29,16 +30,25 @@ const ShareCard = ({
   const currentUser = useCurrentUser();
   const [showDelete, setShowDelete] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [showNeedLogin, setShowNeedLogin] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const checkUser = useSelector((state) => state.checkUser);
+
   const openDelete = () => setShowDelete(true);
   const closeDelete = () => setShowDelete(false);
+
   const openInfo = () => setShowInfo(true);
   const closeInfo = () => setShowInfo(false);
 
+  const openNeedLogin = () => setShowNeedLogin(true);
+  const closeNeedLogin = () => {
+    setShowNeedLogin(false);
+    history.push('/login');
+  };
+
   const handleNeedLogin = () => {
     setAlertMessage('請先登入');
-    openInfo();
-    history.push('/login');
+    openNeedLogin();
   };
 
   return (
@@ -78,6 +88,7 @@ const ShareCard = ({
                     : () => handleCollection(share, 'shares', currentUser)
                   : () => {}
               }
+              isLoggedIn={checkUser.isLoggedIn}
             />
           </CardRowOne>
           <CardRow>
@@ -133,6 +144,11 @@ const ShareCard = ({
       <AlertPopup
         showInfo={showInfo}
         closeInfo={closeInfo}
+        message={alertMessage}
+      />
+      <AlertPopup
+        showInfo={showNeedLogin}
+        closeInfo={closeNeedLogin}
         message={alertMessage}
       />
     </>
@@ -266,7 +282,8 @@ const Heart = styled(AiTwotoneHeart)`
   width: 25px;
   height: 25px;
   ${(props) => {
-    if (props.isliked !== '#2196f3aa') return `cursor: pointer;`;
+    if (props.isLoggedIn && props.isliked !== '#2196f3aa')
+      return `cursor: pointer;`;
   }}
 `;
 
