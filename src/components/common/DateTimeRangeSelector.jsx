@@ -9,6 +9,9 @@ import CalendarImg from '../../images/common/calendar.svg';
 const DateTimeRangeSelector = () => {
   const dispatch = useDispatch();
   const fromToDateTime = useSelector((state) => state.fromToDateTime);
+
+  const now = new Date();
+
   return (
     <>
       <PopTitleContainer>
@@ -17,11 +20,19 @@ const DateTimeRangeSelector = () => {
       </PopTitleContainer>
       <Container>
         <DateTimeRangePicker
-          onChange={(results) =>
-            dispatch({ type: 'fromToDateTime/selected', payload: results })
-          }
+          onChange={(results) => {
+            if (results && results[0] < now) {
+              dispatch({
+                type: 'fromToDateTime/selected',
+                payload: [now, results[1]],
+              });
+            } else {
+              dispatch({ type: 'fromToDateTime/selected', payload: results });
+            }
+          }}
           value={fromToDateTime}
           minDate={new Date()}
+          disableClock={true}
         />
       </Container>
     </>

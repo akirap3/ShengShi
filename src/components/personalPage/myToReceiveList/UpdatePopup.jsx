@@ -62,6 +62,10 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
       setAlertMessage(`請輸入介於 1 ~ ${share.quantities} 的數字`);
       openInfo();
       return false;
+    } else if (specificDateTime === null) {
+      setAlertMessage('請點選領取的日期時間');
+      openInfo();
+      return false;
     }
     return true;
   };
@@ -119,10 +123,7 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
                 <Calendar onClick={openDateTime} />
               </LabelIconContainer>
               <DateTime>
-                {specificDateTime?.toLocaleString() ||
-                  share?.toReceiveInfo[currentUser?.uid]?.upcomingTimestamp
-                    ?.toDate()
-                    .toLocaleString()}
+                {specificDateTime ? specificDateTime.toLocaleString() : ''}
               </DateTime>
             </PopRow>
             <PopRow>

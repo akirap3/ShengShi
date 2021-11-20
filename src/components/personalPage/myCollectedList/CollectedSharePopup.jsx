@@ -111,16 +111,8 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
       setAlertMessage(`請輸入介於 1 ~ ${share.quantities} 的數字`);
       openInfo();
       return false;
-    } else if (specificDateTime < new Date()) {
-      setAlertMessage('您選定時間小於現在時間');
-      openInfo();
-      return false;
-    } else if (specificDateTime < share.fromTimeStamp.toDate()) {
-      setAlertMessage('您選定時間小於可領取時間');
-      openInfo();
-      return false;
-    } else if (specificDateTime > share.toTimeStamp.toDate()) {
-      setAlertMessage('您選定時間大於可領取時間');
+    } else if (specificDateTime === null) {
+      setAlertMessage('請點選領取的日期時間');
       openInfo();
       return false;
     }
