@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Link, useLocation } from 'react-router-dom';
 import AddSharePopup from './AddSharePopup';
 import LoginBg2 from '../loginPage/LoginBg2';
+import Ripples from 'react-ripples';
 
 import useCurrentUser from '../../hooks/useCurrentUser';
 import {
@@ -220,34 +221,44 @@ const Dashbaord = () => {
             </Row>
             <Row>
               <MgmtIcon />
-              <MgmtButton
-                as={Link}
-                to="/personal/mgmt"
-                active={location.pathname === '/personal/mgmt'}
+              <MgmtRipple
+                color="#fff"
+                during={3000}
+                active={
+                  location.pathname === '/personal/mgmt'
+                    ? '#bbdefbaa'
+                    : '#e3f2fd01'
+                }
               >
-                管理預訂
-              </MgmtButton>
+                <MgmtButton as={Link} to="/personal/mgmt">
+                  管理預訂
+                </MgmtButton>
+              </MgmtRipple>
             </Row>
           </Details>
           <Grid>
             {menus.map((menu) => (
-              <Button
+              <StyledRipples
                 key={menu.name}
-                as={Link}
-                to={`${menu.path}`}
-                active={menu.path === location.pathname}
+                color="#fff"
+                during={3000}
+                active={
+                  menu.path === location.pathname ? '#bbdefbaa' : '#e3f2fd01'
+                }
               >
-                <IconContainer>
-                  {menu.icon.map((icon) => icon)}
-                  {menu.count !== 0 ? (
-                    <ItemNumber>{menu.count}</ItemNumber>
-                  ) : (
-                    <></>
-                  )}
-                </IconContainer>
+                <Button key={menu.name} as={Link} to={`${menu.path}`}>
+                  <IconContainer>
+                    {menu.icon.map((icon) => icon)}
+                    {menu.count !== 0 ? (
+                      <ItemNumber>{menu.count}</ItemNumber>
+                    ) : (
+                      <></>
+                    )}
+                  </IconContainer>
 
-                <ButtonName>{menu.name}</ButtonName>
-              </Button>
+                  <ButtonName>{menu.name}</ButtonName>
+                </Button>
+              </StyledRipples>
             ))}
           </Grid>
           <CheckButton as={Link} to="/search">
@@ -490,20 +501,26 @@ const MgmtIcon = styled(BsPeopleFill)`
   }
 `;
 
+const MgmtRipple = styled(Ripples)`
+  border-radius: 8px;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  background-color: ${({ active }) => active};
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+`;
+
 const MgmtButton = styled.button`
   border-radius: 8px;
   padding: 5px 10px;
+  width: 100%;
+  height: 100%;
   font-size: 1.5vw;
   text-align: center;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 16px;
   color: rgb(129, 129, 129);
-  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
-  background-color: ${({ active }) => (active ? '#bbdefbaa' : '#e3f2fd01')};
-
-  &:hover {
-    transform: translateY(-5px);
-  }
 
   @media screen and (min-width: 800px) {
     font-size: 22px;
@@ -524,20 +541,32 @@ const Grid = styled.div`
   }
 `;
 
+const StyledRipples = styled(Ripples)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  color: #2d6a4f;
+  background-color: #e3f2fd01;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  background-color: ${({ active }) => active};
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+`;
+
 const Button = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 8px;
   padding: 10px;
+  width: 100%;
+  height: 100%;
   color: #2d6a4f;
   background-color: #e3f2fd01;
-  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   background-color: ${({ active }) => (active ? '#bbdefbaa' : '#e3f2fd01')};
-
-  &:hover {
-    transform: translateY(-5px);
-  }
 `;
 
 const ListIcon = styled(BsListNested)`

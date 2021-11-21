@@ -22,6 +22,7 @@ import {
   SearchBar,
   SearchIconContainer,
   SearchIcon,
+  StyledRipples,
   ResetButton,
 } from '../common/search/SearchUnits';
 
@@ -166,7 +167,9 @@ const SearchPage = () => {
               <SearchIcon />
             </SearchIconContainer>
           </SearchOutline>
-          <ResetButton onClick={handleResetSearch}>清除搜尋</ResetButton>
+          <StyledRipples during={3000}>
+            <ResetButton onClick={handleResetSearch}>清除搜尋</ResetButton>
+          </StyledRipples>
         </SearchContent>
       </UpperPart>
       <Title title="目前其他人分享的勝食" />

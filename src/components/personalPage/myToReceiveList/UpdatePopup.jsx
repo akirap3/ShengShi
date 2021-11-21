@@ -19,6 +19,7 @@ import {
   Calendar,
   PopPlaceIcon,
   ButtonContainer,
+  StyleBtnRipples,
   SubmitBtn,
 } from '../../common/popup/PopupUnits';
 import LocationMap from '../../common/LocationMap';
@@ -137,9 +138,11 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
               <LocationMap />
             </MapWrapper>
             <ButtonContainer>
-              <SubmitBtn onClick={() => handleSubmit()} disabled={isLoading}>
-                確認更新
-              </SubmitBtn>
+              <StyleBtnRipples color="#fff" during={3000}>
+                <SubmitBtn onClick={() => handleSubmit()} disabled={isLoading}>
+                  確認更新
+                </SubmitBtn>
+              </StyleBtnRipples>
             </ButtonContainer>
           </PopContent>
         </StyledDialogContent>

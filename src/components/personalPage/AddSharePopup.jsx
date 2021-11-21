@@ -37,6 +37,7 @@ import {
   Calendar,
   Preview,
   ButtonContainer,
+  StyleBtnRipples,
   ImgUpload,
   SubmitBtn,
 } from '../common/popup/PopupUnits.jsx';
@@ -210,22 +211,26 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
             </PopRow>
             <Preview src={previewImgUrl} />
             <ButtonContainer>
-              <ImgUpload
-                ref={uploadRef}
-                htmlFor="image-upload"
-                disabled={isLoading}
-              >
-                上傳
-              </ImgUpload>
+              <StyleBtnRipples color="#fff" during={3000}>
+                <ImgUpload
+                  ref={uploadRef}
+                  htmlFor="image-upload"
+                  disabled={isLoading}
+                >
+                  上傳
+                </ImgUpload>
+              </StyleBtnRipples>
               <UploadBtn
                 type="file"
                 id="image-upload"
                 onChange={(e) => handleCompressFile(e)}
                 disabled={isLoading}
               />
-              <SubmitBtn onClick={handleSubmit} disabled={isLoading}>
-                分享
-              </SubmitBtn>
+              <StyleBtnRipples color="#fff" during={3000}>
+                <SubmitBtn onClick={handleSubmit} disabled={isLoading}>
+                  分享
+                </SubmitBtn>
+              </StyleBtnRipples>
             </ButtonContainer>
           </PopContent>
         </StyledDialogContent>

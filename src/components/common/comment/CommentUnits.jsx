@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import NothingImg from '../../../images/common/nothing.gif';
+import Ripples from 'react-ripples';
 
 export const CommentSection = styled.div`
   display: flex;
@@ -18,6 +19,11 @@ export const ReplyArea = styled.textarea`
   border-color: lightgray;
 `;
 
+export const ReplyRipples = styled(Ripples)`
+  border-radius: 5px;
+  margin: 10px auto 20px auto;
+`;
+
 export const RepalyButton = styled.button`
   cursor: pointer;
   font-family: 'cwTeXYen', sans-serif;
@@ -27,7 +33,6 @@ export const RepalyButton = styled.button`
   padding: 5px 10px;
   border-radius: 5px;
   border: 1px solid #1e88e5;
-  margin: 10px auto 20px auto;
 `;
 
 export const CommentSummary = styled.div`

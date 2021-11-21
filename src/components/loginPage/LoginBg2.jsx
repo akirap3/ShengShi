@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const HomepageBackground = () => {
+const LoginBg2 = () => {
   return (
     <BannerBG>
       <div className="area">
@@ -85,21 +85,21 @@ const BannerBG = styled.div`
     left: 75%;
     width: 110px;
     height: 110px;
-    animation-delay: 3s;
+    animation-delay: 1s;
   }
 
   .circles li:nth-child(7) {
     left: 35%;
     width: 150px;
     height: 150px;
-    animation-delay: 7s;
+    animation-delay: 0.5s;
   }
 
   .circles li:nth-child(8) {
     left: 50%;
     width: 25px;
     height: 25px;
-    animation-delay: 15s;
+    animation-delay: 0.1s;
     animation-duration: 45s;
   }
 
@@ -134,4 +134,4 @@ const BannerBG = styled.div`
   }
 `;
 
-export default HomepageBackground;
+export default LoginBg2;

@@ -5,6 +5,7 @@ import {
   StyledDialogContent,
   PopClose,
   ButtonContainer,
+  StyleBtnRipples,
   SubmitBtn,
 } from '../../common/popup/PopupUnits';
 import AlertPopup from '../../common/AlertPopup';
@@ -40,7 +41,9 @@ const ClendarPopup = ({ showCalender, closeCalendar }) => {
           <PopClose onClick={handleCheckDateTimeRange} />
           <DateTimeRangeSelector />
           <ButtonContainer>
-            <SubmitBtn onClick={handleCheckDateTimeRange}>確定</SubmitBtn>
+            <StyleBtnRipples color="#fff" during={3000}>
+              <SubmitBtn onClick={handleCheckDateTimeRange}>確定</SubmitBtn>
+            </StyleBtnRipples>
           </ButtonContainer>
         </StyledDialogContent>
       </DialogOverlay>

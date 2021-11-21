@@ -15,6 +15,7 @@ import {
   SearchIconContainer,
   SearchIcon,
   ResetButton,
+  StyledRipples,
 } from '../common/search/SearchUnits';
 
 import RestaurantMap from './RestaurantMap';
@@ -84,9 +85,11 @@ const RestaurantPage = () => {
               <SearchIcon />
             </SearchIconContainer>
           </SearchOutline>
-          <StyledResetButton onClick={() => handleClearSearch()}>
-            清除搜尋
-          </StyledResetButton>
+          <StyledRipples during={3000}>
+            <StyledResetButton onClick={() => handleClearSearch()}>
+              清除搜尋
+            </StyledResetButton>
+          </StyledRipples>
         </SearchContent>
       </UpperPart>
       {restaurants ? (

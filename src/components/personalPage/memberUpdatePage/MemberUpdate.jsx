@@ -4,6 +4,7 @@ import DeletePopup from '../../common/DeletePopup';
 import AlertPopup from '../../common/AlertPopup';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import Loading from '../../common/Loading';
+import Ripples from 'react-ripples';
 
 import { getCurrentUserData } from '../../../utils/firebase';
 import { doc, getFirestore, updateDoc } from 'firebase/firestore';
@@ -164,16 +165,24 @@ const MemberUpdate = () => {
             </Row>
             <PreviewImg src={previewImgUrl} />
             <ButtonContainer>
-              <ImgUpload ref={uploadRef} htmlFor="image-upload">
-                上 傳
-              </ImgUpload>
+              <UploadRipples color="#fff" during={3000}>
+                <ImgUpload ref={uploadRef} htmlFor="image-upload">
+                  上 傳
+                </ImgUpload>
+              </UploadRipples>
               <UploadBtn
                 type="file"
                 id="image-upload"
                 onChange={(e) => setFile(e.target.files[0])}
               />
-              <UpdateBtn onClick={() => handleUpdateMember()}>更 新</UpdateBtn>
-              <DeleteBtn onClick={openDelete}>刪除會員</DeleteBtn>
+              <UpdateRipples color="#fff" during={3000}>
+                <UpdateBtn onClick={() => handleUpdateMember()}>
+                  更 新
+                </UpdateBtn>
+              </UpdateRipples>
+              <DelBtnRipples color="#fff" during={3000}>
+                <DeleteBtn onClick={openDelete}>刪除會員</DeleteBtn>
+              </DelBtnRipples>
             </ButtonContainer>
           </FormContext>
         )}
@@ -329,12 +338,23 @@ const ButtonContainer = styled.div`
   }
 `;
 
+const UploadRipples = styled(Ripples)`
+  flex-grow: 1;
+  margin-right: 5px;
+  border-radius: 5px;
+
+  @media screen and (max-width: 470px) {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    margin-right: 0;
+  }
+`;
+
 const ImgUpload = styled.label`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
-  margin-right: 5px;
   border-radius: 5px;
   padding: 0.5rem;
   cursor: pointer;
@@ -342,10 +362,6 @@ const ImgUpload = styled.label`
   font-size: 16px;
   color: white;
   background-color: #1e88e5;
-  @media screen and (max-width: 470px) {
-    width: 100%;
-    margin-bottom: 0.5rem;
-  }
 `;
 
 const UploadBtn = styled.input`
@@ -361,21 +377,34 @@ const Button = styled.div`
   cursor: pointer;
 `;
 
+const UpdateRipples = styled(Ripples)`
+  flex-grow: 1;
+  margin-right: 5px;
+  border-radius: 5px;
+
+  @media screen and (max-width: 470px) {
+    width: 48%;
+  }
+`;
+
 const UpdateBtn = styled(Button)`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-grow: 1;
-  margin-right: 5px;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 16px;
   border: 1px solid #d9d7d7;
   background: #52b788;
   color: white;
   backdrop-filter: blur(5px);
+`;
+
+const DelBtnRipples = styled(Ripples)`
+  flex-grow: 1;
+  border-radius: 5px;
   @media screen and (max-width: 470px) {
     width: 48%;
-    font-size: 14px;
   }
 `;
 
@@ -387,10 +416,6 @@ const DeleteBtn = styled(Button)`
   border: 2px solid #d9d7d7;
   background: rgba(255, 255, 255, 0.3);
   color: rgb(129, 129, 129);
-  @media screen and (max-width: 470px) {
-    width: 48%;
-    font-size: 14px;
-  }
 `;
 
 export default MemberUpdate;

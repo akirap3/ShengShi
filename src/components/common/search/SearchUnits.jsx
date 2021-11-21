@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { IoIosSearch } from 'react-icons/io';
+import Ripples from 'react-ripples';
 
 export const SearchContent = styled.div`
   display: flex;
@@ -79,4 +80,8 @@ export const ResetButton = styled.button`
   @media screen and (max-width: 520px) {
     margin-top: 1rem;
   }
+`;
+
+export const StyledRipples = styled(Ripples)`
+  border-radius: 20px;
 `;
