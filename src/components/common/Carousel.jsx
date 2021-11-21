@@ -68,9 +68,11 @@ const Carousel = ({ title, contentData, isRestaurants }) => {
                     <CardImg src={content.imageUrl} />
                     <CardTitle>{content.name}</CardTitle>
                     <Row>
-                      {Array.from(Array(content.rating).keys()).map(() => (
-                        <Star key={uuidv4()} src={StarImg} />
-                      ))}
+                      <StartContainer>
+                        {Array.from(Array(content.rating).keys()).map(() => (
+                          <Star key={uuidv4()} src={StarImg} />
+                        ))}
+                      </StartContainer>
                       {!checkUser.isLoggedIn ? (
                         <WhiteHeart />
                       ) : (
@@ -236,6 +238,7 @@ const CardTitle = styled.h4`
 
 const Row = styled.div`
   display: flex;
+  justify-content: space-between;
   flex-wrap: nowrap;
   text-align: center;
   padding: 0 1rem 1rem;
@@ -244,6 +247,10 @@ const Row = styled.div`
   @media screen and (min-width: 900px) {
     margin: 0 3rem;
   }
+`;
+
+const StartContainer = styled.div`
+  display: flex;
 `;
 
 const Star = styled.img`

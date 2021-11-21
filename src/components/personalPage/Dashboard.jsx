@@ -391,7 +391,7 @@ const Alias = styled.span`
   color: rgb(129, 129, 129);
 
   @media screen and (min-width: 800px) {
-    font-size: 22px;
+    font-size: 20px;
   }
 `;
 
