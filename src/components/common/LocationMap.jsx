@@ -6,9 +6,12 @@ import {
   Marker,
 } from 'react-google-maps';
 
+require('dotenv').config();
+const GoogleMapsAPI = process.env.REACT_APP_GOOGLE_API_KEY;
+
 const LocationMap = compose(
   withProps({
-    googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places`,
+    googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GoogleMapsAPI}`,
     loadingElement: (
       <div
         style={{
