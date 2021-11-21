@@ -54,7 +54,7 @@ export const InfoContainer = styled.div`
   width: 100%;
   padding: 10px 15px;
   background-color: hsla(146, 40%, 40%, 0.4);
-  border-radius: 0 0 10px 10px;
+  border-radius: 0 10 10px 0;
 `;
 
 export const Text = styled.div`

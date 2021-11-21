@@ -115,37 +115,66 @@ const Header = () => {
       {showMenu && (
         <MobileMenu>
           <MenuClose onClick={() => setShowMenu(false)} />
-          <ImgContainer as={Link} to="/">
+          <ImgContainer as={Link} to="/" onClick={() => setShowMenu(false)}>
             <MobileLogo src={LogoImg2} />
           </ImgContainer>
           <MobileMenuContent>
-            <MobileHomeNav as={Link} to="/">
+            <MobileHomeNav as={Link} to="/" onClick={() => setShowMenu(false)}>
               首頁
             </MobileHomeNav>
-            <MobileRestaurantNav as={Link} to="/restaurants">
+            <MobileRestaurantNav
+              as={Link}
+              to="/restaurants"
+              onClick={() => setShowMenu(false)}
+            >
               合作餐廳
             </MobileRestaurantNav>
-            <MobileArticleNav as={Link} to="/articles">
+            <MobileArticleNav
+              as={Link}
+              to="/articles"
+              onClick={() => setShowMenu(false)}
+            >
               文章
             </MobileArticleNav>
-            <MobileShareNav as={Link} to="/search">
+            <MobileShareNav
+              as={Link}
+              to="/search"
+              onClick={() => setShowMenu(false)}
+            >
               他人分享
             </MobileShareNav>
             {checkUser.isLoggedIn ? (
               <>
-                <MyMobileDashboard as={Link} to="/personal/list">
+                <MyMobileDashboard
+                  as={Link}
+                  to="/personal/list"
+                  onClick={() => setShowMenu(false)}
+                >
                   我的看板
                 </MyMobileDashboard>
-                <MobileLogoutButton onClick={() => logout()}>
+                <MobileLogoutButton
+                  onClick={() => {
+                    setShowMenu(false);
+                    logout();
+                  }}
+                >
                   登出
                 </MobileLogoutButton>
               </>
             ) : (
               <>
-                <MobileLoginButton as={Link} to="/login">
+                <MobileLoginButton
+                  as={Link}
+                  to="/login"
+                  onClick={() => setShowMenu(false)}
+                >
                   登入
                 </MobileLoginButton>
-                <MobileSignupButton as={Link} to="/signup">
+                <MobileSignupButton
+                  as={Link}
+                  to="/signup"
+                  onClick={() => setShowMenu(false)}
+                >
                   註冊
                 </MobileSignupButton>
               </>

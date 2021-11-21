@@ -28,6 +28,10 @@ export const SearchOutline = styled.div`
   margin-right: 1rem;
   box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
   backdrop-filter: blur(5px);
+
+  @media screen and (max-width: 520px) {
+    margin-bottom: 1rem;
+  }
 `;
 
 export const SearchBar = styled.input`
@@ -64,24 +68,20 @@ export const SearchIcon = styled(IoIosSearch)`
   height: 20px;
 `;
 
+export const StyledRipples = styled(Ripples)`
+  height: 60px;
+  border-radius: 20px;
+  border: 1px solid #a0a0968a;
+  color: #52b788;
+  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+  backdrop-filter: blur(5px);
+`;
+
 export const ResetButton = styled.button`
   position: relative;
   padding: 0.5rem;
   height: 60px;
-  border-radius: 20px;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
-  border: 1px solid #a0a0968a;
-  color: #52b788;
   cursor: pointer;
-  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
-  backdrop-filter: blur(5px);
-
-  @media screen and (max-width: 520px) {
-    margin-top: 1rem;
-  }
-`;
-
-export const StyledRipples = styled(Ripples)`
-  border-radius: 20px;
 `;
