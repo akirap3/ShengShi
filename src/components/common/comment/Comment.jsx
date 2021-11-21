@@ -6,6 +6,8 @@ import {
   handleDeleteComment,
 } from '../../../utils/firebase';
 
+import Ripples from 'react-ripples';
+
 import { ErrorMessage, Info, Message } from '../ErrorMessageUnits';
 
 const Comment = ({ currentUser, share, comment, userData }) => {
@@ -61,22 +63,24 @@ const Comment = ({ currentUser, share, comment, userData }) => {
             <EditButton isEdit={isEdit} onClick={() => setIsEdit(true)}>
               編輯
             </EditButton>
-            <ConfirmButton
-              isEdit={isEdit}
-              onClick={() =>
-                handleConfirmCommentEdit(
-                  editedComment,
-                  share,
-                  comment,
-                  setEditedComment,
-                  setIsEdit,
-                  setErrorMessage,
-                  setShowErrorMessage
-                )
-              }
-            >
-              確定
-            </ConfirmButton>
+            <ConfirmBtnRipples color="#fff" during={3000}>
+              <ConfirmButton
+                isEdit={isEdit}
+                onClick={() =>
+                  handleConfirmCommentEdit(
+                    editedComment,
+                    share,
+                    comment,
+                    setEditedComment,
+                    setIsEdit,
+                    setErrorMessage,
+                    setShowErrorMessage
+                  )
+                }
+              >
+                確定
+              </ConfirmButton>
+            </ConfirmBtnRipples>
             <DeleteButton
               onClick={() => handleDeleteComment(share, comment, userData)}
             >
@@ -160,11 +164,15 @@ const EditButton = styled(StyledButton)`
   margin-right: 5px;
 `;
 
+const ConfirmBtnRipples = styled(Ripples)`
+  border-radius: 5px;
+  margin-right: 5px;
+`;
+
 const ConfirmButton = styled(StyledButton)`
   display: ${(props) => (props.isEdit ? 'block' : 'none')};
   color: white;
   background-color: #1e88e5;
-  margin-right: 5px;
 `;
 
 const DeleteButton = styled(StyledButton)`

@@ -34,12 +34,14 @@ import {
   Calendar,
   PopPlaceIcon,
   ButtonContainer,
+  StyleBtnRipples,
   ImgUpload,
   SubmitBtn,
 } from '../../common/popup/PopupUnits';
 
 import ClendarPopup from './CalendarPopup';
 import MapPopup from './MapPopup';
+import AlertPopup from '../../common/AlertPopup';
 import Loading from '../../common/Loading';
 import { isFieldsChecked } from '../../../utils/validation';
 
@@ -51,6 +53,8 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
   const latLng = useSelector((state) => state.latLng);
   const [showCalender, setShowCalendar] = useState(false);
   const [showMap, setShowMap] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const [foodName, setFoodName] = useState(share.name);
   const [quantities, setQuantities] = useState(share.quantities);
   const [file, setFile] = useState(null);
@@ -58,18 +62,33 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
 
   const openCalendar = () => setShowCalendar(true);
   const closeCalendar = () => setShowCalendar(false);
+
   const openMap = () => setShowMap(true);
   const closeMap = () => setShowMap(false);
+
+  const openInfo = () => setShowInfo(true);
+  const closeInfo = () => setShowInfo(false);
 
   const handleAddress = (payload) => {
     dispatch({ type: 'address/get', payload: payload });
   };
+
   const handleLatLng = (payload) => {
     dispatch({ type: 'latLng/get', payload: payload });
   };
 
   const handleSubmit = async () => {
-    if (isFieldsChecked(foodName, quantities, address, file)) {
+    if (
+      isFieldsChecked(
+        foodName,
+        quantities,
+        fromToDateTime,
+        address,
+        file,
+        setAlertMessage,
+        openInfo
+      )
+    ) {
       setIsLoaging(true);
       const docRef = doc(getFirestore(), 'shares', share.id);
       const fileRef = ref(getStorage(), `images/shares/${share.id}`);
@@ -153,17 +172,21 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
             <PopRow></PopRow>
             <Preview src={previewImgUrl} />
             <ButtonContainer>
-              <ImgUpload ref={uploadRef} htmlFor="image-upload">
-                上傳
-              </ImgUpload>
+              <StyleBtnRipples color="#fff" during={3000}>
+                <ImgUpload ref={uploadRef} htmlFor="image-upload">
+                  上傳
+                </ImgUpload>
+              </StyleBtnRipples>
               <UploadBtn
                 type="file"
                 id="image-upload"
                 onChange={(e) => setFile(e.target.files[0])}
               />
-              <SubmitBtn onClick={handleSubmit} disabled={isLoading}>
-                確認更新
-              </SubmitBtn>
+              <StyleBtnRipples color="#fff" during={3000}>
+                <SubmitBtn onClick={handleSubmit} disabled={isLoading}>
+                  確認更新
+                </SubmitBtn>
+              </StyleBtnRipples>
             </ButtonContainer>
           </PopContent>
         </StyledDialogContent>
@@ -174,6 +197,11 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
         closeMap={closeMap}
         handleAddress={handleAddress}
         handleLatLng={handleLatLng}
+      />
+      <AlertPopup
+        showInfo={showInfo}
+        closeInfo={closeInfo}
+        message={alertMessage}
       />
     </>
   );

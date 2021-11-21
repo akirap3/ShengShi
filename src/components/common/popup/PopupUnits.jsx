@@ -4,6 +4,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { HiLocationMarker } from 'react-icons/hi';
 import { BsCalendarCheckFill, BsFillInfoCircleFill } from 'react-icons/bs';
 import SaladImg from '../../../images/common/salad.svg';
+import Ripples from 'react-ripples';
 
 export const StyledDialogContent = styled(DialogContent)`
   position: relative;
@@ -167,6 +168,8 @@ export const ButtonContainer = styled.div`
   margin-top: 20px;
 `;
 
+export const StyleBtnRipples = styled(Ripples)``;
+
 export const ImgUpload = styled.label`
   display: flex;
   justify-content: center;
@@ -190,7 +193,7 @@ const StyledBtn = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 5px;
+  /* margin-right: 5px; */
   border-radius: 5px;
   padding: 5px 10px;
   cursor: pointer;

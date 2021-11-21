@@ -75,7 +75,7 @@ const RestaurantMap = ({ restaurants }) => {
         <Loading />
       ) : (
         <GoogleMapReact
-          // bootstrapURLKeys={{ key: myAPIKey }}
+          bootstrapURLKeys={{ key: myAPIKey }}
           defaultCenter={defaultCenter}
           defaultZoom={12}
           yesIWantToUseGoogleMapApiInternals

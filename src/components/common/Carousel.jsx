@@ -3,13 +3,16 @@ import Slider from 'react-slick';
 import { v4 as uuidv4 } from 'uuid';
 import { handleCollection } from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
+import Ripples from 'react-ripples';
 
 import { AiTwotoneHeart } from 'react-icons/ai';
 import { IoIosArrowDropleft, IoIosArrowDropright } from 'react-icons/io';
 import StarImg from '../../images/common/star.png';
+import { useSelector } from 'react-redux';
 
 const Carousel = ({ title, contentData, isRestaurants }) => {
   const currentUser = useCurrentUser();
+  const checkUser = useSelector((state) => state.checkUser);
 
   const settings = {
     className: 'slider variable-width',
@@ -68,32 +71,40 @@ const Carousel = ({ title, contentData, isRestaurants }) => {
                       {Array.from(Array(content.rating).keys()).map(() => (
                         <Star key={uuidv4()} src={StarImg} />
                       ))}
-                      <Heart
-                        onClick={
-                          currentUser
-                            ? isRestaurants
-                              ? () =>
-                                  handleCollection(
-                                    content,
-                                    'restaurants',
-                                    currentUser
+                      {!checkUser.isLoggedIn ? (
+                        <WhiteHeart />
+                      ) : (
+                        <CarouselHeartRipples color="#ff4d6d" during={1000}>
+                          <Heart
+                            onClick={
+                              currentUser
+                                ? isRestaurants
+                                  ? () =>
+                                      handleCollection(
+                                        content,
+                                        'restaurants',
+                                        currentUser
+                                      )
+                                  : () =>
+                                      handleCollection(
+                                        content,
+                                        'shares',
+                                        currentUser
+                                      )
+                                : () => {}
+                            }
+                            like={
+                              currentUser
+                                ? content?.savedUserId?.includes(
+                                    currentUser.uid
                                   )
-                              : () =>
-                                  handleCollection(
-                                    content,
-                                    'shares',
-                                    currentUser
-                                  )
-                            : () => {}
-                        }
-                        like={
-                          currentUser
-                            ? content?.savedUserId?.includes(currentUser.uid)
-                              ? '#FF3131'
-                              : 'white'
-                            : 'white'
-                        }
-                      />
+                                  ? '#FF3131'
+                                  : 'white'
+                                : 'white'
+                            }
+                          />
+                        </CarouselHeartRipples>
+                      )}
                     </Row>
                   </Card>
                 );
@@ -239,6 +250,8 @@ const Star = styled.img`
   width: 14px;
   height: 14px;
   margin-right: 0.5rem;
+  margin-top: 10px;
+  margin-bottom: 10px;
 
   @media screen and (min-width: 700px) {
     width: 16px;
@@ -254,6 +267,11 @@ const Star = styled.img`
     width: 28px;
     height: 28px;
   }
+`;
+
+const CarouselHeartRipples = styled(Ripples)`
+  border-radius: 50%;
+  padding: 10px;
 `;
 
 const Heart = styled(AiTwotoneHeart)`
@@ -277,6 +295,12 @@ const Heart = styled(AiTwotoneHeart)`
     width: 28px;
     height: 28px;
   }
+`;
+
+const WhiteHeart = styled(Heart)`
+  fill: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 export default Carousel;

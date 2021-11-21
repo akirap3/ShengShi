@@ -19,6 +19,7 @@ import {
   PopPlaceIcon,
   Preview,
   ButtonContainer,
+  StyleBtnRipples,
   SubmitBtn,
 } from '../../common/popup/PopupUnits';
 import SelectDateTimePopup from './SelectDateTimePopup';
@@ -210,11 +211,13 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
                 )}
               </CommentSection>
               <ButtonContainer>
-                <SubmitBtn
-                  onClick={() => handleConfirmation(share, specificDateTime)}
-                >
-                  確認領取
-                </SubmitBtn>
+                <StyleBtnRipples color="#fff" during={3000}>
+                  <SubmitBtn
+                    onClick={() => handleConfirmation(share, specificDateTime)}
+                  >
+                    確認領取
+                  </SubmitBtn>
+                </StyleBtnRipples>
               </ButtonContainer>
             </PopContent>
           </StyledDialogContent>

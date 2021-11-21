@@ -26,6 +26,7 @@ import {
 import {
   CommentSection,
   ReplyArea,
+  ReplyRipples,
   RepalyButton,
   CommentSummary,
   NoComment,
@@ -124,27 +125,30 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
                 <Info />
                 <Message>{errorMessage}</Message>
               </ErrorMessage>
-              <RepalyButton
-                onClick={() =>
-                  onCommentSubmit(
-                    share,
-                    userData,
-                    replyComment,
-                    currentUser,
-                    setReplayComment,
-                    setErrorMessage,
-                    setShowErrorMessage
-                  )
-                }
-              >
-                留言
-              </RepalyButton>
+              <ReplyRipples color="#bbdefb" during={3000}>
+                <RepalyButton
+                  onClick={() =>
+                    onCommentSubmit(
+                      share,
+                      userData,
+                      replyComment,
+                      currentUser,
+                      setReplayComment,
+                      setErrorMessage,
+                      setShowErrorMessage
+                    )
+                  }
+                >
+                  留言
+                </RepalyButton>
+              </ReplyRipples>
               <CommentSummary>
                 {`目前共 ${commentCounts || 0} 則留言`}
               </CommentSummary>
               {comments.length !== 0 ? (
                 comments.map((comment) => (
                   <Comment
+                    key={comment.id}
                     currentUser={currentUser}
                     share={share}
                     comment={comment}

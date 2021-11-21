@@ -9,6 +9,7 @@ import {
   StyledDialogContent,
   PopClose,
   ButtonContainer,
+  StyleBtnRipples,
   SubmitBtn,
 } from '../../common/popup/PopupUnits';
 
@@ -35,14 +36,14 @@ const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
       });
       setIsLoading(false);
     };
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(setCurrentLocation);
-    } else {
+
+    navigator.geolocation.watchPosition(setCurrentLocation, (error) => {
       dispatch({
         type: 'latLng/get',
         payload: [25.04267234987771, 121.56497334150076],
       });
-    }
+      setIsLoading(false);
+    });
   }, [dispatch]);
 
   return (
@@ -56,7 +57,9 @@ const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
           defaultCenter={defaultCenter}
         />
         <ButtonContainer>
-          <SubmitBtn onClick={closeMap}>確認</SubmitBtn>
+          <StyleBtnRipples color="#fff" during={3000}>
+            <SubmitBtn onClick={closeMap}>確認</SubmitBtn>
+          </StyleBtnRipples>
         </ButtonContainer>
       </MapStyledDialogContent>
     </DialogOverlay>

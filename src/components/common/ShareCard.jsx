@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import DeletePopup from './DeletePopup';
 import AlertPopup from './AlertPopup';
+import Ripples from 'react-ripples';
 import { handleCollection } from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
 
@@ -71,25 +72,32 @@ const ShareCard = ({
               <Star src={StarImg} />
               <Rating>{share?.rating}</Rating>
             </CardItem>
-            <Heart
-              isliked={
-                currentUser
-                  ? share?.postUser?.id === currentUser.uid
-                    ? '#2196f3aa'
-                    : share?.savedUserId?.includes(currentUser.uid)
-                    ? '#FF3131'
-                    : 'white'
-                  : 'white'
-              }
-              onClick={
-                currentUser
-                  ? share?.postUser?.id === currentUser.uid
-                    ? () => {}
-                    : () => handleCollection(share, 'shares', currentUser)
-                  : () => {}
-              }
-              isLoggedIn={checkUser.isLoggedIn}
-            />
+
+            {!checkUser.isLoggedIn ? (
+              <WhiteHeart></WhiteHeart>
+            ) : (
+              <HeartRipples color="#ff4d6d" during={1000}>
+                <Heart
+                  isliked={
+                    currentUser
+                      ? share?.postUser?.id === currentUser.uid
+                        ? '#2196f3aa'
+                        : share?.savedUserId?.includes(currentUser.uid)
+                        ? '#FF3131'
+                        : 'white'
+                      : 'white'
+                  }
+                  onClick={
+                    currentUser
+                      ? share?.postUser?.id === currentUser.uid
+                        ? () => {}
+                        : () => handleCollection(share, 'shares', currentUser)
+                      : () => {}
+                  }
+                  isloggedin={checkUser.isLoggedIn.toString()}
+                />
+              </HeartRipples>
+            )}
           </CardRowOne>
           <CardRow>
             <CardItem>
@@ -97,38 +105,40 @@ const ShareCard = ({
               <Location>{share?.userLocation}</Location>
             </CardItem>
             {Tag && <Tag>{tagName}</Tag>}
-            <GetButton
-              onClick={
-                currentUser
-                  ? isCollected || isSearch
-                    ? share.postUser.id === currentUser?.uid
-                      ? () => {
-                          setAlertMessage(
-                            '無法領取自己的勝食，可以到 "清單" 編輯'
-                          );
-                          openInfo();
-                        }
-                      : share.receivedUserId.includes(currentUser?.uid)
-                      ? () => {
-                          setAlertMessage('您已經領取過了');
-                          openInfo();
-                        }
-                      : share.toReceiveUserId.includes(currentUser?.uid)
-                      ? () => {
-                          setAlertMessage('您已經預定領取了');
-                          openInfo();
-                        }
-                      : () => handleClick(share)
-                    : () => handleClick()
-                  : () => handleNeedLogin()
-              }
-            >
-              {share.receivedUserId.includes(currentUser?.uid)
-                ? '已領取'
-                : share.toReceiveUserId.includes(currentUser?.uid)
-                ? '已預訂'
-                : btnName || '查看'}
-            </GetButton>
+            <GetBtnRipples color="#fff" during={3000}>
+              <GetButton
+                onClick={
+                  currentUser
+                    ? isCollected || isSearch
+                      ? share.postUser.id === currentUser?.uid
+                        ? () => {
+                            setAlertMessage(
+                              '無法領取自己的勝食，可以到 "清單" 編輯'
+                            );
+                            openInfo();
+                          }
+                        : share.receivedUserId.includes(currentUser?.uid)
+                        ? () => {
+                            setAlertMessage('您已經領取過了');
+                            openInfo();
+                          }
+                        : share.toReceiveUserId.includes(currentUser?.uid)
+                        ? () => {
+                            setAlertMessage('您已經預定領取了');
+                            openInfo();
+                          }
+                        : () => handleClick(share)
+                      : () => handleClick()
+                    : () => handleNeedLogin()
+                }
+              >
+                {share.receivedUserId.includes(currentUser?.uid)
+                  ? '已領取'
+                  : share.toReceiveUserId.includes(currentUser?.uid)
+                  ? '已預訂'
+                  : btnName || '查看'}
+              </GetButton>
+            </GetBtnRipples>
           </CardRow>
         </CardContent>
       </ShareContext>
@@ -277,12 +287,23 @@ const Rating = styled.span`
   }
 `;
 
+const HeartRipples = styled(Ripples)`
+  border-radius: 50%;
+  padding: 10px;
+`;
+
+const WhiteHeart = styled(AiTwotoneHeart)`
+  fill: white;
+  width: 25px;
+  height: 25px;
+`;
+
 const Heart = styled(AiTwotoneHeart)`
   fill: ${(props) => props.isliked};
   width: 25px;
   height: 25px;
   ${(props) => {
-    if (props.isLoggedIn && props.isliked !== '#2196f3aa')
+    if (props.isloggedin === 'true' && props.isliked !== '#2196f3aa')
       return `cursor: pointer;`;
   }}
 `;
@@ -308,12 +329,16 @@ const Location = styled.span`
   }
 `;
 
+const GetBtnRipples = styled(Ripples)`
+  border-radius: 8px;
+  margin-left: 5px;
+`;
+
 const GetButton = styled.div`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 16px;
   color: rgb(129, 129, 129);
   padding: 5px 10px;
-  margin-left: 5px;
   border-radius: 8px;
   background-color: #2a9d8f;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);

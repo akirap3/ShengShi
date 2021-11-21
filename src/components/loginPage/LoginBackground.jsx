@@ -35,15 +35,11 @@ const Background = styled.div`
     right: 0;
     bottom: -200px;
     z-index: -5;
-    height: 250px;
+    height: 350px;
     box-shadow: 0 0 10px -3px #03374a;
     border-radius: 100% 100% 0 0 / 14% 14% 0 0;
     -webkit-transition: bottom 0.5s ease;
     transition: bottom 0.5s ease;
-
-    @media screen and (max-width: 700px) {
-      height: 350px;
-    }
   }
 
   .mainMenuOverlay.open {
