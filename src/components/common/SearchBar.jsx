@@ -79,6 +79,10 @@ const StyledSearchOutline = styled(SearchOutline)`
     background: white;
   }
 
+  @media screen and (max-width: 520px) {
+    margin-top: 1rem;
+  }
+
   @media screen and (max-width: 700px) {
     margin-left: auto;
   }
