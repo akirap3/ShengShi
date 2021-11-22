@@ -20,6 +20,7 @@ import MemberUpdate from './components/personalPage/memberUpdatePage/MemberUpdat
 import QRcodeComfirmPage from './components/qrcodeConfirmPage/QRcodeConfirmPage';
 import MyMgmtList from './components/personalPage/myMgmtPage/MyMgmtList';
 import Notification from './components/personalPage/myNotification/Notification';
+import ErrorPage from './components/ErrorPage';
 
 import './App.css';
 
@@ -75,9 +76,11 @@ const App = () => {
                     <Title title="我的訊息"></Title>
                     <Notification />
                   </Route>
-                  <Route path="/personal/:shareId/:requesterId">
-                    <Title title="勝食領取管理"></Title>
+                  <Route exact path="/personal/:shareId/:requesterId">
                     <QRcodeComfirmPage />
+                  </Route>
+                  <Route path="/">
+                    <ErrorPage />
                   </Route>
                 </Switch>
               </Main>
@@ -100,8 +103,11 @@ const App = () => {
           <Route exact path="/signup">
             {isLoggedIn ? <Redirect to="/personal/list" /> : <SignupPage />}
           </Route>
-          <Route path="/">
+          <Route exact path="/">
             <LandingPage />
+          </Route>
+          <Route path="/">
+            <ErrorPage padding="100px" />
           </Route>
         </Switch>
       ) : (

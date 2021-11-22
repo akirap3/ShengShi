@@ -397,7 +397,11 @@ export const getSingleShare = async (docId) => {
 
 export const getListenedSingleContent = (collectionName, docId, setContent) => {
   const unsubscribe = onSnapshot(doc(db, collectionName, docId), (doc) => {
-    setContent({ ...doc.data(), id: docId });
+    if (doc._document) {
+      setContent({ ...doc.data(), id: docId });
+    } else {
+      setContent(undefined);
+    }
   });
   return unsubscribe;
 };
