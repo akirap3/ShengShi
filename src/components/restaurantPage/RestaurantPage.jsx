@@ -7,6 +7,14 @@ import { getAllContents, getSearchedContents } from '../../utils/firebase';
 import Carousel from '../common/Carousel';
 import HomepageBackground from '../common/HomepageBackground';
 import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
+import {
+  BannerContent,
+  BannerTitle,
+  Subtitle,
+  ButtonRow,
+  StartButton,
+  LearnMoreButton,
+} from '../common/Banner/CommonBanner';
 
 import {
   SearchContent,
@@ -62,16 +70,16 @@ const RestaurantPage = () => {
         <HomepageBackground />
         <Banner>
           <BannerImg src={Img} />
-          <BannerContent>
-            <Title>樂於分享</Title>
-            <SubTitle>
+          <StyledBannerContent>
+            <BannerTitle>樂於分享</BannerTitle>
+            <Subtitle>
               分享快樂加倍，分享是一種生活的信念，分享是另一種幸福
-            </SubTitle>
+            </Subtitle>
             <ButtonRow>
               <StartButton to="/login">開始使用</StartButton>
-              <LookButton to="/search">別人分享</LookButton>
+              <LearnMoreButton to="/search">別人分享</LearnMoreButton>
             </ButtonRow>
-          </BannerContent>
+          </StyledBannerContent>
         </Banner>
         <SearchContent>
           <SearchOutline>
@@ -174,67 +182,12 @@ const BannerImg = styled.img`
   }
 `;
 
-const BannerContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  max-width: 35vw;
-
+const StyledBannerContent = styled(BannerContent)`
   @media screen and (max-width: 700px) {
     order: 1;
     margin-bottom: 3rem;
     max-width: 80vw;
   }
-`;
-
-const Title = styled.h2`
-  margin-bottom: 2rem;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 56px;
-  color: black;
-`;
-
-const SubTitle = styled.h3`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 24px;
-  font-weight: 100;
-  margin-bottom: 2rem;
-  line-height: 2rem;
-  color: #0000009e;
-
-  @media screen and (min-width: 375px) {
-    max-width: 60vw;
-  }
-
-  @media screen and (min-width: 1500px) {
-    max-width: 20vw;
-  }
-`;
-
-const ButtonRow = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const StyledLink = styled(Link)`
-  margin-right: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 5px;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 24px;
-`;
-
-const StartButton = styled(StyledLink)`
-  color: white;
-  background-color: #1e88e5;
-`;
-
-const LookButton = styled(StyledLink)`
-  background-color: white;
-  color: rgb(147, 188, 225);
-  opacity: 0.8;
 `;
 
 const StyledResetButton = styled(ResetButton)`
