@@ -5,8 +5,6 @@ import Loading, { PaddingLoading } from './components/common/Loading';
 import LandingPage from './components/landingPage/LandingPage';
 import RestaurantPage from './components/restaurantPage/RestaurantPage';
 import ArticlePage from './components/articlePage/ArticlePage';
-import AboutPage from './components/aboutPage/AboutPage';
-import ContactPage from './components/contactPage/ContactPage';
 import SearchPage from './components/searchPage/SearchPage';
 import LoginPage from './components/loginPage/LoginPage';
 import SignupPage from './components/signupPage/SingupPage';
@@ -92,12 +90,6 @@ const App = () => {
           </Route>
           <Route exact path="/articles">
             <ArticlePage />
-          </Route>
-          <Route exact path="/about">
-            <AboutPage />
-          </Route>
-          <Route exact path="/contact">
-            <ContactPage />
           </Route>
           <Route exact path="/search">
             <SearchPage />

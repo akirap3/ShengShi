@@ -5,6 +5,13 @@ import { Waypoint } from 'react-waypoint';
 import Main from '../common/Main';
 import NoResult from '../personalPage/NoResult';
 import HomepageBackground from '../common/HomepageBackground';
+
+import {
+  BannerContent,
+  BannerTitle,
+  Subtitle,
+} from '../common/Banner/CommonBanner';
+
 import {
   SearchContent,
   SearchOutline,
@@ -105,12 +112,12 @@ const ArticlePage = () => {
         <HomepageBackground />
         <Banner>
           <BannerImg src={ArticleBannerImg} />
-          <BannerContent>
-            <Title>剩食與解決</Title>
-            <SubTitle>
+          <StyledBannerContent>
+            <StyledBannerTitle>剩食與解決</StyledBannerTitle>
+            <Styledsubtitle>
               透過分享剩食打擊食物浪費，分享你多出的資源，剩食也可以點亮街燈，讓我們共謀解決剩食的創新之道
-            </SubTitle>
-          </BannerContent>
+            </Styledsubtitle>
+          </StyledBannerContent>
         </Banner>
         <SearchContent>
           <SearchOutline>
@@ -173,33 +180,7 @@ const UpperPart = styled.div`
   padding-bottom: 2rem;
   background: linear-gradient(253deg, #0cc898, #1797d2, #864fe1);
   background-size: 300% 300%;
-  -webkit-animation: Background 25s ease infinite;
-  -moz-animation: Background 25s ease infinite;
   animation: Background 25s ease infinite;
-
-  @-webkit-keyframes Background {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-
-  @-moz-keyframes Background {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
 
   @keyframes Background {
     0% {
@@ -255,14 +236,7 @@ const BannerImg = styled.img`
   }
 `;
 
-const BannerContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  max-width: 35vw;
-
+const StyledBannerContent = styled(BannerContent)`
   @media screen and (max-width: 700px) {
     order: 1;
     margin-bottom: 3rem;
@@ -270,29 +244,12 @@ const BannerContent = styled.div`
   }
 `;
 
-const Title = styled.h2`
-  margin-bottom: 2rem;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 56px;
-  font-weight: 600;
+const StyledBannerTitle = styled(BannerTitle)`
   color: white;
 `;
 
-const SubTitle = styled.h3`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 24px;
-  font-weight: 100;
-  margin-bottom: 2rem;
-  line-height: 2rem;
+const Styledsubtitle = styled(Subtitle)`
   color: #ffffff9e;
-
-  @media screen and (min-width: 375px) {
-    max-width: 60vw;
-  }
-
-  @media screen and (min-width: 1500px) {
-    max-width: 20vw;
-  }
 `;
 
 const StyledResetButton = styled(ResetButton)`

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+
 import { v4 as uuidv4 } from 'uuid';
 import SearchPageCard from './SearchPageCard';
 import SharesContainer from '../common/SharesContainer';
@@ -14,6 +14,14 @@ import {
   getAllOrderedOtherShares,
 } from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
+import {
+  BannerContent,
+  BannerTitle,
+  Subtitle,
+  ButtonRow,
+  StartButton,
+  LearnMoreButton,
+} from '../common/Banner/CommonBanner';
 
 import Main from '../common/Main';
 import {
@@ -29,7 +37,7 @@ import {
 import NoResult from '../personalPage/NoResult';
 
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
-import Wave from 'react-wavify';
+import WaveBackground from './WaveBackground';
 import LoginBg2 from '../loginPage/LoginBg2';
 import algolia from '../../utils/algolia';
 
@@ -143,16 +151,16 @@ const SearchPage = () => {
         <LoginBg2 />
         <WaveBackground />
         <Banner>
-          <BannerContent>
+          <StyledBannerContent>
             <BannerTitle>勝食</BannerTitle>
-            <SubTitle>
+            <Subtitle>
               善於分享的人時常受到眷顧，常與他人分享讓生活更多采多姿更有趣
-            </SubTitle>
+            </Subtitle>
             <ButtonRow>
               <StartButton to="/login">開始使用</StartButton>
               <LookButton to="/restaurants">合作餐廳</LookButton>
             </ButtonRow>
-          </BannerContent>
+          </StyledBannerContent>
           <BannerImg src={Img} />
         </Banner>
         <SearchContent>
@@ -201,34 +209,6 @@ const UpperPart = styled.div`
   padding-bottom: 2rem;
 `;
 
-const WaveBackground = () => {
-  return (
-    <Wave
-      mask="url(#mask)"
-      fill="#52b788"
-      style={{
-        position: 'absolute',
-        bottom: '0',
-        height: '100px',
-        zIndex: '-3',
-      }}
-      options={{
-        height: 20,
-      }}
-    >
-      <defs>
-        <linearGradient id="gradient" gradientTransform="rotate(90)">
-          <stop offset="0" stopColor="white" />
-          <stop offset="0.5" stopColor="black" />
-        </linearGradient>
-        <mask id="mask">
-          <rect x="0" y="0" width="3000" height="150" fill="url(#gradient)" />
-        </mask>
-      </defs>
-    </Wave>
-  );
-};
-
 const Banner = styled.div`
   display: flex;
   justify-content: space-around;
@@ -270,14 +250,7 @@ const BannerImg = styled.img`
   }
 `;
 
-const BannerContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  max-width: 35vw;
-
+const StyledBannerContent = styled(BannerContent)`
   @media screen and (max-width: 700px) {
     order: 1;
     margin-bottom: 3rem;
@@ -285,57 +258,8 @@ const BannerContent = styled.div`
   }
 `;
 
-const BannerTitle = styled.h1`
-  margin-bottom: 2rem;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 56px;
-  font-weight: 600;
-  color: black;
-`;
-
-const SubTitle = styled.h3`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 24px;
-  font-weight: 100;
-  margin-bottom: 2rem;
-  line-height: 2rem;
-  color: #0000009e;
-
-  @media screen and (min-width: 375px) {
-    max-width: 60vw;
-  }
-
-  @media screen and (min-width: 1500px) {
-    max-width: 20vw;
-  }
-`;
-
-const ButtonRow = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const StyledLink = styled(Link)`
-  margin-right: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 5px;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 24px;
-`;
-
-const StartButton = styled(StyledLink)`
-  color: white;
-  background-color: #1e88e5;
-  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
-  backdrop-filter: blur(5px);
-`;
-
-const LookButton = styled(StyledLink)`
-  background-color: rgba(255, 255, 255, 0.8);
-  color: rgb(147, 188, 225);
+const LookButton = styled(LearnMoreButton)`
   border: 1px solid #a0a0968a;
-  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
-  backdrop-filter: blur(5px);
 `;
 
 const Outer = styled.div`
