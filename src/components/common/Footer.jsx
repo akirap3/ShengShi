@@ -9,15 +9,15 @@ const Footer = () => {
     <FooterContainer>
       <FooterContent>
         <TextRow>
-          <HomeText to="/">首 頁</HomeText>
-          <RestaurantText to="/restaurants">餐 廳</RestaurantText>
+          <Text to="/">首 頁</Text>
+          <Text to="/restaurants">餐 廳</Text>
         </TextRow>
         <Link to="/">
           <LogoImg src={Logo} />
         </Link>
         <TextRow>
-          <AboutText to="/articles">文 章</AboutText>
-          <ContactText to="/search">搜 尋</ContactText>
+          <Text to="/articles">文 章</Text>
+          <Text to="/search">搜 尋</Text>
         </TextRow>
       </FooterContent>
       <LogoRow>
@@ -58,20 +58,20 @@ const TextRow = styled.div`
 `;
 
 const Text = styled(Link)`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 24px;
-  color: #40916c;
   position: relative;
   margin: auto 2rem;
   text-align: center;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 24px;
+  color: #40916c;
 
   &:after {
     content: '';
     position: absolute;
-    left: 0;
-    bottom: -5px;
     width: 0;
     height: 3px;
+    left: 0;
+    bottom: -5px;
     background-color: #3ea9e1;
     transition: 0.6s width linear;
   }
@@ -86,11 +86,6 @@ const Text = styled(Link)`
     font-size: 32px;
   }
 `;
-
-const HomeText = styled(Text)``;
-const RestaurantText = styled(Text)``;
-const AboutText = styled(Text)``;
-const ContactText = styled(Text)``;
 
 const LogoImg = styled.img`
   width: 100px;

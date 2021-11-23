@@ -3,13 +3,11 @@ import styled from 'styled-components';
 import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { PopTitleContainer, PopTitle } from './popup/PopupUnits';
-
 import CalendarImg from '../../images/common/calendar.svg';
 
 const DateTimeRangeSelector = () => {
   const dispatch = useDispatch();
   const fromToDateTime = useSelector((state) => state.fromToDateTime);
-
   const now = new Date();
 
   return (
@@ -53,8 +51,8 @@ const Container = styled.div`
     flex-direction: column;
     position: relative;
     margin-top: 15px;
-    border-radius: 5px;
     padding: 10px;
+    border-radius: 5px;
     background-color: #b7e4c7;
     box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 
@@ -73,10 +71,10 @@ const Container = styled.div`
   }
 
   .react-datetimerange-picker__button {
-    border: 1px solid black;
-    border-radius: 5px;
     margin-top: 5px;
     padding: 5px 30px;
+    border: 1px solid black;
+    border-radius: 5px;
   }
   .react-datetimerange-picker__clear-button {
     background-color: lightskyblue;
@@ -92,8 +90,8 @@ const Container = styled.div`
   }
 
   .react-calendar {
-    font-size: 14px;
     max-width: 67%;
+    font-size: 14px;
     border-radius: 5px;
     @media screen and (min-width: 520px) {
       max-width: 100%;

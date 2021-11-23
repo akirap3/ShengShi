@@ -13,19 +13,19 @@ export const Context = styled.div`
   display: flex;
   flex-direction: column;
   width: 300px;
+  max-width: 1000px;
   margin: 15px;
   border-radius: 0 0 10px 10px;
   border-top: 10px solid #52b788;
-  max-width: 1000px;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
 
   @media screen and (min-width: 550px) {
     flex-direction: row;
+    justify-content: center;
     width: 500px;
     border-left: 10px solid #52b788;
     border-top: 0;
     border-radius: 0 10px 10px 0;
-    justify-content: center;
   }
 
   @media screen and (min-width: 900px) {
@@ -81,9 +81,9 @@ export const Address = styled(Text)`
 
 export const ButtonContainer = styled.div`
   display: flex;
-  margin-top: 1vw;
   justify-content: center;
   margin-bottom: 15px;
+  margin-top: 1vw;
   @media screen and (min-width: 550px) {
     margin-bottom: 5px;
   }
@@ -92,11 +92,11 @@ export const ButtonContainer = styled.div`
 export const ConfirmedBtn = styled.button`
   margin-right: 0.5rem;
   padding: 0.5rem;
-  border-radius: 5px;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 22px;
   color: white;
   background-color: #1e88e5;
+  border-radius: 5px;
   box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
   cursor: pointer;
 `;
@@ -106,8 +106,8 @@ export const CancleBtn = styled.button`
   border-radius: 5px;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 22px;
-  background-color: white;
   color: #52b788;
+  background-color: white;
   opacity: 0.8;
   box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
   cursor: pointer;

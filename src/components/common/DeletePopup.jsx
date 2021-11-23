@@ -1,4 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import useCurrentUser from '../../hooks/useCurrentUser';
+import Loading from './Loading';
+
 import {
   handleDeleteMember,
   handleArchiveShare,
@@ -6,8 +9,6 @@ import {
   handleDeleteCollected,
   getCurrentUserData,
 } from '../../utils/firebase';
-import Loading from './Loading';
-import useCurrentUser from '../../hooks/useCurrentUser';
 
 import {
   CenterDialogOverlay,

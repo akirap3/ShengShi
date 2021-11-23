@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Loading from '../../common/Loading';
 import { useDispatch } from 'react-redux';
-
 import { DialogOverlay } from '@reach/dialog';
+import Loading from '../../common/Loading';
+import MyMap from '../../common/myMap/Mymap';
 
 import {
   StyledDialogContent,
@@ -13,8 +13,6 @@ import {
   SubmitBtn,
 } from '../../common/popup/PopupUnits';
 
-import MyMap from '../../common/myMap/Mymap';
-
 const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
   const dispatch = useDispatch();
   const [defaultCenter, setDefaultCenter] = useState({
@@ -22,29 +20,36 @@ const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
     lng: 121.56497334150076,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    const setCurrentLocation = (position) => {
-      setDefaultCenter({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      });
-      dispatch({
-        type: 'latLng/get',
-        payload: [position.coords.latitude, position.coords.longitude],
-      });
-      setIsLoading(false);
-    };
+    if (isMounted) {
+      setIsLoading(true);
+      const setCurrentLocation = ({ coords }) => {
+        setDefaultCenter({
+          lat: coords.latitude,
+          lng: coords.longitude,
+        });
+        dispatch({
+          type: 'latLng/get',
+          payload: [coords.latitude, coords.longitude],
+        });
+        setIsLoading(false);
+      };
 
-    navigator.geolocation.watchPosition(setCurrentLocation, (error) => {
-      dispatch({
-        type: 'latLng/get',
-        payload: [25.04267234987771, 121.56497334150076],
+      navigator.geolocation.watchPosition(setCurrentLocation, (error) => {
+        dispatch({
+          type: 'latLng/get',
+          payload: [25.04267234987771, 121.56497334150076],
+        });
+        setIsLoading(false);
       });
-      setIsLoading(false);
-    });
-  }, [dispatch]);
+    }
+
+    return () => {
+      setIsMounted(false);
+    };
+  }, [dispatch, isMounted]);
 
   return (
     <DialogOverlay isOpen={showMap} onDismiss={closeMap}>
@@ -52,9 +57,9 @@ const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
         {isLoading && <Loading />}
         <PopClose onClick={closeMap} />
         <MyMap
+          defaultCenter={defaultCenter}
           handleAddress={handleAddress}
           handleLatLng={handleLatLng}
-          defaultCenter={defaultCenter}
         />
         <ButtonContainer>
           <StyleBtnRipples color="#fff" during={3000}>

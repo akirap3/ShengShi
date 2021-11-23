@@ -173,7 +173,6 @@ const SignupPage = () => {
       });
   };
 
-  console.log(usersData);
   return (
     <>
       {usersData ? (

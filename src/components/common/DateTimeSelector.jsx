@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import DateTimePicker from 'react-datetime-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { PopTitleContainer, PopTitle } from './popup/PopupUnits';
-
 import CalendarImg from '../../images/common/calendar.svg';
 
 const DateTimeSelector = ({ share }) => {
@@ -38,9 +37,7 @@ const DateTimeSelector = ({ share }) => {
         />
       </Container>
     </>
-  ) : (
-    <></>
-  );
+  ) : null;
 };
 
 const CalendarIcon = styled.img`
@@ -77,31 +74,31 @@ const Container = styled.div`
   }
 
   .react-datetime-picker__button {
-    border: 1px solid black;
-    border-radius: 5px;
     margin-top: 5px;
     padding: 5px 30px;
+    border: 1px solid black;
+    border-radius: 5px;
   }
   .react-datetime-picker__clear-button {
+    align-self: center;
+    width: fit-content;
     background-color: lightskyblue;
     box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
-    width: fit-content;
-    align-self: center;
     @media screen and (min-width: 800px) {
       margin-right: 5px;
     }
   }
 
   .react-datetime-picker__calendar-button {
+    align-self: center;
+    width: fit-content;
     background-color: lightseagreen;
     box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
-    width: fit-content;
-    align-self: center;
   }
 
   .react-calendar {
-    font-size: 14px;
     max-width: 67%;
+    font-size: 14px;
     border-radius: 5px;
     @media screen and (min-width: 520px) {
       max-width: 100%;

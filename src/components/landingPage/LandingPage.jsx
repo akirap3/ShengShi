@@ -4,7 +4,7 @@ import Main from '../common/Main';
 import Banner from './Banner';
 import Advantages from './Advantages';
 import UserShares from './UserShares';
-import Carousel from '../common/Carousel';
+import Carousel from '../common/carousel/Carousel';
 import { getAllContents, getAllOtherShares } from '../../utils/firebase';
 import useCurrentUser from '../../hooks/useCurrentUser';
 

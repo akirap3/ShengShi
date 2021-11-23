@@ -36,7 +36,7 @@ const MyToReceiveList = () => {
             <Outer>
               <SharesContainer>
                 {toReceiveShares.map((share) => (
-                  <MyToReceiveCard share={share} />
+                  <MyToReceiveCard key={share.id} share={share} />
                 ))}
               </SharesContainer>
             </Outer>
