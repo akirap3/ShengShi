@@ -24,7 +24,7 @@ const SearchPageCard = ({ share }) => {
       <ShareCard
         handleClick={handleSearchOpen}
         btnName="領取"
-        cnannotDel={true}
+        cannnotDel={true}
         key={share.id}
         share={share}
         isSearch={true}

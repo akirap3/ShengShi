@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { Waypoint } from 'react-waypoint';
 import Main from '../common/Main';
-import NoResult from '../personalPage/NoResult';
 import HomepageBackground from '../common/HomepageBackground';
+import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
+import NoResult from '../personalPage/NoResult';
 
 import {
   BannerContent,
@@ -28,8 +29,6 @@ import {
   getAllOrderedContents,
   getSearchedOrderedContents,
 } from '../../utils/firebase';
-
-import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
 
 const ArticlePage = () => {
   const lastPostSnapshotRef = useRef();
@@ -238,9 +237,9 @@ const BannerImg = styled.img`
 
 const StyledBannerContent = styled(BannerContent)`
   @media screen and (max-width: 700px) {
-    order: 1;
-    margin-bottom: 3rem;
     max-width: 80vw;
+    margin-bottom: 3rem;
+    order: 1;
   }
 `;
 
@@ -261,10 +260,11 @@ const ArticleContainer = styled.div`
   grid-template-columns: repeat(1, 20rem);
   grid-template-rows: auto;
   gap: 2rem;
-  padding-top: 100px;
-  margin-bottom: 150px;
   justify-content: center;
   align-items: center;
+  padding-top: 100px;
+  margin-bottom: 150px;
+  font-family: 'cwTeXYen', sans-serif;
 
   @media screen and (min-width: 800px) {
     grid-template-columns: repeat(2, 20rem);
@@ -278,15 +278,16 @@ const ArticleContainer = styled.div`
 const ArticleCard = styled.div`
   width: 20rem;
   min-height: 20rem;
-  background-color: whitesmoke;
-  box-sizing: border-box;
   border-radius: 10px;
+  box-sizing: border-box;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  background-color: whitesmoke;
 `;
 
 const CardImg = styled.img`
-  height: 30vh;
   width: 100%;
+  height: 250px;
+  object-fit: cover;
   border-radius: 8px 8px 0px 0px;
 `;
 
@@ -300,34 +301,32 @@ const CardContent = styled.div`
 `;
 
 const TagContainer = styled.div`
-  margin-bottom: 1rem;
   display: flex;
+  margin-bottom: 1rem;
 `;
 
 const Tag = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 18px;
+  margin-right: 0.5rem;
   padding: 5px 8px;
   border-radius: 5px;
-  margin-right: 0.5rem;
-  cursor: pointer;
-  color: white;
-  background: #52b788;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  font-size: 18px;
+  background: #52b788;
+  color: white;
+  cursor: pointer;
 `;
 
 const CardTitle = styled.div`
   margin-bottom: 1rem;
-  font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
   line-height: 28px;
   font-weight: 600;
 `;
 
 const CardSubtitle = styled.div`
-  color: hsl(0, 0%, 51%);
   font-weight: 300;
   line-height: 20px;
+  color: hsl(0, 0%, 51%);
 `;
 
 export default ArticlePage;

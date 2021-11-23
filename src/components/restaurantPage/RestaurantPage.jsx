@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 import { layoutConfig } from '../../utils/commonVariables';
 import { getAllContents, getSearchedContents } from '../../utils/firebase';
-import Carousel from '../common/Carousel';
+import Carousel from '../common/carousel/Carousel';
 import HomepageBackground from '../common/HomepageBackground';
 import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
 import {
@@ -59,7 +58,6 @@ const RestaurantPage = () => {
   };
 
   const handleClearSearch = () => {
-    console.log('Hi');
     setIsSearch(false);
     setInputValue('');
   };

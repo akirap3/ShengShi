@@ -1,7 +1,10 @@
 import algoliasearch from 'algoliasearch';
 require('dotenv').config();
 
-const client = algoliasearch('M9FCAECTRL', 'c11b29f9c3d1591ca125fe9ebae2c347');
+const client = algoliasearch(
+  'M9FCAECTRL',
+  process.env.REACT_APP_SEARCH_ONLY_API_KEY
+);
 
 const algolia = client.initIndex('shengshi');
 

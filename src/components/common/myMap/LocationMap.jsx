@@ -10,7 +10,6 @@ import {
 } from 'react-google-maps';
 import Geocode from 'react-geocode';
 import Autocomplete from 'react-google-autocomplete';
-
 import { HiLocationMarker } from 'react-icons/hi';
 
 require('dotenv').config();
@@ -104,7 +103,6 @@ class Map extends Component {
   };
 
   onPlaceSelected = (place) => {
-    console.log('plc', place);
     if (place['formatted_address'] === undefined) {
       alert(
         '請選擇有搜尋出的地址或使用拖拉 Marker 來取得地址(本站僅提供台灣的地址搜尋)'

@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import algolia from '../../utils/algolia';
+import { getSingleShare } from '../../utils/firebase';
+
 import {
   SearchOutline,
   SearchBar as SearchBarUnit,
   SearchIconContainer,
   SearchIcon,
 } from './search/SearchUnits';
-import algolia from '../../utils/algolia';
-import { getSingleShare } from '../../utils/firebase';
 
 const SearchBar = () => {
   const dispatch = useDispatch();
@@ -69,9 +69,9 @@ const StyledSearchOutline = styled(SearchOutline)`
   }
 
   &:hover > input {
-    color: #40916c;
     flex: 1;
     padding: 0 6px;
+    color: #40916c;
     opacity: 1;
   }
 
@@ -89,12 +89,12 @@ const StyledSearchOutline = styled(SearchOutline)`
 `;
 
 const SearchBox = styled(SearchBarUnit)`
-  padding: 0;
-  transition: 1s;
-  line-height: 32px;
   width: 0px;
   margin-right: auto;
+  padding: 0;
+  line-height: 32px;
   opacity: 0;
+  transition: 1s;
 
   @media screen and (max-width: 700px) {
     font-size: 20px;

@@ -65,10 +65,6 @@ const RestaurantMap = ({ restaurants }) => {
     },
   });
 
-  const getLatLng = (e) => {
-    console.log(e.lat);
-  };
-
   return (
     <div style={{ height: '80vh', width: '100%', position: 'relative' }}>
       {isLoading ? (
@@ -91,7 +87,6 @@ const RestaurantMap = ({ restaurants }) => {
               bounds.nw.lat,
             ]);
           }}
-          onClick={(e) => getLatLng(e)}
         >
           {clusters.map((cluster) => {
             const [longitude, latitude] = cluster.geometry.coordinates;

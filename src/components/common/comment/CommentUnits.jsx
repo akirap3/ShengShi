@@ -13,38 +13,38 @@ export const ReplyArea = styled.textarea`
   min-height: 100px;
   max-height: 200px;
   padding: 10px;
-  line-height: 16px;
   font-size: 14px;
+  line-height: 16px;
   border-radius: 5px;
   border-color: lightgray;
 `;
 
 export const ReplyRipples = styled(Ripples)`
-  border-radius: 5px;
   margin: 10px auto 20px auto;
+  border-radius: 5px;
 `;
 
 export const RepalyButton = styled.button`
-  cursor: pointer;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 18px;
-  background-color: white;
-  color: #1e88e5;
   padding: 5px 10px;
   border-radius: 5px;
   border: 1px solid #1e88e5;
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 18px;
+  color: #1e88e5;
+  background-color: white;
+  cursor: pointer;
 `;
 
 export const CommentSummary = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 18px;
-  margin-bottom: 15px;
-  background-color: rgb(46, 180, 204);
   width: fit-content;
+  margin-bottom: 15px;
   padding: 5px 10px;
   border-radius: 5px;
-  color: white;
   box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
+  font-family: 'cwTeXYen', sans-serif;
+  font-size: 18px;
+  color: white;
+  background-color: rgb(46, 180, 204);
 `;
 
 export const NoComment = () => {
@@ -69,8 +69,8 @@ const StyledNoComment = styled.div`
 `;
 
 const NothingMessage = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
   margin-right: 20px;
+  font-family: 'cwTeXYen', sans-serif;
 `;
 
 const Nothing = styled.img`

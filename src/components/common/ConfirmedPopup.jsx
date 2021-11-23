@@ -1,4 +1,10 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+import UpdatePopup from '../personalPage/myToReceiveList/UpdatePopup';
+import { useDispatch } from 'react-redux';
+import useCurrentUser from '../../hooks/useCurrentUser';
+import LocationMap from './LocationMap';
+import MyQRcode from './MyQRcode';
 
 import { DialogOverlay } from '@reach/dialog';
 import {
@@ -18,14 +24,6 @@ import {
   StyleBtnRipples,
   SubmitBtn,
 } from './popup/PopupUnits';
-
-import LocationMap from './LocationMap';
-import MyQRcode from './MyQRcode';
-import UpdatePopup from '../personalPage/myToReceiveList/UpdatePopup';
-import { useDispatch } from 'react-redux';
-
-import { useState } from 'react';
-import useCurrentUser from '../../hooks/useCurrentUser';
 
 const ConfirmedPopup = ({
   showConfirmation,

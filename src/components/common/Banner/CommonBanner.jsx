@@ -5,8 +5,8 @@ export const BannerContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  position: relative;
   align-items: center;
+  position: relative;
   max-width: 35vw;
 `;
 
@@ -19,10 +19,10 @@ export const BannerTitle = styled.h2`
 `;
 
 export const Subtitle = styled.p`
+  margin-bottom: 2rem;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
   font-weight: 100;
-  margin-bottom: 2rem;
   line-height: 2rem;
   color: #0000009e;
 
@@ -50,8 +50,8 @@ export const StyledLink = styled(Link)`
 `;
 
 export const StartButton = styled(StyledLink)`
-  color: white;
   background-color: #1e88e5;
+  color: white;
 `;
 
 export const LearnMoreButton = styled(StyledLink)`

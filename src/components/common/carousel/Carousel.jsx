@@ -1,67 +1,25 @@
 import styled from 'styled-components';
 import Slider from 'react-slick';
-import { v4 as uuidv4 } from 'uuid';
-import { handleCollection } from '../../utils/firebase';
-import useCurrentUser from '../../hooks/useCurrentUser';
 import Ripples from 'react-ripples';
-
-import { AiTwotoneHeart } from 'react-icons/ai';
-import { IoIosArrowDropleft, IoIosArrowDropright } from 'react-icons/io';
-import StarImg from '../../images/common/star.png';
+import { v4 as uuidv4 } from 'uuid';
+import useCurrentUser from '../../../hooks/useCurrentUser';
 import { useSelector } from 'react-redux';
+import { handleCollection } from '../../../utils/firebase';
+import { AiTwotoneHeart } from 'react-icons/ai';
+import StarImg from '../../../images/common/star.png';
+import { CarouselSettings } from './CarouselSettings';
 
 const Carousel = ({ title, contentData, isRestaurants }) => {
   const currentUser = useCurrentUser();
   const checkUser = useSelector((state) => state.checkUser);
 
-  const settings = {
-    className: 'slider variable-width',
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 2,
-    nextArrow: <RightArrow />,
-    prevArrow: <LeftArrow />,
-    responsive: [
-      {
-        breakpoint: 1500,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          infinite: true,
-          dots: false,
-        },
-      },
-      {
-        breakpoint: 800,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-          infinite: true,
-          dots: false,
-        },
-      },
-      {
-        breakpoint: 700,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: false,
-        },
-      },
-    ],
-  };
-
   return (
     contentData && (
       <CarouselContainer>
         <Title>{title}</Title>
-        <CarouselContext>
+        <div>
           <SlideWrapper>
-            <StyledSlider {...settings}>
+            <StyledSlider {...CarouselSettings}>
               {contentData.map((content) => {
                 return (
                   <Card key={content.id}>
@@ -113,26 +71,11 @@ const Carousel = ({ title, contentData, isRestaurants }) => {
               })}
             </StyledSlider>
           </SlideWrapper>
-        </CarouselContext>
+        </div>
       </CarouselContainer>
     )
   );
 };
-
-const RightArrow = ({ currentSlide, slideCount, ...props }) => {
-  return <Right {...props} />;
-};
-
-const LeftArrow = ({ currentSlide, slideCount, ...props }) => {
-  return <Left {...props} />;
-};
-
-const Left = styled(IoIosArrowDropleft)`
-  fill: white;
-`;
-const Right = styled(IoIosArrowDropright)`
-  fill: white;
-`;
 
 const CarouselContainer = styled.div`
   padding: 4rem 5rem;
@@ -151,8 +94,6 @@ const Title = styled.h2`
     font-size: 42px;
   }
 `;
-
-const CarouselContext = styled.div``;
 
 const StyledSlider = styled(Slider)``;
 
@@ -173,11 +114,11 @@ const SlideWrapper = styled.div`
   }
 
   .slick-arrow {
-    background-color: #52b788;
-    padding: 5px;
-    border-radius: 100px;
     width: 50px;
     height: 50px;
+    padding: 5px;
+    border-radius: 100px;
+    background-color: #52b788;
   }
   .slick-prev {
     left: -60px;
@@ -204,9 +145,9 @@ const SlideWrapper = styled.div`
 `;
 
 const Card = styled.div`
+  background-color: hsla(146, 40%, 40%, 0.4);
   border-radius: 0px 0px 10px 10px;
   border-top: 10px solid #52b788;
-  background-color: hsla(146, 40%, 40%, 0.4);
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
 `;
 
@@ -225,8 +166,8 @@ const CardImg = styled.img`
 `;
 
 const CardTitle = styled.h4`
-  text-align: center;
   margin: 1rem;
+  text-align: center;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 22px;
   color: #40916c;
@@ -277,16 +218,16 @@ const Star = styled.img`
 `;
 
 const CarouselHeartRipples = styled(Ripples)`
-  border-radius: 50%;
   padding: 10px;
+  border-radius: 50%;
 `;
 
 const Heart = styled(AiTwotoneHeart)`
+  width: 14px;
+  height: 14px;
   margin-left: auto;
   fill: ${(props) => props.like};
   cursor: pointer;
-  width: 14px;
-  height: 14px;
 
   @media screen and (min-width: 700px) {
     width: 16px;
@@ -305,9 +246,9 @@ const Heart = styled(AiTwotoneHeart)`
 `;
 
 const WhiteHeart = styled(Heart)`
-  fill: white;
   margin-top: 10px;
   margin-bottom: 10px;
+  fill: white;
 `;
 
 export default Carousel;

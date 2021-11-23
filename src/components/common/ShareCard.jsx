@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Ripples from 'react-ripples';
+
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 import DeletePopup from './DeletePopup';
 import AlertPopup from './AlertPopup';
-import Ripples from 'react-ripples';
 import { handleCollection } from '../../utils/firebase';
-import useCurrentUser from '../../hooks/useCurrentUser';
 
-import StarImg from '../../images/common/star.png';
 import { ImSpoonKnife } from 'react-icons/im';
 import { AiTwotoneHeart, AiFillCloseCircle } from 'react-icons/ai';
 import { HiLocationMarker } from 'react-icons/hi';
-import { useSelector } from 'react-redux';
+import StarImg from '../../images/common/star.png';
 
 const ShareCard = ({
   btnName,
   Tag,
   isReceived,
   tagName,
-  cnannotDel,
+  cannnotDel,
   category,
   share,
   isToReceive,
@@ -58,9 +59,7 @@ const ShareCard = ({
         <ShareImg src={share?.imageUrl} />
         <CardContent>
           <ShareTitle>{share?.name}</ShareTitle>
-          {cnannotDel || isReceived ? (
-            <></>
-          ) : (
+          {cannnotDel || isReceived ? null : (
             <DeleteButton onClick={openDelete} />
           )}
           <CardRowOne>
@@ -74,7 +73,7 @@ const ShareCard = ({
             </CardItem>
 
             {!checkUser.isLoggedIn ? (
-              <WhiteHeart></WhiteHeart>
+              <WhiteHeart />
             ) : (
               <HeartRipples color="#ff4d6d" during={1000}>
                 <Heart
@@ -167,11 +166,11 @@ const ShareCard = ({
 
 const ShareContext = styled.div`
   display: flex;
+  max-width: 550px;
   border: 0;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   border-radius: 0 10px 10px 0;
   border-left: 10px solid #52b788;
-  max-width: 550px;
 `;
 
 const ShareImg = styled.img`
@@ -210,11 +209,11 @@ const CardItem = styled.div`
 
 const CardContent = styled.div`
   display: flex;
-  position: relative;
   flex-direction: column;
   justify-content: center;
-  padding: 10px;
   flex-grow: 1;
+  padding: 10px;
+  position: relative;
   background-color: #b7e4c7;
   border-radius: 0 10px 10px 0;
 
@@ -228,27 +227,27 @@ const CardContent = styled.div`
 `;
 
 const ShareTitle = styled.div`
+  margin-bottom: 15px;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 20px;
   font-weight: 500;
-  margin-bottom: 15px;
 `;
 
 const ShareNameIcon = styled(ImSpoonKnife)`
-  fill: white;
   width: 25px;
   height: 25px;
+  margin-right: 5px;
   padding: 5px;
   background-color: rgb(129, 129, 129);
   border-radius: 50%;
-  margin-right: 5px;
+  fill: white;
 `;
 
 const ShareUseName = styled.span`
+  margin-right: 10px;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 16px;
   color: rgb(129, 129, 129);
-  margin-right: 10px;
 
   @media screen and (min-width: 400px) {
     margin-right: 20px;
@@ -256,18 +255,18 @@ const ShareUseName = styled.span`
 `;
 
 const StyledColse = styled(AiFillCloseCircle)`
-  fill: #1e88e582;
   border-radius: 50%;
   opacity: 0.8;
+  fill: #1e88e582;
   cursor: pointer;
 `;
 
 const DeleteButton = styled(StyledColse)`
+  width: 22px;
+  height: 22px;
   position: absolute;
   top: -10px;
   right: -10px;
-  width: 22px;
-  height: 22px;
 `;
 
 const Star = styled.img`
@@ -279,8 +278,8 @@ const Star = styled.img`
 const Rating = styled.span`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 16px;
-  color: rgb(129, 129, 129);
   margin-right: 10px;
+  color: rgb(129, 129, 129);
 
   @media screen and (min-width: 400px) {
     margin-right: 20px;
@@ -288,41 +287,41 @@ const Rating = styled.span`
 `;
 
 const HeartRipples = styled(Ripples)`
-  border-radius: 50%;
   padding: 10px;
+  border-radius: 50%;
 `;
 
 const WhiteHeart = styled(AiTwotoneHeart)`
-  fill: white;
   width: 25px;
   height: 25px;
+  fill: white;
 `;
 
 const Heart = styled(AiTwotoneHeart)`
-  fill: ${(props) => props.isliked};
   width: 25px;
   height: 25px;
-  ${(props) => {
-    if (props.isloggedin === 'true' && props.isliked !== '#2196f3aa')
+  fill: ${({ isliked }) => isliked};
+  ${({ isloggedin, isliked }) => {
+    if (isloggedin === 'true' && isliked !== '#2196f3aa')
       return `cursor: pointer;`;
   }}
 `;
 
 const PlaceIcon = styled(HiLocationMarker)`
-  fill: white;
   width: 25px;
   height: 25px;
-  padding: 5px;
-  background-color: rgb(129, 129, 129);
-  border-radius: 50%;
   margin-right: 5px;
+  padding: 5px;
+  border-radius: 50%;
+  background-color: rgb(129, 129, 129);
+  fill: white;
 `;
 
 const Location = styled.span`
+  margin-right: 10px;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 16px;
   color: rgb(129, 129, 129);
-  margin-right: 10px;
 
   @media screen and (min-width: 400px) {
     margin-right: 20px;
@@ -330,15 +329,14 @@ const Location = styled.span`
 `;
 
 const GetBtnRipples = styled(Ripples)`
-  border-radius: 8px;
   margin-left: 5px;
+  border-radius: 8px;
 `;
 
 const GetButton = styled.div`
+  padding: 5px 10px;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 16px;
-  color: rgb(129, 129, 129);
-  padding: 5px 10px;
   border-radius: 8px;
   background-color: #2a9d8f;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);

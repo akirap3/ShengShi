@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import BannerImage from '../../images/homepage/sharefood-1.jpg';
 import HomepageBackground from '../common/HomepageBackground';
 import {

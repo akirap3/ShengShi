@@ -2,16 +2,16 @@ import React from 'react';
 import Map from './LocationMap';
 import styled from 'styled-components';
 
-const Mymap = (props) => {
+const Mymap = ({ google, defaultCenter, handleAddress, handleLatLng }) => {
   return (
     <Container>
       <Map
-        google={props.google}
-        center={props.defaultCenter}
+        center={defaultCenter}
+        google={google}
         height="250px"
         zoom={15}
-        handleAddress={props.handleAddress}
-        handleLatLng={props.handleLatLng}
+        handleAddress={handleAddress}
+        handleLatLng={handleLatLng}
       />
     </Container>
   );

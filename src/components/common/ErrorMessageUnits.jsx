@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 
 export const ErrorMessage = styled.div`
-  display: ${(props) => (props.isShow ? 'flex' : 'none')};
+  display: ${({ isShow }) => (isShow ? 'flex' : 'none')};
   align-items: center;
   margin-top: 10px;
   padding: 10px 15px;
@@ -11,10 +11,10 @@ export const ErrorMessage = styled.div`
 `;
 
 export const Info = styled(BsFillInfoCircleFill)`
-  fill: #1e88e5;
   width: 16px;
   height: 16px;
   margin-right: 10px;
+  fill: #1e88e5;
 `;
 
 export const Message = styled.span`
