@@ -1,19 +1,26 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import useCurrentUser from '../../hooks/useCurrentUser';
 import styled from 'styled-components';
-
-import { v4 as uuidv4 } from 'uuid';
-import SearchPageCard from './SearchPageCard';
+import { Waypoint } from 'react-waypoint';
+import Main from '../common/Main';
 import SharesContainer from '../common/SharesContainer';
+import Outer from '../common/Outer';
+import SearchPageCard from './SearchPageCard';
+import NoResult from '../personalPage/NoResult';
+import WaveBackground from './WaveBackground';
+import Background from '../common/Background';
 import Title from '../personalPage/Title';
 import Loading from '../common/Loading';
-import { getSingleShare } from '../../utils/firebase';
-import { useDispatch, useSelector } from 'react-redux';
-import { Waypoint } from 'react-waypoint';
+import Img from '../../images/restaurantPage/restaurant-8.jpg';
+import algolia from '../../utils/algolia';
+
 import {
+  getSingleShare,
   getAllOrderedContents,
   getAllOrderedOtherShares,
 } from '../../utils/firebase';
-import useCurrentUser from '../../hooks/useCurrentUser';
+
 import {
   BannerContent,
   BannerTitle,
@@ -23,7 +30,6 @@ import {
   LearnMoreButton,
 } from '../common/banner/CommonBanner';
 
-import Main from '../common/Main';
 import {
   SearchContent,
   SearchOutline,
@@ -33,13 +39,6 @@ import {
   StyledRipples,
   ResetButton,
 } from '../common/search/SearchUnits';
-
-import NoResult from '../personalPage/NoResult';
-import Outer from '../common/Outer';
-import Img from '../../images/restaurantPage/restaurant-8.jpg';
-import WaveBackground from './WaveBackground';
-import Background from '../common/Background';
-import algolia from '../../utils/algolia';
 
 const SearchPage = () => {
   const dispatch = useDispatch();
@@ -189,7 +188,7 @@ const SearchPage = () => {
                 .filter((share) => share.isArchived === false)
                 .filter((share) => share.toTimeStamp.toDate() > new Date())
                 .map((share) => (
-                  <SearchPageCard key={uuidv4()} share={share} />
+                  <SearchPageCard key={share.id} share={share} />
                 ))}
             </SharesContainer>
           ) : (

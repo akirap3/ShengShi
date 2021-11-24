@@ -61,6 +61,12 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
     dispatch({ type: 'latLng/get', payload: payload });
   };
 
+  const openAlertWithMessage = (msg) => {
+    setAlertMessage(msg);
+    openInfo();
+    return false;
+  };
+
   const isOK = () => {
     return isFieldsChecked(
       foodName,
@@ -68,8 +74,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
       fromToDateTime,
       address,
       file,
-      setAlertMessage,
-      openInfo
+      openAlertWithMessage
     );
   };
 

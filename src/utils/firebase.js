@@ -15,7 +15,6 @@ import {
 import {
   getFirestore,
   collection,
-  getDocs,
   getDoc,
   setDoc,
   addDoc,
@@ -283,17 +282,6 @@ export const handleConfirmation = async (
 
 export const handleDeleteDocument = async (currentUser, messageId) => {
   await deleteDoc(doc(db, `users/${currentUser.uid}/messages`, messageId));
-};
-
-const fetchAllDocs = async (collectionName) => {
-  const arr = [];
-  const querySnapshot = await getDocs(collection(db, collectionName));
-  querySnapshot.forEach((doc) => arr.push({ ...doc.data(), id: doc.id }));
-  return arr;
-};
-
-export const fetchArticles = async () => {
-  return fetchAllDocs('articles');
 };
 
 export const observeUserChange = (callback) => {

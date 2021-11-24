@@ -7,6 +7,12 @@ import Loading from '../../common/Loading';
 import Ripples from 'react-ripples';
 
 import {
+  StyledIcon,
+  StyledReadOnly,
+  StyledInput,
+} from '../../common/form/FormUnits';
+
+import {
   getCurrentUserData,
   handleUpdateMember,
 } from '../../../utils/firebase';
@@ -225,18 +231,6 @@ const Row = styled.div`
   margin-bottom: 35px;
 `;
 
-const StyledReadOnly = styled.input`
-  flex-grow: 1;
-  padding: 5px 8px;
-  border: none;
-  background: none;
-  outline: none;
-`;
-
-const StyledInput = styled(StyledReadOnly)`
-  border-bottom: 2px solid #d9d7d7;
-`;
-
 const NameIcon = styled(BsFillPersonFill)`
   width: 20px;
   height: 20px;
@@ -247,13 +241,6 @@ const NameIcon = styled(BsFillPersonFill)`
     align-self: flex-start;
     margin-top: 10px;
   }
-`;
-
-const StyledIcon = styled.div`
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  fill: rgb(129, 129, 129);
 `;
 
 const AboutText = styled.textarea`

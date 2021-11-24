@@ -1,13 +1,11 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import Title from '../personalPage/Title';
-
+import useCurrentUser from '../../hooks/useCurrentUser';
 import {
   getListenedSingleContent,
   handleConfirmShare,
   handleCancelShare,
 } from '../../utils/firebase';
-
 import {
   MgmtContainer,
   Context,
@@ -23,9 +21,8 @@ import {
   ConfirmedBtn,
   CancleBtn,
 } from '../common/mgmtCard/MgmtCardUnits';
-
+import Title from '../personalPage/Title';
 import AlertPopup from '../common/AlertPopup';
-import useCurrentUser from '../../hooks/useCurrentUser';
 import NoResult from '../personalPage/NoResult';
 import ErrorPage from '../ErrorPage';
 import Loading from '../common/Loading';

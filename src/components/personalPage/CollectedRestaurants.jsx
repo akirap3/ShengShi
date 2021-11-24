@@ -1,15 +1,13 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import styled from 'styled-components';
-import { getSpecificContents } from '../../utils/firebase';
-import { handleCollection } from '../../utils/firebase';
-import { v4 as uuidv4 } from 'uuid';
-import { AiTwotoneHeart } from 'react-icons/ai';
-import StarImg from '../../images/common/star.png';
-
+import { useState, useCallback, useEffect } from 'react';
 import useCurrentUser from '../../hooks/useCurrentUser';
+import styled from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
 import NoResult from './NoResult';
 import Outer from '../common/Outer';
 import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
+import { getSpecificContents, handleCollection } from '../../utils/firebase';
+import { AiTwotoneHeart } from 'react-icons/ai';
+import StarImg from '../../images/common/star.png';
 
 const CollectedRestaurants = () => {
   const currentUser = useCurrentUser();
@@ -114,9 +112,9 @@ const CardImg = styled.img`
 `;
 
 const CardTitle = styled.h4`
-  text-align: center;
   margin-top: 15px;
   margin-bottom: 20px;
+  text-align: center;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 22px;
   color: #40916c;
@@ -129,34 +127,24 @@ const Row = styled.div`
 `;
 
 const Star = styled.img`
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   margin-right: 0.5rem;
 
   @media screen and (min-width: 700px) {
-    width: 20px;
-    height: 20px;
-  }
-
-  @media screen and (min-width: 1100px) {
     width: 24px;
     height: 24px;
   }
 `;
 
 const Heart = styled(AiTwotoneHeart)`
+  width: 16px;
+  height: 16px;
   margin-left: auto;
   fill: #ff3131;
   cursor: pointer;
-  width: 14px;
-  height: 14px;
 
   @media screen and (min-width: 700px) {
-    width: 20px;
-    height: 20px;
-  }
-
-  @media screen and (min-width: 1100px) {
     width: 24px;
     height: 24px;
   }

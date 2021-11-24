@@ -92,6 +92,12 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
       });
   };
 
+  const openAlertWithMessage = (msg) => {
+    setAlertMessage(msg);
+    openInfo();
+    return false;
+  };
+
   const isOK = () => {
     return isFieldsChecked(
       foodName,
@@ -99,8 +105,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
       fromToDateTime,
       address,
       file,
-      setAlertMessage,
-      openInfo
+      openAlertWithMessage
     );
   };
 

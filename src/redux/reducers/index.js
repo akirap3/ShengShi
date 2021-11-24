@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 
-import articles from './articles';
 import currentUser from './currentUser';
 import checkUser from './checkUser';
 import fromToDateTime from './fromToDateTime';
@@ -11,7 +10,6 @@ import searchedShares from './searchedShares';
 import isShareSearch from './isShareSearch';
 
 const reducers = combineReducers({
-  articles,
   currentUser,
   checkUser,
   fromToDateTime,

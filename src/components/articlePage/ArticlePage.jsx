@@ -23,7 +23,7 @@ import {
   StyledRipples,
 } from '../common/search/SearchUnits';
 
-import ArticleBannerImg from '../../images/articlePage/articleImage1.jpg';
+import ArticleBannerImg from '../../images/articlePage/articleImage.jpg';
 
 import {
   getAllOrderedContents,

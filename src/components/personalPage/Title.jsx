@@ -1,6 +1,4 @@
-import React from 'react';
 import styled from 'styled-components';
-
 import Hotpot from '../../images/searchPage/hotpot.svg';
 
 const Title = ({ title }) => {
@@ -27,9 +25,9 @@ const Outline = styled.div`
   position: relative;
   justify-content: center;
   align-items: center;
+  padding: 2px 20px;
   background-color: #52b788;
   border-radius: 40px;
-  padding: 2px 20px;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
 `;
 

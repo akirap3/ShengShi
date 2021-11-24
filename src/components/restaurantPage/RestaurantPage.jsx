@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-
 import { layoutConfig } from '../../utils/commonVariables';
 import { getAllContents, getSearchedContents } from '../../utils/firebase';
 import Carousel from '../common/carousel/Carousel';
@@ -14,7 +13,6 @@ import {
   StartButton,
   LearnMoreButton,
 } from '../common/banner/CommonBanner';
-
 import {
   SearchContent,
   SearchOutline,
@@ -24,7 +22,6 @@ import {
   ResetButton,
   StyledRipples,
 } from '../common/search/SearchUnits';
-
 import RestaurantMap from './RestaurantMap';
 import RestaurantSearchCard from './RestaurantSearchCard';
 import Img from '../../images/restaurantPage/restaurant-8.jpg';

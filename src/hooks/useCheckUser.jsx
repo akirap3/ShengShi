@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as firebase from '../utils/firebase';
+import { observeUserChange } from '../utils/firebase';
 
 const useCheckUser = () => {
   const dispatch = useDispatch();
@@ -9,7 +9,7 @@ const useCheckUser = () => {
   useEffect(() => {
     let isMounted = true;
 
-    firebase.observeUserChange((user) => {
+    observeUserChange((user) => {
       if (isMounted) {
         if (user) {
           dispatch({ type: 'user/loggedIn' });

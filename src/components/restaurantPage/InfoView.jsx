@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import styled from 'styled-components';
 import Logo from '../../images/common/shengshi-logo2.svg';
 import { AiTwotoneStar } from 'react-icons/ai';
-import styled from 'styled-components';
 
 const InfoView = ({ imageUrl, restaurantName, rating, address }) => {
   const [showInfo, setShowInfo] = useState(false);
@@ -41,14 +41,15 @@ const StyledImg = styled.img`
 
 const Info = styled.div`
   min-width: 200px;
-  padding: 10px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  background-color: #fff;
-  border-radius: 10px;
-  z-index: 10;
   position: absolute;
   top: -200px;
   left: -55px;
+  z-index: 10;
+  padding: 10px;
+  font-family: 'cwTeXYen', sans-serif;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  background-color: #fff;
+  border-radius: 10px;
 `;
 
 const InfoImg = styled.img`
@@ -58,15 +59,14 @@ const InfoImg = styled.img`
 
 const InfoRow = styled.div`
   display: flex;
-  margin: auto 5px;
   align-items: center;
+  margin: auto 5px;
 `;
 
 const InfoName = styled.span`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 16px;
   margin-top: 5px;
   margin-right: auto;
+  font-size: 16px;
 `;
 
 const Star = styled(AiTwotoneStar)`
@@ -75,12 +75,10 @@ const Star = styled(AiTwotoneStar)`
 `;
 
 const InfoRating = styled.span`
-  font-family: 'cwTeXYen', sans-serif;
   font-size: 14x;
 `;
 
 const InfoAddress = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
   font-size: 16px;
   margin: 5px 5px;
   color: blueviolet;

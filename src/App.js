@@ -21,9 +21,6 @@ import QRcodeComfirmPage from './components/qrcodeConfirmPage/QRcodeConfirmPage'
 import MyMgmtList from './components/personalPage/myMgmtPage/MyMgmtList';
 import Notification from './components/personalPage/myNotification/Notification';
 import ErrorPage from './components/ErrorPage';
-
-import './App.css';
-
 import Main from './components/common/Main';
 import useCheckUser from './hooks/useCheckUser';
 

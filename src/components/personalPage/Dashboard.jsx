@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import useCurrentUser from '../../hooks/useCurrentUser';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { Link, useLocation } from 'react-router-dom';
@@ -6,7 +7,6 @@ import AddSharePopup from './AddSharePopup';
 import Background from '../common/Background';
 import Ripples from 'react-ripples';
 
-import useCurrentUser from '../../hooks/useCurrentUser';
 import {
   getCurrentUserData,
   getContentCounts,
@@ -44,37 +44,37 @@ const Dashbaord = () => {
   const location = useLocation();
   const menus = [
     {
-      icon: [<ListIcon key={uuidv4()} />],
+      icon: [<StyledIcon as={BsListNested} key={uuidv4()} />],
       name: '清單',
       count: myListCounts || 0,
       path: '/personal/list',
     },
     {
-      icon: [<BadgeIcon key={uuidv4()} />],
+      icon: [<StyledIcon as={IoRibbonSharp} key={uuidv4()} />],
       name: '統計',
       count: myBadgeCounts || 0,
       path: '/personal/badges',
     },
     {
-      icon: [<RecordIcon key={uuidv4()} />],
+      icon: [<StyledIcon as={FaArchive} key={uuidv4()} />],
       name: '紀錄',
       count: myReceivedCounts || 0,
       path: '/personal/received',
     },
     {
-      icon: [<BookedIcon key={uuidv4()} />],
+      icon: [<StyledIcon as={MdFastfood} key={uuidv4()} />],
       name: '已訂',
       count: myToReceiveCounts || 0,
       path: '/personal/toReceive',
     },
     {
-      icon: [<HeartIcon key={uuidv4()} />],
+      icon: [<StyledIcon as={BsFillHeartFill} key={uuidv4()} />],
       name: '收藏',
       count: myCollectedShareCounts || 0,
       path: '/personal/collectedShares',
     },
     {
-      icon: [<ShopIcon key={uuidv4()} />],
+      icon: [<StyledIcon as={BsShop} key={uuidv4()} />],
       name: '店家',
       count: myCollectedStoreCounts || 0,
       path: '/personal/collectedRestaurants',
@@ -202,25 +202,25 @@ const Dashbaord = () => {
               </SettingContainer>
             </AvatarContainer>
             <NameContext>
-              <AliasIcon />
+              <BoardIcon as={ImSpoonKnife} />
               <Alias>{userData?.alias}</Alias>
             </NameContext>
           </LeftColumn>
           <Details>
             <Row>
-              <PersoanlUsernameIcon />
-              <UserName>{userData?.displayName}</UserName>
+              <BoardIcon as={IoMdPerson} />
+              <DetailText>{userData?.displayName}</DetailText>
             </Row>
             <Row>
-              <PointIcon />
-              <Rating>{`${userData?.myPoints}`}</Rating>
+              <BoardIcon as={FaCoins} />
+              <DetailText>{`${userData?.myPoints}`}</DetailText>
             </Row>
             <Row>
-              <LocationIcon />
-              <Place>{userData?.myPlace || '尚未設定'}</Place>
+              <BoardIcon as={HiLocationMarker} />
+              <DetailText>{userData?.myPlace || '尚未設定'}</DetailText>
             </Row>
             <Row>
-              <MgmtIcon />
+              <BoardIcon as={BsPeopleFill} />
               <MgmtRipple
                 color="#fff"
                 during={3000}
@@ -282,6 +282,7 @@ const DashboardContainer = styled.div`
   align-items: center;
   padding: 5rem 2rem;
   position: relative;
+  font-family: 'cwTeXYen', sans-serif;
   background-color: rgba(219, 245, 255, 0.3);
   backdrop-filter: blur(5px);
   @media screen and (min-width: 1500px) {
@@ -351,10 +352,10 @@ const Setting = styled(BsGear)`
   position: absolute;
   bottom: -5px;
   right: 5px;
-  fill: white;
   width: 25px;
   height: 25px;
   padding: 5px;
+  fill: white;
   cursor: pointer;
   background-color: rgb(129, 129, 129);
   border-radius: 50%;
@@ -371,7 +372,7 @@ const NameContext = styled.div`
   margin-top: 15px;
 `;
 
-const AliasIcon = styled(ImSpoonKnife)`
+const BoardIcon = styled.div`
   fill: white;
   width: 25px;
   height: 25px;
@@ -386,7 +387,6 @@ const AliasIcon = styled(ImSpoonKnife)`
 `;
 
 const Alias = styled.span`
-  font-family: 'cwTeXYen', sans-serif;
   font-size: 16px;
   color: rgb(129, 129, 129);
 
@@ -415,89 +415,12 @@ const Row = styled.div`
   }
 `;
 
-const PersoanlUsernameIcon = styled(IoMdPerson)`
-  fill: white;
-  width: 25px;
-  height: 25px;
-  padding: 5px;
-  background-color: rgb(129, 129, 129);
-  border-radius: 50%;
-  margin-right: 5px;
-
-  @media screen and (min-width: 500px) {
-    margin-right: 20px;
-  }
-`;
-
-const UserName = styled.span`
-  font-family: 'cwTeXYen', sans-serif;
+const DetailText = styled.span`
   font-size: 16px;
   color: rgb(129, 129, 129);
 
   @media screen and (min-width: 800px) {
     font-size: 22px;
-  }
-`;
-
-const PointIcon = styled(FaCoins)`
-  fill: white;
-  width: 25px;
-  height: 25px;
-  padding: 5px;
-  background-color: rgb(129, 129, 129);
-  border-radius: 50%;
-  margin-right: 5px;
-
-  @media screen and (min-width: 500px) {
-    margin-right: 20px;
-  }
-`;
-
-const Rating = styled.span`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 16px;
-  color: rgb(129, 129, 129);
-
-  @media screen and (min-width: 800px) {
-    font-size: 22px;
-  }
-`;
-
-const LocationIcon = styled(HiLocationMarker)`
-  fill: white;
-  width: 25px;
-  height: 25px;
-  padding: 5px;
-  background-color: rgb(129, 129, 129);
-  border-radius: 50%;
-  margin-right: 5px;
-
-  @media screen and (min-width: 500px) {
-    margin-right: 20px;
-  }
-`;
-
-const Place = styled.span`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 16px;
-  color: rgb(129, 129, 129);
-
-  @media screen and (min-width: 800px) {
-    font-size: 22px;
-  }
-`;
-
-const MgmtIcon = styled(BsPeopleFill)`
-  fill: white;
-  width: 25px;
-  height: 25px;
-  padding: 5px;
-  background-color: rgb(129, 129, 129);
-  border-radius: 50%;
-  margin-right: 5px;
-
-  @media screen and (min-width: 500px) {
-    margin-right: 20px;
   }
 `;
 
@@ -512,15 +435,13 @@ const MgmtRipple = styled(Ripples)`
 `;
 
 const MgmtButton = styled.button`
-  border-radius: 8px;
-  padding: 5px 10px;
   width: 100%;
   height: 100%;
-  font-size: 1.5vw;
+  padding: 5px 10px;
   text-align: center;
-  font-family: 'cwTeXYen', sans-serif;
   font-size: 16px;
   color: rgb(129, 129, 129);
+  border-radius: 8px;
 
   @media screen and (min-width: 800px) {
     font-size: 22px;
@@ -533,8 +454,8 @@ const Grid = styled.div`
   grid-template-rows: auto;
   grid-area: Grid;
   gap: 10px;
-  margin-top: 25px;
   flex-grow: 3;
+  margin-top: 25px;
 
   @media screen and (min-width: 700px) {
     margin-top: 0;
@@ -560,46 +481,15 @@ const Button = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 8px;
-  padding: 10px;
   width: 100%;
   height: 100%;
+  padding: 10px;
   color: #2d6a4f;
-  background-color: #e3f2fd01;
+  border-radius: 8px;
   background-color: ${({ active }) => (active ? '#bbdefbaa' : '#e3f2fd01')};
 `;
 
-const ListIcon = styled(BsListNested)`
-  fill: rgb(129, 129, 129);
-  width: 22px;
-  height: 22px;
-`;
-
-const BadgeIcon = styled(IoRibbonSharp)`
-  fill: rgb(129, 129, 129);
-  width: 22px;
-  height: 22px;
-`;
-
-const RecordIcon = styled(FaArchive)`
-  fill: rgb(129, 129, 129);
-  width: 22px;
-  height: 22px;
-`;
-
-const BookedIcon = styled(MdFastfood)`
-  fill: rgb(129, 129, 129);
-  width: 22px;
-  height: 22px;
-`;
-
-const HeartIcon = styled(BsFillHeartFill)`
-  fill: rgb(129, 129, 129);
-  width: 22px;
-  height: 22px;
-`;
-
-const ShopIcon = styled(BsShop)`
+const StyledIcon = styled.div`
   fill: rgb(129, 129, 129);
   width: 22px;
   height: 22px;
@@ -611,7 +501,6 @@ const IconContainer = styled.div`
 `;
 
 const ItemNumber = styled.div`
-  margin-top: 0.8vw;
   position: absolute;
   bottom: -5px;
   right: -10px;
@@ -628,7 +517,6 @@ const ItemNumber = styled.div`
 `;
 
 const ButtonName = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
   font-size: 18px;
   @media screen and (min-width: 800px) {
     font-size: 22px;
@@ -639,7 +527,6 @@ const BigButton = styled.button`
   border-radius: 8px;
   padding: 10px;
   margin-top: 10px;
-  font-family: 'cwTeXYen', sans-serif;
   font-size: 18px;
   text-align: center;
   color: #2d6a4f;
@@ -661,7 +548,6 @@ const CheckButton = styled(BigButton)`
 const ShareButton = styled(BigButton)`
   grid-area: ShareButton;
   cursor: pointer;
-
   &:hover {
     transform: translateY(-5px);
   }
