@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { getFirestore, doc, onSnapshot } from '@firebase/firestore';
-
+import { useState, useEffect, useCallback } from 'react';
 import EditPopup from './EditPopup';
 import ShareCard from '../../common/ShareCard';
+import { getListenedSingleContent } from '../../../utils/firebase';
 
 const MyShareCard = ({ share }) => {
   const [showEdit, setShowEdit] = useState(false);
@@ -10,18 +9,13 @@ const MyShareCard = ({ share }) => {
   const openEditor = () => setShowEdit(true);
   const closeEditor = () => setShowEdit(false);
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(
-      doc(getFirestore(), 'shares', share.id),
-      (doc) => {
-        const updatedData = { ...doc.data(), id: doc.id };
-        setListenedShare(updatedData);
-      }
-    );
-    return () => {
-      unsubscribe();
-    };
+  const getMyshares = useCallback(() => {
+    getListenedSingleContent('shares', share.id, setListenedShare);
   }, [share.id]);
+
+  useEffect(() => {
+    return getMyshares();
+  }, [getMyshares]);
 
   return (
     <>

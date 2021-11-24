@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-
+import useCurrentUser from '../../hooks/useCurrentUser';
 import Main from '../common/Main';
 import Banner from './Banner';
 import Advantages from './Advantages';
 import UserShares from './UserShares';
 import Carousel from '../common/carousel/Carousel';
 import { getAllContents, getAllOtherShares } from '../../utils/firebase';
-import useCurrentUser from '../../hooks/useCurrentUser';
 
 const LandingPage = () => {
   const [restaurants, setRestaurants] = useState();

@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import styled from 'styled-components';
-import { getSpecificContents } from '../../../utils/firebase';
+import { useState, useCallback, useEffect } from 'react';
 import useCurrentUser from '../../../hooks/useCurrentUser';
-import MyToReceiveCard from './MyToReceiveCard';
+import { getSpecificContents } from '../../../utils/firebase';
+import Outer from '../../common/Outer';
 import SharesContainer from '../../common/SharesContainer';
+import MyToReceiveCard from './MyToReceiveCard';
 import NoResult from '../NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 
@@ -52,11 +52,5 @@ const MyToReceiveList = () => {
     </>
   );
 };
-
-const Outer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 export default MyToReceiveList;

@@ -8,7 +8,7 @@ import * as validation from '../../utils/validation';
 import * as firebase from '../../utils/firebase';
 import Main from '../common/Main';
 import LoginBackground from '../loginPage/LoginBackground';
-import LoginBg2 from '../loginPage/LoginBg2';
+import Background from '../common/Background';
 import { getAllContents } from '../../utils/firebase';
 
 import { IoLogoFacebook } from 'react-icons/io';
@@ -179,7 +179,7 @@ const SignupPage = () => {
         <StyledMain>
           {isLoading && <Loading />}
           <LoginBackground />
-          <LoginBg2 />
+          <Background circleBgColor={'rgba(183, 228, 199, 0.5)'} />
           <SignupContainer>
             <Title>Sign Up</Title>
             <FiledContainer>

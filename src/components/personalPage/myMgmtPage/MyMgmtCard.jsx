@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 
 import {
   getListenedSingleContent,
@@ -27,7 +27,6 @@ const QRCode = require('qrcode.react');
 
 const MyMgmtCard = ({ share, requesterId, setAlertMessage, openInfo }) => {
   const [requester, setRequester] = useState();
-
   const currentUser = useSelector((state) => state.currentUser);
 
   const getRequester = useCallback(() => {
@@ -129,8 +128,12 @@ const QRcodeThree = styled(QRcodeBasic)`
 `;
 
 const EmbedQrcode = ({ info, size, height, width }) => {
+  const value = `https://shengshi.itcosmos.co/personal/${info}`;
+  const src =
+    'https://firebasestorage.googleapis.com/v0/b/shengshi-8bc48.appspot.com/o/images%2Flogo%2Fshengshi-logo2.svg?alt=media&token=218bb2b8-ebaf-4f8d-809a-50912c6d2a6a';
+
   const initialProps = {
-    value: `https://shengshi.itcosmos.co/personal/${info}`,
+    value,
     size,
     bgColor: '#ffffff',
     fgColor: '#000000',
@@ -138,7 +141,7 @@ const EmbedQrcode = ({ info, size, height, width }) => {
     includeMargin: false,
     renderAs: 'svg',
     imageSettings: {
-      src: 'https://firebasestorage.googleapis.com/v0/b/shengshi-8bc48.appspot.com/o/images%2Flogo%2Fshengshi-logo2.svg?alt=media&token=218bb2b8-ebaf-4f8d-809a-50912c6d2a6a',
+      src,
       x: null,
       y: null,
       height,

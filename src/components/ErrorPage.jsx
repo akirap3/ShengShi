@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Main from './common/Main';
 import errerImg from '../images/common/404-image.gif';
-import { StartButton } from './common/Banner/CommonBanner';
+import { StartButton } from './common/banner/CommonBanner';
 import { Link } from 'react-router-dom';
 
 const ErrorPage = ({ padding }) => {

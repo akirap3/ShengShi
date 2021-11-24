@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
+import useCurrentUser from '../../../hooks/useCurrentUser';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { DialogOverlay } from '@reach/dialog';
 import {
   StyledDialogContent,
@@ -23,32 +23,22 @@ import {
   SubmitBtn,
 } from '../../common/popup/PopupUnits';
 import SelectDateTimePopup from './SelectDateTimePopup';
-import LocationMap from '../../common/LocationMap';
-import Loading from '../../common/Loading';
 import ConfirmedPopup from '../../common/ConfirmedPopup';
 import AlertPopup from '../../common/AlertPopup';
-import useCurrentUser from '../../../hooks/useCurrentUser';
+import LocationMap from '../../common/LocationMap';
+import Loading from '../../common/Loading';
 import {
   getCurrentUserData,
   getAllContents,
   getCollectionCounts,
+  handleConfirmation,
 } from '../../../utils/firebase';
-
-import {
-  getFirestore,
-  doc,
-  Timestamp,
-  updateDoc,
-  arrayUnion,
-  increment,
-} from '@firebase/firestore';
-
+import Comment from '../../common/comment/Comment';
 import {
   CommentSection,
   CommentSummary,
   NoComment,
 } from '../../common/comment/CommentUnits';
-import Comment from '../../common/comment/Comment';
 
 const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   const dispatch = useDispatch();
@@ -102,41 +92,22 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
     dispatch({ type: 'specificDateTime/selected', payload: payload });
   };
 
+  const openAlertWithMessage = (msg) => {
+    setAlertMessage(msg);
+    openInfo();
+    return false;
+  };
+
   const isFieldsChecked = (share, specificDateTime) => {
     const newQty = Number(reqQuantities);
     if (isNaN(newQty)) {
-      setAlertMessage('數量請輸入數字');
-      openInfo();
-      return false;
+      return openAlertWithMessage('數量請輸入數字');
     } else if (newQty < 0 || newQty > share.quantities) {
-      setAlertMessage(`請輸入介於 1 ~ ${share.quantities} 的數字`);
-      openInfo();
-      return false;
+      return openAlertWithMessage(`請輸入介於 1 ~ ${share.quantities} 的數字`);
     } else if (specificDateTime === null) {
-      setAlertMessage('請點選領取的日期時間');
-      openInfo();
-      return false;
+      return openAlertWithMessage('請點選領取的日期時間');
     }
     return true;
-  };
-
-  const handleConfirmation = async (share, specificDateTime) => {
-    if (isFieldsChecked(share, specificDateTime)) {
-      setIsLoading(true);
-      const docRef = doc(getFirestore(), 'shares', share.id);
-      await updateDoc(docRef, {
-        toReceiveUserId: arrayUnion(currentUser.uid),
-        [`toReceiveInfo.${currentUser.uid}`]: {
-          quantities: Number(reqQuantities) || 1,
-          upcomingTimestamp: Timestamp.fromDate(specificDateTime),
-        },
-        bookedQuantities: increment(Number(reqQuantities) || 1),
-      });
-      setIsLoading(false);
-      handleSpecificDateTime(null);
-      openConfirmation();
-      closeEditor();
-    }
   };
 
   return (
@@ -152,39 +123,40 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
             </PopTitleContainer>
             <PopContent>
               <Preview src={share?.imageUrl || ''} />
-
               <StyledPopRow>
-                <CurrentNumberLabel>目前數量</CurrentNumberLabel>
-                <CurrentNumber>{share?.quantities || ''}</CurrentNumber>
+                <StyledLabel>目前數量</StyledLabel>
+                <StyledSpan>{share?.quantities || ''}</StyledSpan>
               </StyledPopRow>
               <PopRow>
-                <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
-                <Quantity
+                <StyledLabel>登記數量</StyledLabel>
+                <StyledInput
                   placeholder="請輸入數量"
                   onChange={(e) => setReqQuantities(e.target.value)}
                 />
               </PopRow>
               <PopRow>
                 <DateTimeLabel>可領取時段</DateTimeLabel>
-                <DateTime>
+                <StyledSpan>
                   {share?.fromTimeStamp.toDate().toLocaleString()}
                   {`~`}
                   {share?.toTimeStamp.toDate().toLocaleString()}
-                </DateTime>
+                </StyledSpan>
               </PopRow>
               <PopRow>
                 <LabelIconContainer>
                   <DateTimeLabel>領取日期及時間</DateTimeLabel>
                   <Calendar onClick={openDateTime} />
                 </LabelIconContainer>
-                <DateTime>{specificDateTime?.toLocaleString() || ''}</DateTime>
+                <StyledSpan>
+                  {specificDateTime?.toLocaleString() || ''}
+                </StyledSpan>
               </PopRow>
               <PopRow>
                 <LabelIconContainer>
                   <PopPlaceLabel>地點</PopPlaceLabel>
                   <PopPlaceIcon />
                 </LabelIconContainer>
-                <PopPlace>{share?.exchangePlace || ''}</PopPlace>
+                <StyledSpan>{share?.exchangePlace || ''}</StyledSpan>
               </PopRow>
               <MapWrapper>
                 <LocationMap />
@@ -213,7 +185,19 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
               <ButtonContainer>
                 <StyleBtnRipples color="#fff" during={3000}>
                   <SubmitBtn
-                    onClick={() => handleConfirmation(share, specificDateTime)}
+                    onClick={() =>
+                      handleConfirmation(
+                        isFieldsChecked,
+                        share,
+                        specificDateTime,
+                        setIsLoading,
+                        currentUser,
+                        reqQuantities,
+                        handleSpecificDateTime,
+                        openConfirmation,
+                        closeEditor
+                      )
+                    }
                   >
                     確認領取
                   </SubmitBtn>
@@ -246,25 +230,13 @@ const StyledPopRow = styled(PopRow)`
   margin-top: 15px;
 `;
 
-const CurrentNumberLabel = styled(StyledLabel)``;
-
-const CurrentNumber = styled(StyledSpan)``;
-
-const RegisterQuantityLabel = styled(StyledLabel)``;
-
-const Quantity = styled(StyledInput)``;
-
 const DateTimeLabel = styled(StyledLabel)`
   margin-right: 10px;
 `;
 
-const DateTime = styled(StyledSpan)``;
-
 const PopPlaceLabel = styled(StyledLabel)`
   margin-right: 10px;
 `;
-
-const PopPlace = styled(StyledSpan)``;
 
 const MapWrapper = styled.div`
   margin-bottom: 10px;

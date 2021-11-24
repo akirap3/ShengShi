@@ -21,7 +21,7 @@ import {
   ButtonRow,
   StartButton,
   LearnMoreButton,
-} from '../common/Banner/CommonBanner';
+} from '../common/banner/CommonBanner';
 
 import Main from '../common/Main';
 import {
@@ -35,10 +35,10 @@ import {
 } from '../common/search/SearchUnits';
 
 import NoResult from '../personalPage/NoResult';
-
+import Outer from '../common/Outer';
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
 import WaveBackground from './WaveBackground';
-import LoginBg2 from '../loginPage/LoginBg2';
+import Background from '../common/Background';
 import algolia from '../../utils/algolia';
 
 const SearchPage = () => {
@@ -148,7 +148,7 @@ const SearchPage = () => {
   return (
     <Main>
       <UpperPart>
-        <LoginBg2 />
+        <Background circleBgColor={'rgba(183, 228, 199, 0.5)'} />
         <WaveBackground />
         <Banner>
           <StyledBannerContent>
@@ -181,7 +181,7 @@ const SearchPage = () => {
         </SearchContent>
       </UpperPart>
       <Title title="目前其他人分享的勝食" />
-      <Outer>
+      <StyledOuter>
         {shares ? (
           shares.length !== 0 ? (
             <SharesContainer>
@@ -198,7 +198,7 @@ const SearchPage = () => {
         ) : (
           <Loading />
         )}
-      </Outer>
+      </StyledOuter>
       <Waypoint onEnter={handleInfiniteScroll} />
     </Main>
   );
@@ -262,10 +262,7 @@ const LookButton = styled(LearnMoreButton)`
   border: 1px solid #a0a0968a;
 `;
 
-const Outer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const StyledOuter = styled(Outer)`
   position: relative;
 `;
 

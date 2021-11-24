@@ -8,6 +8,7 @@ import {
 import useCurrentUser from '../../hooks/useCurrentUser';
 import MyResponsivePie from './MyChart';
 import NoResult from './NoResult';
+import Outer from '../common/Outer';
 import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
 
 const Badges = () => {
@@ -246,12 +247,6 @@ const BadgeContainer = styled.div`
   @media screen and (min-width: 650px) {
     grid-template-columns: repeat(3, 1fr);
   }
-`;
-
-const Outer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const BadgeContext = styled.div`

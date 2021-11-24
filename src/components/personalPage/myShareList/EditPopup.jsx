@@ -1,23 +1,7 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-
-import {
-  getFirestore,
-  doc,
-  updateDoc,
-  Timestamp,
-  GeoPoint,
-} from '@firebase/firestore';
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL,
-} from '@firebase/storage';
-
 import { DialogOverlay } from '@reach/dialog';
-
 import {
   StyledDialogContent,
   PopClose,
@@ -38,12 +22,12 @@ import {
   ImgUpload,
   SubmitBtn,
 } from '../../common/popup/PopupUnits';
-
 import ClendarPopup from './CalendarPopup';
 import MapPopup from './MapPopup';
 import AlertPopup from '../../common/AlertPopup';
 import Loading from '../../common/Loading';
 import { isFieldsChecked } from '../../../utils/validation';
+import { handleEditSubmit } from '../../../utils/firebase';
 
 const EditPopup = ({ showEdit, closeEditor, share }) => {
   const dispatch = useDispatch();
@@ -77,42 +61,16 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
     dispatch({ type: 'latLng/get', payload: payload });
   };
 
-  const handleSubmit = async () => {
-    if (
-      isFieldsChecked(
-        foodName,
-        quantities,
-        fromToDateTime,
-        address,
-        file,
-        setAlertMessage,
-        openInfo
-      )
-    ) {
-      setIsLoaging(true);
-      const docRef = doc(getFirestore(), 'shares', share.id);
-      const fileRef = ref(getStorage(), `images/shares/${share.id}`);
-      const metadata = {
-        contentType: file.type,
-      };
-      const uplaodTask = await uploadBytes(fileRef, file, metadata);
-      const imageUrl = await getDownloadURL(uplaodTask.ref);
-      await updateDoc(docRef, {
-        exchangePlace: address,
-        fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
-        toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
-        imageUrl,
-        quantities: Number(quantities),
-        name: foodName,
-        createdAt: Timestamp.fromDate(new Date()),
-        exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
-      });
-      setIsLoaging(false);
-      closeEditor();
-      handleLatLng([]);
-      handleAddress('');
-      setFile(null);
-    }
+  const isOK = () => {
+    return isFieldsChecked(
+      foodName,
+      quantities,
+      fromToDateTime,
+      address,
+      file,
+      setAlertMessage,
+      openInfo
+    );
   };
 
   const previewImgUrl = file
@@ -131,43 +89,43 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
           </PopTitleContainer>
           <PopContent>
             <PopRow>
-              <FoodLabel>食物名稱</FoodLabel>
+              <StyledLabel>食物名稱</StyledLabel>
               <FoodName
                 placeholder={`${share.name}`}
                 onChange={(e) => setFoodName(e.target.value)}
               />
             </PopRow>
             <PopRow>
-              <QuantityLabel>數量</QuantityLabel>
-              <Quantity
+              <StyledLabel>數量</StyledLabel>
+              <StyledInput
                 placeholder={`${share.quantities}`}
                 onChange={(e) => setQuantities(e.target.value)}
               />
             </PopRow>
             <PopRow>
-              <OriDateTimeLabel>原定時間及日期</OriDateTimeLabel>
-              <OriDateTime>
+              <StyledLabel>原定時間及日期</StyledLabel>
+              <StyledSpan>
                 {`${share.fromTimeStamp.toDate().toLocaleString()} -
                   ${share.toTimeStamp.toDate().toLocaleString()}`}
-              </OriDateTime>
+              </StyledSpan>
             </PopRow>
             <PopRow>
               <LabelIconContainer>
                 <DateTimeLabel>更改日期及時間</DateTimeLabel>
                 <Calendar onClick={openCalendar} />
               </LabelIconContainer>
-              <DateTime>
+              <StyledSpan>
                 {fromToDateTime
                   ? `${fromToDateTime[0].toLocaleString()} - ${fromToDateTime[1].toLocaleString()}`
                   : ''}
-              </DateTime>
+              </StyledSpan>
             </PopRow>
             <PopRow>
               <LabelIconContainer>
                 <PopPlaceLabel>地點</PopPlaceLabel>
                 <StyledPopPlaceIcon onClick={openMap} />
               </LabelIconContainer>
-              <PopPlace>{address}</PopPlace>
+              <StyledSpan>{address}</StyledSpan>
             </PopRow>
             <PopRow></PopRow>
             <Preview src={previewImgUrl} />
@@ -183,7 +141,26 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
                 onChange={(e) => setFile(e.target.files[0])}
               />
               <StyleBtnRipples color="#fff" during={3000}>
-                <SubmitBtn onClick={handleSubmit} disabled={isLoading}>
+                <SubmitBtn
+                  onClick={() =>
+                    handleEditSubmit(
+                      isOK,
+                      setIsLoaging,
+                      share,
+                      file,
+                      address,
+                      fromToDateTime,
+                      quantities,
+                      foodName,
+                      latLng,
+                      closeEditor,
+                      handleLatLng,
+                      handleAddress,
+                      setFile
+                    )
+                  }
+                  disabled={isLoading}
+                >
                   確認更新
                 </SubmitBtn>
               </StyleBtnRipples>
@@ -207,22 +184,17 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
   );
 };
 
-const FoodLabel = styled(StyledLabel)``;
 const FoodName = styled(StyledInput)`
   flex-grow: 1;
 `;
-const QuantityLabel = styled(StyledLabel)``;
-const Quantity = styled(StyledInput)``;
-const OriDateTimeLabel = styled(StyledLabel)``;
-const OriDateTime = styled(StyledSpan)``;
+
 const DateTimeLabel = styled(StyledLabel)`
   margin-right: 10px;
 `;
-const DateTime = styled(StyledSpan)``;
+
 const PopPlaceLabel = styled(StyledLabel)`
   margin-right: 10px;
 `;
-const PopPlace = styled(StyledSpan)``;
 
 const StyledPopPlaceIcon = styled(PopPlaceIcon)`
   cursor: pointer;

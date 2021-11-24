@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import styled from 'styled-components';
-import { getSpecificContents } from '../../../utils/firebase';
+import { useState, useEffect, useCallback } from 'react';
 import useCurrentUser from '../../../hooks/useCurrentUser';
+import { getSpecificContents } from '../../../utils/firebase';
 import SharesContainer from '../../common/SharesContainer';
+import Outer from '../../common/Outer';
 import MyCollectedCard from './MyCollectedCard';
 import NoResult from '../NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
@@ -52,11 +52,5 @@ const MyCollectedList = () => {
     </>
   );
 };
-
-const Outer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 export default MyCollectedList;

@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import useCurrentUser from '../../../hooks/useCurrentUser';
 import styled from 'styled-components';
-
 import { DialogOverlay } from '@reach/dialog';
 import {
   StyledDialogContent,
@@ -22,7 +22,6 @@ import {
   getCurrentUserData,
   onCommentSubmit,
 } from '../../../utils/firebase';
-
 import {
   CommentSection,
   ReplyArea,
@@ -31,12 +30,8 @@ import {
   CommentSummary,
   NoComment,
 } from '../../common/comment/CommentUnits';
-
 import Comment from '../../common/comment/Comment';
-
 import { ErrorMessage, Info, Message } from '../../common/ErrorMessageUnits';
-
-import useCurrentUser from '../../../hooks/useCurrentUser';
 
 const CheckPopup = ({ showEdit, closeEditor, share }) => {
   const currentUser = useCurrentUser();
@@ -85,32 +80,32 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
           </PopTitleContainer>
           <PopContent>
             <PopRow>
-              <FoodLabel>食物名稱</FoodLabel>
-              <FoodName>{share?.name || ''}</FoodName>
+              <StyledLabel>食物名稱</StyledLabel>
+              <StyledSpan>{share?.name || ''}</StyledSpan>
             </PopRow>
             <PopRow>
-              <QuantityLabel>數量</QuantityLabel>
-              <Quantity>
+              <StyledLabel>數量</StyledLabel>
+              <StyledSpan>
                 {share?.receivedInfo[currentUser.uid].quantities || 0}
-              </Quantity>
+              </StyledSpan>
             </PopRow>
             <PopRow>
-              <DateTimeLabel>日期及時間</DateTimeLabel>
-              <DateTime>
+              <StyledLabel>日期及時間</StyledLabel>
+              <StyledSpan>
                 {share?.receivedInfo[currentUser.uid].confirmedTimestamp
                   ?.toDate()
                   .toLocaleString()}
-              </DateTime>
+              </StyledSpan>
             </PopRow>
             <PopRow>
               <LabelIconContainer>
-                <PopPlaceLabel>地點</PopPlaceLabel>
+                <StyledLabel>地點</StyledLabel>
                 <PopPlaceIcon />
               </LabelIconContainer>
-              <PopPlace>{share?.exchangePlace || ''}</PopPlace>
+              <StyledSpan>{share?.exchangePlace || ''}</StyledSpan>
             </PopRow>
             <PopRow>
-              <FoodImgLabel>食物照片</FoodImgLabel>
+              <StyledLabel>食物照片</StyledLabel>
             </PopRow>
             <Preview src={share?.imageUrl || ''} />
             <PopRow>
@@ -165,24 +160,6 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
     </>
   );
 };
-
-const FoodLabel = styled(StyledLabel)``;
-
-const FoodName = styled(StyledSpan)``;
-
-const QuantityLabel = styled(StyledLabel)``;
-
-const Quantity = styled(StyledSpan)``;
-
-const DateTimeLabel = styled(StyledLabel)``;
-
-const DateTime = styled(StyledSpan)``;
-
-const PopPlaceLabel = styled(StyledLabel)``;
-
-const PopPlace = styled(StyledSpan)``;
-
-const FoodImgLabel = styled(StyledLabel)``;
 
 const CommentLabel = styled(StyledLabel)`
   margin-top: 15px;

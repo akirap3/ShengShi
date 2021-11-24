@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import useCurrentUser from '../../../hooks/useCurrentUser';
 import { v4 as uuidv4 } from 'uuid';
 import { MgmtContainer } from '../../common/mgmtCard/MgmtCardUnits';
 import MyMgmtCard from './MyMgmtCard';
-import useCurrentUser from '../../../hooks/useCurrentUser';
 import { getSpecificContents } from '../../../utils/firebase';
 import NoResult from '../NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';

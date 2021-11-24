@@ -33,9 +33,16 @@ import {
   increment,
   limit,
   startAfter,
+  GeoPoint,
 } from 'firebase/firestore';
 
-import { getStorage, ref, deleteObject } from 'firebase/storage';
+import {
+  getStorage,
+  ref,
+  deleteObject,
+  uploadBytes,
+  getDownloadURL,
+} from 'firebase/storage';
 
 require('dotenv').config();
 
@@ -52,6 +59,7 @@ initializeApp(firebaseConfig);
 
 export const auth = getAuth();
 export const db = getFirestore();
+export const storage = getStorage();
 
 auth.languageCode = 'it';
 
@@ -120,6 +128,40 @@ export const handleDeleteMember = () => {
   deleteUser(auth.currentUser);
 };
 
+export const handleUpdateMember = async (
+  checkFields,
+  setIsLoading,
+  currentUser,
+  file,
+  initialUserData,
+  setDisplayName,
+  setAlias,
+  setPhone,
+  setMyPlace,
+  setAbout,
+  setFile
+) => {
+  if (checkFields()) {
+    setIsLoading(true);
+    const docRef = doc(db, 'users', currentUser.uid);
+    const fileRef = ref(storage, `images/users/${docRef.id}`);
+    const metadata = {
+      contentType: file.type,
+    };
+    const uplaodTask = await uploadBytes(fileRef, file, metadata);
+    const imageUrl = await getDownloadURL(uplaodTask.ref);
+    initialUserData.imageUrl = imageUrl || '';
+    await updateDoc(docRef, initialUserData);
+    setIsLoading(false);
+    setDisplayName('');
+    setAlias('');
+    setPhone('');
+    setMyPlace('');
+    setAbout('');
+    setFile(null);
+  }
+};
+
 export const handleDeleteShare = async (
   setIsLoading,
   content,
@@ -127,7 +169,7 @@ export const handleDeleteShare = async (
   currentUser
 ) => {
   setIsLoading(true);
-  const deleteImgFileRef = ref(getStorage(), `images/shares/${content?.id}`);
+  const deleteImgFileRef = ref(storage, `images/shares/${content?.id}`);
   await deleteObject(deleteImgFileRef);
   await deleteDoc(doc(db, 'shares', content?.id));
 
@@ -202,12 +244,41 @@ export const handleDeleteCollected = async (
   closeDelete
 ) => {
   setIsLoading(true);
-  const docRef = doc(getFirestore(), 'shares', content?.id);
+  const docRef = doc(db, 'shares', content?.id);
   await updateDoc(docRef, {
     savedUserId: arrayRemove(auth.currentUser.uid),
   });
   setIsLoading(false);
   closeDelete();
+};
+
+export const handleConfirmation = async (
+  isFieldsChecked,
+  share,
+  specificDateTime,
+  setIsLoading,
+  currentUser,
+  reqQuantities,
+  handleSpecificDateTime,
+  openConfirmation,
+  closeEditor
+) => {
+  if (isFieldsChecked(share, specificDateTime)) {
+    setIsLoading(true);
+    const docRef = doc(db, 'shares', share.id);
+    await updateDoc(docRef, {
+      toReceiveUserId: arrayUnion(currentUser.uid),
+      [`toReceiveInfo.${currentUser.uid}`]: {
+        quantities: Number(reqQuantities) || 1,
+        upcomingTimestamp: Timestamp.fromDate(specificDateTime),
+      },
+      bookedQuantities: increment(Number(reqQuantities) || 1),
+    });
+    setIsLoading(false);
+    handleSpecificDateTime(null);
+    openConfirmation();
+    closeEditor();
+  }
 };
 
 export const handleDeleteDocument = async (currentUser, messageId) => {
@@ -234,7 +305,7 @@ export const handleCollection = async (
   collectionName,
   currentUser
 ) => {
-  const docRef = doc(getFirestore(), collectionName, content.id);
+  const docRef = doc(db, collectionName, content.id);
   if (content?.savedUserId?.includes(currentUser.uid)) {
     await updateDoc(docRef, {
       savedUserId: arrayRemove(currentUser.uid),
@@ -750,7 +821,7 @@ export const onCommentSubmit = async (
   setShowErrorMessage
 ) => {
   if (replyComment) {
-    await addDoc(collection(getFirestore(), `shares/${share.id}/comments`), {
+    await addDoc(collection(db, `shares/${share.id}/comments`), {
       createdAt: Timestamp.now(),
       commentContent: replyComment,
       author: {
@@ -760,14 +831,11 @@ export const onCommentSubmit = async (
       },
     });
 
-    await addDoc(
-      collection(getFirestore(), `users/${share.postUser.id}/messages`),
-      {
-        createdAt: Timestamp.now(),
-        messageContent: `${userData.displayName}在您的${share.name}勝食頁面上留言`,
-        kind: 'comment',
-      }
-    );
+    await addDoc(collection(db, `users/${share.postUser.id}/messages`), {
+      createdAt: Timestamp.now(),
+      messageContent: `${userData.displayName}在您的${share.name}勝食頁面上留言`,
+      kind: 'comment',
+    });
 
     setReplayComment('');
     setErrorMessage('');
@@ -788,13 +856,10 @@ export const handleConfirmCommentEdit = async (
   setShowErrorMessage
 ) => {
   if (editedComment) {
-    await updateDoc(
-      doc(getFirestore(), `shares/${share.id}/comments`, `${comment.id}`),
-      {
-        commentContent: editedComment,
-        createdAt: Timestamp.now(),
-      }
-    );
+    await updateDoc(doc(db, `shares/${share.id}/comments`, `${comment.id}`), {
+      commentContent: editedComment,
+      createdAt: Timestamp.now(),
+    });
     setEditedComment('');
     setIsEdit(false);
     setErrorMessage('');
@@ -806,18 +871,13 @@ export const handleConfirmCommentEdit = async (
 };
 
 export const handleDeleteComment = async (share, comment, userData) => {
-  await deleteDoc(
-    doc(getFirestore(), `shares/${share.id}/comments`, `${comment.id}`)
-  );
+  await deleteDoc(doc(db, `shares/${share.id}/comments`, `${comment.id}`));
 
-  await addDoc(
-    collection(getFirestore(), `users/${share.postUser.id}/messages`),
-    {
-      createdAt: Timestamp.now(),
-      messageContent: `${userData.displayName}在您的${share.name}勝食頁面上刪除留言`,
-      kind: 'comment',
-    }
-  );
+  await addDoc(collection(db, `users/${share.postUser.id}/messages`), {
+    createdAt: Timestamp.now(),
+    messageContent: `${userData.displayName}在您的${share.name}勝食頁面上刪除留言`,
+    kind: 'comment',
+  });
 };
 
 export const handleConfirmShare = (
@@ -860,4 +920,141 @@ export const handleCancelShare = (
     setAlertMessage('您已確認對方取消勝食');
     openInfo();
   });
+};
+
+export const handleEditSubmit = async (
+  isOK,
+  setIsLoaging,
+  share,
+  file,
+  address,
+  fromToDateTime,
+  quantities,
+  foodName,
+  latLng,
+  closeEditor,
+  handleLatLng,
+  handleAddress,
+  setFile
+) => {
+  if (isOK()) {
+    setIsLoaging(true);
+    const docRef = doc(db, 'shares', share.id);
+    const fileRef = ref(storage, `images/shares/${share.id}`);
+    const metadata = {
+      contentType: file.type,
+    };
+    const uplaodTask = await uploadBytes(fileRef, file, metadata);
+    const imageUrl = await getDownloadURL(uplaodTask.ref);
+    await updateDoc(docRef, {
+      exchangePlace: address,
+      fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
+      toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
+      imageUrl,
+      quantities: Number(quantities),
+      name: foodName,
+      createdAt: Timestamp.fromDate(new Date()),
+      exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
+    });
+    setIsLoaging(false);
+    closeEditor();
+    handleLatLng([]);
+    handleAddress('');
+    setFile(null);
+  }
+};
+
+export const handleUpdateSubmit = async (
+  isFieldsChecked,
+  share,
+  setIsLoading,
+  currentUser,
+  newQuantities,
+  specificDateTime,
+  handleSpecificDateTime,
+  closeUpdate
+) => {
+  if (isFieldsChecked(share)) {
+    setIsLoading(true);
+    const docRef = doc(getFirestore(), 'shares', share.id);
+    const updateQuantities = `toReceiveInfo.${currentUser.uid}.quantities`;
+    const updateUpcomingTimestamp = `toReceiveInfo.${currentUser.uid}.upcomingTimestamp`;
+    await updateDoc(docRef, {
+      [updateQuantities]: newQuantities,
+      [updateUpcomingTimestamp]: Timestamp.fromDate(specificDateTime),
+    });
+    setIsLoading(false);
+    handleSpecificDateTime(null);
+    closeUpdate();
+  }
+};
+
+export const handleAddShareSubmit = async (
+  isOK,
+  setIsLoading,
+  file,
+  address,
+  fromToDateTime,
+  quantities,
+  foodName,
+  currentUser,
+  userData,
+  latLng,
+  closeEditor,
+  handleLatLng,
+  handleAddress,
+  handleFromToDateTime,
+  setFile
+) => {
+  if (isOK()) {
+    setIsLoading(true);
+    const docRef = doc(collection(db, `shares`));
+    const fileRef = ref(storage, `images/shares/${docRef.id}`);
+
+    const metadata = {
+      contentType: file.type,
+    };
+
+    const uplaodTask = await uploadBytes(fileRef, file, metadata);
+    const imageUrl = await getDownloadURL(uplaodTask.ref);
+    await setDoc(
+      docRef,
+      {
+        exchangePlace: address,
+        fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
+        toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
+        imageUrl,
+        quantities: Number(quantities),
+        name: foodName,
+        postUser: {
+          id: currentUser.uid,
+          displayName: userData.displayName,
+        },
+        rating: 5,
+        createdAt: Timestamp.fromDate(new Date()),
+        userLocation: userData.myPlace || '未提供',
+        exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
+        receivedInfo: {},
+        receivedUserId: [],
+        toReceiveInfo: {},
+        toReceiveUserId: [],
+        savedUserId: [],
+        bookedQuantities: 0,
+        isArchived: false,
+      },
+      { merge: true }
+    );
+
+    await updateDoc(doc(getFirestore(), 'users', currentUser.uid), {
+      myPoints: increment(10),
+    });
+
+    handleAddBadge(currentUser.uid);
+    setIsLoading(false);
+    closeEditor();
+    handleLatLng([]);
+    handleAddress('');
+    handleFromToDateTime();
+    setFile(null);
+  }
 };

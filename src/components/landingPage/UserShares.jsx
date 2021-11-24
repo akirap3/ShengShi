@@ -20,7 +20,7 @@ const UserShares = () => {
       </UserSharesContentOne>
       <UserSharesContentTwo>
         <UserImage>
-          <UserAvatarTwo src={UserImgTwo} />
+          <UserAvatar src={UserImgTwo} />
           <UserName>John Wang</UserName>
           <UserTag>勝食達人</UserTag>
         </UserImage>
@@ -83,27 +83,27 @@ const UserImage = styled.div`
   position: relative;
 
   &::after {
+    content: '';
     position: absolute;
     height: 75%;
     background: linear-gradient(rgba(black, 0) 10%, rgba(black, 0.4));
-    content: '';
     bottom: 0;
     left: 0;
     right: 0;
   }
 
   & h3 {
+    width: 75%;
+    margin: 0;
+    padding: 3rem 2rem;
     position: absolute;
     bottom: 0;
     left: 0;
-    margin: 0;
-    padding: 3rem 2rem;
-    font-family: 'Mansalva', cursive;
-    color: white;
-    font-size: 24px;
-    width: 75%;
-    line-height: 1;
     z-index: 2;
+    font-family: 'Mansalva', cursive;
+    font-size: 24px;
+    line-height: 1;
+    color: white;
     transform: rotate(-2deg);
   }
 `;
@@ -116,8 +116,6 @@ const UserAvatar = styled.img`
   border-radius: 50%;
 `;
 
-const UserAvatarTwo = styled(UserAvatar)``;
-
 const UserName = styled.h3`
   margin-bottom: 2rem;
   font-family: 'cwTeXYen', sans-serif;
@@ -125,24 +123,24 @@ const UserName = styled.h3`
 `;
 
 const UserTag = styled.div`
-  position: absolute;
-  background-color: #40916c;
-  border-radius: 10px;
   width: fit-content;
   padding: 5px 10px;
+  position: absolute;
+  left: 22px;
+  bottom: -14px;
+  border-radius: 10px;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 22px;
   color: white;
-  left: 22px;
-  bottom: -14px;
+  background-color: #40916c;
 `;
 
 const Description = styled.p`
   max-width: 70vw;
+  padding: 2rem;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 24px;
   line-height: 2rem;
-  padding: 2rem 2rem 2rem;
   color: #757575;
   background-color: #b7e4c7;
   border-radius: 0px 0px 10px 10px;

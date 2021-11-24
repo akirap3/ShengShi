@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { AiFillMessage, AiFillCloseCircle } from 'react-icons/ai';
 import { handleDeleteDocument } from '../../../utils/firebase';
@@ -27,8 +26,9 @@ const Context = styled.div`
   align-items: center;
   position: relative;
   padding: 10px;
-  border-radius: 5px;
   margin-bottom: 15px;
+  font-family: 'cwTeXYen', sans-serif;
+  border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   background-color: #b7e4c7;
   border-left: 10px solid #52b788;
@@ -47,29 +47,27 @@ const MessageContainer = styled.div`
 `;
 
 const MessageTag = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 16px;
-  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
-  border-radius: 5px;
-  padding: 5px 10px;
   width: fit-content;
   margin-bottom: 10px;
+  padding: 5px 10px;
+  font-size: 16px;
   color: white;
   background: #52b788;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  border-radius: 5px;
 `;
 
 const MessageContent = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
   font-size: 18px;
   margin-left: 10px;
 `;
 
 const StyledColse = styled(AiFillCloseCircle)`
+  width: 22px;
+  height: 22px;
   position: absolute;
   top: -10px;
   right: -10px;
-  width: 22px;
-  height: 22px;
   fill: #1e88e582;
   border-radius: 50%;
   opacity: 0.8;

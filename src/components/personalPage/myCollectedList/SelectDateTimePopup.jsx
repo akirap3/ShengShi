@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { DialogOverlay } from '@reach/dialog';
 import {
   StyledDialogContent,
@@ -9,9 +9,7 @@ import {
   SubmitBtn,
 } from '../../common/popup/PopupUnits';
 import AlertPopup from '../../common/AlertPopup';
-
 import DateTimeSelector from '../../common/DateTimeSelector';
-import { useSelector } from 'react-redux';
 
 const ClendarPopup = ({ showDateTime, closeDateTime, share }) => {
   const specificDateTime = useSelector((state) => state.specificDateTime);
@@ -22,19 +20,21 @@ const ClendarPopup = ({ showDateTime, closeDateTime, share }) => {
   const closeInfo = () => setShowInfo(false);
   const now = new Date();
 
+  const openAlertWithMessage = (msg) => {
+    setAlertMessage(msg);
+    openInfo();
+  };
+
   const handleCheckDateTime = () => {
     if (specificDateTime && specificDateTime < share.fromTimeStamp.toDate()) {
-      setAlertMessage('領取時間小於可領取的開始時間，請重新選擇領取時間');
-      openInfo();
+      openAlertWithMessage('領取時間小於可領取的開始時間，請重新選擇領取時間');
     } else if (
       specificDateTime &&
       specificDateTime > share.toTimeStamp.toDate()
     ) {
-      setAlertMessage('領取時間大於可領取的結束時間，請重新選擇領取時間');
-      openInfo();
+      openAlertWithMessage('領取時間大於可領取的結束時間，請重新選擇領取時間');
     } else if (specificDateTime && specificDateTime < now) {
-      setAlertMessage('領取時間小於現在時間，請重新選擇領取時間');
-      openInfo();
+      openAlertWithMessage('領取時間小於現在時間，請重新選擇領取時間');
     } else {
       closeDateTime();
     }

@@ -1,11 +1,11 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { getSpecificContents } from '../../../utils/firebase';
+import { useCallback, useState, useEffect } from 'react';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import MyReceivedCard from './MyRecievedCard';
 import SharesContainer from '../../common/SharesContainer';
+import Outer from '../../common/Outer';
 import NoResult from '../NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
+import { getSpecificContents } from '../../../utils/firebase';
 
 const MyReceivedList = () => {
   const currentUser = useCurrentUser();
@@ -52,11 +52,5 @@ const MyReceivedList = () => {
     </>
   );
 };
-
-const Outer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 export default MyReceivedList;

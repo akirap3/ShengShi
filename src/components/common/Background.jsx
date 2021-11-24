@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const HomepageBackground = () => {
+const Background = ({ circleBgColor }) => {
   return (
     <BannerBG>
       <div>
-        <Circles>
+        <Circles circleBgColor={circleBgColor}>
           {[...Array(10).keys()].map((num) => (
             <li key={num} />
           ))}
@@ -33,7 +33,7 @@ const Circles = styled.ul`
     list-style: none;
     width: 20px;
     height: 20px;
-    background: rgba(255, 255, 255, 0.2);
+    background: ${({ circleBgColor }) => circleBgColor};
     animation: animate 25s linear infinite;
     bottom: -150px;
   }
@@ -79,21 +79,21 @@ const Circles = styled.ul`
     left: 75%;
     width: 110px;
     height: 110px;
-    animation-delay: 3s;
+    animation-delay: 1s;
   }
 
   & li:nth-child(7) {
     left: 35%;
     width: 150px;
     height: 150px;
-    animation-delay: 7s;
+    animation-delay: 0.5s;
   }
 
   & li:nth-child(8) {
     left: 50%;
     width: 25px;
     height: 25px;
-    animation-delay: 15s;
+    animation-delay: 0.1s;
     animation-duration: 45s;
   }
 
@@ -128,4 +128,4 @@ const Circles = styled.ul`
   }
 `;
 
-export default HomepageBackground;
+export default Background;

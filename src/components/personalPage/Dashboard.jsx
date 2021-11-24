@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { Link, useLocation } from 'react-router-dom';
 import AddSharePopup from './AddSharePopup';
-import LoginBg2 from '../loginPage/LoginBg2';
+import Background from '../common/Background';
 import Ripples from 'react-ripples';
 
 import useCurrentUser from '../../hooks/useCurrentUser';
@@ -192,7 +192,7 @@ const Dashbaord = () => {
   return (
     <>
       <DashboardContainer>
-        <LoginBg2 />
+        <Background circleBgColor={'rgba(183, 228, 199, 0.5)'} />
         <DashboardContext>
           <LeftColumn>
             <AvatarContainer>

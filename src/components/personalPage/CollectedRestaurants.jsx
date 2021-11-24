@@ -8,6 +8,7 @@ import StarImg from '../../images/common/star.png';
 
 import useCurrentUser from '../../hooks/useCurrentUser';
 import NoResult from './NoResult';
+import Outer from '../common/Outer';
 import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
 
 const CollectedRestaurants = () => {
@@ -36,7 +37,7 @@ const CollectedRestaurants = () => {
       {savedRestaurants ? (
         <>
           {savedRestaurants.length !== 0 ? (
-            <Outer>
+            <StyledOuter>
               <Container>
                 {savedRestaurants.map((restaurant) => (
                   <Card key={restaurant.id}>
@@ -59,7 +60,7 @@ const CollectedRestaurants = () => {
                   </Card>
                 ))}
               </Container>
-            </Outer>
+            </StyledOuter>
           ) : (
             <NoResult text="你沒有任何的收藏店家" />
           )}
@@ -73,10 +74,7 @@ const CollectedRestaurants = () => {
   );
 };
 
-const Outer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const StyledOuter = styled(Outer)`
   padding-top: 50px;
   padding-bottom: 150px;
 `;

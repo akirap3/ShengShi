@@ -28,7 +28,7 @@ import {
 const ConfirmedPopup = ({
   showConfirmation,
   closeConfirmation,
-  UpdateBtn,
+  hasUpdateBtn,
   share,
 }) => {
   const dispatch = useDispatch();
@@ -90,7 +90,7 @@ const ConfirmedPopup = ({
               </QRcodeWrapper>
             </MapQRContainer>
             <ButtonContainer>
-              {UpdateBtn && (
+              {hasUpdateBtn && (
                 <StyleBtnRipples color="#fff" during={3000}>
                   <SubmitBtn onClick={() => handleShowUpdate(share)}>
                     我要更新
