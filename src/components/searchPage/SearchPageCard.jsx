@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ShareCard from '../common/ShareCard';
 import CollectedSharePopup from '../personalPage/myCollectedList/CollectedSharePopup';
-
-import { useDispatch } from 'react-redux';
 
 const SearchPageCard = ({ share }) => {
   const dispatch = useDispatch();
@@ -25,7 +24,6 @@ const SearchPageCard = ({ share }) => {
         handleClick={handleSearchOpen}
         btnName="領取"
         cannnotDel={true}
-        key={share.id}
         share={share}
         isSearch={true}
       />
@@ -35,9 +33,7 @@ const SearchPageCard = ({ share }) => {
         share={share}
       />
     </>
-  ) : (
-    <></>
-  );
+  ) : null;
 };
 
 export default SearchPageCard;

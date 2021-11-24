@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import useCurrentUser from '../../hooks/useCurrentUser';
 import styled from 'styled-components';
 import {
   getSpecificContents,
   getCountsTwoFiltered,
   getContentCounts,
 } from '../../utils/firebase';
-import useCurrentUser from '../../hooks/useCurrentUser';
 import MyResponsivePie from './MyChart';
+import Outer from '../common/Outer';
 import NoResult from './NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
 
@@ -182,11 +183,11 @@ const Badges = () => {
   return (
     <>
       {Total && (
-        <CharContainer>
+        <ChartContainer>
           <ChartContent>
             <MyResponsivePie data={data} />
           </ChartContent>
-        </CharContainer>
+        </ChartContainer>
       )}
 
       <>
@@ -217,7 +218,7 @@ const Badges = () => {
   );
 };
 
-const CharContainer = styled.div`
+const ChartContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -248,15 +249,9 @@ const BadgeContainer = styled.div`
   }
 `;
 
-const Outer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const BadgeContext = styled.div`
-  justify-self: center;
   max-width: 800px;
+  justify-self: center;
 `;
 
 const BadgeImg = styled.img`

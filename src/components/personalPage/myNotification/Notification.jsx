@@ -1,10 +1,11 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
+import useCurrentUser from '../../../hooks/useCurrentUser';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import { getAllContents } from '../../../utils/firebase';
-import useCurrentUser from '../../../hooks/useCurrentUser';
+import Outer from '../../common/Outer';
 import NotificationCard from './NotificationCard';
 import NoResult from '../NoResult';
+import { getAllContents } from '../../../utils/firebase';
 
 const Notification = () => {
   const currentUser = useCurrentUser();
@@ -20,7 +21,7 @@ const Notification = () => {
 
   return currentUser && messages ? (
     messages.length !== 0 ? (
-      <Outer>
+      <StyledOuter>
         <NotificationContainer>
           {messages.map((message) => (
             <NotificationCard
@@ -30,7 +31,7 @@ const Notification = () => {
             />
           ))}
         </NotificationContainer>
-      </Outer>
+      </StyledOuter>
     ) : (
       <NoResult text="你目前沒有任何的訊息" />
     )
@@ -39,10 +40,7 @@ const Notification = () => {
   );
 };
 
-const Outer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const StyledOuter = styled(Outer)`
   padding-top: 50px;
   padding-bottom: 150px;
 `;

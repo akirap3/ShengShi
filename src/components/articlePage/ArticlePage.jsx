@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { Waypoint } from 'react-waypoint';
 import Main from '../common/Main';
-import HomepageBackground from '../common/HomepageBackground';
+import Background from '../common/Background';
 import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
 import NoResult from '../personalPage/NoResult';
 
@@ -11,7 +11,7 @@ import {
   BannerContent,
   BannerTitle,
   Subtitle,
-} from '../common/Banner/CommonBanner';
+} from '../common/banner/CommonBanner';
 
 import {
   SearchContent,
@@ -23,7 +23,7 @@ import {
   StyledRipples,
 } from '../common/search/SearchUnits';
 
-import ArticleBannerImg from '../../images/articlePage/articleImage1.jpg';
+import ArticleBannerImg from '../../images/articlePage/articleImage.jpg';
 
 import {
   getAllOrderedContents,
@@ -108,7 +108,7 @@ const ArticlePage = () => {
   return (
     <Main>
       <UpperPart>
-        <HomepageBackground />
+        <Background circleBgColor={'rgba(255, 255, 255, 0.2)'} />
         <Banner>
           <BannerImg src={ArticleBannerImg} />
           <StyledBannerContent>

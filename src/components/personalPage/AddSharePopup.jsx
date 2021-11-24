@@ -3,22 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Loading from '../common/Loading.jsx';
 import Compressor from 'compressorjs';
-
-import {
-  collection,
-  doc,
-  setDoc,
-  getFirestore,
-  Timestamp,
-  GeoPoint,
-  increment,
-  updateDoc,
-} from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-
 import { isFieldsChecked } from '../../utils/validation.js';
 import useCurrentUser from '../../hooks/useCurrentUser.js';
-import { getListenedSingleContent, handleAddBadge } from '../../utils/firebase';
+import {
+  getListenedSingleContent,
+  handleAddShareSubmit,
+} from '../../utils/firebase';
 
 import { DialogOverlay } from '@reach/dialog';
 import {
@@ -61,7 +51,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
   const [quantities, setQuantities] = useState(1);
   const [file, setFile] = useState(null);
   const [userData, setUserData] = useState('');
-  const [isLoading, setIsLoaging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const openCalendar = () => setShowCalendar(true);
   const closeCalendar = () => setShowCalendar(false);
@@ -73,6 +63,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
   const handleAddress = (payload) => {
     dispatch({ type: 'address/get', payload: payload });
   };
+
   const handleLatLng = (payload) => {
     dispatch({ type: 'latLng/get', payload: payload });
   };
@@ -91,78 +82,31 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
 
   const handleCompressFile = (e) => {
     const image = e.target.files[0];
-    new Compressor(image, {
-      quality: 0.2,
-      convertSize: 1000000,
-      success: (res) => {
-        setFile(res);
-      },
-    });
+    if (image)
+      new Compressor(image, {
+        quality: 0.2,
+        convertSize: 1000000,
+        success: (res) => {
+          setFile(res);
+        },
+      });
   };
 
-  const handleSubmit = async () => {
-    if (
-      isFieldsChecked(
-        foodName,
-        quantities,
-        fromToDateTime,
-        address,
-        file,
-        setAlertMessage,
-        openInfo
-      )
-    ) {
-      setIsLoaging(true);
-      const docRef = doc(collection(getFirestore(), `shares`));
-      const fileRef = ref(getStorage(), `images/shares/${docRef.id}`);
+  const openAlertWithMessage = (msg) => {
+    setAlertMessage(msg);
+    openInfo();
+    return false;
+  };
 
-      const metadata = {
-        contentType: file.type,
-      };
-
-      const uplaodTask = await uploadBytes(fileRef, file, metadata);
-      const imageUrl = await getDownloadURL(uplaodTask.ref);
-      await setDoc(
-        docRef,
-        {
-          exchangePlace: address,
-          fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
-          toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
-          imageUrl,
-          quantities: Number(quantities),
-          name: foodName,
-          postUser: {
-            id: currentUser.uid,
-            displayName: userData.displayName,
-          },
-          rating: 5,
-          createdAt: Timestamp.fromDate(new Date()),
-          userLocation: userData.myPlace || '未提供',
-          exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
-          receivedInfo: {},
-          receivedUserId: [],
-          toReceiveInfo: {},
-          toReceiveUserId: [],
-          savedUserId: [],
-          bookedQuantities: 0,
-          isArchived: false,
-        },
-        { merge: true }
-      );
-
-      await updateDoc(doc(getFirestore(), 'users', currentUser.uid), {
-        myPoints: increment(10),
-      });
-
-      handleAddBadge(currentUser.uid);
-
-      setIsLoaging(false);
-      closeEditor();
-      handleLatLng([]);
-      handleAddress('');
-      handleFromToDateTime();
-      setFile(null);
-    }
+  const isOK = () => {
+    return isFieldsChecked(
+      foodName,
+      quantities,
+      fromToDateTime,
+      address,
+      file,
+      openAlertWithMessage
+    );
   };
 
   const previewImgUrl = file
@@ -181,33 +125,33 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
           </PopTitleContainer>
           <PopContent>
             <PopRow>
-              <FoodLabel>食物名稱</FoodLabel>
-              <FoodName onChange={(e) => setFoodName(e.target.value)} />
+              <StyledLabel>食物名稱</StyledLabel>
+              <StyledInput onChange={(e) => setFoodName(e.target.value)} />
             </PopRow>
             <PopRow>
-              <QuantityLabel>數量</QuantityLabel>
-              <Quantity onChange={(e) => setQuantities(e.target.value)} />
+              <StyledLabel>數量</StyledLabel>
+              <StyledInput onChange={(e) => setQuantities(e.target.value)} />
             </PopRow>
             <PopRow>
               <LabelIconContainer>
                 <DateTimeLabel>日期及時間</DateTimeLabel>
                 <Calendar onClick={openCalendar} />
               </LabelIconContainer>
-              <DateTime>
+              <StyledSpan>
                 {fromToDateTime
                   ? `${fromToDateTime[0].toLocaleString()} - ${fromToDateTime[1].toLocaleString()}`
                   : ''}
-              </DateTime>
+              </StyledSpan>
             </PopRow>
             <PopRow>
               <LabelIconContainer>
                 <PopPlaceLabel>地點</PopPlaceLabel>
                 <StyledPopPlaceIcon onClick={openMap} />
               </LabelIconContainer>
-              <PopPlace>{address}</PopPlace>
+              <StyledSpan>{address}</StyledSpan>
             </PopRow>
             <PopRow>
-              <FoodImgLabel>食物照片</FoodImgLabel>
+              <StyledLabel>食物照片</StyledLabel>
             </PopRow>
             <Preview src={previewImgUrl} />
             <ButtonContainer>
@@ -227,7 +171,28 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
                 disabled={isLoading}
               />
               <StyleBtnRipples color="#fff" during={3000}>
-                <SubmitBtn onClick={handleSubmit} disabled={isLoading}>
+                <SubmitBtn
+                  onClick={() =>
+                    handleAddShareSubmit(
+                      isOK,
+                      setIsLoading,
+                      file,
+                      address,
+                      fromToDateTime,
+                      quantities,
+                      foodName,
+                      currentUser,
+                      userData,
+                      latLng,
+                      closeEditor,
+                      handleLatLng,
+                      handleAddress,
+                      handleFromToDateTime,
+                      setFile
+                    )
+                  }
+                  disabled={isLoading}
+                >
                   分享
                 </SubmitBtn>
               </StyleBtnRipples>
@@ -254,19 +219,9 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
   );
 };
 
-const FoodLabel = styled(StyledLabel)``;
-
-const FoodName = styled(StyledInput)``;
-
-const QuantityLabel = styled(StyledLabel)``;
-
-const Quantity = styled(StyledInput)``;
-
 const DateTimeLabel = styled(StyledLabel)`
   margin-right: 10px;
 `;
-
-const DateTime = styled(StyledSpan)``;
 
 const PopPlaceLabel = styled(StyledLabel)`
   margin-right: 10px;
@@ -275,10 +230,6 @@ const PopPlaceLabel = styled(StyledLabel)`
 const StyledPopPlaceIcon = styled(PopPlaceIcon)`
   cursor: pointer;
 `;
-
-const PopPlace = styled(StyledSpan)``;
-
-const FoodImgLabel = styled(StyledLabel)``;
 
 const UploadBtn = styled.input`
   display: none;

@@ -6,9 +6,24 @@ import { getAllContents } from '../../utils/firebase';
 
 import * as validation from '../../utils/validation';
 import * as firebase from '../../utils/firebase';
+import {
+  FormContainer,
+  Title,
+  FieldContainer,
+  StyledIcon,
+  StyledInput,
+  ButtonContainer,
+  NativeButton,
+  StyledBtnIcon,
+  FbIcon,
+  FBButton,
+  GoogleButton,
+  Text,
+  StyledLink,
+} from '../common/form/FormUnits';
 import Main from '../common/Main';
 import LoginBackground from './LoginBackground';
-import LoginBg2 from './LoginBg2';
+import Background from '../common/Background';
 import AlertPopup from '../common/AlertPopup';
 
 import { IoLogoFacebook } from 'react-icons/io';
@@ -119,11 +134,13 @@ const LoginPage = () => {
         <StyledMain>
           {isLoading && <Loading />}
           <LoginBackground />
-          <LoginBg2 />
-          <SignupContainer>
+          <Background
+            circleBgColor={'linear-gradient(253deg, #0cc898, #1797d2, #864fe1)'}
+          />
+          <LoginContainer>
             <Title>Ｗelcome back</Title>
-            <FiledContainer>
-              <EmailIcon />
+            <FieldContainer>
+              <StyledIcon as={BsFillPersonFill} />
               <Field
                 placeholder="Email"
                 value={email}
@@ -132,9 +149,9 @@ const LoginPage = () => {
                 }}
                 disabled={isLoading}
               />
-            </FiledContainer>
-            <FiledContainer>
-              <PasswordIcon />
+            </FieldContainer>
+            <FieldContainer>
+              <StyledIcon as={RiLock2Fill} />
               <Field
                 type="password"
                 placeholder="Password"
@@ -144,7 +161,7 @@ const LoginPage = () => {
                 }}
                 disabled={isLoading}
               />
-            </FiledContainer>
+            </FieldContainer>
             <ButtonContainer>
               <NativeButton
                 onClick={() => checkAndLogin()}
@@ -163,7 +180,7 @@ const LoginPage = () => {
                 }
                 disabled={isLoading}
               >
-                <FbIcon />
+                <FbIcon as={IoLogoFacebook} />
                 <span>FB</span>
               </FBButton>
               <GoogleButton
@@ -177,14 +194,14 @@ const LoginPage = () => {
                 }
                 disabled={isLoading}
               >
-                <GoogleIcon /> <span>Google</span>
+                <StyledBtnIcon as={FcGoogle} /> <span>Google</span>
               </GoogleButton>
             </ButtonContainer>
             <Text>
               還沒有建立帳號嗎？
-              <SignUpLink to="/signup">註冊</SignUpLink>
+              <StyledLink to="/signup">註冊</StyledLink>
             </Text>
-          </SignupContainer>
+          </LoginContainer>
         </StyledMain>
       ) : (
         <PaddingLoading>
@@ -206,144 +223,17 @@ const StyledMain = styled(Main)`
   align-items: center;
 `;
 
-const SignupContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+const LoginContainer = styled(FormContainer)`
   width: 325px;
   margin: 100px auto;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  background-color: rgba(219, 245, 255, 0.3);
-  backdrop-filter: blur(5px);
 
   @media screen and (max-width: 700px) {
     margin: 50px auto;
   }
 `;
 
-const Title = styled.h1`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 40px;
-  text-transform: uppercase;
-  color: #2b2b2b;
-`;
-
-const FiledContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 35px;
-`;
-
-const EmailIcon = styled(BsFillPersonFill)`
-  fill: rgb(129, 129, 129);
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-`;
-
-const PasswordIcon = styled(RiLock2Fill)`
-  fill: rgb(129, 129, 129);
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-`;
-
-const Field = styled.input`
+const Field = styled(StyledInput)`
   width: 60%;
-  border: none;
-  background: none;
-  outline: none;
-  flex-grow: 1;
-  border-bottom: 2px solid #d9d7d7;
-  padding: 5px 8px;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-`;
-
-const Button = styled.div`
-  border-radius: 5px;
-  padding: 5px 15px;
-  box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
-  cursor: pointer;
-`;
-
-const NativeButton = styled(Button)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 5px;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 16px;
-  color: white;
-  background-color: #1e88e5;
-
-  @media screen and (max-width: 470px) {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-`;
-
-const FBButton = styled(Button)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 5px;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 16px;
-  border: 1px solid #d9d7d7;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(5px);
-  @media screen and (max-width: 470px) {
-    width: 48%;
-    font-size: 14px;
-  }
-`;
-
-const GoogleButton = styled(Button)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #d9d7d7;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(5px);
-  @media screen and (max-width: 470px) {
-    width: 48%;
-    font-size: 14px;
-  }
-`;
-
-const FbIcon = styled(IoLogoFacebook)`
-  fill: rgb(35, 140, 241);
-  height: 20px;
-  width: 20px;
-  margin-right: 5px;
-`;
-
-const GoogleIcon = styled(FcGoogle)`
-  height: 20px;
-  width: 20px;
-  margin-right: 5px;
-`;
-
-const Text = styled.div`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 16px;
-  text-align: center;
-  margin-top: 15px;
-`;
-
-const SignUpLink = styled(Link)`
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 16px;
-  color: #40916c;
 `;
 
 export default LoginPage;

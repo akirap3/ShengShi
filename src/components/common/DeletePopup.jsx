@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import styled from 'styled-components';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import Loading from './Loading';
 
@@ -59,7 +60,7 @@ const DeletePopup = ({
             <PopTitle>{`確認刪除此${category}`}</PopTitle>
           </PopTitleContainer>
           <AlertBtnRow>
-            <SubmitBtn
+            <StyledSubmitBtn
               onClick={
                 isToReceive
                   ? () =>
@@ -81,7 +82,7 @@ const DeletePopup = ({
               disabled={isLoading}
             >
               確認
-            </SubmitBtn>
+            </StyledSubmitBtn>
             <CancelBtn onClick={closeDelete} disabled={isLoading}>
               取消
             </CancelBtn>
@@ -91,5 +92,9 @@ const DeletePopup = ({
     )
   );
 };
+
+const StyledSubmitBtn = styled(SubmitBtn)`
+  margin-right: 5px;
+`;
 
 export default DeletePopup;

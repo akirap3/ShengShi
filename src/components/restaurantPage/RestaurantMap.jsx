@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import useSupercluster from 'use-supercluster';
 import GoogleMapReact from 'google-map-react';
 import styled from 'styled-components';
@@ -16,6 +16,7 @@ const RestaurantMap = ({ restaurants }) => {
   const [bounds, setBounds] = useState(null);
   const [defaultCenter, setDefaultCenter] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(true);
 
   const setCurrentLocation = (position) => {
     setDefaultCenter({
@@ -26,14 +27,19 @@ const RestaurantMap = ({ restaurants }) => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    navigator.geolocation.watchPosition(setCurrentLocation, (error) => {
-      if (error.code === error.PERMISSION_DENIED) {
-        setDefaultCenter({ lat: 25.04267234987771, lng: 121.56497334150076 });
-        setIsLoading(false);
-      }
-    });
-  }, []);
+    if (isMounted) {
+      setIsLoading(true);
+      navigator.geolocation.watchPosition(setCurrentLocation, (error) => {
+        if (error.code === error.PERMISSION_DENIED) {
+          setDefaultCenter({ lat: 25.04267234987771, lng: 121.56497334150076 });
+          setIsLoading(false);
+        }
+      });
+    }
+    return () => {
+      setIsMounted(false);
+    };
+  }, [isMounted]);
 
   const points =
     restaurants?.map((restaurant) => ({

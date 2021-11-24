@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-
+import useCurrentUser from '../../../hooks/useCurrentUser';
+import styled from 'styled-components';
 import { DialogOverlay } from '@reach/dialog';
 import {
   StyledDialogContent,
@@ -23,14 +23,10 @@ import {
   SubmitBtn,
 } from '../../common/popup/PopupUnits';
 import LocationMap from '../../common/LocationMap';
-import Loading from '../../common/Loading';
-
-import { getFirestore, doc, updateDoc, Timestamp } from '@firebase/firestore';
-
 import SelectDateTimePopup from '../myCollectedList/SelectDateTimePopup';
 import AlertPopup from '../../common/AlertPopup';
-
-import useCurrentUser from '../../../hooks/useCurrentUser';
+import Loading from '../../common/Loading';
+import { handleUpdateSubmit } from '../../../utils/firebase';
 
 const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
   const dispatch = useDispatch();
@@ -53,38 +49,22 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
     dispatch({ type: 'specificDateTime/selected', payload: payload });
   };
 
+  const openAlertWithMessage = (msg) => {
+    setAlertMessage(msg);
+    openInfo();
+    return false;
+  };
+
   const isFieldsChecked = (share) => {
     const newQty = Number(newQuantities);
     if (isNaN(newQty)) {
-      setAlertMessage('數量請輸入數字');
-      openInfo();
-      return false;
+      return openAlertWithMessage('數量請輸入數字');
     } else if (newQty < 0 || newQty > share.quantities) {
-      setAlertMessage(`請輸入介於 1 ~ ${share.quantities} 的數字`);
-      openInfo();
-      return false;
+      return openAlertWithMessage(`請輸入介於 1 ~ ${share.quantities} 的數字`);
     } else if (specificDateTime === null) {
-      setAlertMessage('請點選領取的日期時間');
-      openInfo();
-      return false;
+      return openAlertWithMessage('請點選領取的日期時間');
     }
     return true;
-  };
-
-  const handleSubmit = async () => {
-    if (isFieldsChecked(share)) {
-      setIsLoading(true);
-      const docRef = doc(getFirestore(), 'shares', share.id);
-      const updateQuantities = `toReceiveInfo.${currentUser.uid}.quantities`;
-      const updateUpcomingTimestamp = `toReceiveInfo.${currentUser.uid}.upcomingTimestamp`;
-      await updateDoc(docRef, {
-        [updateQuantities]: newQuantities,
-        [updateUpcomingTimestamp]: Timestamp.fromDate(specificDateTime),
-      });
-      setIsLoading(false);
-      handleSpecificDateTime(null);
-      closeUpdate();
-    }
   };
 
   return (
@@ -99,10 +79,9 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
           </PopTitleContainer>
           <PopContent>
             <Preview src={share?.imageUrl || ''} />
-
             <StyledPopRow>
-              <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
-              <Quantity
+              <StyledLabel>登記數量</StyledLabel>
+              <StyledInput
                 placeholder={
                   share?.toReceiveInfo[currentUser?.uid]?.quantities || ''
                 }
@@ -111,35 +90,49 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
               />
             </StyledPopRow>
             <PopRow>
-              <AvailableDateTimeLabel>可領取期間</AvailableDateTimeLabel>
-              <AvailableDateTime>
+              <StyledLabel>可領取期間</StyledLabel>
+              <StyledSpan>
                 {share?.fromTimeStamp.toDate().toLocaleString()}
-                {` - `}
+                {` ~ `}
                 {share?.toTimeStamp.toDate().toLocaleString()}
-              </AvailableDateTime>
+              </StyledSpan>
             </PopRow>
             <PopRow>
               <LabelIconContainer>
                 <DateTimeLabel>領取日期及時間</DateTimeLabel>
                 <Calendar onClick={openDateTime} />
               </LabelIconContainer>
-              <DateTime>
+              <StyledSpan>
                 {specificDateTime ? specificDateTime.toLocaleString() : ''}
-              </DateTime>
+              </StyledSpan>
             </PopRow>
             <PopRow>
               <LabelIconContainer>
                 <PopPlaceLabel>地點</PopPlaceLabel>
                 <PopPlaceIcon />
               </LabelIconContainer>
-              <PopPlace>{share?.exchangePlace || ''}</PopPlace>
+              <StyledSpan>{share?.exchangePlace || ''}</StyledSpan>
             </PopRow>
             <MapWrapper>
               <LocationMap />
             </MapWrapper>
             <ButtonContainer>
               <StyleBtnRipples color="#fff" during={3000}>
-                <SubmitBtn onClick={() => handleSubmit()} disabled={isLoading}>
+                <SubmitBtn
+                  onClick={() =>
+                    handleUpdateSubmit(
+                      isFieldsChecked,
+                      share,
+                      setIsLoading,
+                      currentUser,
+                      newQuantities,
+                      specificDateTime,
+                      handleSpecificDateTime,
+                      closeUpdate
+                    )
+                  }
+                  disabled={isLoading}
+                >
                   確認更新
                 </SubmitBtn>
               </StyleBtnRipples>
@@ -165,25 +158,13 @@ const StyledPopRow = styled(PopRow)`
   margin-top: 15px;
 `;
 
-const RegisterQuantityLabel = styled(StyledLabel)``;
-
-const Quantity = styled(StyledInput)``;
-
-const AvailableDateTimeLabel = styled(StyledLabel)``;
-
-const AvailableDateTime = styled(StyledSpan)``;
-
 const DateTimeLabel = styled(StyledLabel)`
   margin-right: 10px;
 `;
 
-const DateTime = styled(StyledSpan)``;
-
 const PopPlaceLabel = styled(StyledLabel)`
   margin-right: 10px;
 `;
-
-const PopPlace = styled(StyledSpan)``;
 
 const MapWrapper = styled.div`
   margin-bottom: 15px;

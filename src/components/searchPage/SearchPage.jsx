@@ -1,19 +1,26 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import useCurrentUser from '../../hooks/useCurrentUser';
 import styled from 'styled-components';
-
-import { v4 as uuidv4 } from 'uuid';
-import SearchPageCard from './SearchPageCard';
+import { Waypoint } from 'react-waypoint';
+import Main from '../common/Main';
 import SharesContainer from '../common/SharesContainer';
+import Outer from '../common/Outer';
+import SearchPageCard from './SearchPageCard';
+import NoResult from '../personalPage/NoResult';
+import WaveBackground from './WaveBackground';
+import Background from '../common/Background';
 import Title from '../personalPage/Title';
 import Loading from '../common/Loading';
-import { getSingleShare } from '../../utils/firebase';
-import { useDispatch, useSelector } from 'react-redux';
-import { Waypoint } from 'react-waypoint';
+import Img from '../../images/restaurantPage/restaurant-8.jpg';
+import algolia from '../../utils/algolia';
+
 import {
+  getSingleShare,
   getAllOrderedContents,
   getAllOrderedOtherShares,
 } from '../../utils/firebase';
-import useCurrentUser from '../../hooks/useCurrentUser';
+
 import {
   BannerContent,
   BannerTitle,
@@ -21,9 +28,8 @@ import {
   ButtonRow,
   StartButton,
   LearnMoreButton,
-} from '../common/Banner/CommonBanner';
+} from '../common/banner/CommonBanner';
 
-import Main from '../common/Main';
 import {
   SearchContent,
   SearchOutline,
@@ -33,13 +39,6 @@ import {
   StyledRipples,
   ResetButton,
 } from '../common/search/SearchUnits';
-
-import NoResult from '../personalPage/NoResult';
-
-import Img from '../../images/restaurantPage/restaurant-8.jpg';
-import WaveBackground from './WaveBackground';
-import LoginBg2 from '../loginPage/LoginBg2';
-import algolia from '../../utils/algolia';
 
 const SearchPage = () => {
   const dispatch = useDispatch();
@@ -148,7 +147,7 @@ const SearchPage = () => {
   return (
     <Main>
       <UpperPart>
-        <LoginBg2 />
+        <Background circleBgColor={'rgba(183, 228, 199, 0.5)'} />
         <WaveBackground />
         <Banner>
           <StyledBannerContent>
@@ -181,7 +180,7 @@ const SearchPage = () => {
         </SearchContent>
       </UpperPart>
       <Title title="目前其他人分享的勝食" />
-      <Outer>
+      <StyledOuter>
         {shares ? (
           shares.length !== 0 ? (
             <SharesContainer>
@@ -189,7 +188,7 @@ const SearchPage = () => {
                 .filter((share) => share.isArchived === false)
                 .filter((share) => share.toTimeStamp.toDate() > new Date())
                 .map((share) => (
-                  <SearchPageCard key={uuidv4()} share={share} />
+                  <SearchPageCard key={share.id} share={share} />
                 ))}
             </SharesContainer>
           ) : (
@@ -198,7 +197,7 @@ const SearchPage = () => {
         ) : (
           <Loading />
         )}
-      </Outer>
+      </StyledOuter>
       <Waypoint onEnter={handleInfiniteScroll} />
     </Main>
   );
@@ -262,10 +261,7 @@ const LookButton = styled(LearnMoreButton)`
   border: 1px solid #a0a0968a;
 `;
 
-const Outer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const StyledOuter = styled(Outer)`
   position: relative;
 `;
 

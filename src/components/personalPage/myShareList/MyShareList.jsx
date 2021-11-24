@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import styled from 'styled-components';
-import { getSpecificContents } from '../../../utils/firebase';
+import { useState, useEffect, useCallback } from 'react';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import SharesContainer from '../../common/SharesContainer';
+import Outer from '../../common/Outer';
 import MyShareCard from './MyShareCard';
 import NoResult from '../NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
+import { getSpecificContents } from '../../../utils/firebase';
 
 const MyShareList = () => {
   const [shares, setShares] = useState(null);
@@ -54,11 +54,5 @@ const MyShareList = () => {
     </>
   );
 };
-
-const Outer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 export default MyShareList;

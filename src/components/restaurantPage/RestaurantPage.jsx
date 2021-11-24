@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-
 import { layoutConfig } from '../../utils/commonVariables';
 import { getAllContents, getSearchedContents } from '../../utils/firebase';
 import Carousel from '../common/carousel/Carousel';
-import HomepageBackground from '../common/HomepageBackground';
+import Background from '../common/Background';
 import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
 import {
   BannerContent,
@@ -13,8 +12,7 @@ import {
   ButtonRow,
   StartButton,
   LearnMoreButton,
-} from '../common/Banner/CommonBanner';
-
+} from '../common/banner/CommonBanner';
 import {
   SearchContent,
   SearchOutline,
@@ -24,7 +22,6 @@ import {
   ResetButton,
   StyledRipples,
 } from '../common/search/SearchUnits';
-
 import RestaurantMap from './RestaurantMap';
 import RestaurantSearchCard from './RestaurantSearchCard';
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
@@ -65,7 +62,7 @@ const RestaurantPage = () => {
   return (
     <Main>
       <UpperPart>
-        <HomepageBackground />
+        <Background circleBgColor={'rgba(255, 255, 255, 0.2)'} />
         <Banner>
           <BannerImg src={Img} />
           <StyledBannerContent>

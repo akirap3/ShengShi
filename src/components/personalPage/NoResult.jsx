@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import CatImg from '../../images/PersonalPage/cat.gif';
 
@@ -16,8 +15,8 @@ const NoResultContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 10vw;
   height: 40vh;
+  padding: 10vw;
   background-color: white;
 
   @media screen and (min-width: 650px) {

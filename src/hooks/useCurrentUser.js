@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as firebase from '../utils/firebase';
+import { observeUserChange } from '../utils/firebase';
 
 const useCurrentUser = () => {
   const dispatch = useDispatch();
@@ -10,7 +10,7 @@ const useCurrentUser = () => {
     let isMounted = true;
     if (currentUser) return;
 
-    firebase.observeUserChange((currentUser) => {
+    observeUserChange((currentUser) => {
       if (isMounted)
         dispatch({ type: 'currentUser/get', payload: currentUser });
     });

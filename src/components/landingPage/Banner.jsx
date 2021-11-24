@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import BannerImage from '../../images/homepage/sharefood-1.jpg';
-import HomepageBackground from '../common/HomepageBackground';
+import Background from '../common/Background';
 import {
   BannerContent,
   BannerTitle,
@@ -9,12 +9,12 @@ import {
   ButtonRow,
   StartButton,
   LearnMoreButton,
-} from '../common/Banner/CommonBanner';
+} from '../common/banner/CommonBanner';
 
 const Banner = () => {
   return (
     <BannerContainer>
-      <HomepageBackground />
+      <Background circleBgColor={'rgba(255, 255, 255, 0.2)'} />
       <StyledBannerContent>
         <BannerTitle>分享</BannerTitle>
         <Subtitle>

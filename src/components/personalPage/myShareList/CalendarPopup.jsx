@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { DialogOverlay } from '@reach/dialog';
 import {
   StyledDialogContent,
@@ -9,8 +9,6 @@ import {
   SubmitBtn,
 } from '../../common/popup/PopupUnits';
 import AlertPopup from '../../common/AlertPopup';
-import { useSelector } from 'react-redux';
-
 import DateTimeRangeSelector from '../../common/DateTimeRangeSelector';
 
 const ClendarPopup = ({ showCalender, closeCalendar }) => {
