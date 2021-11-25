@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import useCurrentUser from '../../hooks/useCurrentUser';
+
 import styled from 'styled-components';
+
+import useCurrentUser from '../../hooks/useCurrentUser';
 import {
   getSpecificContents,
   getCountsTwoFiltered,
@@ -225,7 +227,7 @@ const ChartContainer = styled.div`
 `;
 
 const ChartContent = styled.div`
-  width: 600px;
+  width: 100%;
   height: 600px;
   @media screen and (max-width: 900px) {
     width: 80vw;

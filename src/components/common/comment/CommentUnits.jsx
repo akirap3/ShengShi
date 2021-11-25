@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import NothingImg from '../../../images/common/nothing.gif';
 import Ripples from 'react-ripples';
+import NothingImg from '../../../images/common/nothing.gif';
 
 export const CommentSection = styled.div`
   display: flex;

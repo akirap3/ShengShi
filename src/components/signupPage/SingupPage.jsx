@@ -1,11 +1,13 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+
 import styled from 'styled-components';
-import Loading, { PaddingLoading } from '../common/Loading';
-import AlertPopup from '../common/AlertPopup';
+import { useHistory } from 'react-router-dom';
+
 import Main from '../common/Main';
 import LoginBackground from '../loginPage/LoginBackground';
 import Background from '../common/Background';
+import Loading, { PaddingLoading } from '../common/Loading';
+import AlertPopup from '../common/AlertPopup';
 
 import {
   FormContainer,

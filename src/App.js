@@ -1,4 +1,5 @@
 import { Route, Switch, Redirect } from 'react-router-dom';
+
 import Header from './components/common/header/Header';
 import Footer from './components/common/Footer';
 import Loading, { PaddingLoading } from './components/common/Loading';
@@ -8,7 +9,7 @@ import ArticlePage from './components/articlePage/ArticlePage';
 import SearchPage from './components/searchPage/SearchPage';
 import LoginPage from './components/loginPage/LoginPage';
 import SignupPage from './components/signupPage/SingupPage';
-import Dashbaord from './components/personalPage/Dashboard';
+import Dashbaord from './components/personalPage/dashboard/Dashboard';
 import Title from './components/personalPage/Title';
 import MyShareList from './components/personalPage/myShareList/MyShareList';
 import Badges from './components/personalPage/Badges';

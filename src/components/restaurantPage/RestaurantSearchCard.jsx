@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import { handleCollection } from '../../utils/firebase';
-import useCurrentUser from '../../hooks/useCurrentUser';
-import NoResult from '../personalPage/NoResult';
 import { AiTwotoneHeart } from 'react-icons/ai';
+
+import useCurrentUser from '../../hooks/useCurrentUser';
+import { handleCollection } from '../../utils/firebase';
+import NoResult from '../personalPage/NoResult';
 import StarImg from '../../images/common/star.png';
 
 const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {

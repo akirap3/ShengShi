@@ -1,5 +1,5 @@
-import React from 'react';
 import styled from 'styled-components';
+
 import UserImgOne from '../../images/homepage/user-2.jpg';
 import UserImgTwo from '../../images/homepage/user-5.jpg';
 

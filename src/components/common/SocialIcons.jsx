@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { IoLogoFacebook, IoLogoTwitter, IoLogoInstagram } from 'react-icons/io';
 
@@ -23,11 +22,9 @@ const SocialIcons = () => {
   );
 };
 
-const FbIcon = styled(IoLogoFacebook)``;
-
-const TwitterIcon = styled(IoLogoTwitter)``;
-
 const InstagramIcon = styled(IoLogoInstagram)``;
+const TwitterIcon = styled(IoLogoTwitter)``;
+const FbIcon = styled(IoLogoFacebook)``;
 
 const Icons = styled.div`
   display: flex;

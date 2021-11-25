@@ -1,5 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
+
 import { useParams, useHistory } from 'react-router-dom';
+
 import useCurrentUser from '../../hooks/useCurrentUser';
 import {
   getListenedSingleContent,
@@ -75,6 +77,11 @@ const QRcodeComfirmPage = () => {
     return share?.toReceiveUserId?.includes(currentUser.uid) ? true : false;
   };
 
+  const openAlertWithMessage = (msg) => {
+    setAlertMessage(msg);
+    openInfo();
+  };
+
   const isOthers = (share, currentUser) => {
     if (
       isGiver(share, currentUser) ||
@@ -83,8 +90,7 @@ const QRcodeComfirmPage = () => {
     ) {
       return false;
     } else {
-      setAlertMessage('您非此剩食的擁有者或是領用者');
-      openInfo();
+      openAlertWithMessage('您非此剩食的擁有者或是領用者');
       history.push('/');
       return true;
     }

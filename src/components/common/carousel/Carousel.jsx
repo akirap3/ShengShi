@@ -2,12 +2,13 @@ import styled from 'styled-components';
 import Slider from 'react-slick';
 import Ripples from 'react-ripples';
 import { v4 as uuidv4 } from 'uuid';
-import useCurrentUser from '../../../hooks/useCurrentUser';
 import { useSelector } from 'react-redux';
-import { handleCollection } from '../../../utils/firebase';
 import { AiTwotoneHeart } from 'react-icons/ai';
-import StarImg from '../../../images/common/star.png';
+
+import useCurrentUser from '../../../hooks/useCurrentUser';
+import { handleCollection } from '../../../utils/firebase';
 import { CarouselSettings } from './CarouselSettings';
+import StarImg from '../../../images/common/star.png';
 
 const Carousel = ({ title, contentData, isRestaurants }) => {
   const currentUser = useCurrentUser();

@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import useCurrentUser from '../../../hooks/useCurrentUser';
+
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { DialogOverlay } from '@reach/dialog';
+
+import useCurrentUser from '../../../hooks/useCurrentUser';
 import {
   StyledDialogContent,
   PopClose,
@@ -27,18 +29,18 @@ import ConfirmedPopup from '../../common/ConfirmedPopup';
 import AlertPopup from '../../common/AlertPopup';
 import LocationMap from '../../common/LocationMap';
 import Loading from '../../common/Loading';
-import {
-  getCurrentUserData,
-  getAllContents,
-  getCollectionCounts,
-  handleConfirmation,
-} from '../../../utils/firebase';
 import Comment from '../../common/comment/Comment';
 import {
   CommentSection,
   CommentSummary,
   NoComment,
 } from '../../common/comment/CommentUnits';
+import {
+  getCurrentUserData,
+  getAllContents,
+  getCollectionCounts,
+  handleConfirmation,
+} from '../../../utils/firebase';
 
 const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   const dispatch = useDispatch();

@@ -1,8 +1,10 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import useCurrentUser from '../../hooks/useCurrentUser';
+
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import { Waypoint } from 'react-waypoint';
+
+import useCurrentUser from '../../hooks/useCurrentUser';
 import Main from '../common/Main';
 import SharesContainer from '../common/SharesContainer';
 import Outer from '../common/Outer';

@@ -1,16 +1,17 @@
-import React, { useRef, useState, useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useRef, useState, useCallback, useEffect } from 'react';
+
 import styled from 'styled-components';
-import Loading from '../common/Loading.jsx';
+import { useDispatch, useSelector } from 'react-redux';
 import Compressor from 'compressorjs';
+import { DialogOverlay } from '@reach/dialog';
+
+import Loading from '../common/Loading.jsx';
 import { isFieldsChecked } from '../../utils/validation.js';
 import useCurrentUser from '../../hooks/useCurrentUser.js';
 import {
   getListenedSingleContent,
   handleAddShareSubmit,
 } from '../../utils/firebase';
-
-import { DialogOverlay } from '@reach/dialog';
 import {
   StyledDialogContent,
   PopClose,
@@ -31,7 +32,6 @@ import {
   ImgUpload,
   SubmitBtn,
 } from '../common/popup/PopupUnits.jsx';
-
 import CalendarPopup from './myShareList/CalendarPopup';
 import MapPopup from './myShareList/MapPopup.jsx';
 import AlertPopup from '../common/AlertPopup.jsx';

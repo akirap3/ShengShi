@@ -1,5 +1,5 @@
-import { layoutConfig } from '../../utils/commonVariables';
 import styled from 'styled-components';
+import { layoutConfig } from '../../utils/commonVariables';
 
 const Main = styled.div`
   position: relative;

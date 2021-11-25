@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import algolia from '../../utils/algolia';
-import { getSingleShare } from '../../utils/firebase';
+import { useState } from 'react';
 
+import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import algolia from '../../utils/algolia';
+
+import { getSingleShare } from '../../utils/firebase';
 import {
   SearchOutline,
   SearchBar as SearchBarUnit,

@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import useCurrentUser from '../../../hooks/useCurrentUser';
+
 import styled from 'styled-components';
 import { DialogOverlay } from '@reach/dialog';
+
+import useCurrentUser from '../../../hooks/useCurrentUser';
 import {
   StyledDialogContent,
   PopClose,

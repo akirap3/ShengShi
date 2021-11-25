@@ -4,13 +4,13 @@ import styled from 'styled-components';
 const Background = ({ circleBgColor }) => {
   return (
     <BannerBG>
-      <div>
+      <>
         <Circles circleBgColor={circleBgColor}>
           {[...Array(10).keys()].map((num) => (
             <li key={num} />
           ))}
         </Circles>
-      </div>
+      </>
     </BannerBG>
   );
 };

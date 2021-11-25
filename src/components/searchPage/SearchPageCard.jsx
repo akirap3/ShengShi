@@ -1,5 +1,7 @@
 import { useState } from 'react';
+
 import { useDispatch } from 'react-redux';
+
 import ShareCard from '../common/ShareCard';
 import CollectedSharePopup from '../personalPage/myCollectedList/CollectedSharePopup';
 

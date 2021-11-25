@@ -171,7 +171,6 @@ export const handleDeleteShare = async (
   const deleteImgFileRef = ref(storage, `images/shares/${content?.id}`);
   await deleteObject(deleteImgFileRef);
   await deleteDoc(doc(db, 'shares', content?.id));
-
   await updateDoc(doc(db, 'users', currentUser.uid), {
     myPoints: increment(-10),
   });
@@ -208,7 +207,6 @@ export const handleArchiveShare = async (
   });
 
   if (share.receivedUserId.length === 0) handleDeleteBadge(currentUser.uid);
-
   setIsLoading(false);
   closeDelete();
 };

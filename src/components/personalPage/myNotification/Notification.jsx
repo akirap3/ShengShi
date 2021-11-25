@@ -1,7 +1,8 @@
 import { useEffect, useCallback, useState } from 'react';
-import useCurrentUser from '../../../hooks/useCurrentUser';
+
 import styled from 'styled-components';
-import { v4 as uuidv4 } from 'uuid';
+
+import useCurrentUser from '../../../hooks/useCurrentUser';
 import Outer from '../../common/Outer';
 import NotificationCard from './NotificationCard';
 import NoResult from '../NoResult';
@@ -25,7 +26,7 @@ const Notification = () => {
         <NotificationContainer>
           {messages.map((message) => (
             <NotificationCard
-              key={uuidv4()}
+              key={message.id}
               message={message}
               currentUser={currentUser}
             />

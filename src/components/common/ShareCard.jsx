@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
+
 import styled from 'styled-components';
 import Ripples from 'react-ripples';
-
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import useCurrentUser from '../../hooks/useCurrentUser';
-
-import DeletePopup from './DeletePopup';
-import AlertPopup from './AlertPopup';
-import { handleCollection } from '../../utils/firebase';
-
 import { ImSpoonKnife } from 'react-icons/im';
 import { AiTwotoneHeart, AiFillCloseCircle } from 'react-icons/ai';
 import { HiLocationMarker } from 'react-icons/hi';
+
+import useCurrentUser from '../../hooks/useCurrentUser';
+import DeletePopup from './DeletePopup';
+import AlertPopup from './AlertPopup';
+import { handleCollection } from '../../utils/firebase';
 import StarImg from '../../images/common/star.png';
 
 const ShareCard = ({
@@ -46,6 +45,12 @@ const ShareCard = ({
   const closeNeedLogin = () => {
     setShowNeedLogin(false);
     history.push('/login');
+  };
+
+  const openAlertWithMessage = (msg) => {
+    setAlertMessage(msg);
+    openInfo();
+    return false;
   };
 
   const handleNeedLogin = () => {
@@ -111,20 +116,17 @@ const ShareCard = ({
                     ? isCollected || isSearch
                       ? share.postUser.id === currentUser?.uid
                         ? () => {
-                            setAlertMessage(
+                            openAlertWithMessage(
                               '無法領取自己的勝食，可以到 "清單" 編輯'
                             );
-                            openInfo();
                           }
                         : share.receivedUserId.includes(currentUser?.uid)
                         ? () => {
-                            setAlertMessage('您已經領取過了');
-                            openInfo();
+                            openAlertWithMessage('您已經領取過了');
                           }
                         : share.toReceiveUserId.includes(currentUser?.uid)
                         ? () => {
-                            setAlertMessage('您已經預定領取了');
-                            openInfo();
+                            openAlertWithMessage('您已經預定領取了');
                           }
                         : () => handleClick(share)
                       : () => handleClick()

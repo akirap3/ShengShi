@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+
 import useCurrentUser from '../../hooks/useCurrentUser';
 import Main from '../common/Main';
 import Banner from './Banner';

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+
 import Main from './common/Main';
 import { StartButton } from './common/banner/CommonBanner';
 import errerImg from '../images/common/404-image.gif';

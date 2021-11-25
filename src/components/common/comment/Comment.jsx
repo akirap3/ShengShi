@@ -1,6 +1,8 @@
 import { useState } from 'react';
+
 import styled from 'styled-components';
 import Ripples from 'react-ripples';
+
 import { ErrorMessage, Info, Message } from '../ErrorMessageUnits';
 import {
   handleConfirmCommentEdit,
@@ -45,7 +47,7 @@ const Comment = ({ currentUser, share, comment, userData }) => {
               isEdit ? (e) => setEditedComment(e.target.value) : () => {}
             }
             onKeyPress={(e) => handleEnter(e)}
-            isEdit={isEdit}
+            isEdit
             disabled={!isEdit}
           />
           <ErrorMessage isShow={showErrorMessage}>

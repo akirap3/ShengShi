@@ -1,12 +1,14 @@
 import { useState, useCallback, useEffect } from 'react';
-import useCurrentUser from '../../hooks/useCurrentUser';
+
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+import { AiTwotoneHeart } from 'react-icons/ai';
+
+import useCurrentUser from '../../hooks/useCurrentUser';
 import NoResult from './NoResult';
 import Outer from '../common/Outer';
 import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
 import { getSpecificContents, handleCollection } from '../../utils/firebase';
-import { AiTwotoneHeart } from 'react-icons/ai';
 import StarImg from '../../images/common/star.png';
 
 const CollectedRestaurants = () => {

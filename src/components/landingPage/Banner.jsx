@@ -1,6 +1,5 @@
-import React from 'react';
 import styled from 'styled-components';
-import BannerImage from '../../images/homepage/sharefood-1.jpg';
+
 import Background from '../common/Background';
 import {
   BannerContent,
@@ -10,6 +9,7 @@ import {
   StartButton,
   LearnMoreButton,
 } from '../common/banner/CommonBanner';
+import BannerImage from '../../images/homepage/sharefood-1.jpg';
 
 const Banner = () => {
   return (

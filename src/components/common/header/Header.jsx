@@ -1,22 +1,20 @@
 import React, { useEffect, useState, useCallback } from 'react';
+
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { BsPersonCircle } from 'react-icons/bs';
+import { FcMenu } from 'react-icons/fc';
+
 import SearchBar from '../SearchBar';
 import MobileSideMenu from './MobileSideMenu';
-
-import { useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import {
   logOut,
   getCurrentUserData,
   getCollectionCounts,
 } from '../../../utils/firebase';
-
 import LogoImg from '../../../images/common/shengshi-logo.svg';
-
-import { BsPersonCircle } from 'react-icons/bs';
-import { FcMenu } from 'react-icons/fc';
 
 const Header = () => {
   const history = useHistory();

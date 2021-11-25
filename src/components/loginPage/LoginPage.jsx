@@ -1,11 +1,25 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import styled from 'styled-components';
-import { useHistory, Link } from 'react-router-dom';
-import Loading, { PaddingLoading } from '../common/Loading';
-import { getAllContents } from '../../utils/firebase';
+import { useState, useCallback, useEffect } from 'react';
 
-import * as validation from '../../utils/validation';
-import * as firebase from '../../utils/firebase';
+import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
+import { IoLogoFacebook } from 'react-icons/io';
+import { BsFillPersonFill } from 'react-icons/bs';
+import { RiLock2Fill } from 'react-icons/ri';
+import { FcGoogle } from 'react-icons/fc';
+
+import Main from '../common/Main';
+import LoginBackground from './LoginBackground';
+import Background from '../common/Background';
+import AlertPopup from '../common/AlertPopup';
+import Loading, { PaddingLoading } from '../common/Loading';
+import { checkEmail } from '../../utils/validation';
+import {
+  getAllContents,
+  login,
+  handleSignUpWithProvider,
+  loginWithFB,
+  loginWithGoogle,
+} from '../../utils/firebase';
 import {
   FormContainer,
   Title,
@@ -21,15 +35,6 @@ import {
   Text,
   StyledLink,
 } from '../common/form/FormUnits';
-import Main from '../common/Main';
-import LoginBackground from './LoginBackground';
-import Background from '../common/Background';
-import AlertPopup from '../common/AlertPopup';
-
-import { IoLogoFacebook } from 'react-icons/io';
-import { BsFillPersonFill } from 'react-icons/bs';
-import { RiLock2Fill } from 'react-icons/ri';
-import { FcGoogle } from 'react-icons/fc';
 
 const LoginPage = () => {
   const history = useHistory();
@@ -52,24 +57,24 @@ const LoginPage = () => {
     return getUsersData();
   }, [getUsersData]);
 
+  const openAlertWithMessage = (msg) => {
+    setAlertMessage(msg);
+    openInfo();
+    return false;
+  };
+
   const hasPassword = () => {
     if (password) {
       return true;
     } else {
-      setAlertMessage('請輸入密碼');
-      openInfo();
-      return false;
+      return openAlertWithMessage('請輸入密碼');
     }
   };
 
   const checkAndLogin = () => {
-    if (
-      validation.checkEmail(email, setAlertMessage, openInfo) &&
-      hasPassword()
-    ) {
+    if (checkEmail(email, openAlertWithMessage) && hasPassword()) {
       setIsLoading(true);
-      firebase
-        .login(email, password)
+      login(email, password)
         .then(() => {
           setIsLoading(false);
           history.push('/personal/list');
@@ -77,13 +82,11 @@ const LoginPage = () => {
         .catch((error) => {
           setIsLoading(false);
           if (error.code === 'auth/user-not-found') {
-            setAlertMessage('您輸入的帳號不存在，請先註冊');
-            openInfo();
+            openAlertWithMessage('您輸入的帳號不存在，請先註冊');
             setEmail('');
             setPassword('');
           } else if (error.code === 'auth/wrong-password') {
-            setAlertMessage('您輸入的密碼錯誤，請重新輸入密碼');
-            openInfo();
+            openAlertWithMessage('您輸入的密碼錯誤，請重新輸入密碼');
             setPassword('');
           }
         });
@@ -107,7 +110,7 @@ const LoginPage = () => {
       .then((result) => {
         const { displayName, photoURL, email, uid } = result.user;
         if (!hasSignedUP(usersData, uid)) {
-          firebase.handleSignUpWithProvider(
+          handleSignUpWithProvider(
             displayName,
             email,
             uid,
@@ -122,8 +125,7 @@ const LoginPage = () => {
         }
       })
       .catch((error) => {
-        setAlertMessage(error.message);
-        openInfo();
+        openAlertWithMessage(error.message);
         setIsLoading(false);
       });
   };
@@ -172,7 +174,7 @@ const LoginPage = () => {
               <FBButton
                 onClick={() =>
                   handleClickProvider(
-                    firebase.loginWithFB,
+                    loginWithFB,
                     '?type=large',
                     setIsLoading,
                     history
@@ -186,7 +188,7 @@ const LoginPage = () => {
               <GoogleButton
                 onClick={() =>
                   handleClickProvider(
-                    firebase.loginWithGoogle,
+                    loginWithGoogle,
                     '',
                     setIsLoading,
                     history

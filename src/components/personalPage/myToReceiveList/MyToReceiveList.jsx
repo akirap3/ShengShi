@@ -1,11 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
+
 import useCurrentUser from '../../../hooks/useCurrentUser';
-import { getSpecificContents } from '../../../utils/firebase';
 import Outer from '../../common/Outer';
 import SharesContainer from '../../common/SharesContainer';
 import MyToReceiveCard from './MyToReceiveCard';
 import NoResult from '../NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
+import { getSpecificContents } from '../../../utils/firebase';
 
 const MyToReceiveList = () => {
   const currentUser = useCurrentUser();

@@ -1,12 +1,19 @@
 import { useEffect, useState, useCallback } from 'react';
+
 import useCurrentUser from '../../../hooks/useCurrentUser';
-import { v4 as uuidv4 } from 'uuid';
 import { MgmtContainer } from '../../common/mgmtCard/MgmtCardUnits';
 import MyMgmtCard from './MyMgmtCard';
-import { getSpecificContents } from '../../../utils/firebase';
 import NoResult from '../NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 import AlertPopup from '../../common/AlertPopup';
+import { getSpecificContents } from '../../../utils/firebase';
+
+export const hasContents = (shares) => {
+  const sum = shares
+    .map((share) => share.toReceiveUserId.length)
+    .reduce((acc, current) => acc + current, 0);
+  return sum ? true : false;
+};
 
 const MyMgmtList = () => {
   const [shares, setShares] = useState(null);
@@ -32,13 +39,7 @@ const MyMgmtList = () => {
     return getMyShares();
   }, [getMyShares]);
 
-  const hasContents = (shares) => {
-    const sum = shares
-      .map((share) => share.toReceiveUserId.length)
-      .reduce((acc, current) => acc + current, 0);
-    return sum ? true : false;
-  };
-
+  console.log(shares);
   return (
     <>
       {shares ? (
@@ -50,7 +51,7 @@ const MyMgmtList = () => {
                   share.toReceiveUserId.map((requesterId) => {
                     return (
                       <MyMgmtCard
-                        key={uuidv4()}
+                        key={requesterId}
                         share={share}
                         requesterId={requesterId}
                         setAlertMessage={setAlertMessage}

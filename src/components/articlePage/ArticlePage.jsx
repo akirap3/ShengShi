@@ -1,12 +1,13 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { Waypoint } from 'react-waypoint';
+
 import Main from '../common/Main';
 import Background from '../common/Background';
 import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
 import NoResult from '../personalPage/NoResult';
-
 import {
   BannerContent,
   BannerTitle,

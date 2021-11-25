@@ -1,5 +1,5 @@
-import React from 'react';
 import styled from 'styled-components';
+
 import ShareFoodOne from '../../images/homepage/sharefood-2.jpg';
 import ShareFoodTwo from '../../images/homepage/sharefood-3.jpg';
 import ShareFoodThree from '../../images/homepage/sharefood-4.jpg';
