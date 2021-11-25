@@ -57,18 +57,22 @@ const LoginPage = () => {
     return getUsersData();
   }, [getUsersData]);
 
+  const openAlertWithMessage = (msg) => {
+    setAlertMessage(msg);
+    openInfo();
+    return false;
+  };
+
   const hasPassword = () => {
     if (password) {
       return true;
     } else {
-      setAlertMessage('請輸入密碼');
-      openInfo();
-      return false;
+      return openAlertWithMessage('請輸入密碼');
     }
   };
 
   const checkAndLogin = () => {
-    if (checkEmail(email, setAlertMessage, openInfo) && hasPassword()) {
+    if (checkEmail(email, openAlertWithMessage) && hasPassword()) {
       setIsLoading(true);
       login(email, password)
         .then(() => {
@@ -78,13 +82,11 @@ const LoginPage = () => {
         .catch((error) => {
           setIsLoading(false);
           if (error.code === 'auth/user-not-found') {
-            setAlertMessage('您輸入的帳號不存在，請先註冊');
-            openInfo();
+            openAlertWithMessage('您輸入的帳號不存在，請先註冊');
             setEmail('');
             setPassword('');
           } else if (error.code === 'auth/wrong-password') {
-            setAlertMessage('您輸入的密碼錯誤，請重新輸入密碼');
-            openInfo();
+            openAlertWithMessage('您輸入的密碼錯誤，請重新輸入密碼');
             setPassword('');
           }
         });
@@ -123,8 +125,7 @@ const LoginPage = () => {
         }
       })
       .catch((error) => {
-        setAlertMessage(error.message);
-        openInfo();
+        openAlertWithMessage(error.message);
         setIsLoading(false);
       });
   };

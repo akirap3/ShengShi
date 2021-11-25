@@ -227,7 +227,7 @@ const ChartContainer = styled.div`
 `;
 
 const ChartContent = styled.div`
-  width: 600px;
+  width: 100%;
   height: 600px;
   @media screen and (max-width: 900px) {
     width: 80vw;

@@ -8,6 +8,13 @@ import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 import AlertPopup from '../../common/AlertPopup';
 import { getSpecificContents } from '../../../utils/firebase';
 
+export const hasContents = (shares) => {
+  const sum = shares
+    .map((share) => share.toReceiveUserId.length)
+    .reduce((acc, current) => acc + current, 0);
+  return sum ? true : false;
+};
+
 const MyMgmtList = () => {
   const [shares, setShares] = useState(null);
   const [showInfo, setShowInfo] = useState(false);
@@ -32,13 +39,7 @@ const MyMgmtList = () => {
     return getMyShares();
   }, [getMyShares]);
 
-  const hasContents = (shares) => {
-    const sum = shares
-      .map((share) => share.toReceiveUserId.length)
-      .reduce((acc, current) => acc + current, 0);
-    return sum ? true : false;
-  };
-
+  console.log(shares);
   return (
     <>
       {shares ? (

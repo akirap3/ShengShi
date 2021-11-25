@@ -9,7 +9,7 @@ import ArticlePage from './components/articlePage/ArticlePage';
 import SearchPage from './components/searchPage/SearchPage';
 import LoginPage from './components/loginPage/LoginPage';
 import SignupPage from './components/signupPage/SingupPage';
-import Dashbaord from './components/personalPage/Dashboard';
+import Dashbaord from './components/personalPage/dashboard/Dashboard';
 import Title from './components/personalPage/Title';
 import MyShareList from './components/personalPage/myShareList/MyShareList';
 import Badges from './components/personalPage/Badges';

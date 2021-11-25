@@ -47,6 +47,12 @@ const ShareCard = ({
     history.push('/login');
   };
 
+  const openAlertWithMessage = (msg) => {
+    setAlertMessage(msg);
+    openInfo();
+    return false;
+  };
+
   const handleNeedLogin = () => {
     setAlertMessage('請先登入');
     openNeedLogin();
@@ -110,20 +116,17 @@ const ShareCard = ({
                     ? isCollected || isSearch
                       ? share.postUser.id === currentUser?.uid
                         ? () => {
-                            setAlertMessage(
+                            openAlertWithMessage(
                               '無法領取自己的勝食，可以到 "清單" 編輯'
                             );
-                            openInfo();
                           }
                         : share.receivedUserId.includes(currentUser?.uid)
                         ? () => {
-                            setAlertMessage('您已經領取過了');
-                            openInfo();
+                            openAlertWithMessage('您已經領取過了');
                           }
                         : share.toReceiveUserId.includes(currentUser?.uid)
                         ? () => {
-                            setAlertMessage('您已經預定領取了');
-                            openInfo();
+                            openAlertWithMessage('您已經預定領取了');
                           }
                         : () => handleClick(share)
                       : () => handleClick()
