@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { DialogOverlay } from '@reach/dialog';
+
 import Loading from '../../common/Loading';
 import MyMap from '../../common/myMap/Mymap';
 

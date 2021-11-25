@@ -1,22 +1,7 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+
 import styled from 'styled-components';
-import DeletePopup from '../../common/DeletePopup';
-import AlertPopup from '../../common/AlertPopup';
-import useCurrentUser from '../../../hooks/useCurrentUser';
-import Loading from '../../common/Loading';
 import Ripples from 'react-ripples';
-
-import {
-  StyledIcon,
-  StyledReadOnly,
-  StyledInput,
-} from '../../common/form/FormUnits';
-
-import {
-  getCurrentUserData,
-  handleUpdateMember,
-} from '../../../utils/firebase';
-
 import {
   BsFillPersonFill,
   BsFillEmojiLaughingFill,
@@ -25,6 +10,20 @@ import {
 } from 'react-icons/bs';
 import { MdEmail } from 'react-icons/md';
 import { HiLocationMarker } from 'react-icons/hi';
+
+import useCurrentUser from '../../../hooks/useCurrentUser';
+import Loading from '../../common/Loading';
+import DeletePopup from '../../common/DeletePopup';
+import AlertPopup from '../../common/AlertPopup';
+import {
+  StyledIcon,
+  StyledReadOnly,
+  StyledInput,
+} from '../../common/form/FormUnits';
+import {
+  getCurrentUserData,
+  handleUpdateMember,
+} from '../../../utils/firebase';
 
 const MemberUpdate = () => {
   const uploadRef = useRef();

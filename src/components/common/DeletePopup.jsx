@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
+
 import useCurrentUser from '../../hooks/useCurrentUser';
 import Loading from './Loading';
-
 import {
   handleDeleteMember,
   handleArchiveShare,
@@ -10,7 +10,6 @@ import {
   handleDeleteCollected,
   getCurrentUserData,
 } from '../../utils/firebase';
-
 import {
   CenterDialogOverlay,
   AlertDialogContent,

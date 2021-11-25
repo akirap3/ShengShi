@@ -1,7 +1,9 @@
 import { useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import { DialogOverlay } from '@reach/dialog';
+
 import {
   StyledDialogContent,
   PopClose,

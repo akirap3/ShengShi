@@ -4,6 +4,7 @@ import { DialogOverlay, DialogContent } from '@reach/dialog';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { HiLocationMarker } from 'react-icons/hi';
 import { BsCalendarCheckFill, BsFillInfoCircleFill } from 'react-icons/bs';
+
 import SaladImg from '../../../images/common/salad.svg';
 
 export const StyledDialogContent = styled(DialogContent)`

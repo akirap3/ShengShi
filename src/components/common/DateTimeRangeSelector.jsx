@@ -1,7 +1,7 @@
-import React from 'react';
 import styled from 'styled-components';
 import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { PopTitleContainer, PopTitle } from './popup/PopupUnits';
 import CalendarImg from '../../images/common/calendar.svg';
 

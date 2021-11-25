@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import useCurrentUser from '../../hooks/useCurrentUser';
+
 import styled from 'styled-components';
+
+import useCurrentUser from '../../hooks/useCurrentUser';
 import {
   getSpecificContents,
   getCountsTwoFiltered,

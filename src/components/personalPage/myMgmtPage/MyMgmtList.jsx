@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
+
 import useCurrentUser from '../../../hooks/useCurrentUser';
-import { v4 as uuidv4 } from 'uuid';
 import { MgmtContainer } from '../../common/mgmtCard/MgmtCardUnits';
 import MyMgmtCard from './MyMgmtCard';
-import { getSpecificContents } from '../../../utils/firebase';
 import NoResult from '../NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 import AlertPopup from '../../common/AlertPopup';
+import { getSpecificContents } from '../../../utils/firebase';
 
 const MyMgmtList = () => {
   const [shares, setShares] = useState(null);
@@ -50,7 +50,7 @@ const MyMgmtList = () => {
                   share.toReceiveUserId.map((requesterId) => {
                     return (
                       <MyMgmtCard
-                        key={uuidv4()}
+                        key={requesterId}
                         share={share}
                         requesterId={requesterId}
                         setAlertMessage={setAlertMessage}

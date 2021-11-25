@@ -1,7 +1,9 @@
 import { useState } from 'react';
+
 import styled from 'styled-components';
-import Logo from '../../images/common/shengshi-logo2.svg';
 import { AiTwotoneStar } from 'react-icons/ai';
+
+import Logo from '../../images/common/shengshi-logo2.svg';
 
 const InfoView = ({ imageUrl, restaurantName, rating, address }) => {
   const [showInfo, setShowInfo] = useState(false);

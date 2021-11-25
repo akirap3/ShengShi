@@ -1,7 +1,9 @@
 import { useRef, useState, useEffect } from 'react';
+
+import styled from 'styled-components';
 import useSupercluster from 'use-supercluster';
 import GoogleMapReact from 'google-map-react';
-import styled from 'styled-components';
+
 import InfoView from './InfoView';
 import Loading from '../common/Loading';
 

@@ -1,12 +1,13 @@
 import { useState } from 'react';
+
 import styled from 'styled-components';
-import UpdatePopup from '../personalPage/myToReceiveList/UpdatePopup';
 import { useDispatch } from 'react-redux';
+import { DialogOverlay } from '@reach/dialog';
+
 import useCurrentUser from '../../hooks/useCurrentUser';
+import UpdatePopup from '../personalPage/myToReceiveList/UpdatePopup';
 import LocationMap from './LocationMap';
 import MyQRcode from './MyQRcode';
-
-import { DialogOverlay } from '@reach/dialog';
 import {
   StyledDialogContent,
   PopClose,

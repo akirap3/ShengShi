@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import useCurrentUser from '../../../hooks/useCurrentUser';
+
 import styled from 'styled-components';
 import { DialogOverlay } from '@reach/dialog';
+import { useDispatch, useSelector } from 'react-redux';
+
+import useCurrentUser from '../../../hooks/useCurrentUser';
 import {
   StyledDialogContent,
   PopClose,

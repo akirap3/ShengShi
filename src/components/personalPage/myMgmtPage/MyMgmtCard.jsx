@@ -1,12 +1,7 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
+import { useCallback, useState, useEffect } from 'react';
 
-import {
-  getListenedSingleContent,
-  handleConfirmShare,
-  handleCancelShare,
-} from '../../../utils/firebase';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 import {
   Context,
@@ -22,6 +17,11 @@ import {
   ConfirmedBtn,
   CancleBtn,
 } from '../../common/mgmtCard/MgmtCardUnits';
+import {
+  getListenedSingleContent,
+  handleConfirmShare,
+  handleCancelShare,
+} from '../../../utils/firebase';
 
 const QRCode = require('qrcode.react');
 

@@ -1,6 +1,7 @@
 import React from 'react';
-import Map from './LocationMap';
 import styled from 'styled-components';
+
+import Map from './LocationMap';
 
 const Mymap = ({ google, defaultCenter, handleAddress, handleLatLng }) => {
   return (

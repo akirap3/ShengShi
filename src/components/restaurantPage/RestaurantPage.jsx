@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
+
 import styled from 'styled-components';
+
 import { layoutConfig } from '../../utils/commonVariables';
 import { getAllContents, getSearchedContents } from '../../utils/firebase';
 import Carousel from '../common/carousel/Carousel';

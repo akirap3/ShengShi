@@ -1,4 +1,5 @@
 import { Route, Switch, Redirect } from 'react-router-dom';
+
 import Header from './components/common/header/Header';
 import Footer from './components/common/Footer';
 import Loading, { PaddingLoading } from './components/common/Loading';

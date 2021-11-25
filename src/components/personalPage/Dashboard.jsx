@@ -1,18 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import useCurrentUser from '../../hooks/useCurrentUser';
+
 import styled from 'styled-components';
-import { v4 as uuidv4 } from 'uuid';
 import { Link, useLocation } from 'react-router-dom';
-import AddSharePopup from './AddSharePopup';
-import Background from '../common/Background';
+import { v4 as uuidv4 } from 'uuid';
 import Ripples from 'react-ripples';
-
-import {
-  getCurrentUserData,
-  getContentCounts,
-  getCountsTwoFiltered,
-} from '../../utils/firebase';
-
 import { ImSpoonKnife } from 'react-icons/im';
 import { IoMdPerson } from 'react-icons/io';
 import { IoRibbonSharp } from 'react-icons/io5';
@@ -26,6 +17,15 @@ import {
 import { FaCoins, FaArchive } from 'react-icons/fa';
 import { HiLocationMarker } from 'react-icons/hi';
 import { MdFastfood } from 'react-icons/md';
+
+import useCurrentUser from '../../hooks/useCurrentUser';
+import AddSharePopup from './AddSharePopup';
+import Background from '../common/Background';
+import {
+  getCurrentUserData,
+  getContentCounts,
+  getCountsTwoFiltered,
+} from '../../utils/firebase';
 
 const Dashbaord = () => {
   const [userData, setUserDate] = useState(null);

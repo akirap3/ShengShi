@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { AiFillMessage, AiFillCloseCircle } from 'react-icons/ai';
+
 import { handleDeleteDocument } from '../../../utils/firebase';
 
 const NotificationCard = ({ message, currentUser }) => {

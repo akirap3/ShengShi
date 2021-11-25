@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 
+import styled from 'styled-components';
 import {
   withGoogleMap,
   GoogleMap,
@@ -13,7 +13,6 @@ import Autocomplete from 'react-google-autocomplete';
 import { HiLocationMarker } from 'react-icons/hi';
 
 require('dotenv').config();
-
 const GoogleMapsAPI = process.env.REACT_APP_GOOGLE_API_KEY;
 
 Geocode.setApiKey(GoogleMapsAPI);
