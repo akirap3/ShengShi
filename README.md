@@ -45,37 +45,35 @@
 ## Features
 
 - #### Modify member data
-  [Modify member data](/readMeImages/modifyMemberData.gif)
+  ![Modify member data](/readMeImages/modifyMemberData.gif)
 - #### Add a share
-- [Add a share](readMeImages/addShare.gif)
+  ![Add a share](readMeImages/addShare.gif)
 - #### Edit a share
-
-  [Edit a share](/readMeImages/editShare.gif)
-
+  ![Edit a share](/readMeImages/editShare.gif)
 - #### Search and book a share
-  [Search and book a share](/readMeImages/searchBookShare.gif)
+  ![Search and book a share](/readMeImages/searchBookShare.gif)
 - #### Check out and change booked shares
-  [Check out and change booked shares](readMeImages/checkoutChnageBookedShare.gif)
+  ![Check out and change booked shares](readMeImages/checkoutChnageBookedShare.gif)
 - #### Scan a QR code to get exchange information
-  [Scan a QR code](/readMeImages/scanQRcode.gif)
+  ![Scan a QR code](/readMeImages/scanQRcode.gif)
 - #### Manage the registered share
-  [Manage the registered share](/readMeImages/manageRegisteredShare.gif)
+  ![Manage the registered share](/readMeImages/manageRegisteredShare.gif)
 - #### Check out the pie chart and badges
-  [Check out the pie chart and badges](/readMeImages/checkChartBadges.gif)
+  ![Check out the pie chart and badges](/readMeImages/checkChartBadges.gif)
 - #### Check out received shares. Post/Edit/Delete comments on shares.
 
-  [Check out received shares](/readMeImages/checkReceivedShareComments.gif)
+  ![Check out received shares](/readMeImages/checkReceivedShareComments.gif)
 
 - #### Check out collected shares and restaurants
 
-  [Check out collected shares and restaurants](/readMeImages/checkCollection.gif)
+  ![Check out collected shares and restaurants](/readMeImages/checkCollection.gif)
 
 - #### Check out and delete messages
-  [Check out and delete messages](/readMeImages/checkMessage.gif)
+  ![Check out and delete messages](/readMeImages/checkMessage.gif)
 - #### Search and check out restaurants
-  [Search and check out restaurants](/readMeImages/checkRestaurants.gif)
+  ![Search and check out restaurants](/readMeImages/checkRestaurants.gif)
 - #### Search and check out articles
-  [Search and check out articles](/readMeImages/checkArticles.gif)
+  ![Search and check out articles](/readMeImages/checkArticles.gif)
 
 ## Future features
 
