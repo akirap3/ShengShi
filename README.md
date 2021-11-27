@@ -42,6 +42,8 @@
 
 ## Flow Chart
 
+![Flow Chart](/readMeImages/ShengShiFlowChart.png)
+
 ## Features
 
 - #### Modify member data
