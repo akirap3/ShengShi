@@ -13,6 +13,9 @@ ShengShi website Link [Click here](https://shengshi.itcosmos.co)
 
 - You could sign up with email, FB or Google.
 - Or login with FB or Google directly.
+- Test Account:
+  - User: mary@gmail.com
+  - Password: 123456
 
 ## Techniques used
 
