@@ -9,7 +9,7 @@
 
 ## Website link
 
-[ShengShi website]('https://shengshi.itcosmos.co')
+ShengShi website Link [Click here](https://shengshi.itcosmos.co)
 
 - You could sign up with email, FB or Google.
 - Or login with FB or Google directly.
@@ -82,3 +82,8 @@
 - Restaurant owner could also add their share
 - Restaurant owner could add their information on 合作餐廳
 - Add one's own articles feature
+
+## Contact
+
+- Author: Peter Fan
+- E-mail: akirapf3@gmail.com
