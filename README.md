@@ -3,9 +3,9 @@
 
 # Introduction
 
-- ShengShi website is a platform sharing redundant meals to others.
-- You could search ShengShi share and choose the one you would like to get.
-- It provides QRcode to show exchange information of ShengShi share.
+- ShengShi website is a platform sharing redundant food to others.
+- You could search redundant food and choose the one you would like to get.
+- It provides QRcode to show exchange information of redundant food.
 
 ## Website link
 
@@ -28,7 +28,7 @@ ShengShi website Link [Click here](https://shengshi.itcosmos.co)
   - Firestore Database
   - Storage
   - Hosting
-  - Search with Algolia
+  - Search with Algolia (extension)
 
 ### Miscellaneous
 
@@ -43,9 +43,9 @@ ShengShi website Link [Click here](https://shengshi.itcosmos.co)
 - react-google-autocomplete
 - react-google-maps
 
-## Flow Chart
+## Function Chart
 
-![Flow Chart](/readMeImages/ShengShiFlowChart.png)
+![Function Chart](/readMeImages/ShengShiFlowChart.png)
 
 ## Features
 
@@ -82,7 +82,7 @@ ShengShi website Link [Click here](https://shengshi.itcosmos.co)
 
 ## Future features
 
-- Restaurant owner could also add their share
+- Restaurant owner could also add their redundant food
 - Restaurant owner could add their information on 合作餐廳
 - Add one's own articles feature
 
