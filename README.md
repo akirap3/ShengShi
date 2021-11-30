@@ -17,7 +17,7 @@ ShengShi website Link [Click here](https://shengshi.itcosmos.co)
   - User: mary@gmail.com
   - Password: 123456
 
-## Techniques used
+## Techniques
 
 ### Front-End
 
