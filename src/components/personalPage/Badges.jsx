@@ -200,7 +200,7 @@ const Badges = () => {
                 <BadgeContainer>
                   {badges.map((badge) => (
                     <BadgeContext key={badge.id}>
-                      <BadgeImg src={badge.imageUrl} />
+                      <BadgeImg src={badge.imageUrl} alt="badge" />
                       <BadgeName>{badge.name}</BadgeName>
                     </BadgeContext>
                   ))}

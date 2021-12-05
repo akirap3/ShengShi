@@ -25,7 +25,7 @@ const Banner = () => {
           <LearnMoreButton to="/search">了解更多</LearnMoreButton>
         </ButtonRow>
       </StyledBannerContent>
-      <BannerImg src={BannerImage} />
+      <BannerImg src={BannerImage} alt="share-food" />
     </BannerContainer>
   );
 };

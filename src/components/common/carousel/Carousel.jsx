@@ -24,12 +24,12 @@ const Carousel = ({ title, contentData, isRestaurants }) => {
               {contentData.map((content) => {
                 return (
                   <Card key={content.id}>
-                    <CardImg src={content.imageUrl} />
+                    <CardImg src={content.imageUrl} alt="redundant-food" />
                     <CardTitle>{content.name}</CardTitle>
                     <Row>
                       <StartContainer>
                         {Array.from(Array(content.rating).keys()).map(() => (
-                          <Star key={uuidv4()} src={StarImg} />
+                          <Star key={uuidv4()} src={StarImg} alt="star" />
                         ))}
                       </StartContainer>
                       {!checkUser.isLoggedIn ? (

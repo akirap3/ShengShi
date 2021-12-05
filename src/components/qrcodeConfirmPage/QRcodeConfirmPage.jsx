@@ -115,7 +115,10 @@ const QRcodeComfirmPage = () => {
                   <Title title="勝食領取管理"></Title>
                   <MgmtContainer>
                     <Context>
-                      <ShareImg src={share?.imageUrl || defaultImgUrl} />
+                      <ShareImg
+                        src={share?.imageUrl || defaultImgUrl}
+                        alt="redundant-food"
+                      />
                       <InfoContainer>
                         <RequesterName>
                           {isGiver(share, currentUser)

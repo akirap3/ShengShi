@@ -45,7 +45,7 @@ export const PopTitleContainer = styled.div`
 `;
 
 export const TitleIcon = () => {
-  return <SaladIcon src={SaladImg} />;
+  return <SaladIcon src={SaladImg} alt="salad-icon" />;
 };
 
 const SaladIcon = styled.img`
@@ -146,7 +146,7 @@ export const Calendar = styled(BsCalendarCheckFill)`
 export const Preview = ({ src }) => {
   return (
     <PreviewOutline>
-      <PreviewImg src={src} />
+      <PreviewImg src={src} alt="preview-reduntant-food" />
     </PreviewOutline>
   );
 };

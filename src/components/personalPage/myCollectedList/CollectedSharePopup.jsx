@@ -124,7 +124,10 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
               <PopTitle>{share?.name || ''}</PopTitle>
             </PopTitleContainer>
             <PopContent>
-              <Preview src={share?.imageUrl || ''} />
+              <Preview
+                src={share?.imageUrl || ''}
+                alt="preview-redundant-food"
+              />
               <StyledPopRow>
                 <StyledLabel>目前數量</StyledLabel>
                 <StyledSpan>{share?.quantities || ''}</StyledSpan>

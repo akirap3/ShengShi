@@ -162,7 +162,7 @@ const SearchPage = () => {
               <LookButton to="/restaurants">合作餐廳</LookButton>
             </ButtonRow>
           </StyledBannerContent>
-          <BannerImg src={Img} />
+          <BannerImg src={Img} alt="share" />
         </Banner>
         <SearchContent>
           <SearchOutline>

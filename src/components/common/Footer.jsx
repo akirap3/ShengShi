@@ -13,7 +13,7 @@ const Footer = () => {
           <Text to="/restaurants">餐 廳</Text>
         </TextRow>
         <Link to="/">
-          <LogoImg src={Logo} />
+          <LogoImg src={Logo} alt="Shenshi-logo" />
         </Link>
         <TextRow>
           <Text to="/articles">文 章</Text>

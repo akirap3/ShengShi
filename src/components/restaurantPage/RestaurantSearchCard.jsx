@@ -17,11 +17,11 @@ const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
         {restaurant?.map((content) => {
           return (
             <Card key={content.id}>
-              <CardImg src={content.imageUrl} />
+              <CardImg src={content.imageUrl} alt="restaurants" />
               <CardTitle>{content.name}</CardTitle>
               <Row>
                 {Array.from(Array(content.rating).keys()).map(() => (
-                  <Star key={uuidv4()} src={StarImg} />
+                  <Star key={uuidv4()} src={StarImg} alt="star" />
                 ))}
                 <Heart
                   onClick={

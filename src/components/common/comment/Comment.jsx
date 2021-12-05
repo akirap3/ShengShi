@@ -33,7 +33,7 @@ const Comment = ({ currentUser, share, comment, userData }) => {
   return (
     <>
       <CommentContainer>
-        <CommentAvatar src={author.imageUrl} />
+        <CommentAvatar src={author.imageUrl} alt="avatar" />
         <CommentContent>
           <CommentRow>
             <CommentAuthor>{author.displayName}</CommentAuthor>
