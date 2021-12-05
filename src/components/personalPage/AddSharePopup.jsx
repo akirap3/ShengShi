@@ -153,7 +153,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
             <PopRow>
               <StyledLabel>食物照片</StyledLabel>
             </PopRow>
-            <Preview src={previewImgUrl} />
+            <Preview src={previewImgUrl} alt="preview-upload" />
             <ButtonContainer>
               <StyleBtnRipples color="#fff" during={3000}>
                 <ImgUpload

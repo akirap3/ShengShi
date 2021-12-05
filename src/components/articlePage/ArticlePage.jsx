@@ -111,7 +111,7 @@ const ArticlePage = () => {
       <UpperPart>
         <Background circleBgColor={'rgba(255, 255, 255, 0.2)'} />
         <Banner>
-          <BannerImg src={ArticleBannerImg} />
+          <BannerImg src={ArticleBannerImg} alt="share-food" />
           <StyledBannerContent>
             <StyledBannerTitle>剩食與解決</StyledBannerTitle>
             <Styledsubtitle>
@@ -145,7 +145,7 @@ const ArticlePage = () => {
             {articles.map((article) => (
               <ArticleCard key={article.id}>
                 <a href={article.url} target="_blank" rel="noreferrer">
-                  <CardImg src={article.imageUrl} />
+                  <CardImg src={article.imageUrl} alt="card-article" />
                 </a>
                 <CardContent>
                   <TagContainer>

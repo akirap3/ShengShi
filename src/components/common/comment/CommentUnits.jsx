@@ -51,7 +51,7 @@ export const NoComment = () => {
   return (
     <StyledNoComment>
       <NothingMessage>目前沒有任何的留言</NothingMessage>
-      <Nothing src={NothingImg} />
+      <Nothing src={NothingImg} alt="nothing" />
     </StyledNoComment>
   );
 };

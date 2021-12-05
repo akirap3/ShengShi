@@ -61,7 +61,7 @@ const ShareCard = ({
   return (
     <>
       <ShareContext>
-        <ShareImg src={share?.imageUrl} />
+        <ShareImg src={share?.imageUrl} alt="share" />
         <CardContent>
           <ShareTitle>{share?.name}</ShareTitle>
           {cannnotDel || isReceived ? null : (
@@ -73,7 +73,7 @@ const ShareCard = ({
               <ShareUseName>{share?.postUser?.displayName}</ShareUseName>
             </CardItem>
             <CardItem>
-              <Star src={StarImg} />
+              <Star src={StarImg} alt="star" />
               <Rating>{share?.rating}</Rating>
             </CardItem>
 

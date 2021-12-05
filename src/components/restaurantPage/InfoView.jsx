@@ -10,11 +10,11 @@ const InfoView = ({ imageUrl, restaurantName, rating, address }) => {
   return (
     <>
       <StyledButton onClick={() => setShowInfo(!showInfo)}>
-        <StyledImg src={Logo} />
+        <StyledImg src={Logo} alt="info" />
       </StyledButton>
       {showInfo && (
         <Info>
-          <InfoImg src={imageUrl} />
+          <InfoImg src={imageUrl} alt="info" />
           <InfoRow>
             <InfoName>{restaurantName}</InfoName>
             <Star />

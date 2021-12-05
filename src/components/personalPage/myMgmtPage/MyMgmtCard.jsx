@@ -41,7 +41,7 @@ const MyMgmtCard = ({ share, requesterId, setAlertMessage, openInfo }) => {
     <>
       {requester && (
         <Context>
-          <ShareImg src={share.imageUrl} />
+          <ShareImg src={share.imageUrl} alt="reduntant-food" />
           <InfoContainer>
             <QRcodeOne>
               <EmbedQrcode

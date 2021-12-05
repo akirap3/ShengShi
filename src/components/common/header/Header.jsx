@@ -59,7 +59,7 @@ const Header = () => {
     <>
       <HeaderContainer>
         <Link to="/">
-          <Logo src={LogoImg} />
+          <Logo src={LogoImg} alt="Shenshi-logo" />
         </Link>
         <Tag>
           <StyledLink to="/">首頁</StyledLink>
@@ -74,7 +74,7 @@ const Header = () => {
         {checkUser.isLoggedIn && userData ? (
           <>
             <MemberIconContainer as={Link} to="/personal/notification">
-              <MemberLoggedIcon src={userData.imageUrl} />
+              <MemberLoggedIcon src={userData.imageUrl} alt="member-avatar" />
               {messagesCount !== 0 && (
                 <MessageCount>{messagesCount}</MessageCount>
               )}
@@ -103,7 +103,7 @@ const Header = () => {
 
       <MobileHeader>
         <MobileLogoLink to="/">
-          <MobileHeaderLogo src={LogoImg} />
+          <MobileHeaderLogo src={LogoImg} alt="ShengShi-logo" />
         </MobileLogoLink>
         <SearchBar />
         <MobileMenuIcon onClick={() => setShowMenu(!showMenu)} />

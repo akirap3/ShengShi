@@ -41,11 +41,11 @@ const CollectedRestaurants = () => {
               <Container>
                 {savedRestaurants.map((restaurant) => (
                   <Card key={restaurant.id}>
-                    <CardImg src={restaurant.imageUrl} />
+                    <CardImg src={restaurant.imageUrl} alt="restaurants" />
                     <CardTitle>{restaurant.name}</CardTitle>
                     <Row>
                       {Array.from(Array(restaurant.rating).keys()).map(() => (
-                        <Star src={StarImg} key={uuidv4()} />
+                        <Star src={StarImg} key={uuidv4()} alt="star" />
                       ))}
                       <Heart
                         onClick={() =>

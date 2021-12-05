@@ -12,7 +12,7 @@ const DateTimeSelector = ({ share }) => {
   return share ? (
     <>
       <PopTitleContainer>
-        <CalendarIcon src={CalendarImg} />
+        <CalendarIcon src={CalendarImg} alt="calendar" />
         <PopTitle>選擇日期及時間</PopTitle>
       </PopTitleContainer>
       <Container>
