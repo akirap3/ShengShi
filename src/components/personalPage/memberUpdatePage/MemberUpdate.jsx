@@ -141,7 +141,7 @@ const MemberUpdate = () => {
                 onChange={(e) => setAbout(e.target.value)}
               />
             </Row>
-            <PreviewImg src={previewImgUrl} />
+            <PreviewImg src={previewImgUrl} alt="preview-avatar" />
             <ButtonContainer>
               <UploadRipples color="#fff" during={3000}>
                 <ImgUpload ref={uploadRef} htmlFor="image-upload">

@@ -11,7 +11,7 @@ const MobileSideMenu = ({ setShowMenu, checkUser, logout }) => {
     <MobileMenu>
       <MenuClose onClick={() => setShowMenu(false)} />
       <ImgContainer as={Link} to="/" onClick={() => setShowMenu(false)}>
-        <MobileLogo src={LogoImg2} />
+        <MobileLogo src={LogoImg2} alt="ShengShi-logo" />
       </ImgContainer>
       <MobileMenuContent>
         <StyledMobileLink as={Link} to="/" onClick={() => setShowMenu(false)}>

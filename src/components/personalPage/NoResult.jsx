@@ -5,7 +5,7 @@ const NoResult = ({ text }) => {
   return (
     <NoResultContainer>
       <NoResultText>{text}</NoResultText>
-      <Cat src={CatImg}></Cat>
+      <Cat src={CatImg} alt="cat"></Cat>
     </NoResultContainer>
   );
 };

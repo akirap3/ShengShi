@@ -66,7 +66,7 @@ const RestaurantPage = () => {
       <UpperPart>
         <Background circleBgColor={'rgba(255, 255, 255, 0.2)'} />
         <Banner>
-          <BannerImg src={Img} />
+          <BannerImg src={Img} alt="share-redundant-food" />
           <StyledBannerContent>
             <BannerTitle>樂於分享</BannerTitle>
             <Subtitle>

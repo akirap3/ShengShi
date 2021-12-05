@@ -5,7 +5,7 @@ const Title = ({ title }) => {
   return (
     <SharesTitleContainer>
       <Outline>
-        <TitleIcon src={Hotpot} />
+        <TitleIcon src={Hotpot} alt="hotpot" />
         <SharesTitle>{title}</SharesTitle>
       </Outline>
     </SharesTitleContainer>

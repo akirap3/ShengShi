@@ -9,7 +9,7 @@ const Advantages = () => {
   return (
     <AdvantagesContainer>
       <AvtContentOne>
-        <AvtImgOne src={ShareFoodOne} />
+        <AvtImgOne src={ShareFoodOne} alt="share" />
         <StyledAvtColumn>
           <Title>糧食</Title>
           <Description>
@@ -26,10 +26,10 @@ const Advantages = () => {
             台灣一年約有 340 萬噸的廚餘量，相當於每人每天的剩食量約一盒炒飯
           </Description>
         </AvtColumnTwo>
-        <AvtImgTwo src={ShareFoodTwo} />
+        <AvtImgTwo src={ShareFoodTwo} alt="share" />
       </AvtContentTwo>
       <AvtContentThree>
-        <AvtImgThree src={ShareFoodThree} />
+        <AvtImgThree src={ShareFoodThree} alt="share" />
         <StyledAvtColumn>
           <Title>價值</Title>
           <Description>

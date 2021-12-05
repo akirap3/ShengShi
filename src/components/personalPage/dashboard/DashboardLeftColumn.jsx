@@ -7,7 +7,7 @@ const DashboardLeftColumn = ({ userData }) => {
   return (
     <LeftColumn>
       <AvatarContainer>
-        <Avatar src={userData?.imageUrl} />
+        <Avatar src={userData?.imageUrl} alt="avatar" />
         <SettingContainer as={Link} to="/personal/memberUpdate/">
           <Setting />
         </SettingContainer>

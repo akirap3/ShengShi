@@ -8,7 +8,7 @@ const UserShares = () => {
     <UserSharesContainer>
       <UserSharesContentOne>
         <UserImage>
-          <UserAvatar src={UserImgOne} />
+          <UserAvatar src={UserImgOne} alt="user" />
           <UserName>Anna Chen</UserName>
           <UserTag>勝食專家</UserTag>
         </UserImage>
@@ -20,7 +20,7 @@ const UserShares = () => {
       </UserSharesContentOne>
       <UserSharesContentTwo>
         <UserImage>
-          <UserAvatar src={UserImgTwo} />
+          <UserAvatar src={UserImgTwo} alt="user" />
           <UserName>John Wang</UserName>
           <UserTag>勝食達人</UserTag>
         </UserImage>
