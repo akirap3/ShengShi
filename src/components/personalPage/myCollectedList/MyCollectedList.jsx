@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import SharesContainer from '../../common/SharesContainer';
@@ -12,22 +12,16 @@ const MyCollectedList = () => {
   const currentUser = useCurrentUser();
   const [savedShares, setSavedShares] = useState(null);
 
-  const getSavedShares = useCallback(
-    () =>
-      getSpecificContents(
-        'shares',
-        'savedUserId',
-        'array-contains',
-        'desc',
-        currentUser,
-        setSavedShares
-      ),
-    [currentUser]
-  );
-
   useEffect(() => {
-    return getSavedShares();
-  }, [getSavedShares]);
+    return getSpecificContents(
+      'shares',
+      'savedUserId',
+      'array-contains',
+      'desc',
+      currentUser,
+      setSavedShares
+    );
+  }, [currentUser]);
 
   return (
     <>

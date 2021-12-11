@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -12,13 +12,9 @@ const Notification = () => {
   const currentUser = useCurrentUser();
   const [messages, setMessages] = useState();
 
-  const getMessages = useCallback(() => {
-    getAllContents(`users/${currentUser.uid}/messages`, setMessages);
-  }, [currentUser.uid]);
-
   useEffect(() => {
-    return getMessages();
-  }, [getMessages]);
+    return getAllContents(`users/${currentUser.uid}/messages`, setMessages);
+  }, [currentUser.uid]);
 
   return currentUser && messages ? (
     messages.length !== 0 ? (

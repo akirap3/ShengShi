@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -73,44 +73,38 @@ const SearchPage = () => {
     if (e.charCode === 13) handleSearch();
   };
 
-  const getShares = useCallback(() => {
-    getAllOrderedContents(
-      'shares',
-      'createdAt',
-      setShares,
-      lastPostSnapshotRef,
-      false,
-      shares
-    );
-  }, []);
-
-  const getOtherShares = useCallback(() => {
-    getAllOrderedOtherShares(
-      'shares',
-      setShares,
-      currentUser,
-      lastPostSnapshotRef,
-      false,
-      shares
-    );
-  }, []);
-
   useEffect(() => {
     if (!isShareSearch) {
       if (currentUser) {
-        return getOtherShares();
+        return getAllOrderedOtherShares(
+          'shares',
+          setShares,
+          currentUser,
+          lastPostSnapshotRef,
+          false,
+          shares
+        );
       } else {
-        return getShares();
+        return getAllOrderedContents(
+          'shares',
+          'createdAt',
+          setShares,
+          lastPostSnapshotRef,
+          false,
+          shares
+        );
       }
     }
-  }, [getOtherShares, getShares, currentUser, isShareSearch]);
+  }, [currentUser, isShareSearch]);
 
   useEffect(() => {
     if (searchedShares) {
-      const otherShares = searchedShares
-        .filter((share) => share.postUser.id !== currentUser?.uid)
-        .filter((share) => share.quantities > 0)
-        .filter((share) => share.toTimeStamp.toDate() > new Date());
+      const otherShares = searchedShares.filter(
+        (share) =>
+          share.postUser.id !== currentUser?.uid &&
+          share.quantities > 0 &&
+          share.toTimeStamp.toDate() > new Date()
+      );
       setShares(otherShares);
     }
   }, [currentUser?.uid, searchedShares]);

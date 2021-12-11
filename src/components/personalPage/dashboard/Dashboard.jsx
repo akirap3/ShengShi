@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
@@ -20,14 +20,9 @@ const Dashboard = () => {
   const openEditor = () => setShowEdit(true);
   const closeEditor = () => setShowEdit(false);
 
-  const getUserData = useCallback(
-    () => getCurrentUserData(currentUser, setUserDate),
-    [currentUser]
-  );
-
   useEffect(() => {
-    return getUserData();
-  }, [getUserData]);
+    return getCurrentUserData(currentUser, setUserDate);
+  }, [currentUser]);
 
   return (
     <>

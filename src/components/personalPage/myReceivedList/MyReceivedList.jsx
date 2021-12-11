@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import MyReceivedCard from './MyRecievedCard';
@@ -12,22 +12,16 @@ const MyReceivedList = () => {
   const currentUser = useCurrentUser();
   const [receivedShares, setReceivedShares] = useState(null);
 
-  const getReceivedShares = useCallback(
-    () =>
-      getSpecificContents(
-        'shares',
-        'receivedUserId',
-        'array-contains',
-        'desc',
-        currentUser,
-        setReceivedShares
-      ),
-    [currentUser]
-  );
-
   useEffect(() => {
-    return getReceivedShares();
-  }, [getReceivedShares]);
+    return getSpecificContents(
+      'shares',
+      'receivedUserId',
+      'array-contains',
+      'desc',
+      currentUser,
+      setReceivedShares
+    );
+  }, [currentUser]);
 
   return (
     <>

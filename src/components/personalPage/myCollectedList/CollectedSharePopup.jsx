@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -63,32 +63,17 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   const openInfo = () => setShowInfo(true);
   const closeInfo = () => setShowInfo(false);
 
-  const getUserData = useCallback(
-    () => getCurrentUserData(currentUser, setUserData),
-    [currentUser]
-  );
-
-  const getComments = useCallback(
-    () => getAllContents(`shares/${share.id}/comments`, setComments),
-    [share.id]
-  );
-
-  const getCommentCounts = useCallback(
-    () => getCollectionCounts(`shares/${share.id}/comments`, setCommentCounts),
-    [share.id]
-  );
+  useEffect(() => {
+    return getCurrentUserData(currentUser, setUserData);
+  }, [currentUser]);
 
   useEffect(() => {
-    return getUserData();
-  }, [getUserData]);
+    return getAllContents(`shares/${share.id}/comments`, setComments);
+  }, [share.id]);
 
   useEffect(() => {
-    return getComments();
-  }, [getComments]);
-
-  useEffect(() => {
-    return getCommentCounts();
-  }, [getCommentCounts]);
+    return getCollectionCounts(`shares/${share.id}/comments`, setCommentCounts);
+  }, [share.id]);
 
   const handleSpecificDateTime = (payload) => {
     dispatch({ type: 'specificDateTime/selected', payload: payload });

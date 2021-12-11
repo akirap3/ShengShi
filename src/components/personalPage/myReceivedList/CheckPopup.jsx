@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 import { DialogOverlay } from '@reach/dialog';
@@ -44,32 +44,17 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-  const getUserData = useCallback(
-    () => getCurrentUserData(currentUser, setUserData),
-    [currentUser]
-  );
-
-  const getComments = useCallback(
-    () => getAllContents(`shares/${share.id}/comments`, setComments),
-    [share.id]
-  );
-
-  const getCommentCounts = useCallback(
-    () => getCollectionCounts(`shares/${share.id}/comments`, setCommentCounts),
-    [share.id]
-  );
+  useEffect(() => {
+    return getCurrentUserData(currentUser, setUserData);
+  }, [currentUser]);
 
   useEffect(() => {
-    return getUserData();
-  }, [getUserData]);
+    return getAllContents(`shares/${share.id}/comments`, setComments);
+  }, [share.id]);
 
   useEffect(() => {
-    return getComments();
-  }, [getComments]);
-
-  useEffect(() => {
-    return getCommentCounts();
-  }, [getCommentCounts]);
+    return getCollectionCounts(`shares/${share.id}/comments`, setCommentCounts);
+  }, [share.id]);
 
   return (
     <>

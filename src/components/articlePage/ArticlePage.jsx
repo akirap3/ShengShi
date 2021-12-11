@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
@@ -37,20 +37,17 @@ const ArticlePage = () => {
   const [articles, setArticles] = useState();
   const [isSearch, setIsSearch] = useState(false);
 
-  const getArticles = useCallback(() => {
-    getAllOrderedContents(
-      'articles',
-      'createdAt',
-      setArticles,
-      lastPostSnapshotRef,
-      false,
-      articles
-    );
-  }, []);
-
   useEffect(() => {
-    if (!isSearch) return getArticles();
-  }, [getArticles, isSearch]);
+    if (!isSearch)
+      return getAllOrderedContents(
+        'articles',
+        'createdAt',
+        setArticles,
+        lastPostSnapshotRef,
+        false,
+        articles
+      );
+  }, [isSearch]);
 
   const handleSearch = () => {
     setIsSearch(true);

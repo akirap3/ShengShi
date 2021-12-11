@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -63,104 +63,68 @@ const DashbaordMenus = ({ location }) => {
     },
   ];
 
-  const getMyListCounts = useCallback(
-    () =>
-      getCountsTwoFiltered(
-        'shares',
-        'postUser.id',
-        'isArchived',
-        '==',
-        '==',
-        currentUser,
-        false,
-        setMyListCounts
-      ),
-    [currentUser]
-  );
-
-  const getBadgeCounts = useCallback(
-    () =>
-      getContentCounts(
-        'badges',
-        'ownedBy',
-        'array-contains',
-        currentUser,
-        setMyBadgeCounts
-      ),
-    [currentUser]
-  );
-
-  const getReceivedCounts = useCallback(
-    () =>
-      getContentCounts(
-        'shares',
-        'receivedUserId',
-        'array-contains',
-        currentUser,
-        setMyReceivedCounts
-      ),
-    [currentUser]
-  );
-
-  const getToReceiveCounts = useCallback(
-    () =>
-      getContentCounts(
-        'shares',
-        'toReceiveUserId',
-        'array-contains',
-        currentUser,
-        setMyToReceiveCounts
-      ),
-    [currentUser]
-  );
-
-  const getCollectedShareCounts = useCallback(
-    () =>
-      getContentCounts(
-        'shares',
-        'savedUserId',
-        'array-contains',
-        currentUser,
-        setMyCollectedShareCounts
-      ),
-    [currentUser]
-  );
-
-  const getCollectedStoreCounts = useCallback(
-    () =>
-      getContentCounts(
-        'restaurants',
-        'savedUserId',
-        'array-contains',
-        currentUser,
-        setMyCollectedStoreCounts
-      ),
-    [currentUser]
-  );
+  useEffect(() => {
+    return getCountsTwoFiltered(
+      'shares',
+      'postUser.id',
+      'isArchived',
+      '==',
+      '==',
+      currentUser,
+      false,
+      setMyListCounts
+    );
+  }, [currentUser]);
 
   useEffect(() => {
-    return getMyListCounts();
-  }, [getMyListCounts]);
+    return getContentCounts(
+      'badges',
+      'ownedBy',
+      'array-contains',
+      currentUser,
+      setMyBadgeCounts
+    );
+  }, [currentUser]);
 
   useEffect(() => {
-    return getBadgeCounts();
-  }, [getBadgeCounts]);
+    return getContentCounts(
+      'shares',
+      'receivedUserId',
+      'array-contains',
+      currentUser,
+      setMyReceivedCounts
+    );
+  }, [currentUser]);
 
   useEffect(() => {
-    return getReceivedCounts();
-  }, [getReceivedCounts]);
+    return getContentCounts(
+      'shares',
+      'toReceiveUserId',
+      'array-contains',
+      currentUser,
+      setMyToReceiveCounts
+    );
+  }, [currentUser]);
 
   useEffect(() => {
-    return getToReceiveCounts();
-  }, [getToReceiveCounts]);
+    return getContentCounts(
+      'shares',
+      'savedUserId',
+      'array-contains',
+      currentUser,
+      setMyCollectedShareCounts
+    );
+  }, [currentUser]);
 
   useEffect(() => {
-    return getCollectedShareCounts();
-  }, [getCollectedShareCounts]);
-
-  useEffect(() => {
-    return getCollectedStoreCounts();
-  }, [getCollectedStoreCounts]);
+    return getContentCounts(
+      'restaurants',
+      'savedUserId',
+      'array-contains',
+      currentUser,
+      setMyCollectedStoreCounts
+    );
+  }, [currentUser]);
 
   return (
     <>

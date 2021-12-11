@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import useCurrentUser from '../../hooks/useCurrentUser';
@@ -35,14 +35,9 @@ const DeletePopup = ({
   const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState(null);
 
-  const getUserData = useCallback(
-    () => getCurrentUserData(currentUser, setUserData),
-    [currentUser]
-  );
-
   useEffect(() => {
-    return getUserData();
-  }, [getUserData]);
+    return getCurrentUserData(currentUser, setUserData);
+  }, [currentUser]);
 
   return (
     userData && (
