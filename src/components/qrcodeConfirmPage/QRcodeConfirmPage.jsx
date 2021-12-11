@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useParams, useHistory } from 'react-router-dom';
 
@@ -45,29 +45,18 @@ const QRcodeComfirmPage = () => {
   const defaultImgUrl =
     'https://react.semantic-ui.com/images/wireframe/image.png';
 
-  const getShare = useCallback(() => {
-    getListenedSingleContent('shares', shareId, setShare);
+  useEffect(() => {
+    return getListenedSingleContent('shares', shareId, setShare);
   }, [shareId]);
 
-  const getGiver = useCallback(() => {
-    getListenedSingleContent('users', share?.postUser?.id, setGiver);
-  }, [share?.postUser?.id]);
+  useEffect(() => {
+    if (share)
+      return getListenedSingleContent('users', share?.postUser?.id, setGiver);
+  }, [share]);
 
-  const getRequester = useCallback(() => {
-    getListenedSingleContent('users', requesterId, setRequester);
+  useEffect(() => {
+    return getListenedSingleContent('users', requesterId, setRequester);
   }, [requesterId]);
-
-  useEffect(() => {
-    return getShare();
-  }, [getShare]);
-
-  useEffect(() => {
-    if (share) return getGiver();
-  }, [share, getGiver]);
-
-  useEffect(() => {
-    return getRequester();
-  }, [getRequester]);
 
   const isGiver = (share, currentUser) => {
     return share?.postUser?.id === currentUser.uid ? true : false;

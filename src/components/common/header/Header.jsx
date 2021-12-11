@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 import { Link, useHistory } from 'react-router-dom';
@@ -33,27 +33,16 @@ const Header = () => {
     });
   };
 
-  const getMessageCounts = useCallback(
-    () =>
-      getCollectionCounts(
-        `users/${currentUser?.uid}/messages`,
-        setMessagesCount
-      ),
-    [currentUser]
-  );
-
-  const getUserData = useCallback(
-    () => getCurrentUserData(currentUser, setUserData),
-    [currentUser]
-  );
+  useEffect(() => {
+    return getCollectionCounts(
+      `users/${currentUser?.uid}/messages`,
+      setMessagesCount
+    );
+  }, [currentUser]);
 
   useEffect(() => {
-    return getMessageCounts();
-  }, [getMessageCounts]);
-
-  useEffect(() => {
-    return getUserData();
-  }, [getUserData]);
+    return getCurrentUserData(currentUser, setUserData);
+  }, [currentUser]);
 
   return (
     <>

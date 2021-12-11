@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 
@@ -33,13 +33,9 @@ const RestaurantPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [isSearch, setIsSearch] = useState(false);
 
-  const getRestaurants = useCallback(() => {
-    getAllContents('restaurants', setRestaurants);
-  }, []);
-
   useEffect(() => {
-    if (!isSearch) return getRestaurants();
-  }, [getRestaurants, isSearch]);
+    if (!isSearch) return getAllContents('restaurants', setRestaurants);
+  }, [isSearch]);
 
   const handleSearch = () => {
     setIsSearch(true);

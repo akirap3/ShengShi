@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -72,13 +72,10 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
     dispatch({ type: 'fromToDateTime/default' });
   };
 
-  const getListenedUserData = useCallback(() => {
-    return getListenedSingleContent('users', currentUser?.uid, setUserData);
-  }, [currentUser?.uid]);
-
   useEffect(() => {
-    if (currentUser) return getListenedUserData();
-  }, [currentUser, getListenedUserData]);
+    if (currentUser)
+      return getListenedSingleContent('users', currentUser?.uid, setUserData);
+  }, [currentUser]);
 
   const handleCompressFile = (e) => {
     const image = e.target.files[0];

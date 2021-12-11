@@ -55,7 +55,13 @@ const App = () => {
   return (
     <>
       <Header />
-      <Suspense fallback={Loading}>
+      <Suspense
+        fallback={
+          <PaddingLoading>
+            <Loading />
+          </PaddingLoading>
+        }
+      >
         {isLoaded ? (
           <Switch>
             <Route path="/personal">

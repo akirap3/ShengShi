@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
@@ -15,22 +15,16 @@ const CollectedRestaurants = () => {
   const currentUser = useCurrentUser();
   const [savedRestaurants, setSavedRestaurants] = useState(null);
 
-  const getCollectedRestaurants = useCallback(
-    () =>
-      getSpecificContents(
-        'restaurants',
-        'savedUserId',
-        'array-contains',
-        'desc',
-        currentUser,
-        setSavedRestaurants
-      ),
-    [currentUser]
-  );
-
   useEffect(() => {
-    return getCollectedRestaurants();
-  }, [getCollectedRestaurants]);
+    return getSpecificContents(
+      'restaurants',
+      'savedUserId',
+      'array-contains',
+      'desc',
+      currentUser,
+      setSavedRestaurants
+    );
+  }, [currentUser]);
 
   return (
     <>

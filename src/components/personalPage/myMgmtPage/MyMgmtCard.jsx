@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
@@ -29,13 +29,9 @@ const MyMgmtCard = ({ share, requesterId, setAlertMessage, openInfo }) => {
   const [requester, setRequester] = useState();
   const currentUser = useSelector((state) => state.currentUser);
 
-  const getRequester = useCallback(() => {
-    getListenedSingleContent('users', requesterId, setRequester);
-  }, [requesterId]);
-
   useEffect(() => {
-    return getRequester();
-  }, [getRequester]);
+    return getListenedSingleContent('users', requesterId, setRequester);
+  }, [requesterId]);
 
   return (
     <>
