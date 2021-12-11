@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import Outer from '../../common/Outer';
@@ -12,22 +12,16 @@ const MyToReceiveList = () => {
   const currentUser = useCurrentUser();
   const [toReceiveShares, setToReceiveShares] = useState(null);
 
-  const getToReceiveShares = useCallback(
-    () =>
-      getSpecificContents(
-        'shares',
-        'toReceiveUserId',
-        'array-contains',
-        'desc',
-        currentUser,
-        setToReceiveShares
-      ),
-    [currentUser]
-  );
-
   useEffect(() => {
-    return getToReceiveShares();
-  }, [getToReceiveShares]);
+    return getSpecificContents(
+      'shares',
+      'toReceiveUserId',
+      'array-contains',
+      'desc',
+      currentUser,
+      setToReceiveShares
+    );
+  }, [currentUser]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 import EditPopup from './EditPopup';
 import ShareCard from '../../common/ShareCard';
@@ -10,13 +10,9 @@ const MyShareCard = ({ share }) => {
   const openEditor = () => setShowEdit(true);
   const closeEditor = () => setShowEdit(false);
 
-  const getMyshares = useCallback(() => {
-    getListenedSingleContent('shares', share.id, setListenedShare);
-  }, [share.id]);
-
   useEffect(() => {
-    return getMyshares();
-  }, [getMyshares]);
+    return getListenedSingleContent('shares', share.id, setListenedShare);
+  }, [share.id]);
 
   return (
     <>

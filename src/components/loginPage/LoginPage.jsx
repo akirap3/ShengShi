@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
@@ -48,14 +48,9 @@ const LoginPage = () => {
   const openInfo = () => setShowInfo(true);
   const closeInfo = () => setShowInfo(false);
 
-  const getUsersData = useCallback(
-    () => getAllContents('users', setUsersDate),
-    []
-  );
-
   useEffect(() => {
-    return getUsersData();
-  }, [getUsersData]);
+    return getAllContents('users', setUsersDate);
+  }, []);
 
   const openAlertWithMessage = (msg) => {
     setAlertMessage(msg);

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 import useCurrentUser from '../../hooks/useCurrentUser';
 import Main from '../common/Main';
@@ -13,29 +13,17 @@ const LandingPage = () => {
   const [shares, setShares] = useState('');
   const currentUser = useCurrentUser();
 
-  const getRestaurants = useCallback(() => {
-    getAllContents('restaurants', setRestaurants);
-  }, []);
-
-  const getShares = useCallback(() => {
-    getAllContents('shares', setShares);
-  }, []);
-
-  const getOtherShares = useCallback(() => {
-    getAllOtherShares('shares', setShares, currentUser);
-  }, [currentUser]);
-
   useEffect(() => {
-    getRestaurants();
-  }, [getRestaurants]);
+    return getAllContents('restaurants', setRestaurants);
+  }, []);
 
   useEffect(() => {
     if (currentUser) {
-      return getOtherShares();
+      return getAllOtherShares('shares', setShares, currentUser);
     } else {
-      return getShares();
+      return getAllContents('shares', setShares);
     }
-  }, [getOtherShares, getShares, currentUser]);
+  }, [currentUser]);
 
   return (
     <Main>

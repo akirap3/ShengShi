@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import { MgmtContainer } from '../../common/mgmtCard/MgmtCardUnits';
@@ -24,8 +24,8 @@ const MyMgmtList = () => {
   const openInfo = () => setShowInfo(true);
   const closeInfo = () => setShowInfo(false);
 
-  const getMyShares = useCallback(() => {
-    getSpecificContents(
+  useEffect(() => {
+    return getSpecificContents(
       'shares',
       'postUser.id',
       '==',
@@ -35,11 +35,6 @@ const MyMgmtList = () => {
     );
   }, [currentUser]);
 
-  useEffect(() => {
-    return getMyShares();
-  }, [getMyShares]);
-
-  console.log(shares);
   return (
     <>
       {shares ? (

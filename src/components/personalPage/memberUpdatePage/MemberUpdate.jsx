@@ -1,7 +1,8 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 import Ripples from 'react-ripples';
+import Compressor from 'compressorjs';
 import {
   BsFillPersonFill,
   BsFillEmojiLaughingFill,
@@ -49,14 +50,9 @@ const MemberUpdate = () => {
   const openInfo = () => setShowInfo(true);
   const closeInfo = () => setShowInfo(false);
 
-  const getUserData = useCallback(
-    () => getCurrentUserData(currentUser, setUserData),
-    [currentUser]
-  );
-
   useEffect(() => {
-    return getUserData();
-  }, [getUserData]);
+    return getCurrentUserData(currentUser, setUserData);
+  }, [currentUser]);
 
   const initialUserData = {
     displayName,
@@ -70,6 +66,18 @@ const MemberUpdate = () => {
     setAlertMessage(msg);
     openInfo();
     return false;
+  };
+
+  const handleCompressFile = (e) => {
+    const image = e.target.files[0];
+    if (image)
+      new Compressor(image, {
+        quality: 0.2,
+        convertSize: 1000000,
+        success: (res) => {
+          setFile(res);
+        },
+      });
   };
 
   const checkFields = () => {
@@ -151,7 +159,7 @@ const MemberUpdate = () => {
               <UploadBtn
                 type="file"
                 id="image-upload"
-                onChange={(e) => setFile(e.target.files[0])}
+                onChange={(e) => handleCompressFile(e)}
               />
               <UpdateRipples color="#fff" during={3000}>
                 <UpdateBtn

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import SharesContainer from '../../common/SharesContainer';
@@ -12,22 +12,16 @@ const MyShareList = () => {
   const [shares, setShares] = useState(null);
   const currentUser = useCurrentUser();
 
-  const getMyShareList = useCallback(
-    () =>
-      getSpecificContents(
-        'shares',
-        'postUser.id',
-        '==',
-        'desc',
-        currentUser,
-        setShares
-      ),
-    [currentUser]
-  );
-
   useEffect(() => {
-    return getMyShareList();
-  }, [getMyShareList]);
+    return getSpecificContents(
+      'shares',
+      'postUser.id',
+      '==',
+      'desc',
+      currentUser,
+      setShares
+    );
+  }, [currentUser]);
 
   return (
     <>
