@@ -19,6 +19,7 @@ const Right = styled(IoIosArrowDropright)`
 export const CarouselSettings = {
   className: 'slider variable-width',
   dots: false,
+  lazyLoad: true,
   infinite: true,
   speed: 500,
   slidesToShow: 3,
