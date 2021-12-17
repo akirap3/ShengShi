@@ -3,49 +3,41 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Loading, { PaddingLoading } from './components/common/Loading';
 import useCheckUser from './hooks/useCheckUser';
-import Header from './components/common/header/Header';
+import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import Main from './components/common/Main';
 
-const LandingPage = lazy(() => import('./components/landingPage/LandingPage'));
-const RestaurantPage = lazy(() =>
-  import('./components/restaurantPage/RestaurantPage')
+const LandingPage = lazy(() => import('./components/LandingPage'));
+const RestaurantPage = lazy(() => import('./components/RestaurantPage'));
+const ArticlePage = lazy(() => import('./components/ArticlePage'));
+const SearchPage = lazy(() => import('./components/SearchPage'));
+const LoginPage = lazy(() => import('./components/LoginPage'));
+const SignupPage = lazy(() => import('./components/SingupPage'));
+const Dashbaord = lazy(() => import('./components/personalPage/Dashboard'));
+const Title = lazy(() => import('./components/common/Title'));
+const MyShareList = lazy(() => import('./components/personalPage/MyShareList'));
+const MyChartBadges = lazy(() =>
+  import('./components/personalPage/MyChartBadges')
 );
-const ArticlePage = lazy(() => import('./components/articlePage/ArticlePage'));
-const SearchPage = lazy(() => import('./components/searchPage/SearchPage'));
-const LoginPage = lazy(() => import('./components/loginPage/LoginPage'));
-const SignupPage = lazy(() => import('./components/signupPage/SingupPage'));
-const Dashbaord = lazy(() =>
-  import('./components/personalPage/dashboard/Dashboard')
-);
-const Title = lazy(() => import('./components/personalPage/Title'));
-const MyShareList = lazy(() =>
-  import('./components/personalPage/myShareList/MyShareList')
-);
-const Badges = lazy(() => import('./components/personalPage/Badges'));
 const MyReceivedList = lazy(() =>
-  import('./components/personalPage/myReceivedList/MyReceivedList')
+  import('./components/personalPage/MyReceivedList')
 );
 const MyToReceiveList = lazy(() =>
-  import('./components/personalPage/myToReceiveList/MyToReceiveList')
+  import('./components/personalPage/MyToReceiveList')
 );
 const MyCollectedList = lazy(() =>
-  import('./components/personalPage/myCollectedList/MyCollectedList')
+  import('./components/personalPage/MyCollectedList')
 );
-const CollectedRestaurants = lazy(() =>
-  import('./components/personalPage/CollectedRestaurants')
+const MyCollectedRestaurants = lazy(() =>
+  import('./components/personalPage/MyCollectedRestaurants')
 );
 const MemberUpdate = lazy(() =>
-  import('./components/personalPage/memberUpdatePage/MemberUpdate')
+  import('./components/personalPage/MemberUpdate')
 );
-const QRcodeComfirmPage = lazy(() =>
-  import('./components/qrcodeConfirmPage/QRcodeConfirmPage')
-);
-const MyMgmtList = lazy(() =>
-  import('./components/personalPage/myMgmtPage/MyMgmtList')
-);
+const QRcodeComfirmPage = lazy(() => import('./components/QRcodeConfirmPage'));
+const MyMgmtPage = lazy(() => import('./components/personalPage/MyMgmtPage'));
 const Notification = lazy(() =>
-  import('./components/personalPage/myNotification/Notification')
+  import('./components/personalPage/Notification')
 );
 const ErrorPage = lazy(() => import('./components/ErrorPage'));
 
@@ -75,7 +67,7 @@ const App = () => {
                     </Route>
                     <Route exact path="/personal/badges">
                       <Title title="我的統計與勳章"></Title>
-                      <Badges />
+                      <MyChartBadges />
                     </Route>
                     <Route exact path="/personal/received">
                       <Title title="我已領取的清單"></Title>
@@ -91,7 +83,7 @@ const App = () => {
                     </Route>
                     <Route exact path="/personal/collectedRestaurants">
                       <Title title="我的收藏店家"></Title>
-                      <CollectedRestaurants />
+                      <MyCollectedRestaurants />
                     </Route>
                     <Route exact path="/personal/memberUpdate">
                       <Title title="個人資料更新"></Title>
@@ -99,7 +91,7 @@ const App = () => {
                     </Route>
                     <Route exact path="/personal/mgmt">
                       <Title title="領取列表管理"></Title>
-                      <MyMgmtList />
+                      <MyMgmtPage />
                     </Route>
                     <Route exact path="/personal/notification">
                       <Title title="我的訊息"></Title>
