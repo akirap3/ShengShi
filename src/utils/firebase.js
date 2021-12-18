@@ -76,27 +76,22 @@ export const login = (email, password) => {
   return signInWithEmailAndPassword(auth, email, password);
 };
 
-const fbProvider = new FacebookAuthProvider();
-const googleProvider = new GoogleAuthProvider();
-
 export const loginWithFB = () => {
-  return signInWithPopup(auth, fbProvider);
+  return signInWithPopup(auth, new FacebookAuthProvider());
 };
 
 export const loginWithGoogle = () => {
-  return signInWithPopup(auth, googleProvider);
+  return signInWithPopup(auth, new GoogleAuthProvider());
 };
 
-export const handleSignUpWithProvider = async (
+export const handleSignUpWithProvider = async ({
   displayName,
   email,
   uid,
   photoURL,
   imageSize,
-  setIsLoading,
-  history
-) => {
-  await setDoc(doc(db, 'users', uid), {
+}) => {
+  return await setDoc(doc(db, 'users', uid), {
     displayName,
     email,
     alias: displayName,
@@ -107,8 +102,6 @@ export const handleSignUpWithProvider = async (
     myPoints: 0,
     myPlace: '',
   });
-  setIsLoading(false);
-  history.push('/personal/list');
 };
 
 export const getCurrentUserData = (currentUser, setUserData) => {
