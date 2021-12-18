@@ -5,8 +5,8 @@ import useCurrentUser from '../../../hooks/useCurrentUser';
 import Loading from '../Loading';
 import {
   handleDeleteMember,
-  handleArchiveShare,
-  handleDeleteToReceive,
+  archiveShare,
+  deleteToReceive,
   handleDeleteCollected,
   getCurrentUserData,
 } from '../../../utils/firebase';
@@ -39,6 +39,21 @@ const DeletePopup = ({
     return getCurrentUserData(currentUser, setUserData);
   }, [currentUser]);
 
+  const handleDeleteToReceive = () => {
+    setIsLoading(true);
+    deleteToReceive(share).then(() => {
+      setIsLoading(false);
+      closeDelete();
+    });
+  };
+
+  const handleArchiveShare = () => {
+    archiveShare(share, currentUser, userData).then(() => {
+      setIsLoading(false);
+      closeDelete();
+    });
+  };
+
   return (
     userData && (
       <CenterDialogOverlay
@@ -57,21 +72,13 @@ const DeletePopup = ({
             <StyledSubmitBtn
               onClick={
                 isToReceive
-                  ? () =>
-                      handleDeleteToReceive(setIsLoading, share, closeDelete)
+                  ? () => handleDeleteToReceive()
                   : isCollected
                   ? () =>
                       handleDeleteCollected(setIsLoading, share, closeDelete)
                   : toDeleteMember
                   ? () => handleDeleteMember()
-                  : () =>
-                      handleArchiveShare(
-                        setIsLoading,
-                        share,
-                        closeDelete,
-                        currentUser,
-                        userData
-                      )
+                  : () => handleArchiveShare()
               }
               disabled={isLoading}
             >

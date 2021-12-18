@@ -132,32 +132,7 @@ export const updateMember = async (currentUser, file, initialUserData) => {
   await updateDoc(docRef, initialUserData);
 };
 
-export const handleDeleteShare = async (
-  setIsLoading,
-  content,
-  closeDelete,
-  currentUser
-) => {
-  setIsLoading(true);
-  const deleteImgFileRef = ref(storage, `images/shares/${content?.id}`);
-  await deleteObject(deleteImgFileRef);
-  await deleteDoc(doc(db, 'shares', content?.id));
-  await updateDoc(doc(db, 'users', currentUser.uid), {
-    myPoints: increment(-10),
-  });
-
-  handleDeleteBadge(currentUser.uid);
-  setIsLoading(false);
-  closeDelete();
-};
-
-export const handleArchiveShare = async (
-  setIsLoading,
-  share,
-  closeDelete,
-  currentUser,
-  userData
-) => {
+export const archiveShare = async (share, currentUser, userData) => {
   share.toReceiveUserId.forEach(async (userId) => {
     await addDoc(collection(db, `users/${userId}/messages`), {
       createdAt: Timestamp.now(),
@@ -178,23 +153,14 @@ export const handleArchiveShare = async (
   });
 
   if (share.receivedUserId.length === 0) handleDeleteBadge(currentUser.uid);
-  setIsLoading(false);
-  closeDelete();
 };
 
-export const handleDeleteToReceive = async (
-  setIsLoading,
-  content,
-  closeDelete
-) => {
-  setIsLoading(true);
+export const deleteToReceive = async (content) => {
   const docRef = doc(db, 'shares', content?.id);
   await updateDoc(docRef, {
     [`toReceiveInfo.${auth.currentUser.uid}`]: deleteField(),
     toReceiveUserId: arrayRemove(auth.currentUser.uid),
   });
-  setIsLoading(false);
-  closeDelete();
 };
 
 export const handleDeleteExchange = async (shareId, requesterId, qty) => {
@@ -859,23 +825,14 @@ export const handleConfirmShare = (
   });
 };
 
-export const handleCancelShare = (
-  shareId,
-  requesterId,
-  share,
-  currentUser,
-  setAlertMessage,
-  openInfo
-) => {
-  handleDeleteExchange(
+export const cancelShare = (shareId, requesterId, share, currentUser) => {
+  return handleDeleteExchange(
     shareId,
     requesterId,
     share?.toReceiveInfo[`${requesterId}`].quantities
   ).then(() => {
     handleDeleteBadge(currentUser.uid);
     handleDeleteBadge(requesterId);
-    setAlertMessage('您已確認對方取消勝食');
-    openInfo();
   });
 };
 
