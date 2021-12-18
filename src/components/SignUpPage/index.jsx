@@ -1,20 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
-
-import Main from '../common/Main';
 import LoginBackground from '../LoginPage/LoginBackground';
 import Background from '../common/Background';
 import Loading, { PaddingLoading } from '../common/Loading';
 import AlertPopup from '../common/popup/AlertPopup';
+import SignupFiled from './components/SignupField';
 
 import {
-  FormContainer,
   Title,
-  FieldContainer,
-  StyledIcon,
-  StyledInput,
   ButtonContainer,
   NativeButton,
   FBButton,
@@ -24,15 +17,22 @@ import {
   Text,
   StyledLink,
 } from '../common/form/FormUnits';
+import {
+  StyledMain,
+  SignupContainer,
+  StyledFieldContainer,
+  NameIcon,
+  NameFiled,
+  LastNameField,
+} from './style/Index.style';
 
 import {
   register,
   handleSignUpWithEmail,
-  handleSignUpWithProvider,
   loginWithFB,
   loginWithGoogle,
-  getAllContents,
 } from '../../utils/firebase';
+import useLoginSignupWithProvider from '../../hooks/useLoginSignupWithProvider';
 import { Timestamp } from '@firebase/firestore';
 import * as validation from '../../utils/validation';
 
@@ -44,7 +44,6 @@ import { MdEmail } from 'react-icons/md';
 import { HiLocationMarker } from 'react-icons/hi';
 
 const SignupPage = () => {
-  const history = useHistory();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [alias, setAlias] = useState('');
@@ -52,17 +51,17 @@ const SignupPage = () => {
   const [place, setPlace] = useState('');
   const [password, setPassword] = useState('');
   const [secPassword, setSecPassword] = useState('');
-  const [usersData, setUsersDate] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showInfo, setShowInfo] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-
-  const openInfo = () => setShowInfo(true);
-  const closeInfo = () => setShowInfo(false);
-
-  useEffect(() => {
-    return getAllContents('users', setUsersDate);
-  }, []);
+  const {
+    openAlertWithMessage,
+    alertMessage,
+    showInfo,
+    closeInfo,
+    isLoading,
+    setIsLoading,
+    usersData,
+    history,
+    handleClickProvider,
+  } = useLoginSignupWithProvider();
 
   const initialUserData = {
     displayName: `${firstName}．${lastName}`,
@@ -71,12 +70,6 @@ const SignupPage = () => {
     myPoints: 0,
     myPlace: place,
     createdAt: Timestamp.now(),
-  };
-
-  const openAlertWithMessage = (msg) => {
-    setAlertMessage(msg);
-    openInfo();
-    return false;
   };
 
   const checkNames = () => {
@@ -141,43 +134,6 @@ const SignupPage = () => {
     }
   };
 
-  const hasSignedUP = (usersData, uid) => {
-    const userIds = usersData.map((user) => user.id);
-    if (userIds.includes(uid)) return true;
-    return false;
-  };
-
-  const handleClickProvider = (
-    loginWithProvider,
-    imageSize,
-    setIsLoading,
-    history
-  ) => {
-    setIsLoading(true);
-    loginWithProvider()
-      .then((result) => {
-        const { displayName, photoURL, email, uid } = result.user;
-        if (!hasSignedUP(usersData, uid)) {
-          handleSignUpWithProvider(
-            displayName,
-            email,
-            uid,
-            photoURL,
-            imageSize,
-            setIsLoading,
-            history
-          );
-        } else {
-          setIsLoading(false);
-          history.push('/personal/list');
-        }
-      })
-      .catch((error) => {
-        openAlertWithMessage(error.message);
-        setIsLoading(false);
-      });
-  };
-
   return (
     <>
       {usersData ? (
@@ -206,63 +162,43 @@ const SignupPage = () => {
                 disabled={isLoading}
               />
             </StyledFieldContainer>
-            <StyledFieldContainer>
-              <StyledIcon as={BsFillEmojiLaughingFill} />
-              <StyledInput
-                placeholder="Alias"
-                value={alias}
-                onChange={(e) => {
-                  setAlias(e.target.value);
-                }}
-                disabled={isLoading}
-              />
-            </StyledFieldContainer>
-            <StyledFieldContainer>
-              <StyledIcon as={HiLocationMarker} />
-              <StyledInput
-                placeholder="Location"
-                value={place}
-                onChange={(e) => {
-                  setPlace(e.target.value);
-                }}
-                disabled={isLoading}
-              />
-            </StyledFieldContainer>
-            <StyledFieldContainer>
-              <StyledIcon as={MdEmail} />
-              <StyledInput
-                placeholder="Email"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                disabled={isLoading}
-              />
-            </StyledFieldContainer>
-            <StyledFieldContainer>
-              <StyledIcon as={RiLock2Fill} />
-              <StyledInput
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                disabled={isLoading}
-              />
-            </StyledFieldContainer>
-            <StyledFieldContainer>
-              <StyledIcon as={RiLock2Fill} />
-              <StyledInput
-                type="password"
-                placeholder="Re-enter Password"
-                value={secPassword}
-                onChange={(e) => {
-                  setSecPassword(e.target.value);
-                }}
-                disabled={isLoading}
-              />
-            </StyledFieldContainer>
+            <SignupFiled
+              icon={BsFillEmojiLaughingFill}
+              hint="Alias"
+              fieldValue={alias}
+              setFn={setAlias}
+              isLoading={isLoading}
+            />
+            <SignupFiled
+              icon={HiLocationMarker}
+              hint="Location"
+              fieldValue={place}
+              setFn={setPlace}
+              isLoading={isLoading}
+            />
+            <SignupFiled
+              icon={MdEmail}
+              hint="Email"
+              fieldValue={email}
+              setFn={setEmail}
+              isLoading={isLoading}
+            />
+            <SignupFiled
+              icon={RiLock2Fill}
+              hint="Password"
+              fieldValue={password}
+              fieldType="password"
+              setFn={setPassword}
+              isLoading={isLoading}
+            />
+            <SignupFiled
+              icon={RiLock2Fill}
+              hint="Re-enter Password"
+              fieldValue={secPassword}
+              fieldType="password"
+              setFn={setSecPassword}
+              isLoading={isLoading}
+            />
             <ButtonContainer>
               <NativeButton
                 onClick={() => checkSignup(initialUserData)}
@@ -271,27 +207,13 @@ const SignupPage = () => {
                 確 認
               </NativeButton>
               <FBButton
-                onClick={() =>
-                  handleClickProvider(
-                    loginWithFB,
-                    '?type=large',
-                    setIsLoading,
-                    history
-                  )
-                }
+                onClick={() => handleClickProvider(loginWithFB, '?type=large')}
                 disabled={isLoading}
               >
                 <FbIcon as={IoLogoFacebook} /> <span>FB </span>
               </FBButton>
               <GoogleButton
-                onClick={() =>
-                  handleClickProvider(
-                    loginWithGoogle,
-                    '',
-                    setIsLoading,
-                    history
-                  )
-                }
+                onClick={() => handleClickProvider(loginWithGoogle, '')}
                 disabled={isLoading}
               >
                 <StyledBtnIcon as={FcGoogle} /> <span>Google</span>
@@ -316,48 +238,5 @@ const SignupPage = () => {
     </>
   );
 };
-
-const StyledMain = styled(Main)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const SignupContainer = styled(FormContainer)`
-  margin: 50px auto 50px auto;
-
-  @media screen and (max-width: 560px) {
-    margin-right: 2rem;
-    margin-left: 2rem;
-    padding: 2rem;
-  } ;
-`;
-
-const StyledFieldContainer = styled(FieldContainer)`
-  flex-wrap: wrap;
-`;
-
-const NameIcon = styled(StyledIcon)`
-  @media screen and (max-width: 540px) {
-    align-self: flex-start;
-    margin-top: 10px;
-  }
-`;
-
-const NameFiled = styled(StyledInput)`
-  flex-grow: 1;
-  margin-right: 0.5rem;
-  @media screen and (max-width: 540px) {
-    margin-right: 0;
-    margin-bottom: 35px;
-  }
-`;
-
-const LastNameField = styled(StyledInput)`
-  flex-grow: 1;
-  @media screen and (max-width: 540px) {
-    margin-left: 30px;
-  }
-`;
 
 export default SignupPage;

@@ -2,12 +2,8 @@ import { useState, useEffect, useMemo } from 'react';
 
 import styled from 'styled-components';
 
-import useCurrentUser from '../../../hooks/useCurrentUser';
-import {
-  getSpecificContents,
-  getCountsTwoFiltered,
-  getContentCounts,
-} from '../../../utils/firebase';
+import useCounts from '../../../hooks/useCounts';
+import { getSpecificContents } from '../../../utils/firebase';
 import MyResponsivePie from './components/MyChart';
 import Outer from '../../common/Outer';
 import NoResult from '../../common/NoResult';
@@ -15,13 +11,15 @@ import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 
 const Badges = () => {
   const [badges, setBadges] = useState(null);
-  const [myListCounts, setMyListCounts] = useState(0);
-  const [myBadgeCounts, setMyBadgeCounts] = useState(0);
-  const [myReceivedCounts, setMyReceivedCounts] = useState(0);
-  const [myToReceiveCounts, setMyToReceiveCounts] = useState(0);
-  const [myCollectedShareCounts, setMyCollectedShareCounts] = useState(0);
-  const [myCollectedStoreCounts, setMyCollectedStoreCounts] = useState(0);
-  const currentUser = useCurrentUser();
+  const {
+    myListCounts,
+    myBadgeCounts,
+    myReceivedCounts,
+    myToReceiveCounts,
+    myCollectedShareCounts,
+    myCollectedStoreCounts,
+    currentUser,
+  } = useCounts();
 
   const data = useMemo(
     () => [
@@ -84,69 +82,6 @@ const Badges = () => {
       'asc',
       currentUser,
       setBadges
-    );
-  }, [currentUser]);
-
-  useEffect(() => {
-    return getCountsTwoFiltered(
-      'shares',
-      'postUser.id',
-      'isArchived',
-      '==',
-      '==',
-      currentUser,
-      false,
-      setMyListCounts
-    );
-  }, [currentUser]);
-
-  useEffect(() => {
-    return getContentCounts(
-      'badges',
-      'ownedBy',
-      'array-contains',
-      currentUser,
-      setMyBadgeCounts
-    );
-  }, [currentUser]);
-
-  useEffect(() => {
-    return getContentCounts(
-      'shares',
-      'receivedUserId',
-      'array-contains',
-      currentUser,
-      setMyReceivedCounts
-    );
-  }, [currentUser]);
-
-  useEffect(() => {
-    return getContentCounts(
-      'shares',
-      'toReceiveUserId',
-      'array-contains',
-      currentUser,
-      setMyToReceiveCounts
-    );
-  }, [currentUser]);
-
-  useEffect(() => {
-    return getContentCounts(
-      'shares',
-      'savedUserId',
-      'array-contains',
-      currentUser,
-      setMyCollectedShareCounts
-    );
-  }, [currentUser]);
-
-  useEffect(() => {
-    return getContentCounts(
-      'restaurants',
-      'savedUserId',
-      'array-contains',
-      currentUser,
-      setMyCollectedStoreCounts
     );
   }, [currentUser]);
 

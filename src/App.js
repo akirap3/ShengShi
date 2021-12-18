@@ -12,8 +12,8 @@ const RestaurantPage = lazy(() => import('./components/RestaurantPage'));
 const ArticlePage = lazy(() => import('./components/ArticlePage'));
 const SearchPage = lazy(() => import('./components/SearchPage'));
 const LoginPage = lazy(() => import('./components/LoginPage'));
-const SignupPage = lazy(() => import('./components/SingupPage'));
-const Dashbaord = lazy(() => import('./components/personalPage/Dashboard'));
+const SignupPage = lazy(() => import('./components/SignUpPage'));
+const Dashboard = lazy(() => import('./components/personalPage/Dashboard'));
 const Title = lazy(() => import('./components/common/Title'));
 const MyShareList = lazy(() => import('./components/personalPage/MyShareList'));
 const MyChartBadges = lazy(() =>
@@ -59,7 +59,7 @@ const App = () => {
             <Route path="/personal">
               {isLoggedIn ? (
                 <Main>
-                  <Dashbaord></Dashbaord>
+                  <Dashboard />
                   <Switch>
                     <Route exact path="/personal/list">
                       <Title title="我的分享清單"></Title>
