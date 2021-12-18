@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
+
 import { IoLogoFacebook } from 'react-icons/io';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { RiLock2Fill } from 'react-icons/ri';
@@ -13,13 +13,8 @@ import Background from '../common/Background';
 import AlertPopup from '../common/popup/AlertPopup';
 import Loading, { PaddingLoading } from '../common/Loading';
 import { checkEmail } from '../../utils/validation';
-import {
-  getAllContents,
-  login,
-  handleSignUpWithProvider,
-  loginWithFB,
-  loginWithGoogle,
-} from '../../utils/firebase';
+import { login, loginWithFB, loginWithGoogle } from '../../utils/firebase';
+import useLoginSignupWithProvider from '../../hooks/useLoginSignupWithProvider';
 import {
   FormContainer,
   Title,
@@ -37,26 +32,19 @@ import {
 } from '../common/form/FormUnits';
 
 const LoginPage = () => {
-  const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [usersData, setUsersDate] = useState(null);
-  const [showInfo, setShowInfo] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-
-  const openInfo = () => setShowInfo(true);
-  const closeInfo = () => setShowInfo(false);
-
-  useEffect(() => {
-    return getAllContents('users', setUsersDate);
-  }, []);
-
-  const openAlertWithMessage = (msg) => {
-    setAlertMessage(msg);
-    openInfo();
-    return false;
-  };
+  const {
+    openAlertWithMessage,
+    alertMessage,
+    showInfo,
+    closeInfo,
+    isLoading,
+    setIsLoading,
+    usersData,
+    history,
+    handleClickProvider,
+  } = useLoginSignupWithProvider();
 
   const hasPassword = () => {
     if (password) {
@@ -86,43 +74,6 @@ const LoginPage = () => {
           }
         });
     }
-  };
-
-  const hasSignedUP = (usersData, uid) => {
-    const userIds = usersData.map((user) => user.id);
-    if (userIds.includes(uid)) return true;
-    return false;
-  };
-
-  const handleClickProvider = (
-    loginWithProvider,
-    imageSize,
-    setIsLoading,
-    history
-  ) => {
-    setIsLoading(true);
-    loginWithProvider()
-      .then((result) => {
-        const { displayName, photoURL, email, uid } = result.user;
-        if (!hasSignedUP(usersData, uid)) {
-          handleSignUpWithProvider(
-            displayName,
-            email,
-            uid,
-            photoURL,
-            imageSize,
-            setIsLoading,
-            history
-          );
-        } else {
-          setIsLoading(false);
-          history.push('/personal/list');
-        }
-      })
-      .catch((error) => {
-        openAlertWithMessage(error.message);
-        setIsLoading(false);
-      });
   };
 
   return (
@@ -167,28 +118,14 @@ const LoginPage = () => {
                 <span>確 認</span>
               </NativeButton>
               <FBButton
-                onClick={() =>
-                  handleClickProvider(
-                    loginWithFB,
-                    '?type=large',
-                    setIsLoading,
-                    history
-                  )
-                }
+                onClick={() => handleClickProvider(loginWithFB, '?type=large')}
                 disabled={isLoading}
               >
                 <FbIcon as={IoLogoFacebook} />
                 <span>FB</span>
               </FBButton>
               <GoogleButton
-                onClick={() =>
-                  handleClickProvider(
-                    loginWithGoogle,
-                    '',
-                    setIsLoading,
-                    history
-                  )
-                }
+                onClick={() => handleClickProvider(loginWithGoogle, '')}
                 disabled={isLoading}
               >
                 <StyledBtnIcon as={FcGoogle} /> <span>Google</span>

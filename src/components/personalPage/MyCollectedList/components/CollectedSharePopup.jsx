@@ -39,7 +39,7 @@ import {
   getCurrentUserData,
   getAllContents,
   getCollectionCounts,
-  handleConfirmation,
+  confirmBooking,
 } from '../../../../utils/firebase';
 
 const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
@@ -75,10 +75,6 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
     return getCollectionCounts(`shares/${share.id}/comments`, setCommentCounts);
   }, [share.id]);
 
-  const handleSpecificDateTime = (payload) => {
-    dispatch({ type: 'specificDateTime/selected', payload: payload });
-  };
-
   const openAlertWithMessage = (msg) => {
     setAlertMessage(msg);
     openInfo();
@@ -95,6 +91,20 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
       return openAlertWithMessage('請點選領取的日期時間');
     }
     return true;
+  };
+
+  const handleConfirmation = () => {
+    if (isFieldsChecked(share, specificDateTime)) {
+      setIsLoading(true);
+      confirmBooking(share, specificDateTime, currentUser, reqQuantities).then(
+        () => {
+          setIsLoading(false);
+          dispatch({ type: 'specificDateTime/selected', payload: null });
+          openConfirmation();
+          closeEditor();
+        }
+      );
+    }
   };
 
   return (
@@ -174,23 +184,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
               </CommentSection>
               <ButtonContainer>
                 <StyleBtnRipples color="#fff" during={3000}>
-                  <SubmitBtn
-                    onClick={() =>
-                      handleConfirmation(
-                        isFieldsChecked,
-                        share,
-                        specificDateTime,
-                        setIsLoading,
-                        currentUser,
-                        reqQuantities,
-                        handleSpecificDateTime,
-                        openConfirmation,
-                        closeEditor
-                      )
-                    }
-                  >
-                    確認領取
-                  </SubmitBtn>
+                  <SubmitBtn onClick={handleConfirmation}>確認領取</SubmitBtn>
                 </StyleBtnRipples>
               </ButtonContainer>
             </PopContent>

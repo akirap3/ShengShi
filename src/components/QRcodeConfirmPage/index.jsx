@@ -6,7 +6,7 @@ import useCurrentUser from '../../hooks/useCurrentUser';
 import {
   getListenedSingleContent,
   handleConfirmShare,
-  handleCancelShare,
+  cancelShare,
 } from '../../utils/firebase';
 import {
   MgmtContainer,
@@ -93,6 +93,13 @@ const QRcodeComfirmPage = () => {
     return share?.toReceiveUserId.includes(requesterId) ? false : true;
   };
 
+  const handleCancelShare = () => {
+    cancelShare(share.id, requesterId, share, currentUser).then(() => {
+      setAlertMessage('您已確認對方取消勝食');
+      openInfo();
+    });
+  };
+
   return (
     <>
       {share !== undefined && requester !== undefined ? (
@@ -159,18 +166,7 @@ const QRcodeComfirmPage = () => {
                             >
                               確認領取
                             </ConfirmedBtn>
-                            <CancleBtn
-                              onClick={() =>
-                                handleCancelShare(
-                                  share.id,
-                                  requesterId,
-                                  share,
-                                  currentUser,
-                                  setAlertMessage,
-                                  openInfo
-                                )
-                              }
-                            >
+                            <CancleBtn onClick={() => handleCancelShare()}>
                               取消
                             </CancleBtn>
                           </ButtonContainer>

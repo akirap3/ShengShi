@@ -35,13 +35,7 @@ import {
   GeoPoint,
 } from 'firebase/firestore';
 
-import {
-  getStorage,
-  ref,
-  deleteObject,
-  uploadBytes,
-  getDownloadURL,
-} from 'firebase/storage';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 require('dotenv').config();
 
@@ -76,27 +70,22 @@ export const login = (email, password) => {
   return signInWithEmailAndPassword(auth, email, password);
 };
 
-const fbProvider = new FacebookAuthProvider();
-const googleProvider = new GoogleAuthProvider();
-
 export const loginWithFB = () => {
-  return signInWithPopup(auth, fbProvider);
+  return signInWithPopup(auth, new FacebookAuthProvider());
 };
 
 export const loginWithGoogle = () => {
-  return signInWithPopup(auth, googleProvider);
+  return signInWithPopup(auth, new GoogleAuthProvider());
 };
 
-export const handleSignUpWithProvider = async (
+export const handleSignUpWithProvider = async ({
   displayName,
   email,
   uid,
   photoURL,
   imageSize,
-  setIsLoading,
-  history
-) => {
-  await setDoc(doc(db, 'users', uid), {
+}) => {
+  return await setDoc(doc(db, 'users', uid), {
     displayName,
     email,
     alias: displayName,
@@ -107,8 +96,6 @@ export const handleSignUpWithProvider = async (
     myPoints: 0,
     myPlace: '',
   });
-  setIsLoading(false);
-  history.push('/personal/list');
 };
 
 export const getCurrentUserData = (currentUser, setUserData) => {
@@ -127,66 +114,19 @@ export const handleDeleteMember = () => {
   deleteUser(auth.currentUser);
 };
 
-export const handleUpdateMember = async (
-  checkFields,
-  setIsLoading,
-  currentUser,
-  file,
-  initialUserData,
-  setDisplayName,
-  setAlias,
-  setPhone,
-  setMyPlace,
-  setAbout,
-  setFile
-) => {
-  if (checkFields()) {
-    setIsLoading(true);
-    const docRef = doc(db, 'users', currentUser.uid);
-    const fileRef = ref(storage, `images/users/${docRef.id}`);
-    const metadata = {
-      contentType: file.type,
-    };
-    const uplaodTask = await uploadBytes(fileRef, file, metadata);
-    const imageUrl = await getDownloadURL(uplaodTask.ref);
-    initialUserData.imageUrl = imageUrl || '';
-    await updateDoc(docRef, initialUserData);
-    setIsLoading(false);
-    setDisplayName('');
-    setAlias('');
-    setPhone('');
-    setMyPlace('');
-    setAbout('');
-    setFile(null);
-  }
+export const updateMember = async (currentUser, file, initialUserData) => {
+  const docRef = doc(db, 'users', currentUser.uid);
+  const fileRef = ref(storage, `images/users/${docRef.id}`);
+  const metadata = {
+    contentType: file.type,
+  };
+  const uplaodTask = await uploadBytes(fileRef, file, metadata);
+  const imageUrl = await getDownloadURL(uplaodTask.ref);
+  initialUserData.imageUrl = imageUrl || '';
+  await updateDoc(docRef, initialUserData);
 };
 
-export const handleDeleteShare = async (
-  setIsLoading,
-  content,
-  closeDelete,
-  currentUser
-) => {
-  setIsLoading(true);
-  const deleteImgFileRef = ref(storage, `images/shares/${content?.id}`);
-  await deleteObject(deleteImgFileRef);
-  await deleteDoc(doc(db, 'shares', content?.id));
-  await updateDoc(doc(db, 'users', currentUser.uid), {
-    myPoints: increment(-10),
-  });
-
-  handleDeleteBadge(currentUser.uid);
-  setIsLoading(false);
-  closeDelete();
-};
-
-export const handleArchiveShare = async (
-  setIsLoading,
-  share,
-  closeDelete,
-  currentUser,
-  userData
-) => {
+export const archiveShare = async (share, currentUser, userData) => {
   share.toReceiveUserId.forEach(async (userId) => {
     await addDoc(collection(db, `users/${userId}/messages`), {
       createdAt: Timestamp.now(),
@@ -207,23 +147,14 @@ export const handleArchiveShare = async (
   });
 
   if (share.receivedUserId.length === 0) handleDeleteBadge(currentUser.uid);
-  setIsLoading(false);
-  closeDelete();
 };
 
-export const handleDeleteToReceive = async (
-  setIsLoading,
-  content,
-  closeDelete
-) => {
-  setIsLoading(true);
+export const deleteToReceive = async (content) => {
   const docRef = doc(db, 'shares', content?.id);
   await updateDoc(docRef, {
     [`toReceiveInfo.${auth.currentUser.uid}`]: deleteField(),
     toReceiveUserId: arrayRemove(auth.currentUser.uid),
   });
-  setIsLoading(false);
-  closeDelete();
 };
 
 export const handleDeleteExchange = async (shareId, requesterId, qty) => {
@@ -235,47 +166,28 @@ export const handleDeleteExchange = async (shareId, requesterId, qty) => {
   return 'done';
 };
 
-export const handleDeleteCollected = async (
-  setIsLoading,
-  content,
-  closeDelete
-) => {
-  setIsLoading(true);
+export const deleteCollected = async (content) => {
   const docRef = doc(db, 'shares', content?.id);
   await updateDoc(docRef, {
     savedUserId: arrayRemove(auth.currentUser.uid),
   });
-  setIsLoading(false);
-  closeDelete();
 };
 
-export const handleConfirmation = async (
-  isFieldsChecked,
+export const confirmBooking = async (
   share,
   specificDateTime,
-  setIsLoading,
   currentUser,
-  reqQuantities,
-  handleSpecificDateTime,
-  openConfirmation,
-  closeEditor
+  reqQuantities
 ) => {
-  if (isFieldsChecked(share, specificDateTime)) {
-    setIsLoading(true);
-    const docRef = doc(db, 'shares', share.id);
-    await updateDoc(docRef, {
-      toReceiveUserId: arrayUnion(currentUser.uid),
-      [`toReceiveInfo.${currentUser.uid}`]: {
-        quantities: Number(reqQuantities) || 1,
-        upcomingTimestamp: Timestamp.fromDate(specificDateTime),
-      },
-      bookedQuantities: increment(Number(reqQuantities) || 1),
-    });
-    setIsLoading(false);
-    handleSpecificDateTime(null);
-    openConfirmation();
-    closeEditor();
-  }
+  const docRef = doc(db, 'shares', share.id);
+  await updateDoc(docRef, {
+    toReceiveUserId: arrayUnion(currentUser.uid),
+    [`toReceiveInfo.${currentUser.uid}`]: {
+      quantities: Number(reqQuantities) || 1,
+      upcomingTimestamp: Timestamp.fromDate(specificDateTime),
+    },
+    bookedQuantities: increment(Number(reqQuantities) || 1),
+  });
 };
 
 export const handleDeleteDocument = async (currentUser, messageId) => {
@@ -363,13 +275,13 @@ export const getSearchedOrderedContents = (
         collection(db, collectionName),
         where(field, operator, keywords),
         orderBy('createdAt', 'desc'),
-        limit(4)
+        limit(15)
       )
     : query(
         collection(db, collectionName),
         where(field, operator, keywords),
         orderBy('createdAt', 'desc'),
-        limit(4),
+        limit(15),
         startAfter(lastPostSnapshotRef.current)
       );
 
@@ -482,10 +394,19 @@ export const getAllOrderedContents = (
   setContents,
   lastPostSnapshotRef,
   isNext,
-  OriContents
+  OriContents,
+  isShareSearchPage
 ) => {
   const q = !isNext
     ? query(collection(db, collectionName), orderBy(field, 'desc'), limit(4))
+    : isShareSearchPage
+    ? query(
+        collection(db, collectionName),
+        where('isArchived', '==', false),
+        where('toTimeStamp', '>=', Timestamp.now()),
+        limit(4),
+        startAfter(lastPostSnapshotRef.current)
+      )
     : query(
         collection(db, collectionName),
         orderBy(field, 'desc'),
@@ -494,9 +415,12 @@ export const getAllOrderedContents = (
       );
 
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    const contents = querySnapshot.docs.map((doc) => {
+    let contents = querySnapshot.docs.map((doc) => {
       return { ...doc.data(), id: doc.id };
     });
+
+    if (isShareSearchPage)
+      contents = contents.filter((item) => item.quantities > 0);
 
     lastPostSnapshotRef.current =
       querySnapshot.docs[querySnapshot.docs.length - 1];
@@ -544,30 +468,32 @@ export const getAllOrderedOtherShares = (
       ? query(
           collection(db, collectionName),
           where('postUser.id', '!=', currentUser.uid),
-          limit(4)
+          where('isArchived', '==', false),
+          limit(20)
         )
       : query(
           collection(db, collectionName),
           where('postUser.id', '!=', currentUser.uid),
-          limit(4),
+          where('isArchived', '==', false),
+          limit(20),
           startAfter(lastPostSnapshotRef.current)
         );
-
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const contents = querySnapshot.docs.map((doc) => {
-        return { ...doc.data(), id: doc.id };
-      });
+      const contents = querySnapshot.docs
+        .map((doc) => {
+          return { ...doc.data(), id: doc.id };
+        })
+        .filter(
+          (item) => item.toTimeStamp > Timestamp.now() && item.quantities > 0
+        );
 
       lastPostSnapshotRef.current =
         querySnapshot.docs[querySnapshot.docs.length - 1];
 
-      const NonzeroContents = contents.filter(
-        (content) => content.quantities > 0
-      );
       if (!isNext) {
-        setContents(NonzeroContents);
+        setContents(contents);
       } else {
-        setContents([...oriContents, ...NonzeroContents]);
+        setContents([...oriContents, ...contents]);
       }
     });
 
@@ -888,23 +814,14 @@ export const handleConfirmShare = (
   });
 };
 
-export const handleCancelShare = (
-  shareId,
-  requesterId,
-  share,
-  currentUser,
-  setAlertMessage,
-  openInfo
-) => {
-  handleDeleteExchange(
+export const cancelShare = (shareId, requesterId, share, currentUser) => {
+  return handleDeleteExchange(
     shareId,
     requesterId,
     share?.toReceiveInfo[`${requesterId}`].quantities
   ).then(() => {
     handleDeleteBadge(currentUser.uid);
     handleDeleteBadge(requesterId);
-    setAlertMessage('您已確認對方取消勝食');
-    openInfo();
   });
 };
 

@@ -91,7 +91,8 @@ const SearchPage = () => {
           setShares,
           lastPostSnapshotRef,
           false,
-          shares
+          shares,
+          true
         );
       }
     }
@@ -128,7 +129,8 @@ const SearchPage = () => {
             setShares,
             lastPostSnapshotRef,
             true,
-            shares
+            shares,
+            true
           );
         }
       }
@@ -180,12 +182,9 @@ const SearchPage = () => {
         {shares ? (
           shares.length !== 0 ? (
             <SharesContainer>
-              {shares
-                .filter((share) => share.isArchived === false)
-                .filter((share) => share.toTimeStamp.toDate() > new Date())
-                .map((share) => (
-                  <SearchPageCard key={share.id} share={share} />
-                ))}
+              {shares.map((share) => (
+                <SearchPageCard key={share.id} share={share} />
+              ))}
             </SharesContainer>
           ) : (
             <NoResult text="搜尋不到" />
