@@ -120,38 +120,16 @@ export const handleDeleteMember = () => {
   deleteUser(auth.currentUser);
 };
 
-export const handleUpdateMember = async (
-  checkFields,
-  setIsLoading,
-  currentUser,
-  file,
-  initialUserData,
-  setDisplayName,
-  setAlias,
-  setPhone,
-  setMyPlace,
-  setAbout,
-  setFile
-) => {
-  if (checkFields()) {
-    setIsLoading(true);
-    const docRef = doc(db, 'users', currentUser.uid);
-    const fileRef = ref(storage, `images/users/${docRef.id}`);
-    const metadata = {
-      contentType: file.type,
-    };
-    const uplaodTask = await uploadBytes(fileRef, file, metadata);
-    const imageUrl = await getDownloadURL(uplaodTask.ref);
-    initialUserData.imageUrl = imageUrl || '';
-    await updateDoc(docRef, initialUserData);
-    setIsLoading(false);
-    setDisplayName('');
-    setAlias('');
-    setPhone('');
-    setMyPlace('');
-    setAbout('');
-    setFile(null);
-  }
+export const updateMember = async (currentUser, file, initialUserData) => {
+  const docRef = doc(db, 'users', currentUser.uid);
+  const fileRef = ref(storage, `images/users/${docRef.id}`);
+  const metadata = {
+    contentType: file.type,
+  };
+  const uplaodTask = await uploadBytes(fileRef, file, metadata);
+  const imageUrl = await getDownloadURL(uplaodTask.ref);
+  initialUserData.imageUrl = imageUrl || '';
+  await updateDoc(docRef, initialUserData);
 };
 
 export const handleDeleteShare = async (
