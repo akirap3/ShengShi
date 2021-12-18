@@ -7,7 +7,7 @@ import {
   handleDeleteMember,
   archiveShare,
   deleteToReceive,
-  handleDeleteCollected,
+  deleteCollected,
   getCurrentUserData,
 } from '../../../utils/firebase';
 import {
@@ -54,6 +54,14 @@ const DeletePopup = ({
     });
   };
 
+  const handleDeleteCollected = () => {
+    setIsLoading(true);
+    deleteCollected(share).then(() => {
+      setIsLoading(false);
+      closeDelete();
+    });
+  };
+
   return (
     userData && (
       <CenterDialogOverlay
@@ -74,8 +82,7 @@ const DeletePopup = ({
                 isToReceive
                   ? () => handleDeleteToReceive()
                   : isCollected
-                  ? () =>
-                      handleDeleteCollected(setIsLoading, share, closeDelete)
+                  ? () => handleDeleteCollected()
                   : toDeleteMember
                   ? () => handleDeleteMember()
                   : () => handleArchiveShare()

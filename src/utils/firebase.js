@@ -35,13 +35,7 @@ import {
   GeoPoint,
 } from 'firebase/firestore';
 
-import {
-  getStorage,
-  ref,
-  deleteObject,
-  uploadBytes,
-  getDownloadURL,
-} from 'firebase/storage';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 require('dotenv').config();
 
@@ -172,47 +166,28 @@ export const handleDeleteExchange = async (shareId, requesterId, qty) => {
   return 'done';
 };
 
-export const handleDeleteCollected = async (
-  setIsLoading,
-  content,
-  closeDelete
-) => {
-  setIsLoading(true);
+export const deleteCollected = async (content) => {
   const docRef = doc(db, 'shares', content?.id);
   await updateDoc(docRef, {
     savedUserId: arrayRemove(auth.currentUser.uid),
   });
-  setIsLoading(false);
-  closeDelete();
 };
 
-export const handleConfirmation = async (
-  isFieldsChecked,
+export const confirmBooking = async (
   share,
   specificDateTime,
-  setIsLoading,
   currentUser,
-  reqQuantities,
-  handleSpecificDateTime,
-  openConfirmation,
-  closeEditor
+  reqQuantities
 ) => {
-  if (isFieldsChecked(share, specificDateTime)) {
-    setIsLoading(true);
-    const docRef = doc(db, 'shares', share.id);
-    await updateDoc(docRef, {
-      toReceiveUserId: arrayUnion(currentUser.uid),
-      [`toReceiveInfo.${currentUser.uid}`]: {
-        quantities: Number(reqQuantities) || 1,
-        upcomingTimestamp: Timestamp.fromDate(specificDateTime),
-      },
-      bookedQuantities: increment(Number(reqQuantities) || 1),
-    });
-    setIsLoading(false);
-    handleSpecificDateTime(null);
-    openConfirmation();
-    closeEditor();
-  }
+  const docRef = doc(db, 'shares', share.id);
+  await updateDoc(docRef, {
+    toReceiveUserId: arrayUnion(currentUser.uid),
+    [`toReceiveInfo.${currentUser.uid}`]: {
+      quantities: Number(reqQuantities) || 1,
+      upcomingTimestamp: Timestamp.fromDate(specificDateTime),
+    },
+    bookedQuantities: increment(Number(reqQuantities) || 1),
+  });
 };
 
 export const handleDeleteDocument = async (currentUser, messageId) => {
@@ -300,13 +275,13 @@ export const getSearchedOrderedContents = (
         collection(db, collectionName),
         where(field, operator, keywords),
         orderBy('createdAt', 'desc'),
-        limit(4)
+        limit(15)
       )
     : query(
         collection(db, collectionName),
         where(field, operator, keywords),
         orderBy('createdAt', 'desc'),
-        limit(4),
+        limit(15),
         startAfter(lastPostSnapshotRef.current)
       );
 
@@ -419,10 +394,19 @@ export const getAllOrderedContents = (
   setContents,
   lastPostSnapshotRef,
   isNext,
-  OriContents
+  OriContents,
+  isShareSearchPage
 ) => {
   const q = !isNext
     ? query(collection(db, collectionName), orderBy(field, 'desc'), limit(4))
+    : isShareSearchPage
+    ? query(
+        collection(db, collectionName),
+        where('isArchived', '==', false),
+        where('toTimeStamp', '>=', Timestamp.now()),
+        limit(4),
+        startAfter(lastPostSnapshotRef.current)
+      )
     : query(
         collection(db, collectionName),
         orderBy(field, 'desc'),
@@ -431,9 +415,12 @@ export const getAllOrderedContents = (
       );
 
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    const contents = querySnapshot.docs.map((doc) => {
+    let contents = querySnapshot.docs.map((doc) => {
       return { ...doc.data(), id: doc.id };
     });
+
+    if (isShareSearchPage)
+      contents = contents.filter((item) => item.quantities > 0);
 
     lastPostSnapshotRef.current =
       querySnapshot.docs[querySnapshot.docs.length - 1];
@@ -481,30 +468,32 @@ export const getAllOrderedOtherShares = (
       ? query(
           collection(db, collectionName),
           where('postUser.id', '!=', currentUser.uid),
-          limit(4)
+          where('isArchived', '==', false),
+          limit(20)
         )
       : query(
           collection(db, collectionName),
           where('postUser.id', '!=', currentUser.uid),
-          limit(4),
+          where('isArchived', '==', false),
+          limit(20),
           startAfter(lastPostSnapshotRef.current)
         );
-
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const contents = querySnapshot.docs.map((doc) => {
-        return { ...doc.data(), id: doc.id };
-      });
+      const contents = querySnapshot.docs
+        .map((doc) => {
+          return { ...doc.data(), id: doc.id };
+        })
+        .filter(
+          (item) => item.toTimeStamp > Timestamp.now() && item.quantities > 0
+        );
 
       lastPostSnapshotRef.current =
         querySnapshot.docs[querySnapshot.docs.length - 1];
 
-      const NonzeroContents = contents.filter(
-        (content) => content.quantities > 0
-      );
       if (!isNext) {
-        setContents(NonzeroContents);
+        setContents(contents);
       } else {
-        setContents([...oriContents, ...NonzeroContents]);
+        setContents([...oriContents, ...contents]);
       }
     });
 
