@@ -275,13 +275,13 @@ export const getSearchedOrderedContents = (
         collection(db, collectionName),
         where(field, operator, keywords),
         orderBy('createdAt', 'desc'),
-        limit(15)
+        limit(4)
       )
     : query(
         collection(db, collectionName),
         where(field, operator, keywords),
         orderBy('createdAt', 'desc'),
-        limit(15),
+        limit(4),
         startAfter(lastPostSnapshotRef.current)
       );
 
@@ -299,25 +299,26 @@ export const getSearchedOrderedContents = (
   });
 };
 
+const setCount = (q, setFn) => {
+  return onSnapshot(q, (querySnapshot) => {
+    const count = querySnapshot.docs.length;
+    setFn(count);
+  });
+};
+
 export const getContentCounts = (
   collectionName,
   field,
   operator,
   currentUser,
-  setCount
+  setFn
 ) => {
   if (currentUser) {
     const q = query(
       collection(db, collectionName),
       where(field, operator, currentUser.uid)
     );
-
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const count = querySnapshot.docs.length;
-      setCount(count);
-    });
-
-    return unsubscribe;
+    return setCount(q, setFn);
   }
 };
 
@@ -329,7 +330,7 @@ export const getCountsTwoFiltered = (
   operator2,
   currentUser,
   value,
-  setCount
+  setFn
 ) => {
   if (currentUser) {
     const q = query(
@@ -337,25 +338,13 @@ export const getCountsTwoFiltered = (
       where(field, operator, currentUser.uid),
       where(field2, operator2, value)
     );
-
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const count = querySnapshot.docs.length;
-      setCount(count);
-    });
-
-    return unsubscribe;
+    return setCount(q, setFn);
   }
 };
 
-export const getCollectionCounts = (collectionName, setCount) => {
+export const getCollectionCounts = (collectionName, setFn) => {
   const q = query(collection(db, collectionName));
-
-  const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    const count = querySnapshot.docs.length;
-    setCount(count);
-  });
-
-  return unsubscribe;
+  return setCount(q, setFn);
 };
 
 export const getSingleShare = async (docId) => {
@@ -543,6 +532,11 @@ const badgeDocRefs = {
   badge9: doc(db, 'badges', 'lYpT2XjS9yeqYwUD6riZ'),
 };
 
+const hasBadge = async (docRef, currentUserUid) => {
+  const docSnapshot = await getDoc(docRef);
+  return docSnapshot.data().ownedBy.includes(currentUserUid);
+};
+
 export const handleAddBadge = async (currentUserUid) => {
   const currentUserDocRef = doc(db, 'users', currentUserUid);
   const userSnap = await getDoc(currentUserDocRef);
@@ -562,74 +556,33 @@ export const handleAddBadge = async (currentUserUid) => {
     });
   };
 
-  const hasBadge = async (docRef) => {
-    const docSnapshot = await getDoc(docRef);
-    return docSnapshot.data().ownedBy.includes(currentUserUid);
+  const handleBadge = (badgeRef, points, badgeName) => {
+    hasBadge(badgeRef, currentUserUid).then((result) => {
+      if (!result) {
+        addBadgeOwner(badgeRef);
+        sendMessage(points, badgeName);
+      }
+    });
   };
 
-  if (points >= 10 && points < 30) {
-    hasBadge(badgeDocRefs.badge1).then((result) => {
-      if (!result) {
-        addBadgeOwner(badgeDocRefs.badge1);
-        sendMessage(10, '勳章1');
-      }
-    });
-  } else if (points >= 30 && points < 50) {
-    hasBadge(badgeDocRefs.badge2).then((result) => {
-      if (!result) {
-        addBadgeOwner(badgeDocRefs.badge2);
-        sendMessage(30, '勳章2');
-      }
-    });
-  } else if (points >= 50 && points < 100) {
-    hasBadge(badgeDocRefs.badge3).then((result) => {
-      if (!result) {
-        addBadgeOwner(badgeDocRefs.badge3);
-        sendMessage(50, '勳章3');
-      }
-    });
-  } else if (points >= 100 && points < 150) {
-    hasBadge(badgeDocRefs.badge4).then((result) => {
-      if (!result) {
-        addBadgeOwner(badgeDocRefs.badge4);
-        sendMessage(100, '勳章4');
-      }
-    });
-  } else if (points >= 150 && points < 180) {
-    hasBadge(badgeDocRefs.badge5).then((result) => {
-      if (!result) {
-        addBadgeOwner(badgeDocRefs.badge5);
-        sendMessage(150, '勳章5');
-      }
-    });
-  } else if (points >= 180 && points < 200) {
-    hasBadge(badgeDocRefs.badge6).then((result) => {
-      if (!result) {
-        addBadgeOwner(badgeDocRefs.badge6);
-        sendMessage(180, '勳章6');
-      }
-    });
-  } else if (points >= 200 && points < 300) {
-    hasBadge(badgeDocRefs.badge7).then((result) => {
-      if (!result) {
-        addBadgeOwner(badgeDocRefs.badge7);
-        sendMessage(200, '勳章7');
-      }
-    });
-  } else if (points >= 300 && points < 500) {
-    hasBadge(badgeDocRefs.badge8).then((result) => {
-      if (!result) {
-        addBadgeOwner(badgeDocRefs.badge8);
-        sendMessage(300, '勳章8');
-      }
-    });
-  } else if (points >= 500) {
-    hasBadge(badgeDocRefs.badge9).then((result) => {
-      if (!result) {
-        addBadgeOwner(badgeDocRefs.badge9);
-        sendMessage(500, '勳章9');
-      }
-    });
+  if (points >= 500) {
+    handleBadge(badgeDocRefs.badge9, 500, '勳章9');
+  } else if (points >= 300) {
+    handleBadge(badgeDocRefs.badge8, 300, '勳章8');
+  } else if (points >= 200) {
+    handleBadge(badgeDocRefs.badge7, 200, '勳章7');
+  } else if (points >= 180) {
+    handleBadge(badgeDocRefs.badge6, 180, '勳章6');
+  } else if (points >= 150) {
+    handleBadge(badgeDocRefs.badge5, 150, '勳章5');
+  } else if (points >= 100) {
+    handleBadge(badgeDocRefs.badge4, 100, '勳章4');
+  } else if (points >= 50) {
+    handleBadge(badgeDocRefs.badge3, 50, '勳章3');
+  } else if (points >= 30) {
+    handleBadge(badgeDocRefs.badge2, 30, '勳章2');
+  } else if (points >= 10) {
+    handleBadge(badgeDocRefs.badge1, 10, '勳章1');
   }
 };
 
@@ -652,74 +605,33 @@ export const handleDeleteBadge = async (currentUserUid) => {
     });
   };
 
-  const hasBadge = async (docRef) => {
-    const docSnapshot = await getDoc(docRef);
-    return docSnapshot.data().ownedBy.includes(currentUserUid);
+  const handleBadge = (badgeRef, points, badgeName) => {
+    hasBadge(badgeRef, currentUserUid).then((result) => {
+      if (result) {
+        deleteBadgeOwner(badgeRef);
+        sendMessage(points, badgeName);
+      }
+    });
   };
 
   if (points < 10) {
-    hasBadge(badgeDocRefs.badge1).then((result) => {
-      if (result) {
-        deleteBadgeOwner(badgeDocRefs.badge1);
-        sendMessage(10, '勳章1');
-      }
-    });
+    handleBadge(badgeDocRefs.badge1, 10, '勳章1');
   } else if (points >= 10 && points < 30) {
-    hasBadge(badgeDocRefs.badge2).then((result) => {
-      if (result) {
-        deleteBadgeOwner(badgeDocRefs.badge2);
-        sendMessage(30, '勳章2');
-      }
-    });
+    handleBadge(badgeDocRefs.badge2, 30, '勳章2');
   } else if (points >= 30 && points < 50) {
-    hasBadge(badgeDocRefs.badge3).then((result) => {
-      if (result) {
-        deleteBadgeOwner(badgeDocRefs.badge3);
-        sendMessage(50, '勳章3');
-      }
-    });
+    handleBadge(badgeDocRefs.badge3, 50, '勳章3');
   } else if (points >= 50 && points < 100) {
-    hasBadge(badgeDocRefs.badge4).then((result) => {
-      if (result) {
-        deleteBadgeOwner(badgeDocRefs.badge4);
-        sendMessage(100, '勳章4');
-      }
-    });
+    handleBadge(badgeDocRefs.badge4, 100, '勳章4');
   } else if (points >= 100 && points < 150) {
-    hasBadge(badgeDocRefs.badge5).then((result) => {
-      if (result) {
-        deleteBadgeOwner(badgeDocRefs.badge5);
-        sendMessage(150, '勳章5');
-      }
-    });
+    handleBadge(badgeDocRefs.badge5, 150, '勳章5');
   } else if (points >= 150 && points < 180) {
-    hasBadge(badgeDocRefs.badge6).then((result) => {
-      if (result) {
-        deleteBadgeOwner(badgeDocRefs.badge6);
-        sendMessage(180, '勳章6');
-      }
-    });
+    handleBadge(badgeDocRefs.badge6, 180, '勳章6');
   } else if (points >= 180 && points < 200) {
-    hasBadge(badgeDocRefs.badge7).then((result) => {
-      if (result) {
-        deleteBadgeOwner(badgeDocRefs.badge7);
-        sendMessage(200, '勳章7');
-      }
-    });
+    handleBadge(badgeDocRefs.badge7, 200, '勳章7');
   } else if (points >= 200 && points < 300) {
-    hasBadge(badgeDocRefs.badge8).then((result) => {
-      if (result) {
-        deleteBadgeOwner(badgeDocRefs.badge8);
-        sendMessage(300, '勳章8');
-      }
-    });
+    handleBadge(badgeDocRefs.badge8, 300, '勳章8');
   } else if (points >= 300 && points < 500) {
-    hasBadge(badgeDocRefs.badge9).then((result) => {
-      if (result) {
-        deleteBadgeOwner(badgeDocRefs.badge9);
-        sendMessage(500, '勳章9');
-      }
-    });
+    handleBadge(badgeDocRefs.badge9, 500, '勳章9');
   }
 };
 
