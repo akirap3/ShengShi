@@ -10,6 +10,30 @@ import StarImg from '../../../images/common/star.png';
 const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
   const currentUser = useCurrentUser();
 
+  const handleClickHeart = (content) => {
+    if (currentUser) {
+      if (isRestaurants) {
+        handleCollection(content, 'restaurants', currentUser);
+      } else {
+        handleCollection(content, 'shares', currentUser);
+      }
+    } else {
+      return;
+    }
+  };
+
+  const handleLike = (content) => {
+    if (currentUser) {
+      if (content?.savedUserId?.includes(currentUser.uid)) {
+        return 'red';
+      } else {
+        return 'white';
+      }
+    } else {
+      return 'white';
+    }
+  };
+
   return restaurant?.length !== 0 ? (
     <CarouselContainer>
       <ResultTitle>搜尋結果</ResultTitle>
@@ -24,25 +48,8 @@ const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
                   <Star key={uuidv4()} src={StarImg} alt="star" />
                 ))}
                 <Heart
-                  onClick={
-                    currentUser
-                      ? isRestaurants
-                        ? () =>
-                            handleCollection(
-                              content,
-                              'restaurants',
-                              currentUser
-                            )
-                        : () => handleCollection(content, 'shares', currentUser)
-                      : () => {}
-                  }
-                  like={
-                    currentUser
-                      ? content?.savedUserId?.includes(currentUser.uid)
-                        ? 'red'
-                        : 'white'
-                      : 'white'
-                  }
+                  onClick={() => handleClickHeart(content)}
+                  like={() => handleLike(content)}
                 />
               </Row>
             </Card>

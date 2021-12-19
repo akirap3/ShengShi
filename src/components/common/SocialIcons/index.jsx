@@ -8,12 +8,10 @@ const SocialIcons = () => {
         <InstagramIcon />
         <span>Instagram</span>
       </div>
-
       <div className="social-button facebook">
         <FbIcon />
         <span>Facebook</span>
       </div>
-
       <div className="social-button twitter">
         <TwitterIcon />
         <span>Twitter</span>
