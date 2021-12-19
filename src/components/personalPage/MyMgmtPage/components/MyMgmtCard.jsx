@@ -19,8 +19,9 @@ import {
 } from '../../../common/mgmtCard/MgmtCardUnits';
 import {
   getListenedSingleContent,
-  handleConfirmShare,
+  updateAfterExchanged,
   cancelShare,
+  handleAddBadge,
 } from '../../../../utils/firebase';
 
 const QRCode = require('qrcode.react');
@@ -36,6 +37,15 @@ const MyMgmtCard = ({ share, requesterId, setAlertMessage, openInfo }) => {
   const handleCancelShare = () => {
     cancelShare(share.id, requesterId, share, currentUser).then(() => {
       setAlertMessage('您已確認對方取消勝食');
+      openInfo();
+    });
+  };
+
+  const handleConfirmShare = () => {
+    updateAfterExchanged(share.id, requesterId, share, currentUser).then(() => {
+      handleAddBadge(currentUser.uid);
+      handleAddBadge(requesterId);
+      setAlertMessage('您已確認對方領取完勝食');
       openInfo();
     });
   };
@@ -76,10 +86,8 @@ const MyMgmtCard = ({ share, requesterId, setAlertMessage, openInfo }) => {
             </RequestedDateTime>
             <Address>交換地點：{share.exchangePlace}</Address>
             <ButtonContainer>
-              <ConfirmedBtn onClick={() => handleConfirmShare()}>
-                確認領取
-              </ConfirmedBtn>
-              <CancleBtn onClick={() => handleCancelShare()}>取消</CancleBtn>
+              <ConfirmedBtn onClick={handleConfirmShare}>確認領取</ConfirmedBtn>
+              <CancleBtn onClick={handleCancelShare}>取消</CancleBtn>
             </ButtonContainer>
           </InfoContainer>
         </Context>
