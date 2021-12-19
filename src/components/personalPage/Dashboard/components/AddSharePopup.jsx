@@ -10,7 +10,7 @@ import { isFieldsChecked } from '../../../../utils/validation.js';
 import useCurrentUser from '../../../../hooks/useCurrentUser.js';
 import {
   getListenedSingleContent,
-  handleAddShareSubmit,
+  onAddShareSubmit,
 } from '../../../../utils/firebase';
 import {
   StyledDialogContent,
@@ -106,6 +106,33 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
     );
   };
 
+  const handleReset = () => {
+    setIsLoading(false);
+    closeEditor();
+    handleLatLng([]);
+    handleAddress('');
+    handleFromToDateTime();
+    setFile(null);
+  };
+
+  const handleAddShareSubmit = () => {
+    const enable = isOK();
+    if (enable) {
+      setIsLoading(true);
+      const data = {
+        file,
+        address,
+        fromToDateTime,
+        quantities,
+        foodName,
+        currentUser,
+        userData,
+        latLng,
+      };
+      onAddShareSubmit(data).then(() => handleReset());
+    }
+  };
+
   const previewImgUrl = file
     ? URL.createObjectURL(file)
     : 'https://react.semantic-ui.com/images/wireframe/image.png';
@@ -168,28 +195,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
                 disabled={isLoading}
               />
               <StyleBtnRipples color="#fff" during={3000}>
-                <SubmitBtn
-                  onClick={() =>
-                    handleAddShareSubmit(
-                      isOK,
-                      setIsLoading,
-                      file,
-                      address,
-                      fromToDateTime,
-                      quantities,
-                      foodName,
-                      currentUser,
-                      userData,
-                      latLng,
-                      closeEditor,
-                      handleLatLng,
-                      handleAddress,
-                      handleFromToDateTime,
-                      setFile
-                    )
-                  }
-                  disabled={isLoading}
-                >
+                <SubmitBtn onClick={handleAddShareSubmit} disabled={isLoading}>
                   分享
                 </SubmitBtn>
               </StyleBtnRipples>

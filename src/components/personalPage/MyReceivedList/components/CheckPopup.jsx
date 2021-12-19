@@ -56,6 +56,19 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
     return getCollectionCounts(`shares/${share.id}/comments`, setCommentCounts);
   }, [share.id]);
 
+  const handleOnCommentSubmit = () => {
+    if (replyComment) {
+      onCommentSubmit(share, userData, replyComment).then(() => {
+        setReplayComment('');
+        setErrorMessage('');
+        setShowErrorMessage(false);
+      });
+    } else {
+      setShowErrorMessage(true);
+      setErrorMessage('留言不能是空白');
+    }
+  };
+
   return (
     <>
       <DialogOverlay isOpen={showEdit} onDismiss={closeEditor}>
@@ -108,19 +121,7 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
                 <Message>{errorMessage}</Message>
               </ErrorMessage>
               <ReplyRipples color="#bbdefb" during={3000}>
-                <RepalyButton
-                  onClick={() =>
-                    onCommentSubmit(
-                      share,
-                      userData,
-                      replyComment,
-                      currentUser,
-                      setReplayComment,
-                      setErrorMessage,
-                      setShowErrorMessage
-                    )
-                  }
-                >
+                <RepalyButton onClick={handleOnCommentSubmit}>
                   留言
                 </RepalyButton>
               </ReplyRipples>
@@ -131,7 +132,6 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
                 comments.map((comment) => (
                   <Comment
                     key={comment.id}
-                    currentUser={currentUser}
                     share={share}
                     comment={comment}
                     userData={userData}

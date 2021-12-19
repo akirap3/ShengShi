@@ -157,15 +157,6 @@ export const deleteToReceive = async (content) => {
   });
 };
 
-export const handleDeleteExchange = async (shareId, requesterId, qty) => {
-  await updateDoc(doc(db, 'shares', shareId), {
-    [`toReceiveInfo.${requesterId}`]: deleteField(),
-    toReceiveUserId: arrayRemove(requesterId),
-    bookedQuantities: increment(-qty),
-  });
-  return 'done';
-};
-
 export const deleteCollected = async (content) => {
   const docRef = doc(db, 'shares', content?.id);
   await updateDoc(docRef, {
@@ -366,14 +357,12 @@ export const getListenedSingleContent = (collectionName, docId, setContent) => {
 
 export const getAllContents = (collectionName, setContents) => {
   const q = query(collection(db, collectionName), orderBy('createdAt', 'desc'));
-
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const contents = querySnapshot.docs.map((doc) => {
       return { ...doc.data(), id: doc.id };
     });
     setContents(contents);
   });
-
   return unsubscribe;
 };
 
@@ -402,15 +391,12 @@ export const getAllOrderedContents = (
         limit(4),
         startAfter(lastPostSnapshotRef.current)
       );
-
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     let contents = querySnapshot.docs.map((doc) => {
       return { ...doc.data(), id: doc.id };
     });
-
     if (isShareSearchPage)
       contents = contents.filter((item) => item.quantities > 0);
-
     lastPostSnapshotRef.current =
       querySnapshot.docs[querySnapshot.docs.length - 1];
     if (!isNext) {
@@ -419,7 +405,6 @@ export const getAllOrderedContents = (
       setContents([...OriContents, ...contents]);
     }
   });
-
   return unsubscribe;
 };
 
@@ -429,7 +414,6 @@ export const getAllOtherShares = (collectionName, setContents, currentUser) => {
       collection(db, collectionName),
       where('postUser.id', '!=', currentUser.uid)
     );
-
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const contents = querySnapshot.docs.map((doc) => {
         return { ...doc.data(), id: doc.id };
@@ -439,7 +423,6 @@ export const getAllOtherShares = (collectionName, setContents, currentUser) => {
       );
       setContents(NonzeroContents);
     });
-
     return unsubscribe;
   }
 };
@@ -475,49 +458,16 @@ export const getAllOrderedOtherShares = (
         .filter(
           (item) => item.toTimeStamp > Timestamp.now() && item.quantities > 0
         );
-
       lastPostSnapshotRef.current =
         querySnapshot.docs[querySnapshot.docs.length - 1];
-
       if (!isNext) {
         setContents(contents);
       } else {
         setContents([...oriContents, ...contents]);
       }
     });
-
     return unsubscribe;
   }
-};
-
-export const updateAfterExchanged = async (
-  shareId,
-  requesterId,
-  qty,
-  dateTime,
-  currentUser
-) => {
-  await updateDoc(doc(db, 'users', currentUser.uid), {
-    myPoints: increment(10),
-  });
-
-  await updateDoc(doc(db, 'users', requesterId), {
-    myPoints: increment(10),
-  });
-
-  await updateDoc(doc(db, 'shares', shareId), {
-    bookedQuantities: increment(-qty),
-    quantities: increment(-qty),
-    [`receivedInfo.${requesterId}`]: {
-      quantities: qty,
-      confirmedTimestamp: Timestamp.fromDate(dateTime),
-    },
-    receivedUserId: arrayUnion(requesterId),
-    [`toReceiveInfo.${requesterId}`]: deleteField(),
-    toReceiveUserId: arrayRemove(requesterId),
-  });
-
-  return 'done';
 };
 
 const badgeDocRefs = {
@@ -635,68 +585,32 @@ export const handleDeleteBadge = async (currentUserUid) => {
   }
 };
 
-export const onCommentSubmit = async (
-  share,
-  userData,
-  replyComment,
-  currentUser,
-  setReplayComment,
-  setErrorMessage,
-  setShowErrorMessage
-) => {
-  if (replyComment) {
-    await addDoc(collection(db, `shares/${share.id}/comments`), {
-      createdAt: Timestamp.now(),
-      commentContent: replyComment,
-      author: {
-        id: currentUser.uid,
-        displayName: userData.displayName,
-        imageUrl: userData.imageUrl,
-      },
-    });
-
-    await addDoc(collection(db, `users/${share.postUser.id}/messages`), {
-      createdAt: Timestamp.now(),
-      messageContent: `${userData.displayName}在您的${share.name}勝食頁面上留言`,
-      kind: 'comment',
-    });
-
-    setReplayComment('');
-    setErrorMessage('');
-    setShowErrorMessage(false);
-  } else {
-    setShowErrorMessage(true);
-    setErrorMessage('留言不能是空白');
-  }
+export const onCommentSubmit = async (share, userData, replyComment) => {
+  await addDoc(collection(db, `shares/${share.id}/comments`), {
+    createdAt: Timestamp.now(),
+    commentContent: replyComment,
+    author: {
+      id: userData.id,
+      displayName: userData.displayName,
+      imageUrl: userData.imageUrl,
+    },
+  });
+  await addDoc(collection(db, `users/${share.postUser.id}/messages`), {
+    createdAt: Timestamp.now(),
+    messageContent: `${userData.displayName}在您的${share.name}勝食頁面上留言`,
+    kind: 'comment',
+  });
 };
 
-export const handleConfirmCommentEdit = async (
-  editedComment,
-  share,
-  comment,
-  setEditedComment,
-  setIsEdit,
-  setErrorMessage,
-  setShowErrorMessage
-) => {
-  if (editedComment) {
-    await updateDoc(doc(db, `shares/${share.id}/comments`, `${comment.id}`), {
-      commentContent: editedComment,
-      createdAt: Timestamp.now(),
-    });
-    setEditedComment('');
-    setIsEdit(false);
-    setErrorMessage('');
-    setShowErrorMessage(false);
-  } else {
-    setShowErrorMessage(true);
-    setErrorMessage('留言不能是空白');
-  }
+export const confirmCommentEdit = async (editedComment, share, comment) => {
+  await updateDoc(doc(db, `shares/${share.id}/comments`, `${comment.id}`), {
+    commentContent: editedComment,
+    createdAt: Timestamp.now(),
+  });
 };
 
 export const handleDeleteComment = async (share, comment, userData) => {
   await deleteDoc(doc(db, `shares/${share.id}/comments`, `${comment.id}`));
-
   await addDoc(collection(db, `users/${share.postUser.id}/messages`), {
     createdAt: Timestamp.now(),
     messageContent: `${userData.displayName}在您的${share.name}勝食頁面上刪除留言`,
@@ -704,26 +618,39 @@ export const handleDeleteComment = async (share, comment, userData) => {
   });
 };
 
-export const handleConfirmShare = (
+export const updateAfterExchanged = async (
   shareId,
   requesterId,
   share,
-  currentUser,
-  setAlertMessage,
-  openInfo
+  currentUser
 ) => {
-  updateAfterExchanged(
-    shareId,
-    requesterId,
-    share?.toReceiveInfo[`${requesterId}`].quantities,
-    new Date(),
-    currentUser
-  ).then(() => {
-    handleAddBadge(currentUser.uid);
-    handleAddBadge(requesterId);
-    setAlertMessage('您已確認對方領取完勝食');
-    openInfo();
+  const qty = share?.toReceiveInfo[`${requesterId}`].quantities;
+  await updateDoc(doc(db, 'users', currentUser.uid), {
+    myPoints: increment(10),
   });
+  await updateDoc(doc(db, 'users', requesterId), {
+    myPoints: increment(10),
+  });
+  await updateDoc(doc(db, 'shares', shareId), {
+    bookedQuantities: increment(-qty),
+    quantities: increment(-qty),
+    [`receivedInfo.${requesterId}`]: {
+      quantities: qty,
+      confirmedTimestamp: Timestamp.fromDate(new Date()),
+    },
+    receivedUserId: arrayUnion(requesterId),
+    [`toReceiveInfo.${requesterId}`]: deleteField(),
+    toReceiveUserId: arrayRemove(requesterId),
+  });
+};
+
+const handleDeleteExchange = async (shareId, requesterId, qty) => {
+  await updateDoc(doc(db, 'shares', shareId), {
+    [`toReceiveInfo.${requesterId}`]: deleteField(),
+    toReceiveUserId: arrayRemove(requesterId),
+    bookedQuantities: increment(-qty),
+  });
+  return 'done';
 };
 
 export const cancelShare = (shareId, requesterId, share, currentUser) => {
@@ -737,139 +664,86 @@ export const cancelShare = (shareId, requesterId, share, currentUser) => {
   });
 };
 
-export const handleEditSubmit = async (
-  isOK,
-  setIsLoaging,
-  share,
-  file,
-  address,
-  fromToDateTime,
-  quantities,
-  foodName,
-  latLng,
-  closeEditor,
-  handleLatLng,
-  handleAddress,
-  setFile
-) => {
-  if (isOK()) {
-    setIsLoaging(true);
-    const docRef = doc(db, 'shares', share.id);
-    const fileRef = ref(storage, `images/shares/${share.id}`);
-    const metadata = {
-      contentType: file.type,
-    };
-    const uplaodTask = await uploadBytes(fileRef, file, metadata);
-    const imageUrl = await getDownloadURL(uplaodTask.ref);
-    await updateDoc(docRef, {
+export const onEditSubmit = async (data) => {
+  const { share, file, address, fromToDateTime, quantities, foodName, latLng } =
+    data;
+  const docRef = doc(db, 'shares', share.id);
+  const fileRef = ref(storage, `images/shares/${share.id}`);
+  const metadata = {
+    contentType: file.type,
+  };
+  const uplaodTask = await uploadBytes(fileRef, file, metadata);
+  const imageUrl = await getDownloadURL(uplaodTask.ref);
+  await updateDoc(docRef, {
+    exchangePlace: address,
+    fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
+    toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
+    imageUrl,
+    quantities: Number(quantities),
+    name: foodName,
+    createdAt: Timestamp.fromDate(new Date()),
+    exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
+  });
+};
+
+export const onUpdateSubmit = async (data) => {
+  const { share, currentUser, newQuantities, specificDateTime } = data;
+  const docRef = doc(getFirestore(), 'shares', share.id);
+  const updateQuantities = `toReceiveInfo.${currentUser.uid}.quantities`;
+  const updateUpcomingTimestamp = `toReceiveInfo.${currentUser.uid}.upcomingTimestamp`;
+  await updateDoc(docRef, {
+    [updateQuantities]: newQuantities,
+    [updateUpcomingTimestamp]: Timestamp.fromDate(specificDateTime),
+  });
+};
+
+export const onAddShareSubmit = async (data) => {
+  const {
+    file,
+    address,
+    fromToDateTime,
+    quantities,
+    foodName,
+    currentUser,
+    userData,
+    latLng,
+  } = data;
+  const docRef = doc(collection(db, `shares`));
+  const fileRef = ref(storage, `images/shares/${docRef.id}`);
+  const metadata = {
+    contentType: file.type,
+  };
+  const uplaodTask = await uploadBytes(fileRef, file, metadata);
+  const imageUrl = await getDownloadURL(uplaodTask.ref);
+  await setDoc(
+    docRef,
+    {
       exchangePlace: address,
       fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
       toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
       imageUrl,
       quantities: Number(quantities),
       name: foodName,
-      createdAt: Timestamp.fromDate(new Date()),
-      exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
-    });
-    setIsLoaging(false);
-    closeEditor();
-    handleLatLng([]);
-    handleAddress('');
-    setFile(null);
-  }
-};
-
-export const handleUpdateSubmit = async (
-  isFieldsChecked,
-  share,
-  setIsLoading,
-  currentUser,
-  newQuantities,
-  specificDateTime,
-  handleSpecificDateTime,
-  closeUpdate
-) => {
-  if (isFieldsChecked(share)) {
-    setIsLoading(true);
-    const docRef = doc(getFirestore(), 'shares', share.id);
-    const updateQuantities = `toReceiveInfo.${currentUser.uid}.quantities`;
-    const updateUpcomingTimestamp = `toReceiveInfo.${currentUser.uid}.upcomingTimestamp`;
-    await updateDoc(docRef, {
-      [updateQuantities]: newQuantities,
-      [updateUpcomingTimestamp]: Timestamp.fromDate(specificDateTime),
-    });
-    setIsLoading(false);
-    handleSpecificDateTime(null);
-    closeUpdate();
-  }
-};
-
-export const handleAddShareSubmit = async (
-  isOK,
-  setIsLoading,
-  file,
-  address,
-  fromToDateTime,
-  quantities,
-  foodName,
-  currentUser,
-  userData,
-  latLng,
-  closeEditor,
-  handleLatLng,
-  handleAddress,
-  handleFromToDateTime,
-  setFile
-) => {
-  if (isOK()) {
-    setIsLoading(true);
-    const docRef = doc(collection(db, `shares`));
-    const fileRef = ref(storage, `images/shares/${docRef.id}`);
-
-    const metadata = {
-      contentType: file.type,
-    };
-
-    const uplaodTask = await uploadBytes(fileRef, file, metadata);
-    const imageUrl = await getDownloadURL(uplaodTask.ref);
-    await setDoc(
-      docRef,
-      {
-        exchangePlace: address,
-        fromTimeStamp: Timestamp.fromDate(fromToDateTime[0]),
-        toTimeStamp: Timestamp.fromDate(fromToDateTime[1]),
-        imageUrl,
-        quantities: Number(quantities),
-        name: foodName,
-        postUser: {
-          id: currentUser.uid,
-          displayName: userData.displayName,
-        },
-        rating: 5,
-        createdAt: Timestamp.fromDate(new Date()),
-        userLocation: userData.myPlace || '未提供',
-        exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
-        receivedInfo: {},
-        receivedUserId: [],
-        toReceiveInfo: {},
-        toReceiveUserId: [],
-        savedUserId: [],
-        bookedQuantities: 0,
-        isArchived: false,
+      postUser: {
+        id: currentUser.uid,
+        displayName: userData.displayName,
       },
-      { merge: true }
-    );
-
-    await updateDoc(doc(getFirestore(), 'users', currentUser.uid), {
-      myPoints: increment(10),
-    });
-
-    handleAddBadge(currentUser.uid);
-    setIsLoading(false);
-    closeEditor();
-    handleLatLng([]);
-    handleAddress('');
-    handleFromToDateTime();
-    setFile(null);
-  }
+      rating: 5,
+      createdAt: Timestamp.fromDate(new Date()),
+      userLocation: userData.myPlace || '未提供',
+      exchangeLocation: new GeoPoint(latLng[0], latLng[1]),
+      receivedInfo: {},
+      receivedUserId: [],
+      toReceiveInfo: {},
+      toReceiveUserId: [],
+      savedUserId: [],
+      bookedQuantities: 0,
+      isArchived: false,
+    },
+    { merge: true }
+  );
+  await updateDoc(doc(getFirestore(), 'users', currentUser.uid), {
+    myPoints: increment(10),
+  });
+  handleAddBadge(currentUser.uid);
 };

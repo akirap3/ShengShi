@@ -5,28 +5,34 @@ import Ripples from 'react-ripples';
 
 import { ErrorMessage, Info, Message } from '../ErrorMessageUnits';
 import {
-  handleConfirmCommentEdit,
+  confirmCommentEdit,
   handleDeleteComment,
 } from '../../../utils/firebase';
 
-const Comment = ({ currentUser, share, comment, userData }) => {
+const Comment = ({ share, comment, userData }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [editedComment, setEditedComment] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const { author, createdAt, commentContent } = comment;
 
+  const handleConfirmCommentEdit = () => {
+    if (editedComment) {
+      confirmCommentEdit(editedComment, share, comment).then(() => {
+        setEditedComment('');
+        setIsEdit(false);
+        setErrorMessage('');
+        setShowErrorMessage(false);
+      });
+    } else {
+      setShowErrorMessage(true);
+      setErrorMessage('留言不能是空白');
+    }
+  };
+
   const handleEnter = (e) => {
     if (e.charCode === 13) {
-      handleConfirmCommentEdit(
-        editedComment,
-        share,
-        comment,
-        setEditedComment,
-        setIsEdit,
-        setErrorMessage,
-        setShowErrorMessage
-      );
+      handleConfirmCommentEdit();
     }
   };
 
@@ -58,26 +64,13 @@ const Comment = ({ currentUser, share, comment, userData }) => {
       </CommentContainer>
 
       <CommentButtonRow>
-        {currentUser.uid === author.id && (
+        {userData.id === author.id && (
           <>
             <EditButton isEdit={isEdit} onClick={() => setIsEdit(true)}>
               編輯
             </EditButton>
             <ConfirmBtnRipples color="#fff" during={3000}>
-              <ConfirmButton
-                isEdit={isEdit}
-                onClick={() =>
-                  handleConfirmCommentEdit(
-                    editedComment,
-                    share,
-                    comment,
-                    setEditedComment,
-                    setIsEdit,
-                    setErrorMessage,
-                    setShowErrorMessage
-                  )
-                }
-              >
+              <ConfirmButton isEdit={isEdit} onClick={handleConfirmCommentEdit}>
                 確定
               </ConfirmButton>
             </ConfirmBtnRipples>

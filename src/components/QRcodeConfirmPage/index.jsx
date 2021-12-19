@@ -5,8 +5,9 @@ import { useParams, useHistory } from 'react-router-dom';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import {
   getListenedSingleContent,
-  handleConfirmShare,
+  updateAfterExchanged,
   cancelShare,
+  handleAddBadge,
 } from '../../utils/firebase';
 import {
   MgmtContainer,
@@ -100,6 +101,15 @@ const QRcodeComfirmPage = () => {
     });
   };
 
+  const handleConfirmShare = () => {
+    updateAfterExchanged(share.id, requesterId, share, currentUser).then(() => {
+      handleAddBadge(currentUser.uid);
+      handleAddBadge(requesterId);
+      setAlertMessage('您已確認對方領取完勝食');
+      openInfo();
+    });
+  };
+
   return (
     <>
       {share !== undefined && requester !== undefined ? (
@@ -152,21 +162,10 @@ const QRcodeComfirmPage = () => {
                         <Address>交換地點：{share?.exchangePlace}</Address>
                         {isGiver(share, currentUser) && (
                           <ButtonContainer>
-                            <ConfirmedBtn
-                              onClick={() =>
-                                handleConfirmShare(
-                                  share.id,
-                                  requesterId,
-                                  share,
-                                  currentUser,
-                                  setAlertMessage,
-                                  openInfo
-                                )
-                              }
-                            >
+                            <ConfirmedBtn onClick={handleConfirmShare}>
                               確認領取
                             </ConfirmedBtn>
-                            <CancleBtn onClick={() => handleCancelShare()}>
+                            <CancleBtn onClick={handleCancelShare}>
                               取消
                             </CancleBtn>
                           </ButtonContainer>

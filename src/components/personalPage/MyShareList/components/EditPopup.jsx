@@ -29,7 +29,7 @@ import MapPopup from './MapPopup';
 import AlertPopup from '../../../common/popup/AlertPopup';
 import Loading from '../../../common/Loading';
 import { isFieldsChecked } from '../../../../utils/validation';
-import { handleEditSubmit } from '../../../../utils/firebase';
+import { onEditSubmit } from '../../../../utils/firebase';
 
 const EditPopup = ({ showEdit, closeEditor, share }) => {
   const dispatch = useDispatch();
@@ -78,6 +78,31 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
       file,
       openAlertWithMessage
     );
+  };
+
+  const handleReset = () => {
+    setIsLoaging(false);
+    closeEditor();
+    handleLatLng([]);
+    handleAddress('');
+    setFile(null);
+  };
+
+  const handleEditSubmit = () => {
+    const enable = isOK();
+    if (enable) {
+      const data = {
+        share,
+        file,
+        address,
+        fromToDateTime,
+        quantities,
+        foodName,
+        latLng,
+      };
+      setIsLoaging(true);
+      onEditSubmit(data).then(() => handleReset());
+    }
   };
 
   const previewImgUrl = file
@@ -148,26 +173,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
                 onChange={(e) => setFile(e.target.files[0])}
               />
               <StyleBtnRipples color="#fff" during={3000}>
-                <SubmitBtn
-                  onClick={() =>
-                    handleEditSubmit(
-                      isOK,
-                      setIsLoaging,
-                      share,
-                      file,
-                      address,
-                      fromToDateTime,
-                      quantities,
-                      foodName,
-                      latLng,
-                      closeEditor,
-                      handleLatLng,
-                      handleAddress,
-                      setFile
-                    )
-                  }
-                  disabled={isLoading}
-                >
+                <SubmitBtn onClick={handleEditSubmit} disabled={isLoading}>
                   確認更新
                 </SubmitBtn>
               </StyleBtnRipples>

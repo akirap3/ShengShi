@@ -28,7 +28,7 @@ import LocationMap from '../../../common/MyMap/components/ExchangeMap';
 import SelectDateTimePopup from '../../MyCollectedList/components/SelectDateTimePopup';
 import AlertPopup from '../../../common/popup/AlertPopup';
 import Loading from '../../../common/Loading';
-import { handleUpdateSubmit } from '../../../../utils/firebase';
+import { onUpdateSubmit } from '../../../../utils/firebase';
 
 const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
   const dispatch = useDispatch();
@@ -47,10 +47,6 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
   const openInfo = () => setShowInfo(true);
   const closeInfo = () => setShowInfo(false);
 
-  const handleSpecificDateTime = (payload) => {
-    dispatch({ type: 'specificDateTime/selected', payload: payload });
-  };
-
   const openAlertWithMessage = (msg) => {
     setAlertMessage(msg);
     openInfo();
@@ -67,6 +63,26 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
       return openAlertWithMessage('請點選領取的日期時間');
     }
     return true;
+  };
+
+  const handleReset = () => {
+    setIsLoading(false);
+    dispatch({ type: 'specificDateTime/selected', payload: null });
+    closeUpdate();
+  };
+
+  const handleUpdateSubmit = () => {
+    const enable = isFieldsChecked(share);
+    if (enable) {
+      const data = {
+        share,
+        currentUser,
+        newQuantities,
+        specificDateTime,
+      };
+      setIsLoading(true);
+      onUpdateSubmit(data).then(() => handleReset());
+    }
   };
 
   return (
@@ -120,21 +136,7 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
             </MapWrapper>
             <ButtonContainer>
               <StyleBtnRipples color="#fff" during={3000}>
-                <SubmitBtn
-                  onClick={() =>
-                    handleUpdateSubmit(
-                      isFieldsChecked,
-                      share,
-                      setIsLoading,
-                      currentUser,
-                      newQuantities,
-                      specificDateTime,
-                      handleSpecificDateTime,
-                      closeUpdate
-                    )
-                  }
-                  disabled={isLoading}
-                >
+                <SubmitBtn onClick={handleUpdateSubmit} disabled={isLoading}>
                   確認更新
                 </SubmitBtn>
               </StyleBtnRipples>
