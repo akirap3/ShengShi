@@ -148,7 +148,7 @@ const ArticlePage = () => {
       </UpperPart>
 
       {articles ? (
-        articles.length !== 0 ? (
+        articles.length ? (
           <ArticleContainer>
             {articles.map((article) => (
               <ArticleCard key={article.id}>
