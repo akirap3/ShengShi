@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,7 +38,6 @@ import AlertPopup from '../../../common/popup/AlertPopup.jsx';
 
 const AddSharePopup = ({ showEdit, closeEditor }) => {
   const dispatch = useDispatch();
-  const uploadRef = useRef();
   const currentUser = useCurrentUser();
   const fromToDateTime = useSelector((state) => state.fromToDateTime);
   const address = useSelector((state) => state.address);
@@ -180,11 +179,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
             <Preview src={previewImgUrl} alt="preview-upload" />
             <ButtonContainer>
               <StyleBtnRipples color="#fff" during={3000}>
-                <ImgUpload
-                  ref={uploadRef}
-                  htmlFor="image-upload"
-                  disabled={isLoading}
-                >
+                <ImgUpload htmlFor="image-upload" disabled={isLoading}>
                   上傳
                 </ImgUpload>
               </StyleBtnRipples>

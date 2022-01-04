@@ -742,7 +742,7 @@ export const onAddShareSubmit = async (data) => {
     },
     { merge: true }
   );
-  await updateDoc(doc(getFirestore(), 'users', currentUser.uid), {
+  await updateDoc(doc(db, 'users', currentUser.uid), {
     myPoints: increment(10),
   });
   handleAddBadge(currentUser.uid);
