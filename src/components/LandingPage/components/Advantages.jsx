@@ -69,7 +69,7 @@ const AvtContentOne = styled(AvtContent)`
 `;
 
 const AvtContentTwo = styled(AvtContent)`
-  background-image: linear-gradient(60deg, #96deda 0%, #50c9c3 100%);
+  background: linear-gradient(60deg, #96deda 0%, #50c9c3 100%);
   backdrop-filter: blur(5px);
 `;
 const AvtContentThree = styled(AvtContent)`

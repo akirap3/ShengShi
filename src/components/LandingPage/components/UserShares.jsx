@@ -9,7 +9,7 @@ const UserShares = () => {
       <UserSharesContentOne>
         <UserImage>
           <UserAvatar src={UserImgOne} alt="user" />
-          <UserName>Anna Chen</UserName>
+          <h3>Anna Chen</h3>
           <UserTag>勝食專家</UserTag>
         </UserImage>
         <Description>
@@ -21,7 +21,7 @@ const UserShares = () => {
       <UserSharesContentTwo>
         <UserImage>
           <UserAvatar src={UserImgTwo} alt="user" />
-          <UserName>John Wang</UserName>
+          <h3>John Wang</h3>
           <UserTag>勝食達人</UserTag>
         </UserImage>
         <Description>
@@ -114,12 +114,6 @@ const UserAvatar = styled.img`
   margin-bottom: 2rem;
   margin-top: 2rem;
   border-radius: 50%;
-`;
-
-const UserName = styled.h3`
-  margin-bottom: 2rem;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 32px;
 `;
 
 const UserTag = styled.div`
