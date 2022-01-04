@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 import Compressor from 'compressorjs';
 import {
@@ -37,7 +37,6 @@ import {
 import { getCurrentUserData, updateMember } from '../../../utils/firebase';
 
 const MemberUpdate = () => {
-  const uploadRef = useRef();
   const [showDelete, setShowDelete] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -182,9 +181,7 @@ const MemberUpdate = () => {
             <PreviewImg src={previewImgUrl} alt="preview-avatar" />
             <ButtonContainer>
               <UploadRipples color="#fff" during={3000}>
-                <ImgUpload ref={uploadRef} htmlFor="image-upload">
-                  上 傳
-                </ImgUpload>
+                <ImgUpload htmlFor="image-upload">上 傳</ImgUpload>
               </UploadRipples>
               <UploadBtn
                 type="file"
