@@ -81,7 +81,7 @@ const DashbaordMenus = ({ location }) => {
           <Button key={menu.name} as={Link} to={`${menu.path}`}>
             <IconContainer>
               {menu.icon.map((icon) => icon)}
-              {menu.count && <ItemNumber>{menu.count}</ItemNumber>}
+              {menu.count !== 0 ? <ItemNumber>{menu.count}</ItemNumber> : <></>}
             </IconContainer>
 
             <ButtonName>{menu.name}</ButtonName>
