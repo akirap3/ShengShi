@@ -72,8 +72,6 @@ class Map extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  onInfoWindowClose = (event) => {};
-
   onMarkerDragEnd = (event) => {
     let newLat = event.latLng.lat(),
       newLng = event.latLng.lng();
@@ -137,7 +135,6 @@ class Map extends Component {
           }}
         >
           <InfoWindow
-            onClose={this.onInfoWindowClose}
             position={{
               lat: this.state.markerPosition.lat + 0.0018,
               lng: this.state.markerPosition.lng,
