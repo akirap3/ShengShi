@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 
+import Ripples from 'react-ripples';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import Compressor from 'compressorjs';
@@ -28,7 +29,6 @@ import {
   Calendar,
   Preview,
   ButtonContainer,
-  StyleBtnRipples,
   ImgUpload,
   SubmitBtn,
 } from '../../../common/popup/PopupUnits.jsx';
@@ -178,22 +178,22 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
             </PopRow>
             <Preview src={previewImgUrl} alt="preview-upload" />
             <ButtonContainer>
-              <StyleBtnRipples color="#fff" during={3000}>
+              <Ripples color="#fff" during={3000}>
                 <ImgUpload htmlFor="image-upload" disabled={isLoading}>
                   上傳
                 </ImgUpload>
-              </StyleBtnRipples>
+              </Ripples>
               <UploadBtn
                 type="file"
                 id="image-upload"
                 onChange={(e) => handleCompressFile(e)}
                 disabled={isLoading}
               />
-              <StyleBtnRipples color="#fff" during={3000}>
+              <Ripples color="#fff" during={3000}>
                 <SubmitBtn onClick={handleAddShareSubmit} disabled={isLoading}>
                   分享
                 </SubmitBtn>
-              </StyleBtnRipples>
+              </Ripples>
             </ButtonContainer>
           </PopContent>
         </StyledDialogContent>

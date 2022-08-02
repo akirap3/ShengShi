@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import Ripples from 'react-ripples';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { DialogOverlay } from '@reach/dialog';
@@ -22,7 +23,6 @@ import {
   PopPlaceIcon,
   Preview,
   ButtonContainer,
-  StyleBtnRipples,
   SubmitBtn,
 } from './PopupUnits';
 
@@ -92,11 +92,11 @@ const ConfirmedPopup = ({
             </MapQRContainer>
             <ButtonContainer>
               {hasUpdateBtn && (
-                <StyleBtnRipples color="#fff" during={3000}>
+                <Ripples color="#fff" during={3000}>
                   <SubmitBtn onClick={() => handleShowUpdate(share)}>
                     我要更新
                   </SubmitBtn>
-                </StyleBtnRipples>
+                </Ripples>
               )}
             </ButtonContainer>
           </PopContent>

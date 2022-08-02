@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 
+import Ripples from 'react-ripples';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { DialogOverlay } from '@reach/dialog';
@@ -20,7 +21,6 @@ import {
   Calendar,
   PopPlaceIcon,
   ButtonContainer,
-  StyleBtnRipples,
   ImgUpload,
   SubmitBtn,
 } from '../../../common/popup/PopupUnits';
@@ -162,21 +162,21 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
             <PopRow></PopRow>
             <Preview src={previewImgUrl} />
             <ButtonContainer>
-              <StyleBtnRipples color="#fff" during={3000}>
+              <Ripples color="#fff" during={3000}>
                 <ImgUpload ref={uploadRef} htmlFor="image-upload">
                   上傳
                 </ImgUpload>
-              </StyleBtnRipples>
+              </Ripples>
               <UploadBtn
                 type="file"
                 id="image-upload"
                 onChange={(e) => setFile(e.target.files[0])}
               />
-              <StyleBtnRipples color="#fff" during={3000}>
+              <Ripples color="#fff" during={3000}>
                 <SubmitBtn onClick={handleEditSubmit} disabled={isLoading}>
                   確認更新
                 </SubmitBtn>
-              </StyleBtnRipples>
+              </Ripples>
             </ButtonContainer>
           </PopContent>
         </StyledDialogContent>

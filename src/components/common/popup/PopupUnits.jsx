@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Ripples from 'react-ripples';
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { HiLocationMarker } from 'react-icons/hi';
@@ -168,8 +167,6 @@ export const ButtonContainer = styled.div`
   justify-content: flex-end;
   margin-top: 20px;
 `;
-
-export const StyleBtnRipples = styled(Ripples)``;
 
 export const ImgUpload = styled.label`
   display: flex;

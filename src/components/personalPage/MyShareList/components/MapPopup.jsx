@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import Ripples from 'react-ripples';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { DialogOverlay } from '@reach/dialog';
@@ -10,7 +11,6 @@ import {
   StyledDialogContent,
   PopClose,
   ButtonContainer,
-  StyleBtnRipples,
   SubmitBtn,
 } from '../../../common/popup/PopupUnits';
 
@@ -58,9 +58,9 @@ const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
           handleLatLng={handleLatLng}
         />
         <ButtonContainer>
-          <StyleBtnRipples color="#fff" during={3000}>
+          <Ripples color="#fff" during={3000}>
             <SubmitBtn onClick={closeMap}>確認</SubmitBtn>
-          </StyleBtnRipples>
+          </Ripples>
         </ButtonContainer>
       </MapStyledDialogContent>
     </DialogOverlay>

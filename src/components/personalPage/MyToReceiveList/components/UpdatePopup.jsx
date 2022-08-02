@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import Ripples from 'react-ripples';
 import styled from 'styled-components';
 import { DialogOverlay } from '@reach/dialog';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +22,6 @@ import {
   Calendar,
   PopPlaceIcon,
   ButtonContainer,
-  StyleBtnRipples,
   SubmitBtn,
 } from '../../../common/popup/PopupUnits';
 import LocationMap from '../../../common/MyMap/components/ExchangeMap';
@@ -135,11 +135,11 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
               <LocationMap />
             </MapWrapper>
             <ButtonContainer>
-              <StyleBtnRipples color="#fff" during={3000}>
+              <Ripples color="#fff" during={3000}>
                 <SubmitBtn onClick={handleUpdateSubmit} disabled={isLoading}>
                   確認更新
                 </SubmitBtn>
-              </StyleBtnRipples>
+              </Ripples>
             </ButtonContainer>
           </PopContent>
         </StyledDialogContent>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import Ripples from 'react-ripples';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { DialogOverlay } from '@reach/dialog';
@@ -21,7 +22,6 @@ import {
   PopPlaceIcon,
   Preview,
   ButtonContainer,
-  StyleBtnRipples,
   SubmitBtn,
 } from '../../../common/popup/PopupUnits';
 import SelectDateTimePopup from './SelectDateTimePopup';
@@ -183,9 +183,9 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
                 )}
               </CommentSection>
               <ButtonContainer>
-                <StyleBtnRipples color="#fff" during={3000}>
+                <Ripples color="#fff" during={3000}>
                   <SubmitBtn onClick={handleConfirmation}>確認領取</SubmitBtn>
-                </StyleBtnRipples>
+                </Ripples>
               </ButtonContainer>
             </PopContent>
           </StyledDialogContent>

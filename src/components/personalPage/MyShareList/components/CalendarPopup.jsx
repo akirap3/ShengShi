@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
 import { useSelector } from 'react-redux';
+import Ripples from 'react-ripples';
 import { DialogOverlay } from '@reach/dialog';
 
 import {
   StyledDialogContent,
   PopClose,
   ButtonContainer,
-  StyleBtnRipples,
   SubmitBtn,
 } from '../../../common/popup/PopupUnits';
 import AlertPopup from '../../../common/popup/AlertPopup';
@@ -44,9 +44,9 @@ const ClendarPopup = ({ showCalender, closeCalendar }) => {
           <PopClose onClick={handleCheckDateTimeRange} />
           <DateTimeRangeSelector />
           <ButtonContainer>
-            <StyleBtnRipples color="#fff" during={3000}>
+            <Ripples color="#fff" during={3000}>
               <SubmitBtn onClick={handleCheckDateTimeRange}>確定</SubmitBtn>
-            </StyleBtnRipples>
+            </Ripples>
           </ButtonContainer>
         </StyledDialogContent>
       </DialogOverlay>
