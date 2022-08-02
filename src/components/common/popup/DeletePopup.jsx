@@ -62,6 +62,18 @@ const DeletePopup = ({
     });
   };
 
+  const choose = () => {
+    if (isToReceive) {
+      handleDeleteToReceive();
+    } else if (isCollected) {
+      handleDeleteCollected();
+    } else if (toDeleteMember) {
+      handleDeleteMember();
+    } else {
+      handleArchiveShare();
+    }
+  };
+
   return (
     userData && (
       <CenterDialogOverlay
@@ -77,18 +89,7 @@ const DeletePopup = ({
             <PopTitle>{`確認刪除此${category}`}</PopTitle>
           </PopTitleContainer>
           <AlertBtnRow>
-            <StyledSubmitBtn
-              onClick={
-                isToReceive
-                  ? () => handleDeleteToReceive()
-                  : isCollected
-                  ? () => handleDeleteCollected()
-                  : toDeleteMember
-                  ? () => handleDeleteMember()
-                  : () => handleArchiveShare()
-              }
-              disabled={isLoading}
-            >
+            <StyledSubmitBtn onClick={choose} disabled={isLoading}>
               確認
             </StyledSubmitBtn>
             <CancelBtn onClick={closeDelete} disabled={isLoading}>
