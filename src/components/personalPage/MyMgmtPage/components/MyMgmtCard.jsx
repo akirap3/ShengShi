@@ -7,11 +7,8 @@ import {
   Context,
   ShareImg,
   InfoContainer,
+  Text,
   RequesterName,
-  RequesterPhone,
-  RequesterEmail,
-  RequesterQty,
-  RequestedDateTime,
   Address,
   ButtonContainer,
   ConfirmedBtn,
@@ -73,17 +70,17 @@ const MyMgmtCard = ({ share, requesterId, setAlertMessage, openInfo }) => {
               />
             </QRcodeThree>
             <RequesterName>領取者：{requester.displayName}</RequesterName>
-            <RequesterPhone>電話：{requester.phone || '未提供'}</RequesterPhone>
-            <RequesterEmail>電子郵件：{requester.email}</RequesterEmail>
-            <RequesterQty>
+            <Text>電話：{requester.phone || '未提供'}</Text>
+            <Text>電子郵件：{requester.email}</Text>
+            <Text>
               領取數量： {share.toReceiveInfo[requesterId].quantities}
-            </RequesterQty>
-            <RequestedDateTime>
+            </Text>
+            <Text>
               日期時間：
               {share.toReceiveInfo[requesterId].upcomingTimestamp
                 .toDate()
                 .toLocaleString()}
-            </RequestedDateTime>
+            </Text>
             <Address>交換地點：{share.exchangePlace}</Address>
             <ButtonContainer>
               <ConfirmedBtn onClick={handleConfirmShare}>確認領取</ConfirmedBtn>

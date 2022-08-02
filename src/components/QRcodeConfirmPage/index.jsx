@@ -14,11 +14,8 @@ import {
   Context,
   ShareImg,
   InfoContainer,
+  Text,
   RequesterName,
-  RequesterPhone,
-  RequesterEmail,
-  RequesterQty,
-  RequestedDateTime,
   Address,
   ButtonContainer,
   ConfirmedBtn,
@@ -133,32 +130,32 @@ const QRcodeComfirmPage = () => {
                             ? `提供者：${giver?.displayName}`
                             : ''}
                         </RequesterName>
-                        <RequesterPhone>
+                        <Text>
                           {`電話：`}
                           {isGiver(share, currentUser)
                             ? requester?.phone || '未提供'
                             : isRequester(share, currentUser)
                             ? giver?.phone || '未提供'
                             : ''}
-                        </RequesterPhone>
-                        <RequesterEmail>
+                        </Text>
+                        <Text>
                           {`電子郵件：`}
                           {isGiver(share, currentUser)
                             ? requester?.email || '未提供'
                             : isRequester(share, currentUser)
                             ? giver?.email || '未提供'
                             : ''}
-                        </RequesterEmail>
-                        <RequesterQty>
+                        </Text>
+                        <Text>
                           領取數量：
                           {share?.toReceiveInfo[`${requesterId}`]?.quantities}
-                        </RequesterQty>
-                        <RequestedDateTime>
+                        </Text>
+                        <Text>
                           日期時間：
                           {share?.toReceiveInfo[requesterId]?.upcomingTimestamp
                             ?.toDate()
                             .toLocaleString()}
-                        </RequestedDateTime>
+                        </Text>
                         <Address>交換地點：{share?.exchangePlace}</Address>
                         {isGiver(share, currentUser) && (
                           <ButtonContainer>
