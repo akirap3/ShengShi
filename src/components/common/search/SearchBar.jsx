@@ -21,7 +21,7 @@ const SearchBar = () => {
   const handleSearch = () => {
     dispatch({ type: 'isShareSearch/search', payload: true });
     if (inputValue === '') setInputValue('請輸入關鍵字');
-    algolia.search(inputValue || '請輸入關鍵字').then((result) => {
+    algolia.search(inputValue).then((result) => {
       const searchResults = result.hits.map((hit) => {
         return {
           docId: hit.objectID,
@@ -47,9 +47,9 @@ const SearchBar = () => {
         placeholder="勝食搜尋"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        onKeyPress={(e) => handleOnEnter(e)}
+        onKeyPress={handleOnEnter}
       />
-      <StyledSearchIconContainer onClick={() => handleSearch()}>
+      <StyledSearchIconContainer onClick={handleSearch}>
         <SearchIcon />
       </StyledSearchIconContainer>
     </StyledSearchOutline>
