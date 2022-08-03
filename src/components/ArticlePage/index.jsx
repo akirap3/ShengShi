@@ -60,13 +60,14 @@ const ArticlePage = () => {
       );
   }, [isSearch]);
 
-  const handleSearch = () => {
+  const handleSearch = (tag) => {
+    if (!tag && inputValue === '') return;
     setIsSearch(true);
     getSearchedOrderedContents(
       'articles',
       'tags',
       'array-contains',
-      inputValue,
+      tag || inputValue,
       setArticles,
       lastPostSnapshotRef,
       false,
@@ -80,7 +81,7 @@ const ArticlePage = () => {
 
   const handleTagSearch = (tag) => {
     setInputValue(tag);
-    handleSearch();
+    handleSearch(tag);
   };
 
   const handleClearSearch = () => {
@@ -133,14 +134,14 @@ const ArticlePage = () => {
               value={inputValue}
               placeholder="文章搜尋"
               onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={(e) => handleOnEnter(e)}
+              onKeyPress={handleOnEnter}
             />
-            <SearchIconContainer onClick={() => handleSearch()}>
+            <SearchIconContainer onClick={() => handleSearch('')}>
               <SearchIcon />
             </SearchIconContainer>
           </SearchOutline>
           <StyledRipples during={3000}>
-            <StyledResetButton onClick={() => handleClearSearch()}>
+            <StyledResetButton onClick={handleClearSearch}>
               清除搜尋
             </StyledResetButton>
           </StyledRipples>
