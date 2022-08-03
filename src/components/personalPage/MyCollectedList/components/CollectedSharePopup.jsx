@@ -138,7 +138,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
                 <DateTimeLabel>可領取時段</DateTimeLabel>
                 <StyledSpan>
                   {share?.fromTimeStamp.toDate().toLocaleString()}
-                  {`~`}
+                  {` ~ `}
                   {share?.toTimeStamp.toDate().toLocaleString()}
                 </StyledSpan>
               </PopRow>

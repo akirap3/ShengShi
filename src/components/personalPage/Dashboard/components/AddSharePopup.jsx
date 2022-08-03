@@ -3,10 +3,10 @@ import { useState, useEffect } from 'react';
 import Ripples from 'react-ripples';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import Compressor from 'compressorjs';
 import { DialogOverlay } from '@reach/dialog';
 
 import Loading from '../../../common/Loading.jsx';
+import handleCompressFile from '../../../../utils/compressImg.js';
 import { isFieldsChecked } from '../../../../utils/validation.js';
 import useCurrentUser from '../../../../hooks/useCurrentUser.js';
 import {
@@ -75,18 +75,6 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
     if (currentUser)
       return getListenedSingleContent('users', currentUser?.uid, setUserData);
   }, [currentUser]);
-
-  const handleCompressFile = (e) => {
-    const image = e.target.files[0];
-    if (image)
-      new Compressor(image, {
-        quality: 0.2,
-        convertSize: 1000000,
-        success: (res) => {
-          setFile(res);
-        },
-      });
-  };
 
   const openAlertWithMessage = (msg) => {
     setAlertMessage(msg);
@@ -186,7 +174,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
               <UploadBtn
                 type="file"
                 id="image-upload"
-                onChange={(e) => handleCompressFile(e)}
+                onChange={(e) => handleCompressFile(e, setFile)}
                 disabled={isLoading}
               />
               <Ripples color="#fff" during={3000}>
