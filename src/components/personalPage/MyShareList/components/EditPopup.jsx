@@ -105,9 +105,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
     }
   };
 
-  const previewImgUrl = file
-    ? URL.createObjectURL(file)
-    : 'https://react.semantic-ui.com/images/wireframe/image.png';
+  const previewImgUrl = file ? URL.createObjectURL(file) : share.imageUrl;
 
   return (
     <>

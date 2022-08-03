@@ -63,7 +63,7 @@ const Comment = ({ share, comment, userData }) => {
             onChange={
               isEdit ? (e) => setEditedComment(e.target.value) : () => {}
             }
-            onKeyPress={(e) => handleEnter(e)}
+            onKeyPress={handleEnter}
             isEdit
             disabled={!isEdit}
           />
