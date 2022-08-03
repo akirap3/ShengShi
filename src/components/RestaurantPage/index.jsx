@@ -80,7 +80,7 @@ const RestaurantPage = () => {
               placeholder="餐廳搜尋"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={(e) => handleOnEnter(e)}
+              onKeyPress={handleOnEnter}
             />
             <SearchIconContainer onClick={() => handleSearch()}>
               <SearchIcon />

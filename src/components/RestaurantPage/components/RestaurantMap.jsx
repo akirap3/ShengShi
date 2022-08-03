@@ -5,7 +5,6 @@ import useSupercluster from 'use-supercluster';
 import GoogleMapReact from 'google-map-react';
 
 import InfoView from './InfoView';
-import Loading from '../../common/Loading';
 
 require('dotenv').config();
 
@@ -16,8 +15,10 @@ const RestaurantMap = ({ restaurants }) => {
   const mapRef = useRef();
   const [zoom, setZoom] = useState(10);
   const [bounds, setBounds] = useState(null);
-  const [defaultCenter, setDefaultCenter] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [defaultCenter, setDefaultCenter] = useState({
+    lat: 25.04267234987771,
+    lng: 121.56497334150076,
+  });
   const [isMounted, setIsMounted] = useState(true);
 
   const setCurrentLocation = (position) => {
@@ -25,16 +26,14 @@ const RestaurantMap = ({ restaurants }) => {
       lat: position.coords.latitude,
       lng: position.coords.longitude,
     });
-    setIsLoading(false);
   };
 
   useEffect(() => {
     if (isMounted) {
-      setIsLoading(true);
+      console.log('000');
       navigator.geolocation.watchPosition(setCurrentLocation, (error) => {
         if (error.code === error.PERMISSION_DENIED) {
           setDefaultCenter({ lat: 25.04267234987771, lng: 121.56497334150076 });
-          setIsLoading(false);
         }
       });
     }
@@ -75,78 +74,74 @@ const RestaurantMap = ({ restaurants }) => {
 
   return (
     <div style={{ height: '80vh', width: '100%', position: 'relative' }}>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: myAPIKey }}
-          defaultCenter={defaultCenter}
-          defaultZoom={12}
-          yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={({ map }) => {
-            mapRef.current = map;
-          }}
-          onChange={({ zoom, bounds }) => {
-            setZoom(zoom);
-            setBounds([
-              bounds.nw.lng,
-              bounds.se.lat,
-              bounds.se.lng,
-              bounds.nw.lat,
-            ]);
-          }}
-        >
-          {clusters.map((cluster) => {
-            const [longitude, latitude] = cluster.geometry.coordinates;
-            const {
-              cluster: isCluster,
-              point_count: pointCount,
-              imageUrl,
-              restaurantName,
-              rating,
-              address,
-            } = cluster.properties;
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: myAPIKey }}
+        defaultCenter={defaultCenter}
+        defaultZoom={12}
+        yesIWantToUseGoogleMapApiInternals
+        onGoogleApiLoaded={({ map }) => {
+          mapRef.current = map;
+        }}
+        onChange={({ zoom, bounds }) => {
+          setZoom(zoom);
+          setBounds([
+            bounds.nw.lng,
+            bounds.se.lat,
+            bounds.se.lng,
+            bounds.nw.lat,
+          ]);
+        }}
+      >
+        {clusters.map((cluster) => {
+          const [longitude, latitude] = cluster.geometry.coordinates;
+          const {
+            cluster: isCluster,
+            point_count: pointCount,
+            imageUrl,
+            restaurantName,
+            rating,
+            address,
+          } = cluster.properties;
 
-            if (isCluster) {
-              return (
-                <Marker key={cluster.id} lat={latitude} lng={longitude}>
-                  <StyledDiv
-                    style={{
-                      width: `${10 + (pointCount / points.length) * 40}px`,
-                      height: `${10 + (pointCount / points.length) * 40}px`,
-                    }}
-                    onClick={() => {
-                      const expansionZoom = Math.min(
-                        supercluster.getClusterExpansionZoom(cluster.id),
-                        20
-                      );
-                      mapRef.current.setZoom(expansionZoom);
-                      mapRef.current.panTo({ lat: latitude, lng: longitude });
-                    }}
-                  >
-                    {pointCount}
-                  </StyledDiv>
-                </Marker>
-              );
-            }
-
+          if (isCluster) {
             return (
-              <Marker
-                key={cluster.properties.restaurantId}
-                lat={latitude}
-                lng={longitude}
-              >
-                <InfoView
-                  imageUrl={imageUrl}
-                  restaurantName={restaurantName}
-                  rating={rating}
-                  address={address}
-                />
+              <Marker key={cluster.id} lat={latitude} lng={longitude}>
+                <StyledDiv
+                  style={{
+                    width: `${10 + (pointCount / points.length) * 40}px`,
+                    height: `${10 + (pointCount / points.length) * 40}px`,
+                  }}
+                  onClick={() => {
+                    const expansionZoom = Math.min(
+                      supercluster.getClusterExpansionZoom(cluster.id),
+                      20
+                    );
+                    mapRef.current.setZoom(expansionZoom);
+                    mapRef.current.panTo({ lat: latitude, lng: longitude });
+                  }}
+                >
+                  {pointCount}
+                </StyledDiv>
               </Marker>
             );
-          })}
-        </GoogleMapReact>
-      )}
+          }
+
+          return (
+            <Marker
+              key={cluster.properties.restaurantId}
+              lat={latitude}
+              lng={longitude}
+            >
+              <InfoView
+                imageUrl={imageUrl}
+                restaurantName={restaurantName}
+                rating={rating}
+                address={address}
+              />
+            </Marker>
+          );
+        })}
+      </GoogleMapReact>
     </div>
   );
 };
