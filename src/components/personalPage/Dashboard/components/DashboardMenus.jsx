@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import Ripples from 'react-ripples';
 import { IoRibbonSharp } from 'react-icons/io5';
 import { BsListNested, BsFillHeartFill, BsShop } from 'react-icons/bs';
@@ -23,37 +22,37 @@ const DashbaordMenus = ({ location }) => {
   const menus = useMemo(
     () => [
       {
-        icon: [<StyledIcon as={BsListNested} key={uuidv4()} />],
+        icon: <StyledIcon as={BsListNested} />,
         name: '清單',
         count: myListCounts || 0,
         path: '/personal/list',
       },
       {
-        icon: [<StyledIcon as={IoRibbonSharp} key={uuidv4()} />],
+        icon: <StyledIcon as={IoRibbonSharp} />,
         name: '統計',
         count: myBadgeCounts || 0,
         path: '/personal/badges',
       },
       {
-        icon: [<StyledIcon as={FaArchive} key={uuidv4()} />],
+        icon: <StyledIcon as={FaArchive} />,
         name: '紀錄',
         count: myReceivedCounts || 0,
         path: '/personal/received',
       },
       {
-        icon: [<StyledIcon as={MdFastfood} key={uuidv4()} />],
+        icon: <StyledIcon as={MdFastfood} />,
         name: '已訂',
         count: myToReceiveCounts || 0,
         path: '/personal/toReceive',
       },
       {
-        icon: [<StyledIcon as={BsFillHeartFill} key={uuidv4()} />],
+        icon: <StyledIcon as={BsFillHeartFill} />,
         name: '收藏',
         count: myCollectedShareCounts || 0,
         path: '/personal/collectedShares',
       },
       {
-        icon: [<StyledIcon as={BsShop} key={uuidv4()} />],
+        icon: <StyledIcon as={BsShop} />,
         name: '店家',
         count: myCollectedStoreCounts || 0,
         path: '/personal/collectedRestaurants',
@@ -78,10 +77,10 @@ const DashbaordMenus = ({ location }) => {
           during={3000}
           active={menu.path === location.pathname ? '#bbdefbaa' : '#e3f2fd01'}
         >
-          <Button key={menu.name} as={Link} to={`${menu.path}`}>
+          <Button as={Link} to={`${menu.path}`}>
             <IconContainer>
-              {menu.icon.map((icon) => icon)}
-              {menu.count !== 0 ? <ItemNumber>{menu.count}</ItemNumber> : <></>}
+              {menu.icon}
+              {menu.count !== 0 ? <ItemNumber>{menu.count}</ItemNumber> : null}
             </IconContainer>
 
             <ButtonName>{menu.name}</ButtonName>

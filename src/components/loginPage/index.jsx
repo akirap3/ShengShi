@@ -86,7 +86,7 @@ const LoginPage = () => {
             circleBgColor={'linear-gradient(253deg, #0cc898, #1797d2, #864fe1)'}
           />
           <LoginContainer>
-            <Title>Ｗelcome back</Title>
+            <Title>Welcome back</Title>
             <FieldContainer>
               <StyledIcon as={BsFillPersonFill} />
               <Field
@@ -111,10 +111,7 @@ const LoginPage = () => {
               />
             </FieldContainer>
             <ButtonContainer>
-              <NativeButton
-                onClick={() => checkAndLogin()}
-                disabled={isLoading}
-              >
+              <NativeButton onClick={checkAndLogin} disabled={isLoading}>
                 <span>確 認</span>
               </NativeButton>
               <FBButton
