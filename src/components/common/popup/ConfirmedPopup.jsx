@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import Ripples from 'react-ripples';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { DialogOverlay } from '@reach/dialog';
@@ -22,7 +23,6 @@ import {
   PopPlaceIcon,
   Preview,
   ButtonContainer,
-  StyleBtnRipples,
   SubmitBtn,
 } from './PopupUnits';
 
@@ -61,26 +61,26 @@ const ConfirmedPopup = ({
           <PopContent>
             <Preview src={share?.imageUrl || ''} />
             <StyledPopRow>
-              <RegisterQuantityLabel>登記數量</RegisterQuantityLabel>
-              <Quantity>
+              <StyledLabel>登記數量</StyledLabel>
+              <StyledSpan>
                 {share?.toReceiveInfo[currentUser?.uid]?.quantities || 0}
-              </Quantity>
+              </StyledSpan>
             </StyledPopRow>
             <PopRow>
-              <DateTimeLabel>領取日期及時間</DateTimeLabel>
-              <DateTime>
+              <StyledLabel>領取日期及時間</StyledLabel>
+              <StyledSpan>
                 {share?.toReceiveInfo[currentUser?.uid]?.upcomingTimestamp
                   ?.toDate()
                   .toLocaleString()}
-              </DateTime>
+              </StyledSpan>
             </PopRow>
             <PopRow>
               <LabelIconContainer>
-                <PopPlaceLabel>地點</PopPlaceLabel>
+                <StyledLabel>地點</StyledLabel>
                 <PopPlaceIcon />
               </LabelIconContainer>
 
-              <PopPlace>{share?.exchangePlace || ''}</PopPlace>
+              <StyledSpan>{share?.exchangePlace || ''}</StyledSpan>
             </PopRow>
             <MapQRContainer>
               <MapWrapper>
@@ -92,11 +92,11 @@ const ConfirmedPopup = ({
             </MapQRContainer>
             <ButtonContainer>
               {hasUpdateBtn && (
-                <StyleBtnRipples color="#fff" during={3000}>
+                <Ripples color="#fff" during={3000}>
                   <SubmitBtn onClick={() => handleShowUpdate(share)}>
                     我要更新
                   </SubmitBtn>
-                </StyleBtnRipples>
+                </Ripples>
               )}
             </ButtonContainer>
           </PopContent>
@@ -114,18 +114,6 @@ const ConfirmedPopup = ({
 const StyledPopRow = styled(PopRow)`
   margin-top: 20px;
 `;
-
-const RegisterQuantityLabel = styled(StyledLabel)``;
-
-const Quantity = styled(StyledSpan)``;
-
-const DateTimeLabel = styled(StyledLabel)``;
-
-const DateTime = styled(StyledSpan)``;
-
-const PopPlaceLabel = styled(StyledLabel)``;
-
-const PopPlace = styled(StyledSpan)``;
 
 const MapQRContainer = styled.div`
   display: flex;

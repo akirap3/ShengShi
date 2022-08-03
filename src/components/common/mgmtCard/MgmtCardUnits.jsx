@@ -71,10 +71,6 @@ export const RequesterName = styled(Text)`
   }
 `;
 
-export const RequesterPhone = styled(Text)``;
-export const RequesterEmail = styled(Text)``;
-export const RequesterQty = styled(Text)``;
-export const RequestedDateTime = styled(Text)``;
 export const Address = styled(Text)`
   margin-bottom: 25px;
 `;
@@ -89,26 +85,24 @@ export const ButtonContainer = styled.div`
   }
 `;
 
-export const ConfirmedBtn = styled.button`
-  margin-right: 0.5rem;
+const Btn = styled.button`
   padding: 0.5rem;
   font-family: 'cwTeXYen', sans-serif;
   font-size: 22px;
-  color: white;
-  background-color: #1e88e5;
   border-radius: 5px;
   box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
   cursor: pointer;
 `;
 
-export const CancleBtn = styled.button`
-  padding: 0.5rem;
+export const ConfirmedBtn = styled(Btn)`
+  margin-right: 0.5rem;
+  color: white;
+  background-color: #1e88e5;
+`;
+
+export const CancleBtn = styled(Btn)`
   border-radius: 5px;
-  font-family: 'cwTeXYen', sans-serif;
-  font-size: 22px;
   color: #52b788;
   background-color: white;
   opacity: 0.8;
-  box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
-  cursor: pointer;
 `;

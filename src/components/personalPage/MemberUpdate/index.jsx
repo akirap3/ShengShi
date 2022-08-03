@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
-import Compressor from 'compressorjs';
 import {
   BsFillEmojiLaughingFill,
   BsFillTelephoneFill,
@@ -10,6 +9,7 @@ import { MdEmail } from 'react-icons/md';
 import { HiLocationMarker } from 'react-icons/hi';
 
 import useCurrentUser from '../../../hooks/useCurrentUser';
+import handleCompressFile from '../../../utils/compressImg';
 import Loading from '../../common/Loading';
 import DeletePopup from '../../common/popup/DeletePopup';
 import AlertPopup from '../../common/popup/AlertPopup';
@@ -37,7 +37,6 @@ import {
 import { getCurrentUserData, updateMember } from '../../../utils/firebase';
 
 const MemberUpdate = () => {
-  const uploadRef = useRef();
   const [showDelete, setShowDelete] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -76,18 +75,6 @@ const MemberUpdate = () => {
     setAlertMessage(msg);
     openInfo();
     return false;
-  };
-
-  const handleCompressFile = (e) => {
-    const image = e.target.files[0];
-    if (image)
-      new Compressor(image, {
-        quality: 0.2,
-        convertSize: 1000000,
-        success: (res) => {
-          setFile(res);
-        },
-      });
   };
 
   const checkFields = () => {
@@ -182,14 +169,12 @@ const MemberUpdate = () => {
             <PreviewImg src={previewImgUrl} alt="preview-avatar" />
             <ButtonContainer>
               <UploadRipples color="#fff" during={3000}>
-                <ImgUpload ref={uploadRef} htmlFor="image-upload">
-                  上 傳
-                </ImgUpload>
+                <ImgUpload htmlFor="image-upload">上 傳</ImgUpload>
               </UploadRipples>
               <UploadBtn
                 type="file"
                 id="image-upload"
-                onChange={(e) => handleCompressFile(e)}
+                onChange={(e) => handleCompressFile(e, setFile)}
               />
               <UpdateRipples color="#fff" during={3000}>
                 <UpdateBtn onClick={() => handleUpdateMember()}>

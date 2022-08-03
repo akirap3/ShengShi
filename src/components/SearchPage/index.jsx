@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Waypoint } from 'react-waypoint';
 
 import useCurrentUser from '../../hooks/useCurrentUser';
+import useSearch from '../../hooks/useSearch';
 import Main from '../common/Main';
 import SharesContainer from '../common/ShareCard/components/SharesContainer';
 import Outer from '../common/Outer';
@@ -15,10 +16,8 @@ import Background from '../common/Background';
 import Title from '../common/Title';
 import Loading from '../common/Loading';
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
-import algolia from '../../utils/algolia';
 
 import {
-  getSingleShare,
   getAllOrderedContents,
   getAllOrderedOtherShares,
 } from '../../utils/firebase';
@@ -45,33 +44,12 @@ import {
 const SearchPage = () => {
   const dispatch = useDispatch();
   const currentUser = useCurrentUser();
+  const { inputValue, setInputValue, handleSearch, handleOnEnter } =
+    useSearch();
   const lastPostSnapshotRef = useRef();
-  const [inputValue, setInputValue] = useState('');
   const [shares, setShares] = useState();
   const isShareSearch = useSelector((state) => state.isShareSearch);
   const searchedShares = useSelector((state) => state.searchedShares);
-
-  const handleSearch = () => {
-    dispatch({ type: 'isShareSearch/search', payload: true });
-    if (inputValue === '') setInputValue('請輸入關鍵字');
-    algolia.search(inputValue || '請輸入關鍵字').then((result) => {
-      const searchResults = result.hits.map((hit) => {
-        return {
-          docId: hit.objectID,
-        };
-      });
-      const contents = searchResults.map((result) =>
-        getSingleShare(result.docId)
-      );
-      Promise.all(contents).then((values) => {
-        dispatch({ type: 'searchedShares/get', payload: values });
-      });
-    });
-  };
-
-  const handleOnEnter = (e) => {
-    if (e.charCode === 13) handleSearch();
-  };
 
   useEffect(() => {
     if (!isShareSearch) {
@@ -166,9 +144,9 @@ const SearchPage = () => {
               placeholder="勝食搜尋"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={(e) => handleOnEnter(e)}
+              onKeyPress={handleOnEnter}
             />
-            <SearchIconContainer onClick={() => handleSearch()}>
+            <SearchIconContainer onClick={handleSearch}>
               <SearchIcon />
             </SearchIconContainer>
           </SearchOutline>

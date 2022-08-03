@@ -5,24 +5,20 @@ const SocialIcons = () => {
   return (
     <Icons>
       <div className="social-button insta">
-        <InstagramIcon />
+        <IoLogoInstagram />
         <span>Instagram</span>
       </div>
       <div className="social-button facebook">
-        <FbIcon />
+        <IoLogoFacebook />
         <span>Facebook</span>
       </div>
       <div className="social-button twitter">
-        <TwitterIcon />
+        <IoLogoTwitter />
         <span>Twitter</span>
       </div>
     </Icons>
   );
 };
-
-const InstagramIcon = styled(IoLogoInstagram)``;
-const TwitterIcon = styled(IoLogoTwitter)``;
-const FbIcon = styled(IoLogoFacebook)``;
 
 const Icons = styled.div`
   display: flex;
@@ -52,10 +48,6 @@ const Icons = styled.div`
 
   .twitter {
     background: #1da1f2;
-  }
-
-  .dribbble {
-    background: #ea4c89;
   }
 
   .social-button:hover {

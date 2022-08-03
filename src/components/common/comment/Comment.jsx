@@ -21,11 +21,11 @@ import {
 } from '../../../utils/firebase';
 
 const Comment = ({ share, comment, userData }) => {
+  const { author, createdAt, commentContent } = comment;
   const [isEdit, setIsEdit] = useState(false);
-  const [editedComment, setEditedComment] = useState('');
+  const [editedComment, setEditedComment] = useState(commentContent);
   const [errorMessage, setErrorMessage] = useState('');
   const [showErrorMessage, setShowErrorMessage] = useState(false);
-  const { author, createdAt, commentContent } = comment;
 
   const handleConfirmCommentEdit = () => {
     if (editedComment) {
@@ -63,7 +63,7 @@ const Comment = ({ share, comment, userData }) => {
             onChange={
               isEdit ? (e) => setEditedComment(e.target.value) : () => {}
             }
-            onKeyPress={(e) => handleEnter(e)}
+            onKeyPress={handleEnter}
             isEdit
             disabled={!isEdit}
           />

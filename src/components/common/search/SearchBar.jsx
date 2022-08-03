@@ -1,11 +1,7 @@
-import { useState } from 'react';
-
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import algolia from '../../../utils/algolia';
 
-import { getSingleShare } from '../../../utils/firebase';
+import useSearch from '../../../hooks/useSearch';
+
 import {
   SearchOutline,
   SearchBar as SearchBarUnit,
@@ -14,32 +10,8 @@ import {
 } from './SearchUnits';
 
 const SearchBar = () => {
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const [inputValue, setInputValue] = useState('');
-
-  const handleSearch = () => {
-    dispatch({ type: 'isShareSearch/search', payload: true });
-    if (inputValue === '') setInputValue('請輸入關鍵字');
-    algolia.search(inputValue || '請輸入關鍵字').then((result) => {
-      const searchResults = result.hits.map((hit) => {
-        return {
-          docId: hit.objectID,
-        };
-      });
-      const contents = searchResults.map((result) =>
-        getSingleShare(result.docId)
-      );
-      Promise.all(contents).then((values) => {
-        dispatch({ type: 'searchedShares/get', payload: values || [] });
-      });
-      history.push('/search');
-    });
-  };
-
-  const handleOnEnter = (e) => {
-    if (e.charCode === 13) handleSearch();
-  };
+  const { inputValue, setInputValue, handleSearch, handleOnEnter } =
+    useSearch();
 
   return (
     <StyledSearchOutline>
@@ -47,9 +19,9 @@ const SearchBar = () => {
         placeholder="勝食搜尋"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        onKeyPress={(e) => handleOnEnter(e)}
+        onKeyPress={handleOnEnter}
       />
-      <StyledSearchIconContainer onClick={() => handleSearch()}>
+      <StyledSearchIconContainer onClick={handleSearch}>
         <SearchIcon />
       </StyledSearchIconContainer>
     </StyledSearchOutline>

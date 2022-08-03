@@ -1,11 +1,12 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
+import Ripples from 'react-ripples';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import Compressor from 'compressorjs';
 import { DialogOverlay } from '@reach/dialog';
 
 import Loading from '../../../common/Loading.jsx';
+import handleCompressFile from '../../../../utils/compressImg.js';
 import { isFieldsChecked } from '../../../../utils/validation.js';
 import useCurrentUser from '../../../../hooks/useCurrentUser.js';
 import {
@@ -28,7 +29,6 @@ import {
   Calendar,
   Preview,
   ButtonContainer,
-  StyleBtnRipples,
   ImgUpload,
   SubmitBtn,
 } from '../../../common/popup/PopupUnits.jsx';
@@ -38,7 +38,6 @@ import AlertPopup from '../../../common/popup/AlertPopup.jsx';
 
 const AddSharePopup = ({ showEdit, closeEditor }) => {
   const dispatch = useDispatch();
-  const uploadRef = useRef();
   const currentUser = useCurrentUser();
   const fromToDateTime = useSelector((state) => state.fromToDateTime);
   const address = useSelector((state) => state.address);
@@ -76,18 +75,6 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
     if (currentUser)
       return getListenedSingleContent('users', currentUser?.uid, setUserData);
   }, [currentUser]);
-
-  const handleCompressFile = (e) => {
-    const image = e.target.files[0];
-    if (image)
-      new Compressor(image, {
-        quality: 0.2,
-        convertSize: 1000000,
-        success: (res) => {
-          setFile(res);
-        },
-      });
-  };
 
   const openAlertWithMessage = (msg) => {
     setAlertMessage(msg);
@@ -179,26 +166,22 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
             </PopRow>
             <Preview src={previewImgUrl} alt="preview-upload" />
             <ButtonContainer>
-              <StyleBtnRipples color="#fff" during={3000}>
-                <ImgUpload
-                  ref={uploadRef}
-                  htmlFor="image-upload"
-                  disabled={isLoading}
-                >
+              <Ripples color="#fff" during={3000}>
+                <ImgUpload htmlFor="image-upload" disabled={isLoading}>
                   上傳
                 </ImgUpload>
-              </StyleBtnRipples>
+              </Ripples>
               <UploadBtn
                 type="file"
                 id="image-upload"
-                onChange={(e) => handleCompressFile(e)}
+                onChange={(e) => handleCompressFile(e, setFile)}
                 disabled={isLoading}
               />
-              <StyleBtnRipples color="#fff" during={3000}>
+              <Ripples color="#fff" during={3000}>
                 <SubmitBtn onClick={handleAddShareSubmit} disabled={isLoading}>
                   分享
                 </SubmitBtn>
-              </StyleBtnRipples>
+              </Ripples>
             </ButtonContainer>
           </PopContent>
         </StyledDialogContent>

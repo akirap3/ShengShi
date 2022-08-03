@@ -129,7 +129,6 @@ const CardContent = styled.div`
   flex-direction: column;
   justify-items: center;
   align-items: center;
-  justify-self: center;
   padding: 1rem 2rem 2rem;
 `;
 

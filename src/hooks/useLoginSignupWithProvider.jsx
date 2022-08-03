@@ -23,7 +23,7 @@ const useLoginSignupWithProvider = () => {
     return false;
   };
 
-  const hasSignedUP = (usersData, uid) => {
+  const hasSignedUp = (usersData, uid) => {
     const userIds = usersData.map((user) => user.id);
     if (userIds.includes(uid)) return true;
     return false;
@@ -34,7 +34,7 @@ const useLoginSignupWithProvider = () => {
     loginWithProvider()
       .then((result) => {
         const { displayName, photoURL, email, uid } = result.user;
-        if (!hasSignedUP(usersData, uid)) {
+        if (!hasSignedUp(usersData, uid)) {
           const data = {
             displayName,
             email,
