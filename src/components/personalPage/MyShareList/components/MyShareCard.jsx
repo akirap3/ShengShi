@@ -3,10 +3,12 @@ import { useState, useEffect } from 'react';
 import EditPopup from './EditPopup';
 import ShareCard from '../../../common/ShareCard';
 import { getListenedSingleContent } from '../../../../utils/firebase';
+import { useTranslation } from '../../../../context/LanguageContext';
 
 const MyShareCard = ({ share }) => {
   const [showEdit, setShowEdit] = useState(false);
   const [listenedShare, setListenedShare] = useState(share);
+  const { t } = useTranslation();
   const openEditor = () => setShowEdit(true);
   const closeEditor = () => setShowEdit(false);
 
@@ -18,8 +20,8 @@ const MyShareCard = ({ share }) => {
     <>
       <ShareCard
         handleClick={openEditor}
-        btnName="編輯"
-        category="分享"
+        btnName={t('btnEdit')}
+        category={t('catShare')}
         share={listenedShare}
       />
       <EditPopup

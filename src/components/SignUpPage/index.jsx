@@ -33,6 +33,7 @@ import {
   loginWithGoogle,
 } from '../../utils/firebase';
 import useLoginSignupWithProvider from '../../hooks/useLoginSignupWithProvider';
+import { useTranslation } from '../../context/LanguageContext';
 import { Timestamp } from '@firebase/firestore';
 import * as validation from '../../utils/validation';
 
@@ -51,6 +52,7 @@ const SignupPage = () => {
   const [place, setPlace] = useState('');
   const [password, setPassword] = useState('');
   const [secPassword, setSecPassword] = useState('');
+  const { t } = useTranslation();
   const {
     openAlertWithMessage,
     alertMessage,
@@ -75,30 +77,30 @@ const SignupPage = () => {
   const checkNames = () => {
     const regex = /[a-zA-Z0-9]+/;
     if (!regex.test(firstName) || !regex.test(lastName)) {
-      return openAlertWithMessage('您的名字資料格式不符');
+      return openAlertWithMessage(t('errNameFormat'));
     }
     return true;
   };
 
   const checkPassword = () => {
     if (!password && !secPassword) {
-      return openAlertWithMessage('請輸入密碼');
+      return openAlertWithMessage(t('errEnterPassword'));
     } else if (password !== secPassword) {
-      return openAlertWithMessage('密碼不相符');
+      return openAlertWithMessage(t('errPasswordMismatch'));
     }
     return true;
   };
 
   const checkAlias = () => {
     if (alias === '') {
-      return openAlertWithMessage('請輸入暱稱');
+      return openAlertWithMessage(t('errEnterAlias'));
     }
     return true;
   };
 
   const checkPlace = () => {
     if (place === '') {
-      return openAlertWithMessage('請輸入地點');
+      return openAlertWithMessage(t('errEnterLocation'));
     }
     return true;
   };
@@ -108,26 +110,24 @@ const SignupPage = () => {
       checkNames() &&
       checkAlias() &&
       checkPlace() &&
-      validation.checkEmail(email, openAlertWithMessage) &&
+      validation.checkEmail(email, openAlertWithMessage, t) &&
       checkPassword()
     ) {
       setIsLoading(true);
       register(email, password)
         .then((userCredential) => {
           handleSignUpWithEmail(initialUserData, userCredential.user.uid);
-          openAlertWithMessage(`您使用 ${email} 註冊`);
+          openAlertWithMessage(`${t('registerSuccess')}: ${email}`);
           setIsLoading(false);
         })
         .catch((error) => {
           setIsLoading(false);
           if (error.code === 'auth/weak-password') {
-            openAlertWithMessage('密碼長度需要至少六個字元');
+            openAlertWithMessage(t('errPasswordLength'));
             setPassword('');
             setSecPassword('');
           } else if (error.code === 'auth/email-already-in-use') {
-            openAlertWithMessage(
-              '此信箱已經註冊過，請您使用信箱或是 FB 及 Google 登入'
-            );
+            openAlertWithMessage(t('errEmailAlreadyInUse'));
             history.push('/login');
           }
         });
@@ -142,7 +142,7 @@ const SignupPage = () => {
           <LoginBackground />
           <Background circleBgColor={'rgba(183, 228, 199, 0.5)'} />
           <SignupContainer>
-            <Title>Sign Up</Title>
+            <Title>{t('signup')}</Title>
             <StyledFieldContainer>
               <NameIcon as={BsFillPersonFill} />
               <NameFiled
@@ -204,7 +204,7 @@ const SignupPage = () => {
                 onClick={() => checkSignup(initialUserData)}
                 disabled={isLoading}
               >
-                確 認
+                {t('confirm')}
               </NativeButton>
               <FBButton
                 onClick={() => handleClickProvider(loginWithFB, '?type=large')}
@@ -220,8 +220,8 @@ const SignupPage = () => {
               </GoogleButton>
             </ButtonContainer>
             <Text>
-              您已經有帳號了嗎？
-              <StyledLink to="/login">登入</StyledLink>
+              {t('haveAccount')}
+              <StyledLink to="/login">{t('login')}</StyledLink>
             </Text>
           </SignupContainer>
         </StyledMain>

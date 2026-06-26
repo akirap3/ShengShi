@@ -7,6 +7,7 @@ import Main from '../common/Main';
 import Background from '../common/Background';
 import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
 import NoResult from '../common/NoResult';
+import { useTranslation } from '../../context/LanguageContext';
 
 import {
   SearchContent,
@@ -47,6 +48,7 @@ const ArticlePage = () => {
   const [inputValue, setInputValue] = useState('');
   const [articles, setArticles] = useState();
   const [isSearch, setIsSearch] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isSearch)
@@ -122,9 +124,9 @@ const ArticlePage = () => {
         <Banner>
           <BannerImg src={ArticleBannerImg} alt="share-food" />
           <StyledBannerContent>
-            <StyledBannerTitle>剩食與解決</StyledBannerTitle>
+            <StyledBannerTitle>{t('articlesTitle')}</StyledBannerTitle>
             <Styledsubtitle>
-              透過分享剩食打擊食物浪費，分享你多出的資源，剩食也可以點亮街燈，讓我們共謀解決剩食的創新之道
+              {t('articlesSubtitle')}
             </Styledsubtitle>
           </StyledBannerContent>
         </Banner>
@@ -132,7 +134,7 @@ const ArticlePage = () => {
           <SearchOutline>
             <SearchBar
               value={inputValue}
-              placeholder="文章搜尋"
+              placeholder={t('searchArticles')}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleOnEnter}
             />
@@ -142,7 +144,7 @@ const ArticlePage = () => {
           </SearchOutline>
           <StyledRipples during={3000}>
             <StyledResetButton onClick={handleClearSearch}>
-              清除搜尋
+              {t('clearSearch')}
             </StyledResetButton>
           </StyledRipples>
         </SearchContent>
@@ -171,8 +173,9 @@ const ArticlePage = () => {
             ))}
           </ArticleContainer>
         ) : (
-          <NoResult text="搜尋不到文章" />
+          <NoResult text={t('noArticlesFound')} />
         )
+
       ) : (
         <HalfHeightPaddingLoading>
           <Loading />

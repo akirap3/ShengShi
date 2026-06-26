@@ -7,10 +7,12 @@ import Outer from '../../common/Outer';
 import NoResult from '../../common/NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 import { getSpecificContents } from '../../../utils/firebase';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const MyReceivedList = () => {
   const currentUser = useCurrentUser();
   const [receivedShares, setReceivedShares] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     return getSpecificContents(
@@ -36,7 +38,7 @@ const MyReceivedList = () => {
               </SharesContainer>
             </Outer>
           ) : (
-            <NoResult text="你沒有任何的領取紀錄" />
+            <NoResult text={t('noReceivedRecord')} />
           )}
         </>
       ) : (

@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import SearchBar from '../search/SearchBar';
 import MobileSideMenu from './MobileSideMenu';
 import useCurrentUser from '../../../hooks/useCurrentUser';
+import { useTranslation } from '../../../context/LanguageContext';
 import {
   logOut,
   getCurrentUserData,
@@ -28,6 +29,9 @@ import {
   MobileLogoLink,
   MobileHeaderLogo,
   MobileMenuIcon,
+  ToggleContainer,
+  ToggleThumb,
+  ToggleText,
 } from './style/Index.style';
 import LogoImg from '../../../images/common/shengshi-logo.svg';
 
@@ -40,6 +44,7 @@ const Header = () => {
 
   const checkUser = useSelector((state) => state.checkUser);
   const currentUser = useCurrentUser();
+  const { t, locale, toggleLanguage } = useTranslation();
 
   const logout = () => {
     logOut().then(() => {
@@ -66,13 +71,13 @@ const Header = () => {
           <Logo src={LogoImg} alt="Shenshi-logo" />
         </Link>
         <Tag>
-          <StyledLink to="/">首頁</StyledLink>
+          <StyledLink to="/">{t('home')}</StyledLink>
         </Tag>
         <RestaurantTag>
-          <RestaurantNav to="/restaurants">合作餐廳</RestaurantNav>
+          <RestaurantNav to="/restaurants">{t('partners')}</RestaurantNav>
         </RestaurantTag>
         <ArticleTag>
-          <StyledLink to="/articles">文章</StyledLink>
+          <StyledLink to="/articles">{t('articles')}</StyledLink>
         </ArticleTag>
         <SearchBar />
         {checkUser.isLoggedIn && userData ? (
@@ -84,11 +89,11 @@ const Header = () => {
               )}
             </MemberIconContainer>
             <Tag>
-              <MyDashboard to="/personal/list">我的看板</MyDashboard>
+              <MyDashboard to="/personal/list">{t('myDashboard')}</MyDashboard>
             </Tag>
             <Tag>
               <StyledLink as={Link} to="/" onClick={() => logout()}>
-                登出
+                {t('logout')}
               </StyledLink>
             </Tag>
           </>
@@ -96,14 +101,20 @@ const Header = () => {
           <>
             <MemberIcon />
             <Tag>
-              <StyledLink to="/login">登入</StyledLink>
+              <StyledLink to="/login">{t('login')}</StyledLink>
             </Tag>
             <Tag>
-              <StyledLink to="/signup">註冊</StyledLink>
+              <StyledLink to="/signup">{t('signup')}</StyledLink>
             </Tag>
           </>
         )}
+        <ToggleContainer onClick={toggleLanguage}>
+          <ToggleThumb locale={locale} />
+          <ToggleText active={locale === 'en'}>EN</ToggleText>
+          <ToggleText active={locale === 'zh'}>中</ToggleText>
+        </ToggleContainer>
       </HeaderContainer>
+
 
       <MobileHeader>
         <MobileLogoLink to="/">
@@ -122,5 +133,6 @@ const Header = () => {
     </>
   );
 };
+
 
 export default Header;

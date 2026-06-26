@@ -4,18 +4,22 @@ import { useDispatch } from 'react-redux';
 import algolia from '../utils/algolia';
 import { getSingleShare } from '../utils/firebase';
 
+import { useTranslation } from '../context/LanguageContext';
+
 const useSearch = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [inputValue, setInputValue] = useState('');
+  const { t } = useTranslation();
 
   const handleSearch = () => {
     dispatch({ type: 'isShareSearch/search', payload: true });
     if (inputValue === '') {
-      setInputValue('請輸入關鍵字');
+      setInputValue(t('enterKeyword'));
       return;
     }
-    if (inputValue === '請輸入關鍵字') return;
+    if (inputValue === t('enterKeyword') || inputValue === '請輸入關鍵字' || inputValue === 'Please enter a keyword') return;
+
 
     algolia.search(inputValue).then((result) => {
       const searchResults = result.hits.map((hit) => {

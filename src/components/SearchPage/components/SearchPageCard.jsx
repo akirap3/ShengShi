@@ -4,10 +4,12 @@ import { useDispatch } from 'react-redux';
 
 import ShareCard from '../../common/ShareCard';
 import CollectedSharePopup from '../../personalPage/MyCollectedList/components/CollectedSharePopup';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const SearchPageCard = ({ share }) => {
   const dispatch = useDispatch();
   const [showEdit, setShowEdit] = useState(false);
+  const { t } = useTranslation();
 
   const openEditor = () => setShowEdit(true);
   const closeEditor = () => setShowEdit(false);
@@ -24,7 +26,7 @@ const SearchPageCard = ({ share }) => {
     <>
       <ShareCard
         handleClick={handleSearchOpen}
-        btnName="領取"
+        btnName={t('btnBook')}
         cannnotDel={true}
         share={share}
         isSearch={true}

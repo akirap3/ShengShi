@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import useSearch from '../../../hooks/useSearch';
+import { useTranslation } from '../../../context/LanguageContext';
 
 import {
   SearchOutline,
@@ -12,11 +13,12 @@ import {
 const SearchBar = () => {
   const { inputValue, setInputValue, handleSearch, handleOnEnter } =
     useSearch();
+  const { t } = useTranslation();
 
   return (
     <StyledSearchOutline>
       <SearchBox
-        placeholder="勝食搜尋"
+        placeholder={t('searchPlaceholder')}
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyPress={handleOnEnter}

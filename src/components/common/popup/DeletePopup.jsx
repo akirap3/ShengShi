@@ -21,6 +21,7 @@ import {
   CancelBtn,
   InfoIcon,
 } from './PopupUnits';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const DeletePopup = ({
   showDelete,
@@ -34,6 +35,7 @@ const DeletePopup = ({
   const currentUser = useCurrentUser();
   const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     return getCurrentUserData(currentUser, setUserData);
@@ -86,14 +88,14 @@ const DeletePopup = ({
           <PopClose onClick={closeDelete} disabled={isLoading} />
           <PopTitleContainer>
             <InfoIcon />
-            <PopTitle>{`確認刪除此${category}`}</PopTitle>
+            <PopTitle>{t('confirmDeleteTitle').replace('{category}', category)}</PopTitle>
           </PopTitleContainer>
           <AlertBtnRow>
             <StyledSubmitBtn onClick={choose} disabled={isLoading}>
-              確認
+              {t('confirm')}
             </StyledSubmitBtn>
             <CancelBtn onClick={closeDelete} disabled={isLoading}>
-              取消
+              {t('cancel')}
             </CancelBtn>
           </AlertBtnRow>
         </AlertDialogContent>

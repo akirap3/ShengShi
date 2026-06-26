@@ -7,6 +7,7 @@ import NoResult from '../../common/NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 import AlertPopup from '../../common/popup/AlertPopup';
 import { getSpecificContents } from '../../../utils/firebase';
+import { useTranslation } from '../../../context/LanguageContext';
 
 export const hasContents = (shares) => {
   const sum = shares
@@ -20,6 +21,7 @@ const MyMgmtList = () => {
   const [showInfo, setShowInfo] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const currentUser = useCurrentUser();
+  const { t } = useTranslation();
 
   const openInfo = () => setShowInfo(true);
   const closeInfo = () => setShowInfo(false);
@@ -57,10 +59,10 @@ const MyMgmtList = () => {
                 )}
               </MgmtContainer>
             ) : (
-              <NoResult text="目前沒有任何預約" />
+              <NoResult text={t('noReservation')} />
             )
           ) : (
-            <NoResult text="目前您沒有任何的分享清單，也沒有任何預約" />
+            <NoResult text={t('noShareList')} />
           )}
         </>
       ) : (

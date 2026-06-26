@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Ripples from 'react-ripples';
 import NothingImg from '../../../images/common/nothing.gif';
+import { useTranslation } from '../../../context/LanguageContext';
 
 export const CommentSection = styled.div`
   display: flex;
@@ -47,10 +48,12 @@ export const CommentSummary = styled.div`
   background-color: rgb(46, 180, 204);
 `;
 
+
 export const NoComment = () => {
+  const { t } = useTranslation();
   return (
     <StyledNoComment>
-      <NothingMessage>目前沒有任何的留言</NothingMessage>
+      <NothingMessage>{t('noCommentsYet')}</NothingMessage>
       <Nothing src={NothingImg} alt="nothing" />
     </StyledNoComment>
   );

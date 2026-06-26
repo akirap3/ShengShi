@@ -12,11 +12,13 @@ import {
 } from '../../../common/popup/PopupUnits';
 import AlertPopup from '../../../common/popup/AlertPopup';
 import DateTimeSelector from '../../../common/dateTime/DateTimeSelector';
+import { useTranslation } from '../../../../context/LanguageContext';
 
 const ClendarPopup = ({ showDateTime, closeDateTime, share }) => {
   const specificDateTime = useSelector((state) => state.specificDateTime);
   const [showInfo, setShowInfo] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const { t } = useTranslation();
 
   const openInfo = () => setShowInfo(true);
   const closeInfo = () => setShowInfo(false);
@@ -29,14 +31,14 @@ const ClendarPopup = ({ showDateTime, closeDateTime, share }) => {
 
   const handleCheckDateTime = () => {
     if (specificDateTime && specificDateTime < share.fromTimeStamp.toDate()) {
-      openAlertWithMessage('領取時間小於可領取的開始時間，請重新選擇領取時間');
+      openAlertWithMessage(t('errTimeTooEarly'));
     } else if (
       specificDateTime &&
       specificDateTime > share.toTimeStamp.toDate()
     ) {
-      openAlertWithMessage('領取時間大於可領取的結束時間，請重新選擇領取時間');
+      openAlertWithMessage(t('errTimeTooLate'));
     } else if (specificDateTime && specificDateTime < now) {
-      openAlertWithMessage('領取時間小於現在時間，請重新選擇領取時間');
+      openAlertWithMessage(t('errTimeInPast'));
     } else {
       closeDateTime();
     }
@@ -50,7 +52,7 @@ const ClendarPopup = ({ showDateTime, closeDateTime, share }) => {
           <DateTimeSelector share={share} />
           <ButtonContainer>
             <Ripples color="#fff" during={3000}>
-              <SubmitBtn onClick={handleCheckDateTime}>確認</SubmitBtn>
+              <SubmitBtn onClick={handleCheckDateTime}>{t('confirm')}</SubmitBtn>
             </Ripples>
           </ButtonContainer>
         </StyledDialogContent>

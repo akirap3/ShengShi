@@ -9,8 +9,10 @@ import { FaArchive } from 'react-icons/fa';
 import { MdFastfood } from 'react-icons/md';
 
 import useCounts from '../../../../hooks/useCounts';
+import { useTranslation } from '../../../../context/LanguageContext';
 
 const DashbaordMenus = ({ location }) => {
+  const { t, locale } = useTranslation();
   const {
     myListCounts,
     myBadgeCounts,
@@ -23,41 +25,42 @@ const DashbaordMenus = ({ location }) => {
     () => [
       {
         icon: <StyledIcon as={BsListNested} />,
-        name: '清單',
+        name: t('menuShares'),
         count: myListCounts || 0,
         path: '/personal/list',
       },
       {
         icon: <StyledIcon as={IoRibbonSharp} />,
-        name: '統計',
+        name: t('menuStats'),
         count: myBadgeCounts || 0,
         path: '/personal/badges',
       },
       {
         icon: <StyledIcon as={FaArchive} />,
-        name: '紀錄',
+        name: t('menuRecord'),
         count: myReceivedCounts || 0,
         path: '/personal/received',
       },
       {
         icon: <StyledIcon as={MdFastfood} />,
-        name: '已訂',
+        name: t('menuToReceive'),
         count: myToReceiveCounts || 0,
         path: '/personal/toReceive',
       },
       {
         icon: <StyledIcon as={BsFillHeartFill} />,
-        name: '收藏',
+        name: t('menuCollected'),
         count: myCollectedShareCounts || 0,
         path: '/personal/collectedShares',
       },
       {
         icon: <StyledIcon as={BsShop} />,
-        name: '店家',
+        name: t('menuStore'),
         count: myCollectedStoreCounts || 0,
         path: '/personal/collectedRestaurants',
       },
     ],
+
     [
       myListCounts,
       myBadgeCounts,
@@ -65,6 +68,8 @@ const DashbaordMenus = ({ location }) => {
       myToReceiveCounts,
       myCollectedShareCounts,
       myCollectedStoreCounts,
+      locale,
+      t,
     ]
   );
 

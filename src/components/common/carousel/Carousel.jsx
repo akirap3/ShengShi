@@ -74,7 +74,7 @@ const Carousel = ({ title, contentData, isRestaurants }) => {
                         <CarouselHeartRipples color="#ff4d6d" during={1000}>
                           <Heart
                             onClick={() => handleClickHeart(content)}
-                            like={() => handleLike(content)}
+                            $like={handleLike(content)}
                           />
                         </CarouselHeartRipples>
                       )}

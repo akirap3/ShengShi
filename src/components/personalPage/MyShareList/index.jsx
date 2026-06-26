@@ -7,10 +7,12 @@ import MyShareCard from './components/MyShareCard';
 import NoResult from '../../common/NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 import { getSpecificContents } from '../../../utils/firebase';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const MyShareList = () => {
   const [shares, setShares] = useState(null);
   const currentUser = useCurrentUser();
+  const { t } = useTranslation();
 
   useEffect(() => {
     return getSpecificContents(
@@ -38,7 +40,7 @@ const MyShareList = () => {
               </SharesContainer>
             </Outer>
           ) : (
-            <NoResult text="目前沒有任何分享清單" />
+            <NoResult text={t('noSharedItems')} />
           )}
         </>
       ) : (

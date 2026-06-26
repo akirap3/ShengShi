@@ -1,6 +1,8 @@
 import { ResponsivePie } from '@nivo/pie';
+import { useTranslation } from '../../../../context/LanguageContext';
 
 const MyResponsivePie = ({ data }) => {
+  const { t } = useTranslation();
   return (
     <ResponsivePie
       data={data}
@@ -40,43 +42,43 @@ const MyResponsivePie = ({ data }) => {
       fill={[
         {
           match: {
-            id: '我的清單',
+            id: t('mySharesList'),
           },
           id: 'dots',
         },
         {
           match: {
-            id: '我的勳章',
+            id: t('myBadges'),
           },
           id: 'lines',
         },
         {
           match: {
-            id: '領取紀錄',
+            id: t('myReceivedRecord'),
           },
           id: 'dots',
         },
         {
           match: {
-            id: '尚未領取',
+            id: t('myToReceiveList'),
           },
           id: 'lines',
         },
         {
           match: {
-            id: '收藏清單',
+            id: t('myCollectedShares'),
           },
           id: 'dots',
         },
         {
           match: {
-            id: '收藏店家',
+            id: t('myCollectedPartners'),
           },
           id: 'lines',
         },
         {
           match: {
-            id: '我的訊息',
+            id: t('myMessages'),
           },
           id: 'dots',
         },

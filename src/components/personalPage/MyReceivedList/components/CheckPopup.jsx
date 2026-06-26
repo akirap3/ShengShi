@@ -34,6 +34,7 @@ import {
 } from '../../../common/comment/CommentUnits';
 import Comment from '../../../common/comment/Comment';
 import { ErrorMessage, Info, Message } from '../../../common/ErrorMessageUnits';
+import { useTranslation } from '../../../../context/LanguageContext';
 
 const CheckPopup = ({ showEdit, closeEditor, share }) => {
   const currentUser = useCurrentUser();
@@ -43,6 +44,7 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
   const [commentCounts, setCommentCounts] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     return getCurrentUserData(currentUser, setUserData);
@@ -65,7 +67,7 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
       });
     } else {
       setShowErrorMessage(true);
-      setErrorMessage('留言不能是空白');
+      setErrorMessage(t('errCommentEmpty'));
     }
   };
 
@@ -80,17 +82,17 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
           </PopTitleContainer>
           <PopContent>
             <PopRow>
-              <StyledLabel>食物名稱</StyledLabel>
+              <StyledLabel>{t('foodName')}</StyledLabel>
               <StyledSpan>{share?.name || ''}</StyledSpan>
             </PopRow>
             <PopRow>
-              <StyledLabel>數量</StyledLabel>
+              <StyledLabel>{t('quantity')}</StyledLabel>
               <StyledSpan>
                 {share?.receivedInfo[currentUser.uid].quantities || 0}
               </StyledSpan>
             </PopRow>
             <PopRow>
-              <StyledLabel>日期及時間</StyledLabel>
+              <StyledLabel>{t('dateAndTime')}</StyledLabel>
               <StyledSpan>
                 {share?.receivedInfo[currentUser.uid].confirmedTimestamp
                   ?.toDate()
@@ -99,17 +101,17 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
             </PopRow>
             <PopRow>
               <LabelIconContainer>
-                <StyledLabel>地點</StyledLabel>
+                <StyledLabel>{t('place')}</StyledLabel>
                 <PopPlaceIcon />
               </LabelIconContainer>
               <StyledSpan>{share?.exchangePlace || ''}</StyledSpan>
             </PopRow>
             <PopRow>
-              <StyledLabel>食物照片</StyledLabel>
+              <StyledLabel>{t('foodPhoto')}</StyledLabel>
             </PopRow>
             <Preview src={share?.imageUrl || ''} />
             <PopRow>
-              <CommentLabel>評論</CommentLabel>
+              <CommentLabel>{t('comment')}</CommentLabel>
             </PopRow>
             <CommentSection>
               <ReplyArea
@@ -122,11 +124,11 @@ const CheckPopup = ({ showEdit, closeEditor, share }) => {
               </ErrorMessage>
               <ReplyRipples color="#bbdefb" during={3000}>
                 <RepalyButton onClick={handleOnCommentSubmit}>
-                  留言
+                  {t('postComment')}
                 </RepalyButton>
               </ReplyRipples>
               <CommentSummary>
-                {`目前共 ${commentCounts || 0} 則留言`}
+                {t('commentCountLabel').replace('{count}', commentCounts || 0)}
               </CommentSummary>
               {comments.length !== 0 ? (
                 comments.map((comment) => (

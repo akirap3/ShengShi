@@ -7,10 +7,12 @@ import Outer from '../../common/Outer';
 import NotificationCard from './components/NotificationCard';
 import NoResult from '../../common/NoResult';
 import { getAllContents } from '../../../utils/firebase';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const Notification = () => {
   const currentUser = useCurrentUser();
   const [messages, setMessages] = useState();
+  const { t } = useTranslation();
 
   useEffect(() => {
     return getAllContents(`users/${currentUser.uid}/messages`, setMessages);
@@ -30,10 +32,10 @@ const Notification = () => {
         </NotificationContainer>
       </StyledOuter>
     ) : (
-      <NoResult text="你目前沒有任何的訊息" />
+      <NoResult text={t('noMessages')} />
     )
   ) : (
-    <NoResult text="你目前沒有任何的訊息" />
+    <NoResult text={t('noMessages')} />
   );
 };
 

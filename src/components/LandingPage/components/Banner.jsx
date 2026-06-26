@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useTranslation } from '../../../context/LanguageContext';
 
 import Background from '../../common/Background';
 import {
@@ -12,23 +13,26 @@ import {
 import BannerImage from '../../../images/homepage/sharefood-1.jpg';
 
 const Banner = () => {
+  const { t } = useTranslation();
+
   return (
     <BannerContainer>
       <Background circleBgColor={'rgba(255, 255, 255, 0.2)'} />
       <StyledBannerContent>
-        <BannerTitle>分享</BannerTitle>
+        <BannerTitle>{t('bannerTitle')}</BannerTitle>
         <Subtitle>
-          透過交換平台分享剩食幫助別人與環境，一起把「剩食」變成「勝食」吧
+          {t('bannerSubtitle')}
         </Subtitle>
         <ButtonRow>
-          <StartButton to="/login">開始使用</StartButton>
-          <LearnMoreButton to="/search">了解更多</LearnMoreButton>
+          <StartButton to="/login">{t('startUsing')}</StartButton>
+          <LearnMoreButton to="/search">{t('learnMore')}</LearnMoreButton>
         </ButtonRow>
       </StyledBannerContent>
       <BannerImg src={BannerImage} alt="share-food" />
     </BannerContainer>
   );
 };
+
 
 const BannerContainer = styled.div`
   display: flex;

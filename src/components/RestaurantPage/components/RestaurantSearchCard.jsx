@@ -4,11 +4,13 @@ import { AiTwotoneHeart } from 'react-icons/ai';
 
 import useCurrentUser from '../../../hooks/useCurrentUser';
 import { handleCollection } from '../../../utils/firebase';
+import { useTranslation } from '../../../context/LanguageContext';
 import NoResult from '../../common/NoResult';
 import StarImg from '../../../images/common/star.png';
 
 const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
   const currentUser = useCurrentUser();
+  const { t } = useTranslation();
 
   const handleClickHeart = (content) => {
     if (currentUser) {
@@ -36,7 +38,7 @@ const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
 
   return restaurant?.length !== 0 ? (
     <CarouselContainer>
-      <ResultTitle>搜尋結果</ResultTitle>
+      <ResultTitle>{t('searchResults')}</ResultTitle>
       <div>
         {restaurant?.map((content) => {
           return (
@@ -49,7 +51,7 @@ const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
                 ))}
                 <Heart
                   onClick={() => handleClickHeart(content)}
-                  like={() => handleLike(content)}
+                  $like={handleLike(content)}
                 />
               </Row>
             </Card>
@@ -58,7 +60,7 @@ const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
       </div>
     </CarouselContainer>
   ) : (
-    <NoResult text="搜尋不到餐廳" />
+    <NoResult text={t('noRestaurantFound')} />
   );
 };
 
@@ -140,7 +142,7 @@ const Heart = styled(AiTwotoneHeart)`
   margin-left: auto;
   width: 24px;
   height: 24px;
-  fill: ${({ like }) => like};
+  fill: ${({ $like }) => $like};
   cursor: pointer;
 
   @media screen and (min-width: 700px) {

@@ -7,11 +7,13 @@ import Advantages from './components/Advantages';
 import UserShares from './components/UserShares';
 import Carousel from '../common/carousel/Carousel';
 import { getAllContents, getAllOtherShares } from '../../utils/firebase';
+import { useTranslation } from '../../context/LanguageContext';
 
 const LandingPage = () => {
   const [restaurants, setRestaurants] = useState();
   const [shares, setShares] = useState('');
   const currentUser = useCurrentUser();
+  const { t } = useTranslation();
 
   useEffect(() => {
     return getAllContents('restaurants', setRestaurants);
@@ -32,12 +34,12 @@ const LandingPage = () => {
       <UserShares />
       {restaurants && (
         <Carousel
-          title="合作餐廳"
+          title={t('partners')}
           contentData={restaurants}
           isRestaurants={true}
         />
       )}
-      {shares && <Carousel title="他人勝食分享" contentData={shares} />}
+      {shares && <Carousel title={t('othersShares')} contentData={shares} />}
     </Main>
   );
 };

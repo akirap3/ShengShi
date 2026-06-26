@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from '../../../context/LanguageContext';
 
 import {
   FooterContainer,
@@ -13,19 +14,21 @@ import Logo from '../../../images/common/shengshi-logo2.svg';
 import SocialIcons from '../SocialIcons';
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <FooterContainer>
       <FooterContent>
         <TextRow>
-          <Text to="/">首 頁</Text>
-          <Text to="/restaurants">餐 廳</Text>
+          <Text to="/">{t('home')}</Text>
+          <Text to="/restaurants">{t('partners')}</Text>
         </TextRow>
         <Link to="/">
           <LogoImg src={Logo} alt="Shenshi-logo" />
         </Link>
         <TextRow>
-          <Text to="/articles">文 章</Text>
-          <Text to="/search">搜 尋</Text>
+          <Text to="/articles">{t('articles')}</Text>
+          <Text to="/search">{t('search')}</Text>
         </TextRow>
       </FooterContent>
       <LogoRow>
@@ -37,3 +40,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

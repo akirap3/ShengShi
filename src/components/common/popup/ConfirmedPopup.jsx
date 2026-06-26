@@ -9,6 +9,7 @@ import useCurrentUser from '../../../hooks/useCurrentUser';
 import UpdatePopup from '../../personalPage/MyToReceiveList/components/UpdatePopup';
 import LocationMap from '../MyMap/components/ExchangeMap';
 import MyQRcode from '../MyQRcode';
+import { useTranslation } from '../../../context/LanguageContext';
 import {
   StyledDialogContent,
   PopClose,
@@ -35,6 +36,7 @@ const ConfirmedPopup = ({
   const dispatch = useDispatch();
   const [showUpdate, setShowUpdate] = useState(false);
   const currentUser = useCurrentUser();
+  const { t } = useTranslation();
 
   const openUpdate = () => setShowUpdate(true);
   const closeUpdate = () => setShowUpdate(false);
@@ -61,13 +63,13 @@ const ConfirmedPopup = ({
           <PopContent>
             <Preview src={share?.imageUrl || ''} />
             <StyledPopRow>
-              <StyledLabel>登記數量</StyledLabel>
+              <StyledLabel>{t('requestedQuantity')}</StyledLabel>
               <StyledSpan>
                 {share?.toReceiveInfo[currentUser?.uid]?.quantities || 0}
               </StyledSpan>
             </StyledPopRow>
             <PopRow>
-              <StyledLabel>領取日期及時間</StyledLabel>
+              <StyledLabel>{t('pickupDateTime')}</StyledLabel>
               <StyledSpan>
                 {share?.toReceiveInfo[currentUser?.uid]?.upcomingTimestamp
                   ?.toDate()
@@ -76,7 +78,7 @@ const ConfirmedPopup = ({
             </PopRow>
             <PopRow>
               <LabelIconContainer>
-                <StyledLabel>地點</StyledLabel>
+                <StyledLabel>{t('place')}</StyledLabel>
                 <PopPlaceIcon />
               </LabelIconContainer>
 
@@ -94,7 +96,7 @@ const ConfirmedPopup = ({
               {hasUpdateBtn && (
                 <Ripples color="#fff" during={3000}>
                   <SubmitBtn onClick={() => handleShowUpdate(share)}>
-                    我要更新
+                    {t('btnUpdateBooking')}
                   </SubmitBtn>
                 </Ripples>
               )}

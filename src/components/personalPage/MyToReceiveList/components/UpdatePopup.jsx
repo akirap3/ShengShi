@@ -29,6 +29,7 @@ import SelectDateTimePopup from '../../MyCollectedList/components/SelectDateTime
 import AlertPopup from '../../../common/popup/AlertPopup';
 import Loading from '../../../common/Loading';
 import { onUpdateSubmit } from '../../../../utils/firebase';
+import { useTranslation } from '../../../../context/LanguageContext';
 
 const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
   );
   const specificDateTime = useSelector((state) => state.specificDateTime);
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   const openDateTime = () => setShowDateTime(true);
   const closeDateTime = () => setShowDateTime(false);
@@ -56,11 +58,11 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
   const isFieldsChecked = (share) => {
     const newQty = Number(newQuantities);
     if (isNaN(newQty)) {
-      return openAlertWithMessage('數量請輸入數字');
+      return openAlertWithMessage(t('errQtyFormat'));
     } else if (newQty < 0 || newQty > share.quantities) {
-      return openAlertWithMessage(`請輸入介於 1 ~ ${share.quantities} 的數字`);
+      return openAlertWithMessage(t('qtyRangeMinMax').replace('{max}', share.quantities));
     } else if (specificDateTime === null) {
-      return openAlertWithMessage('請點選領取的日期時間');
+      return openAlertWithMessage(t('errSelectDateTime'));
     }
     return true;
   };
@@ -98,7 +100,7 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
           <PopContent>
             <Preview src={share?.imageUrl || ''} />
             <StyledPopRow>
-              <StyledLabel>登記數量</StyledLabel>
+              <StyledLabel>{t('requestedQuantity')}</StyledLabel>
               <StyledInput
                 placeholder={
                   share?.toReceiveInfo[currentUser?.uid]?.quantities || ''
@@ -108,7 +110,7 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
               />
             </StyledPopRow>
             <PopRow>
-              <StyledLabel>可領取期間</StyledLabel>
+              <StyledLabel>{t('availableTimeRange')}</StyledLabel>
               <StyledSpan>
                 {share?.fromTimeStamp.toDate().toLocaleString()}
                 {` ~ `}
@@ -117,7 +119,7 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
             </PopRow>
             <PopRow>
               <LabelIconContainer>
-                <DateTimeLabel>領取日期及時間</DateTimeLabel>
+                <DateTimeLabel>{t('dateAndTime')}</DateTimeLabel>
                 <Calendar onClick={openDateTime} />
               </LabelIconContainer>
               <StyledSpan>
@@ -126,7 +128,7 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
             </PopRow>
             <PopRow>
               <LabelIconContainer>
-                <PopPlaceLabel>地點</PopPlaceLabel>
+                <PopPlaceLabel>{t('place')}</PopPlaceLabel>
                 <PopPlaceIcon />
               </LabelIconContainer>
               <StyledSpan>{share?.exchangePlace || ''}</StyledSpan>
@@ -137,7 +139,7 @@ const UpdatePopup = ({ showUpdate, closeUpdate, share }) => {
             <ButtonContainer>
               <Ripples color="#fff" during={3000}>
                 <SubmitBtn onClick={handleUpdateSubmit} disabled={isLoading}>
-                  確認更新
+                  {t('confirmUpdate')}
                 </SubmitBtn>
               </Ripples>
             </ButtonContainer>

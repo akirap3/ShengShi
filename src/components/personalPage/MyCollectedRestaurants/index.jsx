@@ -10,10 +10,12 @@ import Outer from '../../common/Outer';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 import { getSpecificContents, handleCollection } from '../../../utils/firebase';
 import StarImg from '../../../images/common/star.png';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const CollectedRestaurants = () => {
   const currentUser = useCurrentUser();
   const [savedRestaurants, setSavedRestaurants] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     return getSpecificContents(
@@ -56,7 +58,7 @@ const CollectedRestaurants = () => {
               </Container>
             </StyledOuter>
           ) : (
-            <NoResult text="你沒有任何的收藏店家" />
+            <NoResult text={t('noCollectedPartners')} />
           )}
         </>
       ) : (

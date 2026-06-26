@@ -7,10 +7,12 @@ import MyToReceiveCard from './components/MyToReceiveCard';
 import NoResult from '../../common/NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 import { getSpecificContents } from '../../../utils/firebase';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const MyToReceiveList = () => {
   const currentUser = useCurrentUser();
   const [toReceiveShares, setToReceiveShares] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     return getSpecificContents(
@@ -36,7 +38,7 @@ const MyToReceiveList = () => {
               </SharesContainer>
             </Outer>
           ) : (
-            <NoResult text="你沒有任何的尚未領取清單" />
+            <NoResult text={t('noToReceiveList')} />
           )}
         </>
       ) : (

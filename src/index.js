@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import './index.css';
 import App from './App';
+import { LanguageProvider } from './context/LanguageContext';
 
 import '@reach/dialog/styles.css';
 import 'slick-carousel/slick/slick.css';
@@ -16,9 +17,12 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Provider store={store}>
-        <App />
+        <LanguageProvider>
+          <App />
+        </LanguageProvider>
       </Provider>
     </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );
+

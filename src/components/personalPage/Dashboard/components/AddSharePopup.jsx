@@ -35,6 +35,7 @@ import {
 import CalendarPopup from '../../MyShareList/components/CalendarPopup';
 import MapPopup from '../../MyShareList/components/MapPopup.jsx';
 import AlertPopup from '../../../common/popup/AlertPopup.jsx';
+import { useTranslation } from '../../../../context/LanguageContext';
 
 const AddSharePopup = ({ showEdit, closeEditor }) => {
   const dispatch = useDispatch();
@@ -51,6 +52,7 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
   const [file, setFile] = useState(null);
   const [userData, setUserData] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   const openCalendar = () => setShowCalendar(true);
   const closeCalendar = () => setShowCalendar(false);
@@ -89,7 +91,8 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
       fromToDateTime,
       address,
       file,
-      openAlertWithMessage
+      openAlertWithMessage,
+      t
     );
   };
 
@@ -132,20 +135,20 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
           <PopClose onClick={closeEditor} disabled={isLoading} />
           <PopTitleContainer>
             <TitleIcon />
-            <PopTitle>分享勝食</PopTitle>
+            <PopTitle>{t('newShare')}</PopTitle>
           </PopTitleContainer>
           <PopContent>
             <PopRow>
-              <StyledLabel>食物名稱</StyledLabel>
+              <StyledLabel>{t('foodName')}</StyledLabel>
               <StyledInput onChange={(e) => setFoodName(e.target.value)} />
             </PopRow>
             <PopRow>
-              <StyledLabel>數量</StyledLabel>
+              <StyledLabel>{t('quantity')}</StyledLabel>
               <StyledInput onChange={(e) => setQuantities(e.target.value)} />
             </PopRow>
             <PopRow>
               <LabelIconContainer>
-                <DateTimeLabel>日期及時間</DateTimeLabel>
+                <DateTimeLabel>{t('dateAndTime')}</DateTimeLabel>
                 <Calendar onClick={openCalendar} />
               </LabelIconContainer>
               <StyledSpan>
@@ -156,19 +159,19 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
             </PopRow>
             <PopRow>
               <LabelIconContainer>
-                <PopPlaceLabel>地點</PopPlaceLabel>
+                <PopPlaceLabel>{t('place')}</PopPlaceLabel>
                 <StyledPopPlaceIcon onClick={openMap} />
               </LabelIconContainer>
               <StyledSpan>{address}</StyledSpan>
             </PopRow>
             <PopRow>
-              <StyledLabel>食物照片</StyledLabel>
+              <StyledLabel>{t('foodPhoto')}</StyledLabel>
             </PopRow>
             <Preview src={previewImgUrl} alt="preview-upload" />
             <ButtonContainer>
               <Ripples color="#fff" during={3000}>
                 <ImgUpload htmlFor="image-upload" disabled={isLoading}>
-                  上傳
+                  {t('upload')}
                 </ImgUpload>
               </Ripples>
               <UploadBtn
@@ -179,13 +182,14 @@ const AddSharePopup = ({ showEdit, closeEditor }) => {
               />
               <Ripples color="#fff" during={3000}>
                 <SubmitBtn onClick={handleAddShareSubmit} disabled={isLoading}>
-                  分享
+                  {t('share')}
                 </SubmitBtn>
               </Ripples>
             </ButtonContainer>
           </PopContent>
         </StyledDialogContent>
       </DialogOverlay>
+
       <CalendarPopup
         showCalender={showCalender}
         closeCalendar={closeCalendar}

@@ -4,17 +4,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { PopTitleContainer, PopTitle } from '../popup/PopupUnits';
 import { CalendarIcon, Container } from './style/DateTimeRangeSelector.style';
 import CalendarImg from '../../../images/common/calendar.svg';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const DateTimeRangeSelector = () => {
   const dispatch = useDispatch();
   const fromToDateTime = useSelector((state) => state.fromToDateTime);
   const now = new Date();
+  const { t } = useTranslation();
 
   return (
     <>
       <PopTitleContainer>
         <CalendarIcon src={CalendarImg} alt="calendar" />
-        <PopTitle>選擇日期及時間</PopTitle>
+        <PopTitle>{t('selectDateAndTime')}</PopTitle>
       </PopTitleContainer>
       <Container>
         <DateTimeRangePicker

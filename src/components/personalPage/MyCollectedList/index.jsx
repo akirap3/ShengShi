@@ -7,10 +7,12 @@ import MyCollectedCard from './components/MyCollectedCard';
 import NoResult from '../../common/NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 import { getSpecificContents } from '../../../utils/firebase';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const MyCollectedList = () => {
   const currentUser = useCurrentUser();
   const [savedShares, setSavedShares] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     return getSpecificContents(
@@ -36,7 +38,7 @@ const MyCollectedList = () => {
               </SharesContainer>
             </Outer>
           ) : (
-            <NoResult text="你沒有任何的收藏清單"></NoResult>
+            <NoResult text={t('noCollectedShares')}></NoResult>
           )}
         </>
       ) : (
