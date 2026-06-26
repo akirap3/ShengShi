@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import styled from 'styled-components';
+import { useTranslation } from '../../../../context/LanguageContext';
 import {
   withGoogleMap,
   GoogleMap,
@@ -102,7 +103,7 @@ class Map extends Component {
   onPlaceSelected = (place) => {
     if (place['formatted_address'] === undefined) {
       alert(
-        '請選擇有搜尋出的地址或使用拖拉 Marker 來取得地址(本站僅提供台灣的地址搜尋)'
+        this.props.t('errSelectLocationAlert')
       );
     } else {
       const address = place.formatted_address,
@@ -166,7 +167,7 @@ class Map extends Component {
               borderRadius: '5px',
             }}
             onPlaceSelected={this.onPlaceSelected}
-            placeholder="地址搜尋"
+            placeholder={this.props.t('searchAddressPlaceholder')}
             options={{
               types: ['geocode'],
               componentRestrictions: { country: 'TW' },
@@ -181,7 +182,7 @@ class Map extends Component {
         <>
           <AddressRow>
             <PopPlaceIcon />
-            <AddressTitle>地址</AddressTitle>
+            <AddressTitle>{this.props.t('address')}</AddressTitle>
           </AddressRow>
           <Address
             type="text"
@@ -246,4 +247,9 @@ const Address = styled.textarea`
   box-shadow: 0px 2px 6px 0px hsla(0, 0%, 0%, 0.2);
 `;
 
-export default Map;
+const MapWithTranslation = (props) => {
+  const { t } = useTranslation();
+  return <Map {...props} t={t} />;
+};
+
+export default MapWithTranslation;

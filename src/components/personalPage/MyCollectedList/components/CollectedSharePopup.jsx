@@ -41,8 +41,10 @@ import {
   getCollectionCounts,
   confirmBooking,
 } from '../../../../utils/firebase';
+import { useTranslation } from '../../../../context/LanguageContext';
 
 const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const currentUser = useCurrentUser();
   const [showDateTime, setShowDateTime] = useState(false);
@@ -84,11 +86,11 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
   const isFieldsChecked = (share, specificDateTime) => {
     const newQty = Number(reqQuantities);
     if (isNaN(newQty)) {
-      return openAlertWithMessage('數量請輸入數字');
+      return openAlertWithMessage(t('errQtyFormat'));
     } else if (newQty < 0 || newQty > share.quantities) {
-      return openAlertWithMessage(`請輸入介於 1 ~ ${share.quantities} 的數字`);
+      return openAlertWithMessage(t('qtyRangeMinMax').replace('{max}', share.quantities));
     } else if (specificDateTime === null) {
-      return openAlertWithMessage('請點選領取的日期時間');
+      return openAlertWithMessage(t('errSelectDateTime'));
     }
     return true;
   };
@@ -124,18 +126,18 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
                 alt="preview-redundant-food"
               />
               <StyledPopRow>
-                <StyledLabel>目前數量</StyledLabel>
+                <StyledLabel>{t('currentQuantity')}</StyledLabel>
                 <StyledSpan>{share?.quantities || ''}</StyledSpan>
               </StyledPopRow>
               <PopRow>
-                <StyledLabel>登記數量</StyledLabel>
+                <StyledLabel>{t('requestedQuantity')}</StyledLabel>
                 <StyledInput
-                  placeholder="請輸入數量"
+                  placeholder={t('enterQuantity')}
                   onChange={(e) => setReqQuantities(e.target.value)}
                 />
               </PopRow>
               <PopRow>
-                <DateTimeLabel>可領取時段</DateTimeLabel>
+                <DateTimeLabel>{t('availableTimeRange')}</DateTimeLabel>
                 <StyledSpan>
                   {share?.fromTimeStamp.toDate().toLocaleString()}
                   {` ~ `}
@@ -144,7 +146,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
               </PopRow>
               <PopRow>
                 <LabelIconContainer>
-                  <DateTimeLabel>領取日期及時間</DateTimeLabel>
+                  <DateTimeLabel>{t('dateAndTime')}</DateTimeLabel>
                   <Calendar onClick={openDateTime} />
                 </LabelIconContainer>
                 <StyledSpan>
@@ -153,7 +155,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
               </PopRow>
               <PopRow>
                 <LabelIconContainer>
-                  <PopPlaceLabel>地點</PopPlaceLabel>
+                  <PopPlaceLabel>{t('place')}</PopPlaceLabel>
                   <PopPlaceIcon />
                 </LabelIconContainer>
                 <StyledSpan>{share?.exchangePlace || ''}</StyledSpan>
@@ -162,11 +164,11 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
                 <LocationMap />
               </MapWrapper>
               <PopRow>
-                <CommentLabel>評論</CommentLabel>
+                <CommentLabel>{t('comment')}</CommentLabel>
               </PopRow>
               <CommentSection>
                 <CommentSummary>
-                  {`目前共 ${commentCounts || 0} 則留言`}
+                  {t('commentCountLabel').replace('{count}', commentCounts || 0)}
                 </CommentSummary>
                 {comments.length !== 0 ? (
                   comments.map((comment) => (
@@ -184,7 +186,7 @@ const CollectedSharePopup = ({ showEdit, closeEditor, share }) => {
               </CommentSection>
               <ButtonContainer>
                 <Ripples color="#fff" during={3000}>
-                  <SubmitBtn onClick={handleConfirmation}>確認領取</SubmitBtn>
+                  <SubmitBtn onClick={handleConfirmation}>{t('confirmPickup')}</SubmitBtn>
                 </Ripples>
               </ButtonContainer>
             </PopContent>

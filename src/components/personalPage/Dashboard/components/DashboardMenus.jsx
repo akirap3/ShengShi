@@ -12,7 +12,7 @@ import useCounts from '../../../../hooks/useCounts';
 import { useTranslation } from '../../../../context/LanguageContext';
 
 const DashbaordMenus = ({ location }) => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const {
     myListCounts,
     myBadgeCounts,
@@ -68,6 +68,8 @@ const DashbaordMenus = ({ location }) => {
       myToReceiveCounts,
       myCollectedShareCounts,
       myCollectedStoreCounts,
+      locale,
+      t,
     ]
   );
 

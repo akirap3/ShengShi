@@ -4,16 +4,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { PopTitleContainer, PopTitle } from '../popup/PopupUnits';
 import { CalendarIcon, Container } from './style/DateTimeSelector.style';
 import CalendarImg from '../../../images/common/calendar.svg';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const DateTimeSelector = ({ share }) => {
   const dispatch = useDispatch();
   const specificDateTime = useSelector((state) => state.specificDateTime);
+  const { t } = useTranslation();
 
   return share ? (
     <>
       <PopTitleContainer>
         <CalendarIcon src={CalendarImg} alt="calendar" />
-        <PopTitle>選擇日期及時間</PopTitle>
+        <PopTitle>{t('selectDateAndTime')}</PopTitle>
       </PopTitleContainer>
       <Container>
         <DateTimePicker

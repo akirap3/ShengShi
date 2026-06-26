@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import useCurrentUser from '../../../hooks/useCurrentUser';
+import { useTranslation } from '../../../context/LanguageContext';
 import DeletePopup from '../popup/DeletePopup';
 import AlertPopup from '../popup/AlertPopup';
 import { handleCollection } from '../../../utils/firebase';
@@ -50,6 +51,7 @@ const ShareCard = ({
   const [showNeedLogin, setShowNeedLogin] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const checkUser = useSelector((state) => state.checkUser);
+  const { t } = useTranslation();
 
   const openDelete = () => setShowDelete(true);
   const closeDelete = () => setShowDelete(false);
@@ -70,7 +72,7 @@ const ShareCard = ({
   };
 
   const handleNeedLogin = () => {
-    setAlertMessage('請先登入');
+    setAlertMessage(t('errPleaseLogin'));
     openNeedLogin();
   };
 
@@ -104,11 +106,11 @@ const ShareCard = ({
     if (currentUser) {
       if (isCollected || isSearch) {
         if (share.postUser.id === currentUser?.uid) {
-          openAlertWithMessage('無法領取自己的勝食，可以到 "清單" 編輯');
+          openAlertWithMessage(t('errCannotBookOwnShare'));
         } else if (share.receivedUserId.includes(currentUser?.uid)) {
-          openAlertWithMessage('您已經領取過了');
+          openAlertWithMessage(t('errAlreadyReceived'));
         } else if (share.toReceiveUserId.includes(currentUser?.uid)) {
-          openAlertWithMessage('您已經預定領取了');
+          openAlertWithMessage(t('errAlreadyBooked'));
         } else {
           handleClick(share);
         }
@@ -160,10 +162,10 @@ const ShareCard = ({
             <GetBtnRipples color="#fff" during={3000}>
               <GetButton onClick={handleGetBtn}>
                 {share.receivedUserId.includes(currentUser?.uid)
-                  ? '已領取'
+                  ? t('statusReceived')
                   : share.toReceiveUserId.includes(currentUser?.uid)
-                  ? '已預訂'
-                  : btnName || '查看'}
+                  ? t('statusBooked')
+                  : btnName || t('btnView')}
               </GetButton>
             </GetBtnRipples>
           </CardRow>

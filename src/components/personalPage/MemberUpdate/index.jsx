@@ -35,6 +35,7 @@ import {
   DeleteBtn,
 } from './style/Index.style';
 import { getCurrentUserData, updateMember } from '../../../utils/firebase';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const MemberUpdate = () => {
   const [showDelete, setShowDelete] = useState(false);
@@ -49,6 +50,7 @@ const MemberUpdate = () => {
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const currentUser = useCurrentUser();
+  const { t } = useTranslation();
 
   const previewImgUrl = file
     ? URL.createObjectURL(file)
@@ -80,17 +82,17 @@ const MemberUpdate = () => {
   const checkFields = () => {
     const phonNumberRegex = /^\d{10}$/;
     if (!displayName) {
-      return openAlertWithMessage('請輸入姓名');
+      return openAlertWithMessage(t('errEnterName'));
     } else if (!alias) {
-      return openAlertWithMessage('請輸入暱稱');
+      return openAlertWithMessage(t('errEnterAlias'));
     } else if (!phonNumberRegex.test(phone)) {
-      return openAlertWithMessage('請輸入10個數字的電話號碼');
+      return openAlertWithMessage(t('errEnterPhone'));
     } else if (!myPlace) {
-      return openAlertWithMessage('請輸入你的地點');
+      return openAlertWithMessage(t('errEnterLocation'));
     } else if (!about) {
-      return openAlertWithMessage('請描述關於你');
+      return openAlertWithMessage(t('errDescribeSelf'));
     } else if (!file) {
-      return openAlertWithMessage('請上傳照片');
+      return openAlertWithMessage(t('errUploadPhoto'));
     }
     return true;
   };
@@ -145,7 +147,7 @@ const MemberUpdate = () => {
             <Row>
               <StyledIcon as={BsFillTelephoneFill} />
               <StyledInput
-                placeholder={userData?.phone || '請輸入電話'}
+                placeholder={userData?.phone || t('enterPhone')}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
               />
@@ -153,7 +155,7 @@ const MemberUpdate = () => {
             <Row>
               <StyledIcon as={HiLocationMarker} />
               <StyledInput
-                placeholder={userData?.myPlace || '請輸入地點'}
+                placeholder={userData?.myPlace || t('enterLocation')}
                 value={myPlace}
                 onChange={(e) => setMyPlace(e.target.value)}
               />
@@ -161,7 +163,7 @@ const MemberUpdate = () => {
             <Row>
               <StyledIcon as={BsFillChatQuoteFill} />
               <AboutText
-                placeholder={userData?.about || '請描述你自己'}
+                placeholder={userData?.about || t('describeYourself')}
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}
               />
@@ -169,7 +171,7 @@ const MemberUpdate = () => {
             <PreviewImg src={previewImgUrl} alt="preview-avatar" />
             <ButtonContainer>
               <UploadRipples color="#fff" during={3000}>
-                <ImgUpload htmlFor="image-upload">上 傳</ImgUpload>
+                <ImgUpload htmlFor="image-upload">{t('upload')}</ImgUpload>
               </UploadRipples>
               <UploadBtn
                 type="file"
@@ -178,11 +180,11 @@ const MemberUpdate = () => {
               />
               <UpdateRipples color="#fff" during={3000}>
                 <UpdateBtn onClick={() => handleUpdateMember()}>
-                  更 新
+                  {t('update')}
                 </UpdateBtn>
               </UpdateRipples>
               <DelBtnRipples color="#fff" during={3000}>
-                <DeleteBtn onClick={openDelete}>刪除會員</DeleteBtn>
+                <DeleteBtn onClick={openDelete}>{t('deleteMember')}</DeleteBtn>
               </DelBtnRipples>
             </ButtonContainer>
           </FormContext>
@@ -191,7 +193,7 @@ const MemberUpdate = () => {
       <DeletePopup
         showDelete={showDelete}
         closeDelete={closeDelete}
-        category="會員"
+        category={t('memberCategory')}
         toDeleteMember={true}
       />
       <AlertPopup

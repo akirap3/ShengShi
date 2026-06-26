@@ -8,9 +8,11 @@ import MyResponsivePie from './components/MyChart';
 import Outer from '../../common/Outer';
 import NoResult from '../../common/NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const Badges = () => {
   const [badges, setBadges] = useState(null);
+  const { t, locale } = useTranslation();
   const {
     myListCounts,
     myBadgeCounts,
@@ -24,38 +26,38 @@ const Badges = () => {
   const data = useMemo(
     () => [
       {
-        id: '我的清單',
-        label: '我的清單',
+        id: t('mySharesList'),
+        label: t('mySharesList'),
         value: myListCounts || 0,
         color: 'hsl(187, 70%, 50%)',
       },
       {
-        id: '我的勳章',
-        label: '我的勳章',
+        id: t('myBadges'),
+        label: t('myBadges'),
         value: myBadgeCounts || 0,
         color: 'hsl(65, 70%, 50%)',
       },
       {
-        id: '領取紀錄',
-        label: '領取紀錄',
+        id: t('myReceivedRecord'),
+        label: t('myReceivedRecord'),
         value: myReceivedCounts || 0,
         color: 'hsl(76, 70%, 50%)',
       },
       {
-        id: '尚未領取',
-        label: '尚未領取',
+        id: t('myToReceiveList'),
+        label: t('myToReceiveList'),
         value: myToReceiveCounts || 0,
         color: 'hsl(279, 70%, 50%)',
       },
       {
-        id: '收藏清單',
-        label: '收藏清單',
+        id: t('myCollectedShares'),
+        label: t('myCollectedShares'),
         value: myCollectedShareCounts || 0,
         color: 'hsl(277, 70%, 50%)',
       },
       {
-        id: '收藏店家',
-        label: '收藏店家',
+        id: t('myCollectedPartners'),
+        label: t('myCollectedPartners'),
         value: myCollectedStoreCounts || 0,
         color: 'hsl(267, 70%, 50%)',
       },
@@ -67,6 +69,8 @@ const Badges = () => {
       myToReceiveCounts,
       myCollectedShareCounts,
       myCollectedStoreCounts,
+      locale,
+      t,
     ]
   );
 
@@ -110,7 +114,7 @@ const Badges = () => {
                 </BadgeContainer>
               </Outer>
             ) : (
-              <NoResult text="目前沒有任何的勳章" />
+              <NoResult text={t('noBadge')} />
             )}
           </>
         ) : (

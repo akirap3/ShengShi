@@ -6,6 +6,7 @@ import useCheckUser from './hooks/useCheckUser';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import Main from './components/common/Main';
+import { useTranslation } from './context/LanguageContext';
 
 const LandingPage = lazy(() => import('./components/LandingPage'));
 const RestaurantPage = lazy(() => import('./components/RestaurantPage'));
@@ -43,6 +44,7 @@ const ErrorPage = lazy(() => import('./components/ErrorPage'));
 
 const App = () => {
   const { isLoaded, isLoggedIn } = useCheckUser();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -62,39 +64,39 @@ const App = () => {
                   <Dashboard />
                   <Switch>
                     <Route exact path="/personal/list">
-                      <Title title="我的分享清單"></Title>
+                      <Title title={t('titleMyShareList')}></Title>
                       <MyShareList />
                     </Route>
                     <Route exact path="/personal/badges">
-                      <Title title="我的統計與勳章"></Title>
+                      <Title title={t('titleMyChartBadges')}></Title>
                       <MyChartBadges />
                     </Route>
                     <Route exact path="/personal/received">
-                      <Title title="我已領取的清單"></Title>
+                      <Title title={t('titleMyReceivedList')}></Title>
                       <MyReceivedList />
                     </Route>
                     <Route exact path="/personal/toReceive">
-                      <Title title="我的尚未領取清單"></Title>
+                      <Title title={t('titleMyToReceiveList')}></Title>
                       <MyToReceiveList />
                     </Route>
                     <Route exact path="/personal/collectedShares">
-                      <Title title="我的收藏清單"></Title>
+                      <Title title={t('titleMyCollectedList')}></Title>
                       <MyCollectedList />
                     </Route>
                     <Route exact path="/personal/collectedRestaurants">
-                      <Title title="我的收藏店家"></Title>
+                      <Title title={t('titleMyCollectedRestaurants')}></Title>
                       <MyCollectedRestaurants />
                     </Route>
                     <Route exact path="/personal/memberUpdate">
-                      <Title title="個人資料更新"></Title>
+                      <Title title={t('titleMemberUpdate')}></Title>
                       <MemberUpdate />
                     </Route>
                     <Route exact path="/personal/mgmt">
-                      <Title title="領取列表管理"></Title>
+                      <Title title={t('titleMyMgmtPage')}></Title>
                       <MyMgmtPage />
                     </Route>
                     <Route exact path="/personal/notification">
-                      <Title title="我的訊息"></Title>
+                      <Title title={t('titleNotification')}></Title>
                       <Notification />
                     </Route>
                     <Route exact path="/personal/:shareId/:requesterId">

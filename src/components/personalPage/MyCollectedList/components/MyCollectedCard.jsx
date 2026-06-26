@@ -5,10 +5,12 @@ import { useDispatch } from 'react-redux';
 import ShareCard from '../../../common/ShareCard';
 import ShareCardTag from '../../../common/ShareCard/components/ShareCardTag';
 import CollectedSharePopup from './CollectedSharePopup';
+import { useTranslation } from '../../../../context/LanguageContext';
 
 const MyCollectedCard = ({ share }) => {
   const dispatch = useDispatch();
   const [showEdit, setShowEdit] = useState(false);
+  const { t } = useTranslation();
 
   const openEditor = () => setShowEdit(true);
   const closeEditor = () => setShowEdit(false);
@@ -26,9 +28,9 @@ const MyCollectedCard = ({ share }) => {
       <ShareCard
         handleClick={handleCollectedOpen}
         Tag={ShareCardTag}
-        tagName="#收藏"
-        btnName="領取"
-        category="收藏"
+        tagName={t('tagSaved')}
+        btnName={t('btnBook')}
+        category={t('catSaved')}
         isCollected={true}
         share={share}
       />

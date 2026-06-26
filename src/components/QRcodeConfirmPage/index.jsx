@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
 import useCurrentUser from '../../hooks/useCurrentUser';
+import { useTranslation } from '../../context/LanguageContext';
 import {
   getListenedSingleContent,
   updateAfterExchanged,
@@ -36,6 +37,7 @@ const QRcodeComfirmPage = () => {
   const [requester, setRequester] = useState(null);
   const [showInfo, setShowInfo] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const { t } = useTranslation();
 
   const openInfo = () => setShowInfo(true);
   const closeInfo = () => setShowInfo(false);
@@ -77,7 +79,7 @@ const QRcodeComfirmPage = () => {
     ) {
       return false;
     } else {
-      openAlertWithMessage('您非此剩食的擁有者或是領用者');
+      openAlertWithMessage(t('errNotOwnerOrRecipient'));
       history.push('/');
       return true;
     }
@@ -93,7 +95,7 @@ const QRcodeComfirmPage = () => {
 
   const handleCancelShare = () => {
     cancelShare(share.id, requesterId, share, currentUser).then(() => {
-      setAlertMessage('您已確認對方取消勝食');
+      setAlertMessage(t('confirmCancelSuccess'));
       openInfo();
     });
   };
@@ -102,7 +104,7 @@ const QRcodeComfirmPage = () => {
     updateAfterExchanged(share.id, requesterId, share, currentUser).then(() => {
       handleAddBadge(currentUser.uid);
       handleAddBadge(requesterId);
-      setAlertMessage('您已確認對方領取完勝食');
+      setAlertMessage(t('confirmReceiveSuccess'));
       openInfo();
     });
   };
@@ -115,7 +117,7 @@ const QRcodeComfirmPage = () => {
             !isReceived(share) ? (
               !isCancled(share) ? (
                 <>
-                  <Title title="勝食領取管理"></Title>
+                  <Title title={t('titleQRcodeConfirm')}></Title>
                   <MgmtContainer>
                     <Context>
                       <ShareImg
@@ -125,45 +127,45 @@ const QRcodeComfirmPage = () => {
                       <InfoContainer>
                         <RequesterName>
                           {isGiver(share, currentUser)
-                            ? `領取者：${requester?.displayName}`
+                            ? `${t('recipient')}: ${requester?.displayName}`
                             : isRequester(share, currentUser)
-                            ? `提供者：${giver?.displayName}`
+                            ? `${t('giver')}: ${giver?.displayName}`
                             : ''}
                         </RequesterName>
                         <Text>
-                          {`電話：`}
+                          {t('phone')}:{' '}
                           {isGiver(share, currentUser)
-                            ? requester?.phone || '未提供'
+                            ? requester?.phone || t('notProvided')
                             : isRequester(share, currentUser)
-                            ? giver?.phone || '未提供'
+                            ? giver?.phone || t('notProvided')
                             : ''}
                         </Text>
                         <Text>
-                          {`電子郵件：`}
+                          {t('emailLabel')}:{' '}
                           {isGiver(share, currentUser)
-                            ? requester?.email || '未提供'
+                            ? requester?.email || t('notProvided')
                             : isRequester(share, currentUser)
-                            ? giver?.email || '未提供'
+                            ? giver?.email || t('notProvided')
                             : ''}
                         </Text>
                         <Text>
-                          領取數量：
+                          {t('pickupQuantity')}:{' '}
                           {share?.toReceiveInfo[`${requesterId}`]?.quantities}
                         </Text>
                         <Text>
-                          日期時間：
+                          {t('dateAndTime')}:{' '}
                           {share?.toReceiveInfo[requesterId]?.upcomingTimestamp
                             ?.toDate()
                             .toLocaleString()}
                         </Text>
-                        <Address>交換地點：{share?.exchangePlace}</Address>
+                        <Address>{t('exchangePlace')}: {share?.exchangePlace}</Address>
                         {isGiver(share, currentUser) && (
                           <ButtonContainer>
                             <ConfirmedBtn onClick={handleConfirmShare}>
-                              確認領取
+                              {t('confirmPickup')}
                             </ConfirmedBtn>
                             <CancleBtn onClick={handleCancelShare}>
-                              取消
+                              {t('cancel')}
                             </CancleBtn>
                           </ButtonContainer>
                         )}
@@ -172,13 +174,13 @@ const QRcodeComfirmPage = () => {
                   </MgmtContainer>
                 </>
               ) : (
-                <NoResult text="該領取已經取消" />
+                <NoResult text={t('bookingCancelled')} />
               )
             ) : (
-              <NoResult text="該領取已經完成" />
+              <NoResult text={t('bookingCompleted')} />
             )
           ) : (
-            <NoResult text="您非此剩食的擁有者或是領用者" />
+            <NoResult text={t('errNotOwnerOrRecipient')} />
           )
         ) : (
           <Loading />

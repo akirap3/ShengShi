@@ -20,12 +20,14 @@ import {
   cancelShare,
   handleAddBadge,
 } from '../../../../utils/firebase';
+import { useTranslation } from '../../../../context/LanguageContext';
 
 const QRCode = require('qrcode.react');
 
 const MyMgmtCard = ({ share, requesterId, setAlertMessage, openInfo }) => {
   const [requester, setRequester] = useState();
   const currentUser = useSelector((state) => state.currentUser);
+  const { t } = useTranslation();
 
   useEffect(() => {
     return getListenedSingleContent('users', requesterId, setRequester);
@@ -33,7 +35,7 @@ const MyMgmtCard = ({ share, requesterId, setAlertMessage, openInfo }) => {
 
   const handleCancelShare = () => {
     cancelShare(share.id, requesterId, share, currentUser).then(() => {
-      setAlertMessage('您已確認對方取消勝食');
+      setAlertMessage(t('cancelSuccess'));
       openInfo();
     });
   };
@@ -42,7 +44,7 @@ const MyMgmtCard = ({ share, requesterId, setAlertMessage, openInfo }) => {
     updateAfterExchanged(share.id, requesterId, share, currentUser).then(() => {
       handleAddBadge(currentUser.uid);
       handleAddBadge(requesterId);
-      setAlertMessage('您已確認對方領取完勝食');
+      setAlertMessage(t('confirmPickupSuccess'));
       openInfo();
     });
   };
@@ -69,22 +71,22 @@ const MyMgmtCard = ({ share, requesterId, setAlertMessage, openInfo }) => {
                 height={5}
               />
             </QRcodeThree>
-            <RequesterName>領取者：{requester.displayName}</RequesterName>
-            <Text>電話：{requester.phone || '未提供'}</Text>
-            <Text>電子郵件：{requester.email}</Text>
+            <RequesterName>{t('recipient')}：{requester.displayName}</RequesterName>
+            <Text>{t('phone')}：{requester.phone || t('notProvided')}</Text>
+            <Text>{t('emailLabel')}：{requester.email}</Text>
             <Text>
-              領取數量： {share.toReceiveInfo[requesterId].quantities}
+              {t('pickupQuantity')}： {share.toReceiveInfo[requesterId].quantities}
             </Text>
             <Text>
-              日期時間：
+              {t('dateAndTime')}：
               {share.toReceiveInfo[requesterId].upcomingTimestamp
                 .toDate()
                 .toLocaleString()}
             </Text>
-            <Address>交換地點：{share.exchangePlace}</Address>
+            <Address>{t('exchangePlace')}：{share.exchangePlace}</Address>
             <ButtonContainer>
-              <ConfirmedBtn onClick={handleConfirmShare}>確認領取</ConfirmedBtn>
-              <CancleBtn onClick={handleCancelShare}>取消</CancleBtn>
+              <ConfirmedBtn onClick={handleConfirmShare}>{t('confirmPickup')}</ConfirmedBtn>
+              <CancleBtn onClick={handleCancelShare}>{t('cancel')}</CancleBtn>
             </ButtonContainer>
           </InfoContainer>
         </Context>

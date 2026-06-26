@@ -13,6 +13,7 @@ import {
   ButtonContainer,
   SubmitBtn,
 } from '../../../common/popup/PopupUnits';
+import { useTranslation } from '../../../../context/LanguageContext';
 
 const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
     lng: 121.56497334150076,
   });
   const [isMounted, setIsMounted] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isMounted) {
@@ -59,7 +61,7 @@ const MapPopup = ({ showMap, closeMap, handleAddress, handleLatLng }) => {
         />
         <ButtonContainer>
           <Ripples color="#fff" during={3000}>
-            <SubmitBtn onClick={closeMap}>確認</SubmitBtn>
+            <SubmitBtn onClick={closeMap}>{t('confirm')}</SubmitBtn>
           </Ripples>
         </ButtonContainer>
       </MapStyledDialogContent>

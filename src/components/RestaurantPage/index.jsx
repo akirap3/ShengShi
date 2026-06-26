@@ -100,7 +100,7 @@ const RestaurantPage = () => {
           <CarouselContainer>
             {!isSearch ? (
               <Carousel
-                title="合作餐廳"
+                title={t('partners')}
                 contentData={restaurants}
                 isRestaurants={true}
               />

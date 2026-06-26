@@ -10,12 +10,14 @@ import DashbaordMenus from './components/DashboardMenus';
 import AddSharePopup from './components/AddSharePopup';
 import Background from '../../common/Background';
 import { getCurrentUserData } from '../../../utils/firebase';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const Dashboard = () => {
   const [userData, setUserDate] = useState(null);
   const [showEdit, setShowEdit] = useState(false);
   const currentUser = useCurrentUser();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const openEditor = () => setShowEdit(true);
   const closeEditor = () => setShowEdit(false);
@@ -35,9 +37,9 @@ const Dashboard = () => {
             <DashbaordMenus location={location} />
           </Grid>
           <CheckButton as={Link} to="/search">
-            勝食搜尋
+            {t('searchFood')}
           </CheckButton>
-          <ShareButton onClick={openEditor}>分享勝食 +10</ShareButton>
+          <ShareButton onClick={openEditor}>{t('shareFoodPlusTen')}</ShareButton>
         </DashboardContext>
       </DashboardContainer>
       <AddSharePopup

@@ -19,6 +19,7 @@ import {
   confirmCommentEdit,
   handleDeleteComment,
 } from '../../../utils/firebase';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const Comment = ({ share, comment, userData }) => {
   const { author, createdAt, commentContent } = comment;
@@ -26,6 +27,7 @@ const Comment = ({ share, comment, userData }) => {
   const [editedComment, setEditedComment] = useState(commentContent);
   const [errorMessage, setErrorMessage] = useState('');
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const { t } = useTranslation();
 
   const handleConfirmCommentEdit = () => {
     if (editedComment) {
@@ -37,7 +39,7 @@ const Comment = ({ share, comment, userData }) => {
       });
     } else {
       setShowErrorMessage(true);
-      setErrorMessage('留言不能是空白');
+      setErrorMessage(t('errCommentEmpty'));
     }
   };
 
@@ -78,17 +80,17 @@ const Comment = ({ share, comment, userData }) => {
         {userData.id === author.id && (
           <>
             <EditButton isEdit={isEdit} onClick={() => setIsEdit(true)}>
-              編輯
+              {t('edit')}
             </EditButton>
             <ConfirmBtnRipples color="#fff" during={3000}>
               <ConfirmButton isEdit={isEdit} onClick={handleConfirmCommentEdit}>
-                確定
+                {t('confirm')}
               </ConfirmButton>
             </ConfirmBtnRipples>
             <DeleteButton
               onClick={() => handleDeleteComment(share, comment, userData)}
             >
-              刪除
+              {t('delete')}
             </DeleteButton>
           </>
         )}

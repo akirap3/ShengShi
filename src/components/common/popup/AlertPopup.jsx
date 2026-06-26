@@ -10,8 +10,10 @@ import {
   SubmitBtn,
   InfoIcon,
 } from './PopupUnits';
+import { useTranslation } from '../../../context/LanguageContext';
 
 const AlertPopup = ({ showInfo, closeInfo, message }) => {
+  const { t } = useTranslation();
   return (
     <CenterDialogOverlay isOpen={showInfo} onDismiss={closeInfo}>
       <AlertDialogContent aria-label="delete-popup">
@@ -21,7 +23,7 @@ const AlertPopup = ({ showInfo, closeInfo, message }) => {
           <PopTitle>{message}</PopTitle>
         </PopTitleContainer>
         <AlertBtnRow>
-          <SubmitBtn onClick={closeInfo}>確認</SubmitBtn>
+          <SubmitBtn onClick={closeInfo}>{t('confirm')}</SubmitBtn>
         </AlertBtnRow>
       </AlertDialogContent>
     </CenterDialogOverlay>

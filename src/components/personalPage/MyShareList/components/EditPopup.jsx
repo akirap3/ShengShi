@@ -30,6 +30,7 @@ import AlertPopup from '../../../common/popup/AlertPopup';
 import Loading from '../../../common/Loading';
 import { isFieldsChecked } from '../../../../utils/validation';
 import { onEditSubmit } from '../../../../utils/firebase';
+import { useTranslation } from '../../../../context/LanguageContext';
 
 const EditPopup = ({ showEdit, closeEditor, share }) => {
   const dispatch = useDispatch();
@@ -45,6 +46,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
   const [quantities, setQuantities] = useState(share.quantities);
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoaging] = useState(false);
+  const { t } = useTranslation();
 
   const openCalendar = () => setShowCalendar(true);
   const closeCalendar = () => setShowCalendar(false);
@@ -119,21 +121,21 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
           </PopTitleContainer>
           <PopContent>
             <PopRow>
-              <StyledLabel>食物名稱</StyledLabel>
+              <StyledLabel>{t('foodName')}</StyledLabel>
               <FoodName
                 placeholder={`${share.name}`}
                 onChange={(e) => setFoodName(e.target.value)}
               />
             </PopRow>
             <PopRow>
-              <StyledLabel>數量</StyledLabel>
+              <StyledLabel>{t('quantity')}</StyledLabel>
               <StyledInput
                 placeholder={`${share.quantities}`}
                 onChange={(e) => setQuantities(e.target.value)}
               />
             </PopRow>
             <PopRow>
-              <StyledLabel>原定時間及日期</StyledLabel>
+              <StyledLabel>{t('originalDateTime')}</StyledLabel>
               <StyledSpan>
                 {`${share.fromTimeStamp.toDate().toLocaleString()} -
                   ${share.toTimeStamp.toDate().toLocaleString()}`}
@@ -141,7 +143,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
             </PopRow>
             <PopRow>
               <LabelIconContainer>
-                <DateTimeLabel>更改日期及時間</DateTimeLabel>
+                <DateTimeLabel>{t('changeDateTime')}</DateTimeLabel>
                 <Calendar onClick={openCalendar} />
               </LabelIconContainer>
               <StyledSpan>
@@ -152,7 +154,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
             </PopRow>
             <PopRow>
               <LabelIconContainer>
-                <PopPlaceLabel>地點</PopPlaceLabel>
+                <PopPlaceLabel>{t('place')}</PopPlaceLabel>
                 <StyledPopPlaceIcon onClick={openMap} />
               </LabelIconContainer>
               <StyledSpan>{address}</StyledSpan>
@@ -162,7 +164,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
             <ButtonContainer>
               <Ripples color="#fff" during={3000}>
                 <ImgUpload ref={uploadRef} htmlFor="image-upload">
-                  上傳
+                  {t('upload')}
                 </ImgUpload>
               </Ripples>
               <UploadBtn
@@ -172,7 +174,7 @@ const EditPopup = ({ showEdit, closeEditor, share }) => {
               />
               <Ripples color="#fff" during={3000}>
                 <SubmitBtn onClick={handleEditSubmit} disabled={isLoading}>
-                  確認更新
+                  {t('confirmUpdate')}
                 </SubmitBtn>
               </Ripples>
             </ButtonContainer>
