@@ -71,9 +71,7 @@ const StyledMobileLink = styled.div`
   }
 `;
 
-const MobileShareNav = styled(StyledMobileLink)`
-  margin-bottom: auto;
-`;
+const MobileShareNav = styled(StyledMobileLink)``;
 
 const MobileLogoutButton = styled(StyledMobileLink)`
   color: rgb(129, 129, 129);
@@ -81,6 +79,52 @@ const MobileLogoutButton = styled(StyledMobileLink)`
   &:hover {
     color: white;
   }
+`;
+
+const MobileToggleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  width: 90px;
+  height: 38px;
+  background-color: rgba(45, 106, 79, 0.1);
+  border-radius: 19px;
+  padding: 4px;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid rgba(45, 106, 79, 0.25);
+  margin-top: auto;
+  transition: all 0.3s ease;
+
+
+  &:hover {
+    border-color: #2d6a4f;
+    background-color: rgba(45, 106, 79, 0.15);
+  }
+`;
+
+const MobileToggleThumb = styled.div`
+  position: absolute;
+  top: 4px;
+  left: ${props => props.locale === 'en' ? '4px' : '48px'};
+  width: 38px;
+  height: 28px;
+  background-color: #2d6a4f;
+  border-radius: 14px;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+`;
+
+const MobileToggleText = styled.span`
+  font-size: 16px;
+  font-weight: 700;
+  color: ${props => props.active ? '#ffffff' : '#2d6a4f'};
+  z-index: 2;
+  width: 38px;
+  text-align: center;
+  transition: color 0.3s ease;
+  line-height: 28px;
 `;
 
 export {
@@ -92,4 +136,9 @@ export {
   StyledMobileLink,
   MobileShareNav,
   MobileLogoutButton,
+  MobileToggleContainer,
+  MobileToggleThumb,
+  MobileToggleText,
 };
+
+

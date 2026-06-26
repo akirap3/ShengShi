@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useTranslation } from '../../../context/LanguageContext';
 
 import ShareFoodOne from '../../../images/homepage/sharefood-2.jpg';
 import ShareFoodTwo from '../../../images/homepage/sharefood-3.jpg';
@@ -6,24 +7,25 @@ import ShareFoodThree from '../../../images/homepage/sharefood-4.jpg';
 import Background from '../../common/Background';
 
 const Advantages = () => {
+  const { t } = useTranslation();
+
   return (
     <AdvantagesContainer>
       <AvtContentOne>
         <AvtImgOne src={ShareFoodOne} alt="share" />
         <StyledAvtColumn>
-          <Title>糧食</Title>
+          <Title>{t('foodTitle')}</Title>
           <Description>
-            全球有 8 億 2 千萬人仍處於飢餓狀態，相當於每 9
-            個人即有一人無法取得足夠糧食
+            {t('foodDesc')}
           </Description>
         </StyledAvtColumn>
       </AvtContentOne>
       <AvtContentTwo>
         <Background circleBgColor={'rgba(255, 255, 255, 0.2)'} />
         <AvtColumnTwo>
-          <Title>節約</Title>
+          <Title>{t('saveTitle')}</Title>
           <Description>
-            台灣一年約有 340 萬噸的廚餘量，相當於每人每天的剩食量約一盒炒飯
+            {t('saveDesc')}
           </Description>
         </AvtColumnTwo>
         <AvtImgTwo src={ShareFoodTwo} alt="share" />
@@ -31,15 +33,16 @@ const Advantages = () => {
       <AvtContentThree>
         <AvtImgThree src={ShareFoodThree} alt="share" />
         <StyledAvtColumn>
-          <Title>價值</Title>
+          <Title>{t('valueTitle')}</Title>
           <Description>
-            如果全世界食物浪費的排碳量位居世界第三，透過惜食減碳，共創美好環境
+            {t('valueDesc')}
           </Description>
         </StyledAvtColumn>
       </AvtContentThree>
     </AdvantagesContainer>
   );
 };
+
 
 const AdvantagesContainer = styled.div`
   display: flex;

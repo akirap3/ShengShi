@@ -143,11 +143,12 @@ const ShareCard = ({
             ) : (
               <HeartRipples color="#ff4d6d" during={1000}>
                 <Heart
-                  isliked={handleLike}
+                  $isliked={handleLike}
                   onClick={handleClickHeart}
-                  isloggedin={checkUser.isLoggedIn.toString()}
+                  $isloggedin={checkUser.isLoggedIn.toString()}
                 />
               </HeartRipples>
+
             )}
           </CardRowOne>
           <CardRow>

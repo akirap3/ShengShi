@@ -167,6 +167,52 @@ const MobileMenuIcon = styled(FcMenu)`
   cursor: pointer;
 `;
 
+const ToggleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  width: 76px;
+  height: 32px;
+  background-color: rgba(45, 106, 79, 0.1);
+  border-radius: 16px;
+  padding: 3px;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid rgba(45, 106, 79, 0.25);
+  margin-left: 1rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #2d6a4f;
+    background-color: rgba(45, 106, 79, 0.15);
+  }
+`;
+
+const ToggleThumb = styled.div`
+  position: absolute;
+  top: 3px;
+  left: ${props => props.locale === 'en' ? '3px' : '39px'};
+  width: 32px;
+  height: 24px;
+  background-color: #2d6a4f;
+  border-radius: 12px;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+`;
+
+const ToggleText = styled.span`
+  font-size: 14px;
+  font-weight: 700;
+  color: ${props => props.active ? '#ffffff' : '#2d6a4f'};
+  z-index: 2;
+  width: 32px;
+  text-align: center;
+  transition: color 0.3s ease;
+  line-height: 24px;
+  font-family: 'cwTeXYen', sans-serif;
+`;
+
 export {
   HeaderContainer,
   Logo,
@@ -184,4 +230,9 @@ export {
   MobileLogoLink,
   MobileHeaderLogo,
   MobileMenuIcon,
+  ToggleContainer,
+  ToggleThumb,
+  ToggleText,
 };
+
+

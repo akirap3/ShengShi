@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { layoutConfig } from '../../utils/commonVariables';
 import { getAllContents, getSearchedContents } from '../../utils/firebase';
+import { useTranslation } from '../../context/LanguageContext';
 import Carousel from '../common/carousel/Carousel';
 import Background from '../common/Background';
 import Loading, { HalfHeightPaddingLoading } from '../common/Loading';
@@ -32,6 +33,7 @@ const RestaurantPage = () => {
   const [restaurants, setRestaurants] = useState(null);
   const [inputValue, setInputValue] = useState('');
   const [isSearch, setIsSearch] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isSearch) return getAllContents('restaurants', setRestaurants);
@@ -64,20 +66,20 @@ const RestaurantPage = () => {
         <Banner>
           <BannerImg src={Img} alt="share-redundant-food" />
           <StyledBannerContent>
-            <BannerTitle>樂於分享</BannerTitle>
+            <BannerTitle>{t('happyToShare')}</BannerTitle>
             <Subtitle>
-              分享快樂加倍，分享是一種生活的信念，分享是另一種幸福
+              {t('restaurantSubtitle')}
             </Subtitle>
             <ButtonRow>
-              <StartButton to="/login">開始使用</StartButton>
-              <LearnMoreButton to="/search">別人分享</LearnMoreButton>
+              <StartButton to="/login">{t('startUsing')}</StartButton>
+              <LearnMoreButton to="/search">{t('exploreShares')}</LearnMoreButton>
             </ButtonRow>
           </StyledBannerContent>
         </Banner>
         <SearchContent>
           <SearchOutline>
             <SearchBar
-              placeholder="餐廳搜尋"
+              placeholder={t('searchPartners')}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleOnEnter}
@@ -88,7 +90,7 @@ const RestaurantPage = () => {
           </SearchOutline>
           <StyledRipples during={3000}>
             <StyledResetButton onClick={() => handleClearSearch()}>
-              清除搜尋
+              {t('clearSearch')}
             </StyledResetButton>
           </StyledRipples>
         </SearchContent>

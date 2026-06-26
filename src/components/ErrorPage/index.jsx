@@ -1,26 +1,30 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useTranslation } from '../../context/LanguageContext';
 
 import Main from '../common/Main';
 import { StartButton } from '../common/banner/CommonBanner';
 import errerImg from '../../images/common/404-image.gif';
 
 const ErrorPage = ({ padding }) => {
+  const { t } = useTranslation();
+
   return (
     <StyledMain>
       <ErrorContainer padding={padding}>
         <ErrorMessage>
           <StyledSpan>404</StyledSpan>
-          <Message> 找不到網頁</Message>
+          <Message> {t('pageNotFound')}</Message>
         </ErrorMessage>
         <img src={errerImg} alt="error" />
         <StyledStartButton as={Link} to="/">
-          返回首頁
+          {t('backToHome')}
         </StyledStartButton>
       </ErrorContainer>
     </StyledMain>
   );
 };
+
 
 const StyledMain = styled(Main)`
   display: flex;

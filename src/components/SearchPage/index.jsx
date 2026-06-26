@@ -16,6 +16,7 @@ import Background from '../common/Background';
 import Title from '../common/Title';
 import Loading from '../common/Loading';
 import Img from '../../images/restaurantPage/restaurant-8.jpg';
+import { useTranslation } from '../../context/LanguageContext';
 
 import {
   getAllOrderedContents,
@@ -50,6 +51,7 @@ const SearchPage = () => {
   const [shares, setShares] = useState();
   const isShareSearch = useSelector((state) => state.isShareSearch);
   const searchedShares = useSelector((state) => state.searchedShares);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isShareSearch) {
@@ -127,13 +129,13 @@ const SearchPage = () => {
         <WaveBackground />
         <Banner>
           <StyledBannerContent>
-            <BannerTitle>勝食</BannerTitle>
+            <BannerTitle>{t('searchBannerTitle')}</BannerTitle>
             <Subtitle>
-              善於分享的人時常受到眷顧，常與他人分享讓生活更多采多姿更有趣
+              {t('searchBannerSubtitle')}
             </Subtitle>
             <ButtonRow>
-              <StartButton to="/login">開始使用</StartButton>
-              <LookButton to="/restaurants">合作餐廳</LookButton>
+              <StartButton to="/login">{t('startUsing')}</StartButton>
+              <LookButton to="/restaurants">{t('partners')}</LookButton>
             </ButtonRow>
           </StyledBannerContent>
           <BannerImg src={Img} alt="share" />
@@ -141,7 +143,7 @@ const SearchPage = () => {
         <SearchContent>
           <SearchOutline>
             <SearchBar
-              placeholder="勝食搜尋"
+              placeholder={t('searchPlaceholder')}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleOnEnter}
@@ -151,11 +153,11 @@ const SearchPage = () => {
             </SearchIconContainer>
           </SearchOutline>
           <StyledRipples during={3000}>
-            <ResetButton onClick={handleResetSearch}>清除搜尋</ResetButton>
+            <ResetButton onClick={handleResetSearch}>{t('clearSearch')}</ResetButton>
           </StyledRipples>
         </SearchContent>
       </UpperPart>
-      <Title title="目前其他人分享的勝食" />
+      <Title title={t('currentSharesTitle')} />
       <StyledOuter>
         {shares ? (
           shares.length !== 0 ? (
@@ -165,7 +167,7 @@ const SearchPage = () => {
               ))}
             </SharesContainer>
           ) : (
-            <NoResult text="搜尋不到" />
+            <NoResult text={t('noResult')} />
           )
         ) : (
           <Loading />

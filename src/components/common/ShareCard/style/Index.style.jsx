@@ -140,12 +140,13 @@ const WhiteHeart = styled(AiTwotoneHeart)`
 const Heart = styled(AiTwotoneHeart)`
   width: 25px;
   height: 25px;
-  fill: ${({ isliked }) => isliked};
-  ${({ isloggedin, isliked }) => {
-    if (isloggedin === 'true' && isliked !== '#2196f3aa')
+  fill: ${({ $isliked }) => $isliked};
+  ${({ $isloggedin, $isliked }) => {
+    if ($isloggedin === 'true' && $isliked !== '#2196f3aa')
       return `cursor: pointer;`;
   }}
 `;
+
 
 const PlaceIcon = styled(HiLocationMarker)`
   width: 25px;

@@ -15,6 +15,7 @@ import Loading, { PaddingLoading } from '../common/Loading';
 import { checkEmail } from '../../utils/validation';
 import { login, loginWithFB, loginWithGoogle } from '../../utils/firebase';
 import useLoginSignupWithProvider from '../../hooks/useLoginSignupWithProvider';
+import { useTranslation } from '../../context/LanguageContext';
 import {
   FormContainer,
   Title,
@@ -34,6 +35,7 @@ import {
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { t } = useTranslation();
   const {
     openAlertWithMessage,
     alertMessage,
@@ -50,12 +52,12 @@ const LoginPage = () => {
     if (password) {
       return true;
     } else {
-      return openAlertWithMessage('請輸入密碼');
+      return openAlertWithMessage(t('errEnterPassword'));
     }
   };
 
   const checkAndLogin = () => {
-    if (checkEmail(email, openAlertWithMessage) && hasPassword()) {
+    if (checkEmail(email, openAlertWithMessage, t) && hasPassword()) {
       setIsLoading(true);
       login(email, password)
         .then(() => {
@@ -65,11 +67,11 @@ const LoginPage = () => {
         .catch((error) => {
           setIsLoading(false);
           if (error.code === 'auth/user-not-found') {
-            openAlertWithMessage('您輸入的帳號不存在，請先註冊');
+            openAlertWithMessage(t('errAccountNotExist'));
             setEmail('');
             setPassword('');
           } else if (error.code === 'auth/wrong-password') {
-            openAlertWithMessage('您輸入的密碼錯誤，請重新輸入密碼');
+            openAlertWithMessage(t('errPasswordIncorrect'));
             setPassword('');
           }
         });
@@ -86,11 +88,11 @@ const LoginPage = () => {
             circleBgColor={'linear-gradient(253deg, #0cc898, #1797d2, #864fe1)'}
           />
           <LoginContainer>
-            <Title>Welcome back</Title>
+            <Title>{t('welcomeBack')}</Title>
             <FieldContainer>
               <StyledIcon as={BsFillPersonFill} />
               <Field
-                placeholder="Email"
+                placeholder={t('email')}
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -102,7 +104,7 @@ const LoginPage = () => {
               <StyledIcon as={RiLock2Fill} />
               <Field
                 type="password"
-                placeholder="Password"
+                placeholder={t('password')}
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -112,7 +114,7 @@ const LoginPage = () => {
             </FieldContainer>
             <ButtonContainer>
               <NativeButton onClick={checkAndLogin} disabled={isLoading}>
-                <span>確 認</span>
+                <span>{t('confirm')}</span>
               </NativeButton>
               <FBButton
                 onClick={() => handleClickProvider(loginWithFB, '?type=large')}
@@ -129,8 +131,8 @@ const LoginPage = () => {
               </GoogleButton>
             </ButtonContainer>
             <Text>
-              還沒有建立帳號嗎？
-              <StyledLink to="/signup">註冊</StyledLink>
+              {t('noAccount')}
+              <StyledLink to="/signup">{t('signup')}</StyledLink>
             </Text>
           </LoginContainer>
         </StyledMain>
@@ -147,6 +149,7 @@ const LoginPage = () => {
     </>
   );
 };
+
 
 const StyledMain = styled(Main)`
   display: flex;

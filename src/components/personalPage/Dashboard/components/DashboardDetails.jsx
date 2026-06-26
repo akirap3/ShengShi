@@ -5,8 +5,11 @@ import { IoMdPerson } from 'react-icons/io';
 import { BsPeopleFill } from 'react-icons/bs';
 import { FaCoins } from 'react-icons/fa';
 import { HiLocationMarker } from 'react-icons/hi';
+import { useTranslation } from '../../../../context/LanguageContext';
 
 const DashboardDetails = ({ userData, location }) => {
+  const { t } = useTranslation();
+
   return (
     <Details>
       <Row>
@@ -19,7 +22,7 @@ const DashboardDetails = ({ userData, location }) => {
       </Row>
       <Row>
         <BoardIcon as={HiLocationMarker} />
-        <DetailText>{userData?.myPlace || '尚未設定'}</DetailText>
+        <DetailText>{userData?.myPlace || t('notSetYet')}</DetailText>
       </Row>
       <Row>
         <BoardIcon as={BsPeopleFill} />
@@ -31,13 +34,14 @@ const DashboardDetails = ({ userData, location }) => {
           }
         >
           <MgmtButton as={Link} to="/personal/mgmt">
-            管理預訂
+            {t('manageReservations')}
           </MgmtButton>
         </MgmtRipple>
       </Row>
     </Details>
   );
 };
+
 
 const BoardIcon = styled.div`
   fill: white;
