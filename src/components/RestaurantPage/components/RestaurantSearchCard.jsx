@@ -51,7 +51,7 @@ const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
                 ))}
                 <Heart
                   onClick={() => handleClickHeart(content)}
-                  like={() => handleLike(content)}
+                  $like={handleLike(content)}
                 />
               </Row>
             </Card>
@@ -142,7 +142,7 @@ const Heart = styled(AiTwotoneHeart)`
   margin-left: auto;
   width: 24px;
   height: 24px;
-  fill: ${({ like }) => like};
+  fill: ${({ $like }) => $like};
   cursor: pointer;
 
   @media screen and (min-width: 700px) {

@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 
 import styled from 'styled-components';
 import useSupercluster from 'use-supercluster';
@@ -15,32 +15,10 @@ const RestaurantMap = ({ restaurants }) => {
   const mapRef = useRef();
   const [zoom, setZoom] = useState(10);
   const [bounds, setBounds] = useState(null);
-  const [defaultCenter, setDefaultCenter] = useState({
+  const defaultCenter = {
     lat: 25.04267234987771,
     lng: 121.56497334150076,
-  });
-  const [isMounted, setIsMounted] = useState(true);
-
-  const setCurrentLocation = (position) => {
-    setDefaultCenter({
-      lat: position.coords.latitude,
-      lng: position.coords.longitude,
-    });
   };
-
-  useEffect(() => {
-    if (isMounted) {
-      console.log('000');
-      navigator.geolocation.watchPosition(setCurrentLocation, (error) => {
-        if (error.code === error.PERMISSION_DENIED) {
-          setDefaultCenter({ lat: 25.04267234987771, lng: 121.56497334150076 });
-        }
-      });
-    }
-    return () => {
-      setIsMounted(false);
-    };
-  }, [isMounted]);
 
   const points =
     restaurants?.map((restaurant) => ({

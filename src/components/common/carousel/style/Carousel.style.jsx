@@ -152,7 +152,7 @@ const Heart = styled(AiTwotoneHeart)`
   width: 14px;
   height: 14px;
   margin-left: auto;
-  fill: ${(props) => props.like};
+  fill: ${(props) => props.$like};
   cursor: pointer;
 
   @media screen and (min-width: 700px) {
