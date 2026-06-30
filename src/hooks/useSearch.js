@@ -11,15 +11,15 @@ const useSearch = () => {
   const history = useHistory();
   const [inputValue, setInputValue] = useState('');
   const { t } = useTranslation();
+  const [placeholder, setPlaceholder] = useState(t('searchPlaceholder'));
 
   const handleSearch = () => {
     dispatch({ type: 'isShareSearch/search', payload: true });
-    if (inputValue === '') {
-      setInputValue(t('enterKeyword'));
+    if (inputValue.trim() === '') {
+      setPlaceholder(t('enterKeyword'));
+      setInputValue('');
       return;
     }
-    if (inputValue === t('enterKeyword') || inputValue === '請輸入關鍵字' || inputValue === 'Please enter a keyword') return;
-
 
     algolia.search(inputValue).then((result) => {
       const searchResults = result.hits.map((hit) => {
@@ -41,9 +41,17 @@ const useSearch = () => {
     if (e.charCode === 13) handleSearch();
   };
 
+  const handleSetInputValue = (value) => {
+    setInputValue(value);
+    if (value && value.trim() !== '') {
+      setPlaceholder(t('searchPlaceholder'));
+    }
+  };
+
   return {
     inputValue,
-    setInputValue,
+    setInputValue: handleSetInputValue,
+    placeholder,
     handleSearch,
     handleOnEnter,
   };

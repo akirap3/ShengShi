@@ -5,8 +5,11 @@ import useSupercluster from 'use-supercluster';
 import GoogleMapReact from 'google-map-react';
 
 import InfoView from './InfoView';
+import { useTranslation } from '../../../context/LanguageContext';
+import { getLocalizedField } from '../../../utils/langHelper';
 
 require('dotenv').config();
+
 
 const Marker = ({ children }) => children;
 
@@ -15,6 +18,7 @@ const RestaurantMap = ({ restaurants }) => {
   const mapRef = useRef();
   const [zoom, setZoom] = useState(10);
   const [bounds, setBounds] = useState(null);
+  const { locale } = useTranslation();
   const defaultCenter = {
     lat: 25.04267234987771,
     lng: 121.56497334150076,
@@ -27,9 +31,9 @@ const RestaurantMap = ({ restaurants }) => {
         cluster: false,
         restaurantId: restaurant.id,
         imageUrl: restaurant.imageUrl,
-        restaurantName: restaurant.name,
+        restaurantName: getLocalizedField(restaurant.name, locale),
         rating: restaurant.rating,
-        address: restaurant.address,
+        address: getLocalizedField(restaurant.address, locale),
       },
       geometry: {
         type: 'Point',

@@ -7,10 +7,12 @@ import { handleCollection } from '../../../utils/firebase';
 import { useTranslation } from '../../../context/LanguageContext';
 import NoResult from '../../common/NoResult';
 import StarImg from '../../../images/common/star.png';
+import { getLocalizedField } from '../../../utils/langHelper';
+
 
 const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
   const currentUser = useCurrentUser();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
 
   const handleClickHeart = (content) => {
     if (currentUser) {
@@ -44,7 +46,7 @@ const RestaurantSearchCard = ({ restaurant, isRestaurants }) => {
           return (
             <Card key={content.id}>
               <CardImg src={content.imageUrl} alt="restaurants" />
-              <CardTitle>{content.name}</CardTitle>
+              <CardTitle>{getLocalizedField(content.name, locale)}</CardTitle>
               <Row>
                 {Array.from(Array(content.rating).keys()).map(() => (
                   <Star key={uuidv4()} src={StarImg} alt="star" />

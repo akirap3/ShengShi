@@ -45,7 +45,7 @@ import {
 const SearchPage = () => {
   const dispatch = useDispatch();
   const currentUser = useCurrentUser();
-  const { inputValue, setInputValue, handleSearch, handleOnEnter } =
+  const { inputValue, setInputValue, placeholder, handleSearch, handleOnEnter } =
     useSearch();
   const lastPostSnapshotRef = useRef();
   const [shares, setShares] = useState();
@@ -143,7 +143,7 @@ const SearchPage = () => {
         <SearchContent>
           <SearchOutline>
             <SearchBar
-              placeholder={t('searchPlaceholder')}
+              placeholder={placeholder}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleOnEnter}
