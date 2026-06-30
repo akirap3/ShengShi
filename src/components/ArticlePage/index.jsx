@@ -42,13 +42,15 @@ import {
   getAllOrderedContents,
   getSearchedOrderedContents,
 } from '../../utils/firebase';
+import { getLocalizedField, getLocalizedArray } from '../../utils/langHelper';
+
 
 const ArticlePage = () => {
   const lastPostSnapshotRef = useRef();
   const [inputValue, setInputValue] = useState('');
   const [articles, setArticles] = useState();
   const [isSearch, setIsSearch] = useState(false);
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
 
   useEffect(() => {
     if (!isSearch)
@@ -65,9 +67,10 @@ const ArticlePage = () => {
   const handleSearch = (tag) => {
     if (!tag && inputValue === '') return;
     setIsSearch(true);
+    const searchField = locale === 'zh' ? 'tags.zh' : 'tags.en';
     getSearchedOrderedContents(
       'articles',
-      'tags',
+      searchField,
       'array-contains',
       tag || inputValue,
       setArticles,
@@ -103,9 +106,10 @@ const ArticlePage = () => {
           articles
         );
       } else {
+        const searchField = locale === 'zh' ? 'tags.zh' : 'tags.en';
         getSearchedOrderedContents(
           'articles',
-          'tags',
+          searchField,
           'array-contains',
           inputValue,
           setArticles,
@@ -160,14 +164,14 @@ const ArticlePage = () => {
                 </a>
                 <CardContent>
                   <TagContainer>
-                    {article.tags.map((tag) => (
+                    {getLocalizedArray(article.tags, locale).map((tag) => (
                       <Tag key={uuidv4()} onClick={() => handleTagSearch(tag)}>
                         {`# ${tag}`}
                       </Tag>
                     ))}
                   </TagContainer>
-                  <CardTitle>{article.title}</CardTitle>
-                  <CardSubtitle>{article.subtitle}</CardSubtitle>
+                  <CardTitle>{getLocalizedField(article.title, locale)}</CardTitle>
+                  <CardSubtitle>{getLocalizedField(article.subtitle, locale)}</CardSubtitle>
                 </CardContent>
               </ArticleCard>
             ))}

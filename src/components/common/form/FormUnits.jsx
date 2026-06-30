@@ -49,48 +49,54 @@ export const StyledInput = styled(StyledReadOnly)`
 export const ButtonContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  gap: 12px;
+  justify-content: space-between;
   font-family: 'cwTeXYen', sans-serif;
+  width: 100%;
 `;
 
 const Button = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-grow: 1;
   border-radius: 5px;
-  padding: 5px 15px;
-  background: rgba(255, 255, 255, 0.3);
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(5px);
-  box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
 
-  @media screen and (max-width: 470px) {
-    width: 48%;
-    font-size: 14px;
+  &:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   }
 `;
 
 export const NativeButton = styled(Button)`
-  margin-right: 5px;
+  width: 100%;
   font-size: 16px;
   color: white;
   background: #1e88e5;
+  font-weight: 500;
 
-  @media screen and (max-width: 470px) {
-    width: 100%;
-    margin-bottom: 10px;
-    margin-right: 0;
+  &:hover {
+    background: #1565c0;
+    color: white;
   }
 `;
 
 export const FBButton = styled(Button)`
-  margin-right: 5px;
+  width: calc(50% - 6px);
   font-size: 16px;
   border: 1px solid #d9d7d7;
 `;
 
 export const GoogleButton = styled(Button)`
+  width: calc(50% - 6px);
+  font-size: 16px;
   border: 1px solid #d9d7d7;
 `;
 

@@ -94,7 +94,7 @@ const ArticleContainer = styled.div`
   grid-template-rows: auto;
   gap: 2rem;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   padding-top: 100px;
   margin-bottom: 150px;
   font-family: 'cwTeXYen', sans-serif;
@@ -109,8 +109,9 @@ const ArticleContainer = styled.div`
 `;
 
 const ArticleCard = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 20rem;
-  min-height: 20rem;
   border-radius: 10px;
   box-sizing: border-box;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -129,23 +130,27 @@ const CardContent = styled.div`
   flex-direction: column;
   justify-items: center;
   align-items: center;
+  flex-grow: 1;
   padding: 1rem 2rem 2rem;
 `;
 
 const TagContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 `;
 
 const Tag = styled.div`
-  margin-right: 0.5rem;
   padding: 5px 8px;
   border-radius: 5px;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
-  font-size: 18px;
+  font-size: 15px;
   background: #52b788;
   color: white;
   cursor: pointer;
+  white-space: nowrap;
 `;
 
 const CardTitle = styled.div`
@@ -153,12 +158,14 @@ const CardTitle = styled.div`
   font-size: 24px;
   line-height: 28px;
   font-weight: 600;
+  text-align: center;
 `;
 
 const CardSubtitle = styled.div`
   font-weight: 300;
   line-height: 20px;
   color: hsl(0, 0%, 51%);
+  text-align: center;
 `;
 
 export {

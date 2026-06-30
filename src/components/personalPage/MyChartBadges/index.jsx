@@ -9,6 +9,8 @@ import Outer from '../../common/Outer';
 import NoResult from '../../common/NoResult';
 import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 import { useTranslation } from '../../../context/LanguageContext';
+import { getLocalizedField } from '../../../utils/langHelper';
+
 
 const Badges = () => {
   const [badges, setBadges] = useState(null);
@@ -108,7 +110,7 @@ const Badges = () => {
                   {badges.map((badge) => (
                     <BadgeContext key={badge.id}>
                       <BadgeImg src={badge.imageUrl} alt="badge" />
-                      <BadgeName>{badge.name}</BadgeName>
+                      <BadgeName>{getLocalizedField(badge.name, locale)}</BadgeName>
                     </BadgeContext>
                   ))}
                 </BadgeContainer>
@@ -159,6 +161,9 @@ const BadgeContainer = styled.div`
 `;
 
 const BadgeContext = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   max-width: 800px;
   justify-self: center;
 `;

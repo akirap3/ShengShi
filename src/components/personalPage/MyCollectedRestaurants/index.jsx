@@ -11,11 +11,13 @@ import Loading, { HalfHeightPaddingLoading } from '../../common/Loading';
 import { getSpecificContents, handleCollection } from '../../../utils/firebase';
 import StarImg from '../../../images/common/star.png';
 import { useTranslation } from '../../../context/LanguageContext';
+import { getLocalizedField } from '../../../utils/langHelper';
+
 
 const CollectedRestaurants = () => {
   const currentUser = useCurrentUser();
   const [savedRestaurants, setSavedRestaurants] = useState(null);
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
 
   useEffect(() => {
     return getSpecificContents(
@@ -38,7 +40,7 @@ const CollectedRestaurants = () => {
                 {savedRestaurants.map((restaurant) => (
                   <Card key={restaurant.id}>
                     <CardImg src={restaurant.imageUrl} alt="restaurants" />
-                    <CardTitle>{restaurant.name}</CardTitle>
+                    <CardTitle>{getLocalizedField(restaurant.name, locale)}</CardTitle>
                     <Row>
                       {Array.from(Array(restaurant.rating).keys()).map(() => (
                         <Star src={StarImg} key={uuidv4()} alt="star" />
@@ -79,6 +81,7 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(1, 15rem);
   gap: 15px;
+  align-items: stretch;
 
   @media screen and (min-width: 700px) {
     grid-template-columns: repeat(2, 18rem);
@@ -89,6 +92,9 @@ const Container = styled.div`
 `;
 
 const Card = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   border-radius: 0px 0px 10px 10px;
   border-top: 10px solid #52b788;
   background-color: hsla(146, 40%, 40%, 0.4);
@@ -116,12 +122,17 @@ const CardTitle = styled.h4`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 22px;
   color: #40916c;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Row = styled.div`
   display: flex;
   justify-content: center;
   margin: 0 50px 15px;
+  margin-top: auto;
 `;
 
 const Star = styled.img`

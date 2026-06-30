@@ -5,6 +5,9 @@ import useCurrentUser from '../../../hooks/useCurrentUser';
 import { handleCollection } from '../../../utils/firebase';
 import { CarouselSettings } from './CarouselSettings';
 import StarImg from '../../../images/common/star.png';
+import { useTranslation } from '../../../context/LanguageContext';
+import { getLocalizedField } from '../../../utils/langHelper';
+
 
 import {
   CarouselContainer,
@@ -25,6 +28,8 @@ import {
 const Carousel = ({ title, contentData, isRestaurants }) => {
   const currentUser = useCurrentUser();
   const checkUser = useSelector((state) => state.checkUser);
+  const { locale } = useTranslation();
+
 
   const handleClickHeart = (content) => {
     if (currentUser) {
@@ -61,7 +66,7 @@ const Carousel = ({ title, contentData, isRestaurants }) => {
                 return (
                   <Card key={content.id}>
                     <CardImg src={content.imageUrl} alt="redundant-food" />
-                    <CardTitle>{content.name}</CardTitle>
+                    <CardTitle>{getLocalizedField(content.name, locale)}</CardTitle>
                     <Row>
                       <StartContainer>
                         {Array.from(Array(content.rating).keys()).map(() => (

@@ -113,11 +113,11 @@ const StyledRipples = styled(Ripples)`
 
 const Button = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 10px;
+  padding: 10px 10px 10px 25px;
   color: #2d6a4f;
   border-radius: 8px;
   background-color: ${({ active }) => (active ? '#bbdefbaa' : '#e3f2fd01')};

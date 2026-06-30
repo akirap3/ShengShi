@@ -33,6 +33,13 @@ const SlideWrapper = styled.div`
   .slick-slide {
     margin-right: 8px;
     margin-left: 5px;
+    height: auto;
+  }
+
+  .slick-slide > div {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   .slick-track {
@@ -71,6 +78,10 @@ const SlideWrapper = styled.div`
 `;
 
 const Card = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-grow: 1;
   background-color: hsla(146, 40%, 40%, 0.4);
   border-radius: 0px 0px 10px 10px;
   border-top: 10px solid #52b788;
@@ -97,6 +108,10 @@ const CardTitle = styled.h4`
   font-family: 'cwTeXYen', sans-serif;
   font-size: 22px;
   color: #40916c;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   @media screen and (min-width: 1500px) {
     font-size: 36px;
@@ -110,9 +125,11 @@ const Row = styled.div`
   text-align: center;
   padding: 0 1rem 1rem;
   margin: 0 1rem;
+  margin-top: auto;
 
   @media screen and (min-width: 900px) {
     margin: 0 3rem;
+    margin-top: auto;
   }
 `;
 
